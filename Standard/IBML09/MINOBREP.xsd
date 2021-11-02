@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:bml="http://netlab.gmu.edu/IBML" 
+	xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 0.10
+			Source:  US Army FM 6-99.2 April 2007 by GMU C4I Center 8-21-09
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:import namespace="http://netlab.gmu.edu/IBML" 
+		schemaLocation="FiveWTypes.xsd"/>
+		
+		<xs:element name="MINOBREP">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="ReporterWho" type="bml:WhoType"/>
+					<xs:element name="ReferenceOrderID" type="bml:LabelType"/>
+					<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+					<xs:element name="AtWhere" type="bml:AtWhereType"/>
+					<xs:element name="When" type="mip:Datetime18XmlType"/>
+					<xs:element name="ReportID" type="xs:string"/>
+					<xs:element name="What">
+						<xs:complexType>
+							<xs:choice>
+								<xs:element name="ReporterWhat" type="bml:WhatType"/>
+								<xs:element name="ObservedWhat" type="bml:WhatType"/>
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Credibility" type="bml:CredibilityType"/>
+					<xs:element name="Why" minOccurs="0">
+						<xs:complexType>
+							<xs:choice>
+								<xs:element name="ReporterWhy" type="bml:WhyType"/>
+								<xs:element name="ObservedWhy" type="bml:WhyType"/>
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Parameters">
+						<xs:complexType>
+							<xs:sequence>
+							 	<xs:element name="EmplacingUnit" type="bml:ExecuterType" minOccurs="0"/>
+								<xs:element name="ApprovingAuthority" type="bml:WhoType" minOccurs="0"/>
+								<xs:element name="TargetObstacleNumber" minOccurs="0"/>
+								<xs:element name="TypeOfEmplacingSystem" minOccurs="0"/>
+								<xs:element name="TypeOfMinesObstacles" minOccurs="0"/>
+								<xs:element name="TypeOfMarkingSystem" minOccurs="0"/>
+								<xs:element name="LifeCycleDateTime" type="mip:Datetime18XmlType" minOccurs="0"/>
+								<xs:element name="CornerLocations" type="bml:CornerLocationsType" minOccurs="0"/>
+								<xs:element name="Reduce" type="bml:YesNoType"/>
+								<xs:element name="NumberOfLanes" type="xs:integer"/>
+								<xs:element name="ReductionAssetUsed" type="xs:string"/>
+								<xs:element name="WidthInCentimeters" type="xs:integer"/>
+								<xs:element name="DepthInCentimeters" type="xs:integer"/>
+								<xs:element name="GridToStartOfLane" type="bml:LocationType"/>
+								<xs:element name="GridToEndOfLane" type="bml:LocationType"/>
+								<xs:element name="LaneMarking" minOccurs="0"/>
+								<xs:element name="Bypass" type="bml:YesNoType"/>
+								<xs:element name="BypassGrid" type="bml:WhereLocationType" minOccurs="0"/>
+								<xs:element name="Barriers" minOccurs="0"/>
+								<xs:element name="Narrative" minOccurs="0"/>
+								<xs:element name="Authentication"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+	
+</xs:schema>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://netlab.gmu.edu/IBML" targetNamespace="http://netlab.gmu.edu/IBML" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.1.0" id="MSDL">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 1.0
+			Source: This schema extracts location definitions, borrowed  from the Military Scenario Definition Language (MSDL) Schema 0.1
+			IBML Status: Deprecated
+			IBML Schema Version: 1.0
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Copyright Statement: "The MSDL work was generated under U.S. Government contract and the government has unlimited data rights therein." 
+			classification="Unclassified" 
+			projectName="OneSAF Objective System Military Scenario Definition Language" 
+			contractNumber="#N61339-02-6-0047" 
+			taskOrder="MSDE" 
+			copyrights="Copyrights 2001-2004. Acusoft Inc. All rights reserved." 
+			distribution statement="APPROVED FOR PUBLIC RELEASE; DISTRIBUTION IS UNLIMITED"?
+		</xs:documentation>
+	</xs:annotation>
+<!-- MSG-048 uses all elements of this subschema except us of MGRS, UTM and GCC) -->	
+	<xs:complexType name="Coordinates">
+		<xs:annotation>
+			<xs:documentation>A data structure containing the coordinates extracted from the MSDL schema msdlElements.xsd, version 0.1, for use in the Joint Battle Management Language (JBML) project.  This can be replaced appropriately when the MSDL project establishes a namespace for its vocabulary.  POC for this approach: Curtis Blais, NPS MOVES Institute. </xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element ref="MGRS"/>
+			<xs:element ref="UTM"/>
+			<xs:element ref="GDC"/>
+			<xs:element ref="GCC"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="Location" type="Coordinates">
+		<xs:annotation>
+			<xs:documentation>The coordinates of an object</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="GDC">
+		<xs:annotation>
+			<xs:documentation>Geodetic coordinates in fractional degress of latitude and longitude</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="Latitude"/>
+				<xs:element ref="Longitude"/>
+				<xs:element ref="ElevationAGL"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ElevationAGL">
+		<xs:annotation>
+			<xs:documentation>The Altitude, in meters, of a position above ground level.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:float">
+				<xs:minInclusive value="-1000.0"/>
+				<xs:maxInclusive value="100000.0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="MGRSPrecision">
+		<xs:annotation>
+			<xs:documentation>The precision, 2 (km) to 5 (meters), used for each MGRS coordinate</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="2"/>
+				<xs:maxInclusive value="5"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="MGRS">
+		<xs:annotation>
+			<xs:documentation>MGRS coordinate</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="MGRSGridZone"/>
+				<xs:element ref="MGRSGridSquare"/>
+				<xs:element ref="MGRSPrecision"/>
+				<xs:element ref="MGRSEasting"/>
+				<xs:element ref="MGRSNorthing"/>
+				<xs:element ref="ElevationAGL" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UTM">
+		<xs:annotation>
+			<xs:documentation>Universal Transverse Mercator Coordinate</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="UTMGridZone"/>
+				<xs:element ref="UTMEasting"/>
+				<xs:element ref="UTMNorthing"/>
+				<xs:element ref="ElevationAGL" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GCC">
+		<xs:annotation>
+			<xs:documentation>Geocentric Coordinate</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="X"/>
+				<xs:element ref="Y"/>
+				<xs:element ref="Z"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MGRSGridZone">
+		<xs:annotation>
+			<xs:documentation>The MGRS Grid Zone designator, to include the number and letter as defined by NIMA TM 8358.1</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="3"/>
+				<xs:pattern value="[0-9]{2}[ABCDEFGHJKLMNPQRSTUVWXYZ]{1}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="UTMGridZone">
+		<xs:annotation>
+			<xs:documentation>The UTM Grid Zone designator, to include the number and letter as defined by NIMA TM 8358.1</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="3"/>
+				<xs:pattern value="[0-9]{2}[NS]{1}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="MGRSGridSquare">
+		<xs:annotation>
+			<xs:documentation>The MGRS one hundred thousand meter grid square designator, as defined by NIMA TM 8358.1</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="2"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="MGRSEasting">
+		<xs:annotation>
+			<xs:documentation>The easting component of the MGRS coordindate to the precsion value of the MGRS precision element.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:long">
+				<xs:minInclusive value="0"/>
+				<xs:maxInclusive value="99999"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="MGRSNorthing">
+		<xs:annotation>
+			<xs:documentation>The northing component of the MGRS coordindate to the precsion value of the MGRS precision element.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:long">
+				<xs:minInclusive value="0"/>
+				<xs:maxInclusive value="99999"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="UTMEasting">
+		<xs:annotation>
+			<xs:documentation>The easting component of the UTM coordindate to the precsion value of the MGRS precision element.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:float">
+				<xs:minInclusive value="0.0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="UTMNorthing">
+		<xs:annotation>
+			<xs:documentation>The northing component of the UTM coordindate to the precsion value of the MGRS precision element.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:float">
+				<xs:minInclusive value="0.0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Longitude">
+		<xs:annotation>
+			<xs:documentation>Fractional degrees of longitude.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:float">
+				<xs:maxInclusive value="180."/>
+				<xs:minExclusive value="-180."/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Latitude">
+		<xs:annotation>
+			<xs:documentation>Fractional degress of latitude.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:float">
+				<xs:maxInclusive value="180.0"/>
+				<xs:minExclusive value="-180.0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="X" type="xs:double">
+		<xs:annotation>
+			<xs:documentation>The double precision X component of the Geocetric coordindate.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Y" type="xs:double">
+		<xs:annotation>
+			<xs:documentation>The double precision Y component of the Geocetric coordindate.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Z" type="xs:double">
+		<xs:annotation>
+			<xs:documentation>The double precision Z component of the Geocentric coordindate.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>JBML Deviation: Coordinates with sequence number to organize multiple coordinates</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name = "SequencedCoordinates">
+		<xs:complexContent>
+			<xs:extension base="Coordinates">
+				<xs:attribute name="Sequence" type="xs:integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,9 @@
+﻿  C2SIMClientREST_Lib.cpp
+  C2SIMClientSTOMP_Lib.cpp
+  C2SIMSTOMPMessage.cpp
+  C2SIMClientException.cpp
+  C2SIMHeader.cpp
+boost/uuid/seed_rng.hpp(143): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+  StompClient.cpp
+  Generating Code...
+  ClientLib.vcxproj -> C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.0.3\lib64\C2SIMClientLib.lib

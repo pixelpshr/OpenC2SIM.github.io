@@ -1,0 +1,1209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+    targetNamespace="http://www.sisostds.org/schemas/C2SIM/1.1">
+
+	<!-- repackaging of C2SIM_SMX_LOX_v1.0.0.xsd from C2SIM Core/SMX/LOX Ontology -->
+	<!-- replacing ref and group by an equivalent direct use of the element names -->
+
+	<xs:simpleType name="NameType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="SystemNameType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="IntializationFileTypeType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="InitializationDataFileType">
+		<xs:annotation>
+			<xs:documentation>Defines a file of supplementary data that is used to initialize the scenario. This file is generally system-specific, for example a terrain database file or a mapping from C2SIM entity types to local entity type enumerations. It could apply to "all" systems.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="SystemName" type="SystemNameType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="IntializationFileType" type="IntializationFileTypeType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="CountryCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GenericCountry"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="EthnicGroupCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GenericEthnicGroup"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ReligiousOrganizationCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GenericReligiousOrganization"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="AbstractOrganizationType">
+		<xs:annotation>
+			<xs:documentation>A group that an actor can be affiliated with. Does not perform any actions and does not have a specific location.
+				Subclasses of this class can be created for country, religion, etc. Each of these will have defined instances (one for each country, etc.)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="CountryCode" type="CountryCodeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EthnicGroupCode" type="EthnicGroupCodeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ReligiousOrganizationCode" type="ReligiousOrganizationCodeType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="CommunicationNetworkType">
+		<xs:annotation>
+			<xs:documentation>An specific network over which an entity communicates. A logical entity. Will have data properties defining communication parameters.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="ReferenceType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="OverlayType">
+		<xs:annotation>
+			<xs:documentation>A logical grouping of Entities (units, graphics, etc.) for purposes of conveniently referring to them.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Reference" type="ReferenceType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="HostilityStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>Enumerations of possible hostility relationships in a military situation. Derived from JC3IEDM-v3.0.1.ObjectItemHostilityStatusCode</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#HostilityStatusCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AFR"/>
+			<xs:enumeration value="AHO"/>
+			<xs:enumeration value="AIV"/>
+			<xs:enumeration value="ANT"/>
+			<xs:enumeration value="FAKER"/>
+			<xs:enumeration value="FR"/>
+			<xs:enumeration value="HO"/>
+			<xs:enumeration value="IV"/>
+			<xs:enumeration value="JOKER"/>
+			<xs:enumeration value="NEUTRL"/>
+			<xs:enumeration value="PENDNG"/>
+			<xs:enumeration value="SUSPCT"/>
+			<xs:enumeration value="UNK"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="OtherSideType">
+		<xs:annotation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasOtherSide</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="ForceSideRelationType">
+		<xs:annotation>
+			<xs:documentation>This relation describes the hostility relationship of a military force toward another force. The force that has this relationship as its property is the "military force", while the force named in the hasOtherSide property of this relationship is "another force."</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#ForceSideRelation</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="HostilityStatusCode" type="HostilityStatusCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="OtherSide" type="OtherSideType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ForceSideType">
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ForceSideRelation" type="ForceSideRelationType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AbstractObjectType">
+		<xs:choice>
+			<xs:element name="AbstractOrganization" type="AbstractOrganizationType"/>
+			<xs:element name="CommunicationNetwork" type="CommunicationNetworkType"/>
+			<xs:element name="Overlay" type="OverlayType"/>
+			<xs:element name="ForceSide" type="ForceSideType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="EventCodeType">
+		<xs:annotation>
+			<xs:documentation>The type of event.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GenericAction"/>
+			<xs:enumeration value="TaskEnd"/>
+			<xs:enumeration value="TaskStart"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="EventType">
+		<xs:annotation>
+			<xs:documentation>An ACTION that is an incident, phenomenon, or occasion. May or may not be the result of an agent's action.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Location" type="LocationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="MapGraphicID" type="MapGraphicIDType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EventCode" type="EventCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="StartTime" type="DateTimeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ActionType">
+		<xs:choice>
+			<xs:element name="Event" type="EventType"/>
+			<xs:element name="Task" type="TaskType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="SubordinateType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	
+	<xs:simpleType name="SIDCStringType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="EntityTypeStringType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="APP6-SIDCType">
+		<xs:sequence>
+			<xs:element name="SIDCString" type="SIDCStringType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="DISCategoryType">
+		<xs:annotation>
+			<xs:documentation>Provides a Category Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISCategory</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISCodeType">
+		<xs:annotation>
+			<xs:documentation>Provides an entity type code from IEEE 1516-2010 Distributed Interactive Simulation.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISCountryType">
+		<xs:annotation>
+			<xs:documentation>Provides a Country Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISCountry</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISDomainType">
+		<xs:annotation>
+			<xs:documentation>Provides a Domain Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISDomain</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISExtraType">
+		<xs:annotation>
+			<xs:documentation>Provides an Extra Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISExtra</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISKindType">
+		<xs:annotation>
+			<xs:documentation>Provides a Kind Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISKind</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISSpecificType">
+		<xs:annotation>
+			<xs:documentation>Provides a Specific Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISSpecific</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte"/>
+	</xs:simpleType>
+	<xs:simpleType name="DISSubCategoryType">
+		<xs:annotation>
+			<xs:documentation>Provides a SubCategory Code from the DIS standard IEEE 1516-2010.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/smx#hasDISSubCategory</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:byte"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="DISEntityTypeType">
+		<xs:sequence>
+			<xs:element name="DISCategory" type="DISCategoryType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISCountry" type="DISCountryType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISDomain" type="DISDomainType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISExtra" type="DISExtraType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISKind" type="DISKindType" minOccurs="1" maxOccurs="1"/>	
+			<xs:element name="DISSpecific" type="DISSpecificType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISSubCategory" type="DISSubCategoryType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="NamedEntityTypeType">
+		<xs:annotation>
+			<xs:documentation>An EntityType that can be identified by a unique name</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#NamedEntityType</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntityTypeString" type="EntityTypeStringType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EntityTypeType">
+		<xs:choice>
+			<xs:element name="APP6-SIDC" type="APP6-SIDCType"/>
+			<xs:element name="DISEntityType" type="DISEntityTypeType"/>
+			<xs:element name="NamedEntityType" type="NamedEntityTypeType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="CountType">
+		<xs:restriction base="xs:nonNegativeInteger"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="ConsumableMaterialType">
+		<xs:annotation>
+			<xs:documentation>Physical assets that are significant to the exercise but that are inanimate and do not perform actions by themselves. They are consumable resources, such as food or ammunition.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Count" type="CountType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EquipmentType">
+		<xs:annotation>
+			<xs:documentation>A physical object that is normally part of an entity. For example an uncrewed gun.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Count" type="CountType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ResourceType">
+		<xs:choice>
+			<xs:element name="ConsumableMaterial" type="ConsumableMaterialType"/>
+			<xs:element name="Equipment" type="EquipmentType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="AllegianceToType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="AffiliatedWithType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="CommunicationsNetworkType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="SuperiorType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="SideType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="HeightType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="LengthType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="WidthType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="BoundingBoxType">
+		<xs:annotation>
+			<xs:documentation>A rectangle in 2D space containing the two-dimensional extent of an entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Length" type="LengthType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Width" type="WidthType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="BoundingVolumeType">
+		<xs:annotation>
+			<xs:documentation>A rectangular volume of 3D space containing the physical extend of an entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Height" type="HeightType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Length" type="LengthType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Width" type="WidthType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ExtentVerticesType">
+		<xs:annotation>
+			<xs:documentation>The locations of multiple vertices defining the space occupied by an entity. For example, points on a multi-point line or a convex hull. These vertices are in a specific order.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Location" type="LocationType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="HandlesType">
+		<xs:annotation>
+			<xs:documentation>The locations of the special locations that define the shape of a physical object. For example, the tip of an arrow head graphic, a side point defining the arrow head width, and a bottom point defining its length.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Location" type="LocationType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PhysicalExtentType">
+		<xs:choice>
+			<xs:element name="BoundingBox" type="BoundingBoxType"/>
+			<xs:element name="BoundingVolume" type="BoundingVolumeType"/>
+			<xs:element name="ExtentVertices" type="ExtentVerticesType"/>
+			<xs:element name="Handles" type="HandlesType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="angleType">
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-180.0"/>
+			<xs:maxInclusive value="180.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="PhiType">
+		<xs:restriction base="angleType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="PsiType">
+		<xs:restriction base="angleType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ThetaType">
+		<xs:restriction base="angleType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="HeadingAngleType">
+		<xs:annotation>
+			<xs:documentation>Property of geospatial data value that represents heading direction in degrees where north is zero.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#hasHeadingAngle</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="EulerAnglesType">
+		<xs:annotation>
+			<xs:documentation>Representation of the orientation of an entity in 3D space expressed as Euler angles (DIS).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="HeadingAngle" type="HeadingAngleType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Phi" type="PhiType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Psi" type="PsiType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Theta" type="ThetaType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="OrientationType">
+		<xs:choice>
+			<xs:element name="EulerAngles" type="EulerAnglesType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="OperationalStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>An enumeration indicating the general level of capability of an entity.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FullyOperational"/>
+			<xs:enumeration value="MostlyOperational"/>
+			<xs:enumeration value="NotOperational"/>
+			<xs:enumeration value="PartlyOperational"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="OperationalStatusType">
+		<xs:annotation>
+			<xs:documentation>An enumeration indicating degree of partial capability.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OperationalStatusCode" type="OperationalStatusCodeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ResourcesType">
+		<xs:annotation>
+			<xs:documentation>A level of personnel, equipment, ammunition, fuel, etc. The user must compare this to the full strength of the unit.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Resource" type="ResourceType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="percentageType">
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:maxInclusive value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="StrengthPercentageType">
+		<xs:restriction base="percentageType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="StrengthType">
+		<xs:annotation>
+			<xs:documentation>Representation of the strength of an entity expressed as a percentage of some starting value.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StrengthPercentage" type="StrengthPercentageType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EntityHealthStatusType">
+		<xs:choice>
+			<xs:element name="OperationalStatus" type="OperationalStatusType"/>
+			<xs:element name="Resources" type="ResourcesType"/>
+			<xs:element name="Strength" type="StrengthType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="SpeedType">
+		<xs:annotation>
+			<xs:documentation>Speed in meters/second.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="PhysicalStateType">
+		<xs:annotation>
+			<xs:documentation>Description of the physical state of an entity, including location, orientation, health, speed, etc.
+				Note that an EnvironmentalState class should be a subclass of PhysicalState. The EnvironmentalState could be the state of, for example, a smoke plume, which would have a location and could have direction, orientation, and speed.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DateTime" type="DateTimeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="DirectionOfMovement" type="OrientationType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EntityHealthStatus" type="EntityHealthStatusType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Location" type="LocationType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Orientation" type="OrientationType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Speed" type="SpeedType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EntityDescriptorType">
+		<xs:annotation>
+			<xs:documentation>The Descriptor defines static attributes of an entity, i.e. that do not change during the course of the simulation. This information is provided at initialization time.			
+				The friend/hostile/... relationship of this entity with others can be specfied with hasAllegianceRelationship properties, to define specific and possibly asymmetric relations with other enitities.
+				The isAffiliatedWith property defines organizations that this entity is affiliated with. These organizations are abstract; they are not actors.
+				C2 structures can be defined by using the hasSuperior property.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AffiliatedWith" type="AffiliatedWithType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AllegianceTo" type="AllegianceToType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CommunicationsNetwork" type="CommunicationsNetworkType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Side" type="SideType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Superior" type="SuperiorType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="CurrentTaskType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="MilitaryOrganizationType">
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Subordinate" type="SubordinateType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+		
+	<xs:complexType name="NonMilitaryOrganizationType">
+		<xs:annotation>
+			<xs:documentation>An organization operating external to military authority (e.g., law enforcement, non-governmental organizations).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Subordinate" type="SubordinateType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="CollectiveEntityType">
+		<xs:choice>
+			<xs:element name="MilitaryOrganization" type="MilitaryOrganizationType"/>
+			<xs:element name="NonMilitaryOrganization" type="NonMilitaryOrganizationType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="EntityStateType">
+		<xs:choice>
+			<xs:element name="PhysicalState" type="PhysicalStateType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="PersonTypeCategoryCodeType">
+		<xs:annotation>
+			<xs:documentation>Instances of this class (code values) to be taken from JC3IEDM 3.1.4 PersonTypeCategoryCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GenericInstance"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="MarkingType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="PersonType">
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AircraftType">
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SubsurfaceVesselType">
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SurfaceVesselType">
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="VehicleType">
+		<xs:sequence>
+			<xs:element name="CurrentTask" type="CurrentTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityDescriptor" type="EntityDescriptorType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PlatformType">
+		<xs:choice>
+			<xs:element name="Aircraft" type="AircraftType"/>
+			<xs:element name="SubsurfaceVessel" type="SubsurfaceVesselType"/>
+			<xs:element name="SurfaceVessel" type="SurfaceVesselType"/>
+			<xs:element name="Vehicle" type="VehicleType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="ActorEntityType">
+		<xs:choice>
+			<xs:element name="CollectiveEntity" type="CollectiveEntityType"/>
+			<xs:element name="Person" type="PersonType"/>
+			<xs:element name="Platform" type="PlatformType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="CulturalFeatureType">
+		<xs:annotation>
+			<xs:documentation>Any man-made feature in the environment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ConsumableMaterial" type="ConsumableMaterialType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EnvironmentalObjectType">
+		<xs:annotation>
+			<xs:documentation>A specified region in which the environment (e.g. weather, ocean state) is defined by a particular Environmental State.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="GeographicFeatureType">
+		<xs:annotation>
+			<xs:documentation>A geographic feature generally used for location reference. For example a hill, river, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="MapGraphicType">
+		<xs:annotation>
+			<xs:documentation>Graphics on a map that define locations, lines, areas, actions, etc. The location of the graphic is the location in the real world represented on the map. The extent is the set of handle points or vertices that define its shape and size. This class includes task graphics, METOC graphics, and MOOTW graphics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CurrentState" type="EntityStateType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Marking" type="MarkingType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PhysicalEntityType">
+		<xs:choice>
+			<xs:element name="CulturalFeature" type="CulturalFeatureType"/>
+			<xs:element name="EnvironmentalObject" type="EnvironmentalObjectType"/>
+			<xs:element name="GeographicFeature" type="GeographicFeatureType"/>
+			<xs:element name="MapGraphic" type="MapGraphicType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="EntityType">
+		<xs:choice>
+			<xs:element name="ActorEntity" type="ActorEntityType"/>
+			<xs:element name="PhysicalEntity" type="PhysicalEntityType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="PlanPhaseReferenceType">
+		<xs:annotation>
+			<xs:documentation>A reference to a plan phase.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="ObjectDefinitionsType">
+		<xs:sequence>
+			<xs:element name="AbstractObject" type="AbstractObjectType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Action" type="ActionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Entity" type="EntityType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PlanPhaseReference" type="PlanPhaseReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="ActorReferenceType">
+		<xs:annotation>
+			<xs:documentation>These references should be to objects of class Actor, or subclasses.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="SystemEntityListType">
+		<xs:annotation>
+			<xs:documentation>This is a listing of entities that reside of a system. The list defines what system a message should be sent to in order to get it to a given actor.  Each entity can reside on only one system. This list does not define necessarily define the complete list of entities on the given system.
+				Systems can build a map from this and other lists to get the system from a given entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ActorReference" type="ActorReferenceType" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="SystemName" type="SystemNameType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="VersionType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="ScenarioSettingType">
+		<xs:annotation>
+			<xs:documentation>Information describing the setting of the scenario, including the date, time, physical extent of the terrain, and a version string.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DateTime" type="DateTimeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Version" type="VersionType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="C2SIMInitializationBodyType">
+		<xs:annotation>
+			<xs:documentation>This message can initialize all of the objects in the scenario as well as the scenario setting.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InitializationDataFile" type="InitializationDataFileType" minOccurs="0" maxOccurs="unbounded"/>
+			<!-- next 3 lines changed to minOccurs="0" 22Apr18 by JMP -->
+			<xs:element name="ObjectDefinitions" type="ObjectDefinitionsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SystemEntityList" type="SystemEntityListType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ScenarioSetting" type="ScenarioSettingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="C2SIMInitializationBody" type="C2SIMInitializationBodyType"/>
+	
+	<xs:complexType name="ObjectInitializationBodyType">
+		<xs:annotation>
+			<xs:documentation>This message is sent by each system to a marshalling server upon receipt of a SubmitInitialization message.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InitializationDataFile" type="InitializationDataFileType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ObjectDefinitions" type="ObjectDefinitionsType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ScenarioSetting" type="ScenarioSettingType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ObjectInitializationBody" type="ObjectInitializationBodyType"/>
+	
+	<xs:complexType name="MessageBodyType">
+		<xs:choice>
+			<xs:element ref="C2SIMInitializationBody"/>
+			<xs:element ref="ObjectInitializationBody"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="MessageBody" type="MessageBodyType"/>
+	
+	<xs:simpleType name="UUIDBaseType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="FromSenderType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ToReceiverType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="IsoDateTimeBaseType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{4}-[0-9]{2}-[0-9]{2}[T]{1}[0-9]{2}:[0-9]{2}:[0-9]{2}[Z]{1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IsoDateTimeType">
+		<xs:restriction base="IsoDateTimeBaseType"/>
+	</xs:simpleType>
+	<xs:element name="IsoDateTime" type="IsoDateTimeType"/>
+	<xs:complexType name="DateTimeType">
+		<xs:annotation>
+			<xs:documentation>A date and time in ISO 8601:2000 DateTime Group format yyyy-mm-ddThh:mm:ssZ e.g. 1998-05-12T14:15:00Z. From MSDL simple types.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="DateTimeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="IsoDateTime" type="IsoDateTimeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="DateTime" type="DateTimeType"/>
+	
+	<xs:simpleType name="TimeReferenceCodeType">
+		<xs:annotation>
+			<xs:documentation>Indicates whether a relative time is referenced to the start or the end of an interval time.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="IntervalEndTime"/>
+			<xs:enumeration value="IntervalStartTime"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="TimeReferenceCode" type="TimeReferenceCodeType"/>
+	
+	<xs:simpleType name="EventReferenceType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:element name="EventReference" type="EventReferenceType"/>
+	
+	<xs:complexType name="RelativeTimeType">
+		<xs:annotation>
+			<xs:documentation>Specifies an absolute time relative to the start or end time of an event.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="DelayTimeAmount" type="DurationType" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="TimeReferenceCode" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="EventReference" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="RelativeTime" type="RelativeTimeType"/>
+	
+	<xs:complexType name="SimulationTimeType">
+		<xs:annotation>
+			<xs:documentation>A time measured as a time duration since the time instant of the scenario start.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="DelayTimeAmount" type="DurationType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SimulationTime" type="SimulationTimeType"/>
+	
+	<xs:complexType name="TimeInstantType">
+		<xs:choice>
+			<xs:element ref="DateTime"/>
+			<xs:element ref="RelativeTime"/>
+			<xs:element ref="SimulationTime"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="OrderIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="RequestingEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="OrganizationCodeType">
+		<xs:choice>
+			<xs:element name="CountryCode" type="CountryCodeType"/>
+			<xs:element name="EthnicGroupCode" type="EthnicGroupCodeType"/>
+			<xs:element name="ReligiousOrganizationCode" type="ReligiousOrganizationCodeType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="ManeuverWarfareTaskType">
+		<xs:annotation>
+			<xs:documentation>A task containing the who, what, where, when, why of a ground maneuver task.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DesiredEffectCode" type="DesiredEffectCodeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="TaskNameCode" type="TaskNameCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Duration" type="DurationType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EndTime" type="DateTimeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="StartTime" type="DateTimeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="AffectedEntity" type="AffectedEntityType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PerformingEntity" type="PerformingEntityType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="TaskFunctionalAssociationCode" type="TaskFunctionalAssociationCodeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="FunctionalAssociationWithTask" type="FunctionalAssociationWithTaskType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Location" type="LocationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="MapGraphicID" type="MapGraphicIDType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="TaskType">
+		<xs:choice>
+			<xs:element name="ManeuverWarfareTask" type="ManeuverWarfareTaskType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="DesiredEffectCodeType">
+		<xs:annotation>
+			<xs:documentation>A code describing the intended effect of a task.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BURN"/>
+			<xs:enumeration value="CAPTRD"/>
+			<xs:enumeration value="CONS"/>
+			<xs:enumeration value="DSTRYK"/>
+			<xs:enumeration value="FKIL"/>
+			<xs:enumeration value="FLIG"/>
+			<xs:enumeration value="GenericEffect"/>
+			<xs:enumeration value="IDNT"/>
+			<xs:enumeration value="ILLUMN"/>
+			<xs:enumeration value="INTREC"/>
+			<xs:enumeration value="KILL"/>
+			<xs:enumeration value="LDAM"/>
+			<xs:enumeration value="LGTRST"/>
+			<xs:enumeration value="LOST"/>
+			<xs:enumeration value="MKIL"/>
+			<xs:enumeration value="MODDAM"/>
+			<xs:enumeration value="NBCAS"/>
+			<xs:enumeration value="NKN"/>
+			<xs:enumeration value="NORSTN"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="NUTRLD"/>
+			<xs:enumeration value="SDAM"/>
+			<xs:enumeration value="SUPRSD"/>
+			<xs:enumeration value="WNDD"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TaskNameCodeType">
+		<xs:annotation>
+			<xs:documentation>The activity to be performed in the task, e.g. Move, Observe, Assist.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACQUIR"/>
+			<xs:enumeration value="ADVANC"/>
+			<xs:enumeration value="AIRDEF"/>
+			<xs:enumeration value="AMBUSH"/>
+			<xs:enumeration value="ARASLT"/>
+			<xs:enumeration value="ASSMBL"/>
+			<xs:enumeration value="ATTACK"/>
+			<xs:enumeration value="ATTRIT"/>
+			<xs:enumeration value="ATTSPT"/>
+			<xs:enumeration value="AVOID"/>
+			<xs:enumeration value="AssistOtherUnit"/>
+			<xs:enumeration value="BLOCK"/>
+			<xs:enumeration value="BREACH"/>
+			<xs:enumeration value="BYPASS"/>
+			<xs:enumeration value="CAPTUR"/>
+			<xs:enumeration value="CLOSE"/>
+			<xs:enumeration value="CLRLND"/>
+			<xs:enumeration value="CLROBS"/>
+			<xs:enumeration value="CNFPSL"/>
+			<xs:enumeration value="CNRPSL"/>
+			<xs:enumeration value="COVER"/>
+			<xs:enumeration value="CRESRV"/>
+			<xs:enumeration value="CTRATK"/>
+			<xs:enumeration value="CTRBYF"/>
+			<xs:enumeration value="CTRFIR"/>
+			<xs:enumeration value="DECEIV"/>
+			<xs:enumeration value="DEFEAT"/>
+			<xs:enumeration value="DEFEND"/>
+			<xs:enumeration value="DELAY"/>
+			<xs:enumeration value="DENY"/>
+			<xs:enumeration value="DESTRY"/>
+			<xs:enumeration value="DISENG"/>
+			<xs:enumeration value="DISRPT"/>
+			<xs:enumeration value="DLBATK"/>
+			<xs:enumeration value="DRONL"/>
+			<xs:enumeration value="ENGAGE"/>
+			<xs:enumeration value="ENVLP"/>
+			<xs:enumeration value="EXPLT"/>
+			<xs:enumeration value="FIX"/>
+			<xs:enumeration value="GUARD"/>
+			<xs:enumeration value="HARASS"/>
+			<xs:enumeration value="HASTY"/>
+			<xs:enumeration value="HONASP"/>
+			<xs:enumeration value="HoldInPlace"/>
+			<xs:enumeration value="INFILT"/>
+			<xs:enumeration value="INTDCT"/>
+			<xs:enumeration value="ISOLAT"/>
+			<xs:enumeration value="LOCATE"/>
+			<xs:enumeration value="MEDEVC"/>
+			<xs:enumeration value="MOPUP"/>
+			<xs:enumeration value="MOVE"/>
+			<xs:enumeration value="MoveToLocation"/>
+			<xs:enumeration value="OBSCUR"/>
+			<xs:enumeration value="OBSRV"/>
+			<xs:enumeration value="OCCUPY"/>
+			<xs:enumeration value="Observe"/>
+			<xs:enumeration value="OrientToLocation"/>
+			<xs:enumeration value="PATROL"/>
+			<xs:enumeration value="PENTRT"/>
+			<xs:enumeration value="PLAN"/>
+			<xs:enumeration value="PREFIR"/>
+			<xs:enumeration value="PURSUE"/>
+			<xs:enumeration value="RECCE"/>
+			<xs:enumeration value="RECONS"/>
+			<xs:enumeration value="RECOVR"/>
+			<xs:enumeration value="REFUEL"/>
+			<xs:enumeration value="REINF"/>
+			<xs:enumeration value="RESCUE"/>
+			<xs:enumeration value="RESUPL"/>
+			<xs:enumeration value="RETAIN"/>
+			<xs:enumeration value="RLFPLC"/>
+			<xs:enumeration value="ReportPosition"/>
+			<xs:enumeration value="SCREEN"/>
+			<xs:enumeration value="SECURE"/>
+			<xs:enumeration value="SEIZE"/>
+			<xs:enumeration value="SUPPRS"/>
+			<xs:enumeration value="SUPPRT"/>
+			<xs:enumeration value="THREAT"/>
+			<xs:enumeration value="TURN"/>
+			<xs:enumeration value="UseCapability"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="IsoTimeDurationBaseType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[P]{1}[0-9]{2}[Y]{1}[0-9]{2}[M]{1}[0-9]{2}[D]{1}[T]{1}[0-9]{2}[H]{1}[0-9]{2}[M]{1}[0-9]{2}[S]{1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IsoTimeDurationType">
+		<xs:restriction base="IsoTimeDurationBaseType"/>
+	</xs:simpleType>
+	<xs:complexType name="DurationType">
+		<xs:annotation>
+			<xs:documentation>A time duration expressed in ISO 8601:2000 duration format PnYnMnDTnHnMnS e.g. P00Y00M00DT00H00M00S. Note that this does not support fractions of seconds. From MSDL simple types.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IsoTimeDuration" type="IsoTimeDurationType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="AffectedEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="PerformingEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="TaskFunctionalAssociationCodeType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="FunctionalAssociationWithTaskType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="latitudeType">
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-90.0"/>
+			<xs:maxInclusive value="90.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LatitudeType">
+		<xs:annotation>
+			<xs:documentation>This should have a range specified of -90 to +90 (degrees)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="latitudeType"/>
+	</xs:simpleType>
+	<xs:simpleType name="longitudeType">
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-180.0"/>
+			<xs:maxInclusive value="180.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LongitudeType">
+		<xs:annotation>
+			<xs:documentation>This should have a range specified of -180 to +180 (degrees)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="longitudeType"/>
+	</xs:simpleType>
+	<xs:simpleType name="AltitudeAGLType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="AltitudeMSLType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="spatialMeasuresType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="AngleType">
+		<xs:restriction base="spatialMeasuresType"/>
+	</xs:simpleType>
+
+	<xs:complexType name="GeodeticCoordinateType">
+		<xs:sequence>
+			<xs:element name="AltitudeAGL" type="AltitudeAGLType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="AltitudeMSL" type="AltitudeMSLType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Latitude" type="LatitudeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Longitude" type="LongitudeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="XType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="YType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="ZType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="CartesianOffsetType">
+		<xs:annotation>
+			<xs:documentation>A spatial offset expressed in geocentric coordinates.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="X" type="XType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Y" type="YType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Z" type="ZType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CartesianOffset" type="CartesianOffsetType"/>
+	<xs:complexType name="SpatialOffsetType">
+		<xs:choice>
+			<xs:element ref="CartesianOffset"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:simpleType name="LocationReferenceEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:complexType name="RelativeLocationType">
+		<xs:annotation>
+			<xs:documentation>A location defined by an offset to some reference location.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SpatialOffset" type="SpatialOffsetType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EntityReference" type="EntityReferenceType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="EntityReferenceType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:complexType name="LocationType">
+		<xs:choice>
+			<xs:element name="GeodeticCoordinate" type="GeodeticCoordinateType"/>
+			<xs:element name="RelativeLocation" type="RelativeLocationType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="MapGraphicIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="UUIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+</xs:schema>

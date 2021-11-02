@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://netlab.gmu.edu/JBML/BML"
+        xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:C_BML="urn:sisostds:bml:coalition:draft:cbml:1"
+        targetNamespace="http://netlab.gmu.edu/JBML/BML" elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+        <xsd:import namespace="urn:sisostds:bml:coalition:draft:cbml:1"
+                schemaLocation="C_BML-JC3IEDM-3.0.2-EntityTypes-20090514.xsd"/>
+
+        <xsd:import namespace="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+                schemaLocation="JC3IEDM-3.0.2-SimpleTypes-20090514.xsd"/>
+        <xsd:annotation>
+                <xsd:documentation xml:lang="en"> Battle Management Language proposed schema types
+                        definition. Inputs needed for a NewUnitType, that is, to instantiate a unit type in the database
+                        Copyright 2009 George Mason University C4I Center. </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:element name="NewUnitPush">
+                <xsd:complexType>
+                        <xsd:sequence>
+                                <xsd:element name="NewUnit" type="NewUnit_Type"
+                                        maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                </xsd:complexType>
+        </xsd:element>
+
+        <xsd:complexType name="NewUnit_Type">
+                <xsd:sequence>
+                        <xsd:annotation>
+                                <xsd:documentation> for XmlType definitions see
+                                        US-JC3IEDM-v3_1b-EntityTypes.xsd </xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:element name="unit_name" type="mip:OIDType">
+                                <xsd:annotation>
+                                        <xsd:documentation> name of the Unit in strict format, e.g.
+                                                A2-BN-5-CAV </xsd:documentation>
+                                </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element name="unit_type_ref" type="C_BML:UnitTypeRef">
+                                <xsd:annotation>
+                                        <xsd:documentation xml:lang="en">Ref to Unit Type</xsd:documentation>
+                                </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element name="Position" type="C_BML:GeographicPoint" minOccurs="0"/>
+                        <xsd:element name="OpStatus"
+                                type="mip:OrganisationStatusOperationalStatusCode" minOccurs="0"/>
+                </xsd:sequence>
+        </xsd:complexType>
+
+        <xsd:element name="NewUnitTypePush">
+                <xsd:complexType>
+                        <xsd:sequence>
+                                <xsd:element name="NewUnitType" type="NewUnitType_Type"
+                                        maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                </xsd:complexType>
+        </xsd:element>
+
+
+        <xsd:complexType name="NewUnitType_Type">
+                <xsd:sequence>
+                        <xsd:annotation>
+                                <xsd:documentation> for XmlType definitions see US-JC3IEDM-v3_1b-EntityTypes.xsd
+                                </xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:element name="obj_type_name" type="mip:OIDType">
+                                <xsd:annotation>
+                                        <xsd:documentation> Name for the type of Who's organization, e.g. Motorized
+                                                Cavalry Bn </xsd:documentation>
+                                </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element name="cmd_function_ind_code"
+                                type="mip:OrganisationTypeCommandFunctionIndicatorCode"/>
+                        <xsd:element name="service_code"
+                                type="mip:MilitaryOrganisationTypeServiceCode"/>
+                        <xsd:element name="unit_type_cat_code" type="mip:UnitTypeCategoryCode"/>
+                        <xsd:element name="arm_cat_code" type="mip:UnitTypeArmCategoryCode"/>
+                        <xsd:element name="size_code" type="mip:EchelonSizeCode"/>
+                        <xsd:element name="unit_type_arm_spclsn_code"
+                                type="mip:UnitTypeArmSpecialisationCode" minOccurs="0"/>
+                        <xsd:element name="unit_type_suppl_spclsn_code"
+                                type="mip:UnitTypeSupplementarySpecialisationCode" minOccurs="0"/>
+                        <xsd:element name="unit_type_gen_mob_code"
+                                type="mip:UnitTypeGeneralMobilityCode" minOccurs="0"/>
+                        <xsd:element name="unit_type_qual_code" type="mip:UnitTypeQualifierCode"
+                                minOccurs="0"/>
+                </xsd:sequence>
+        </xsd:complexType>
+
+</xsd:schema>

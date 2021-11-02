@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="StompClient.h" />
+    <ClInclude Include="C2SIMClientLib2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C2SIMHeader.cpp" />
+    <ClCompile Include="StompClient.cpp" />
+    <ClCompile Include="C2SIMClientException.cpp" />
+    <ClCompile Include="C2SIMClientREST_Lib.cpp" />
+    <ClCompile Include="C2SIMClientSTOMP_Lib.cpp" />
+    <ClCompile Include="C2SIMSTOMPMessage.cpp" />
+  </ItemGroup>
+</Project>

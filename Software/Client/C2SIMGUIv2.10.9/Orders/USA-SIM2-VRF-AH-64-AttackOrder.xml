@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c2s:MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIM_SMX_LOX_v1.0.0.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<!-- NPS-VRForces order template for FMN demo -->
+<c2s:DomainMessageBody>
+<c2s:OrderBody>
+    <c2s:FromSender>00000000-0000-0001-0001-000000000000</c2s:FromSender>
+    <c2s:ToReceiver>00000000-0007-0001-0000-000000000000</c2s:ToReceiver>
+    <c2s:IssuedTime>
+        <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+    </c2s:IssuedTime>
+    <c2s:OrderID>00000000-0007-0000-0001-000000000000</c2s:OrderID>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:AltitudeAGL>100</c2s:AltitudeAGL>
+            <c2s:Latitude>58.644655</c2s:Latitude>
+            <c2s:Longitude>16.427088</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Location>
+        <c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:AltitudeAGL>100</c2s:AltitudeAGL>
+            <c2s:Latitude>58.605881</c2s:Latitude>
+            <c2s:Longitude>16.236114</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Location>
+        <c2s:Name>NPS-VRF1</c2s:Name>
+        <c2s:UUID>00000000-0007-0001-0001-000000000000</c2s:UUID>
+        <c2s:AffectedEntity>00000000-0007-0001-0050-000000000000</c2s:AffectedEntity>       
+        <c2s:DesiredEffectCode>NKN</c2s:DesiredEffectCode>
+        <c2s:PerformingEntity>00000000-0007-0001-0050-000000000000</c2s:PerformingEntity>
+        <c2s:StartTime><c2s:DateTime>
+            <c2s:Name>0.00</c2s:Name>
+            <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+        </c2s:DateTime></c2s:StartTime>
+        <c2s:TaskActionCode>ATTACK</c2s:TaskActionCode>
+        <c2s:RuleOfEngagement><c2s:MipWeaponUseROE><c2s:WeaponROECode>
+             <c2s:WeaponRuleOfEngagementCode>ROEFree</c2s:WeaponRuleOfEngagementCode>
+        </c2s:WeaponROECode></c2s:MipWeaponUseROE></c2s:RuleOfEngagement>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+</c2s:OrderBody>
+</c2s:DomainMessageBody>
+</c2s:MessageBody>

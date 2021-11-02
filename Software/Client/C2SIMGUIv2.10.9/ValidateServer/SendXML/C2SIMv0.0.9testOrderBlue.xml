@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c2s:MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 C2SIMv9_SMXv9_LOXplusv6.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<!-- Blue Order H1:c2S:DomainMessageBodyGroup00 MSG-145 CWIX 2018 -->
+<!-- CWIX-BLUE-H1.00 -->
+<c2s:DomainMessageBody>
+<c2s:OrderBody>
+    <c2s:FromSender>00000000-0000-0001-0001-000000000000</c2s:FromSender>
+    <c2s:ToReceiver>00000000-0000-0001-0006-000000000000</c2s:ToReceiver>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:DesiredEffectCode>DSTRYK</c2s:DesiredEffectCode>
+        <c2s:TaskNameCode>ATTACK</c2s:TaskNameCode>
+        <c2s:StartTime>
+            <c2s:Name>H1.00</c2s:Name>
+            <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+        </c2s:StartTime>
+        <c2s:AffectedEntity>00000000-0000-0002-0010-000000000000</c2s:AffectedEntity>       
+        <c2s:PerformingEntity>00000000-0000-0001-0020-000000000000</c2s:PerformingEntity>
+        <c2s:Location><c2s:Coordinate><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.6667747</c2s:Latitude>
+            <c2s:Longitude>16.259910</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Coordinate></c2s:Location>
+        <c2s:Route>
+           <c2s:RouteLocation>   
+                <c2s:GeodeticCoordinate>
+                    <c2s:Latitude>58.600</c2s:Latitude>
+                    <c2s:Longitude>16.195</c2s:Longitude>
+                </c2s:GeodeticCoordinate>
+            </c2s:RouteLocation>
+            <c2s:RouteLocation>
+                <c2s:GeodeticCoordinate>
+                    <c2s:Latitude>58.615934</c2s:Latitude>
+                    <c2s:Longitude>16.178524</c2s:Longitude>                    
+                </c2s:GeodeticCoordinate>                
+            </c2s:RouteLocation>
+            <c2s:RouteLocation>
+                <c2s:GeodeticCoordinate>
+                    <c2s:Latitude>58.639491</c2s:Latitude>
+                    <c2s:Longitude>16.170411</c2s:Longitude>
+                </c2s:GeodeticCoordinate>              
+            </c2s:RouteLocation>       
+            <c2s:RouteLocation>
+                <c2s:GeodeticCoordinate>         
+                    <c2s:Latitude>58.66188</c2s:Latitude>
+                    <c2s:Longitude>16.19687</c2s:Longitude>
+                    </c2s:GeodeticCoordinate>    
+            </c2s:RouteLocation>
+            <c2s:RouteLocation>   
+                <c2s:GeodeticCoordinate>
+                    <c2s:Latitude>58.673989</c2s:Latitude>
+                    <c2s:Longitude>16.221751</c2s:Longitude>
+                </c2s:GeodeticCoordinate>
+            </c2s:RouteLocation>      
+        </c2s:Route>
+        <c2s:UUID>00000000-0000-0401-0001-000000000000</c2s:UUID>
+        <c2s:Name>AttackSHC</c2s:Name>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:DesiredEffectCode>DSTRYK</c2s:DesiredEffectCode>
+        <c2s:TaskNameCode>ATTACK</c2s:TaskNameCode>
+        <c2s:StartTime>
+            <c2s:Name>H1.00</c2s:Name>
+            <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+        </c2s:StartTime>
+        <c2s:AffectedEntity>00000000-0000-0002-0010-000000000000</c2s:AffectedEntity>       
+        <c2s:PerformingEntity>00000000-0000-0001-0010-000000000000</c2s:PerformingEntity>
+        <c2s:Location><c2s:Coordinate><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.666082</c2s:Latitude>
+            <c2s:Longitude>16.260219</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Coordinate></c2s:Location>
+        <c2s:UUID>00000000-0000-0402-0001-000000000000</c2s:UUID>
+        <c2s:Name>UAV-AttackSHC</c2s:Name>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+    <c2s:IssuedTime><c2s:DateTime>
+        <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+    </c2s:DateTime></c2s:IssuedTime>
+    <c2s:OrderID>00000000-0000-0001-0001-000000000000</c2s:OrderID>
+</c2s:OrderBody>
+</c2s:DomainMessageBody>
+</c2s:MessageBody>

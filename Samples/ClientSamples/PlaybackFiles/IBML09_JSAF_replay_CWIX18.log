@@ -1,0 +1,560 @@
+2018-06-08 09:03:37,890 INFO 3987  FFI  <?xml version="1.0" encoding="UTF-8" standalone="yes"?><C2SIM_Message xmlns="http://www.sisostds.org/schemas/c2sim/1.0"><Header><messageId>2</messageId><performative>Request</performative><sender>FFI</sender></Header><C2SIM_Order xmlns="http://www.sisostds.org/schemas/c2sim/1.0"><OrderingEntity><Name>SWAP</Name></OrderingEntity><OrderID>1528463907276</OrderID><OrderIssuedTime>2018-18-08T13:18:27Z</OrderIssuedTime><Task><ActionTaskActivityCode>MOVE</ActionTaskActivityCode><PerformingEntity><Name>UKUAS1</Name><ActorEntityID>07006aaa-a1ce-4cb8-8be0-8099cd46e90b</ActorEntityID></PerformingEntity><TaskID>1</TaskID><ValidTimeInterval><StartTime>2018-06-08T13:01:41Z</StartTime><EndTime>2018-06-08T15:01:41Z</EndTime></ValidTimeInterval><Where><RouteWhere><Point><Latitude>58.66114</Latitude><Longitude>16.193676</Longitude></Point><Point><Latitude>58.609764</Latitude><Longitude>16.53717</Longitude></Point><Point><Latitude>58.59116</Latitude><Longitude>16.789856</Longitude></Point><Point><Latitude>58.680508</Latitude><Longitude>16.500092</Longitude></Point><Point><Latitude>58.66114</Latitude><Longitude>16.193682</Longitude></Point></RouteWhere></Where></Task><Task><ActionTaskActivityCode>MOVE</ActionTaskActivityCode><PerformingEntity><Name>UKUAS2</Name><ActorEntityID>571646bf-1951-44d2-8f3b-a63f62f30697</ActorEntityID></PerformingEntity><TaskID>2</TaskID><ValidTimeInterval><StartTime>2018-06-08T13:01:41Z</StartTime><EndTime>2018-06-08T15:01:41Z</EndTime></ValidTimeInterval><Where><RouteWhere><Point><Latitude>58.41284</Latitude><Longitude>15.641785</Longitude></Point><Point><Latitude>58.480774</Latitude><Longitude>15.961761</Longitude></Point><Point><Latitude>58.576843</Latitude><Longitude>16.143723</Longitude></Point><Point><Latitude>58.711903</Latitude><Longitude>16.161575</Longitude></Point><Point><Latitude>58.546043</Latitude><Longitude>15.969887</Longitude></Point><Point><Latitude>58.41284</Latitude><Longitude>15.64179</Longitude></Point></RouteWhere></Where></Task></C2SIM_Order></C2SIM_Message>
+2018-06-08 09:04:03,756 INFO 3988  TestBW  <?xml version="1.0" encoding="UTF-8"?><BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4108581542969</Latitude><Longitude>15.6215696334839</Longitude><ElevationAGL>7.84171570558101e-05</ElevationAGL></GDC></WhereLocation><When>20180608141556.000</When><ReportID>20002</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6666984558106</Latitude><Longitude>16.1833057403564</Longitude><ElevationAGL>92.2570037841797</ElevationAGL></GDC></WhereLocation><When>20180608141556.000</When><ReportID>20003</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+2018-06-08 09:04:44,016 INFO 3989  TestBW  <?xml version="1.0" encoding="UTF-8"?><BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4168395996094</Latitude><Longitude>15.6372661590576</Longitude><ElevationAGL>7548.93505859375</ElevationAGL></GDC></WhereLocation><When>20180608141636.000</When><ReportID>20004</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6723289489746</Latitude><Longitude>16.1995906829834</Longitude><ElevationAGL>7609.66162109375</ElevationAGL></GDC></WhereLocation><When>20180608141636.000</When><ReportID>20005</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:05:24,029 INFO 3990  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4219398498535</Latitude><Longitude>15.6774873733521</Longitude><ElevationAGL>7550.16259765625</ElevationAGL></GDC></WhereLocation><When>20180608141716.000</When><ReportID>20006</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6615524291992</Latitude><Longitude>16.2355308532715</Longitude><ElevationAGL>7613.548828125</ElevationAGL></GDC></WhereLocation><When>20180608141716.000</When><ReportID>20007</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:06:04,237 INFO 3991  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4302062988281</Latitude><Longitude>15.717095375061</Longitude><ElevationAGL>7550.7080078125</ElevationAGL></GDC></WhereLocation><When>20180608141756.000</When><ReportID>20008</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6545715332031</Latitude><Longitude>16.2763824462891</Longitude><ElevationAGL>7617.48876953125</ElevationAGL></GDC></WhereLocation><When>20180608141756.000</When><ReportID>20009</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:06:44,451 INFO 3992  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4375114440918</Latitude><Longitude>15.7521638870239</Longitude><ElevationAGL>7550.3798828125</ElevationAGL></GDC></WhereLocation><When>20180608141836.000</When><ReportID>20010</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6475677490234</Latitude><Longitude>16.3172512054443</Longitude><ElevationAGL>7620.45703125</ElevationAGL></GDC></WhereLocation><When>20180608141836.000</When><ReportID>20011</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:07:24,365 INFO 3993  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4458122253418</Latitude><Longitude>15.7920732498169</Longitude><ElevationAGL>7549.08056640625</ElevationAGL></GDC></WhereLocation><When>20180608141916.000</When><ReportID>20012</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6414070129395</Latitude><Longitude>16.3531398773193</Longitude><ElevationAGL>7621.986328125</ElevationAGL></GDC></WhereLocation><When>20180608141916.000</When><ReportID>20013</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:08:04,571 INFO 3994  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4540138244629</Latitude><Longitude>15.8315954208374</Longitude><ElevationAGL>7560.9140625</ElevationAGL></GDC></WhereLocation><When>20180608141956.000</When><ReportID>20014</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6343803405762</Latitude><Longitude>16.3940010070801</Longitude><ElevationAGL>7621.2939453125</ElevationAGL></GDC></WhereLocation><When>20180608141956.000</When><ReportID>20015</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:08:28,131 INFO 3995  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS1</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00002</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.6260833740234</Latitude>
+                        <Longitude>16.2202186584473</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608142020.000</When>
+                <ReportID>1</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:08:44,629 INFO 3996  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4622116088867</Latitude><Longitude>15.8711862564087</Longitude><ElevationAGL>7572.828125</ElevationAGL></GDC></WhereLocation><When>20180608142036.000</When><ReportID>20016</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6273345947266</Latitude><Longitude>16.4348678588867</Longitude><ElevationAGL>7620.83056640625</ElevationAGL></GDC></WhereLocation><When>20180608142036.000</When><ReportID>20017</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:09:24,970 INFO 3997  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.470516204834</Latitude><Longitude>15.9113512039185</Longitude><ElevationAGL>7572.32666015625</ElevationAGL></GDC></WhereLocation><When>20180608142116.000</When><ReportID>20018</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6202659606934</Latitude><Longitude>16.475772857666</Longitude><ElevationAGL>7619.51220703125</ElevationAGL></GDC></WhereLocation><When>20180608142116.000</When><ReportID>20019</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:09:47,765 INFO 3999  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS2</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00004</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.4828948974609</Latitude>
+                        <Longitude>15.9028968811035</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608142139.000</When>
+                <ReportID>2</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:10:05,340 INFO 4000  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4786949157715</Latitude><Longitude>15.9510097503662</Longitude><ElevationAGL>7570.85400390625</ElevationAGL></GDC></WhereLocation><When>20180608142156.000</When><ReportID>20020</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6132659912109</Latitude><Longitude>16.516185760498</Longitude><ElevationAGL>7618.931640625</ElevationAGL></GDC></WhereLocation><When>20180608142156.000</When><ReportID>20021</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:10:45,003 INFO 4001  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4928321838379</Latitude><Longitude>15.9833307266235</Longitude><ElevationAGL>7570.98974609375</ElevationAGL></GDC></WhereLocation><When>20180608142236.000</When><ReportID>20022</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.608341217041</Latitude><Longitude>16.5581340789795</Longitude><ElevationAGL>7616.951171875</ElevationAGL></GDC></WhereLocation><When>20180608142236.000</When><ReportID>20023</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:11:13,377 INFO 4003  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS2</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00007</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.6260833740234</Latitude>
+                        <Longitude>16.2202186584473</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608142304.000</When>
+                <ReportID>3</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:11:20,284 INFO 4004  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS2</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00009</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.4828948974609</Latitude>
+                        <Longitude>15.9028968811035</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608142311.000</When>
+                <ReportID>4</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:11:25,182 INFO 4005  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5086517333984</Latitude><Longitude>16.0134391784668</Longitude><ElevationAGL>7576.8544921875</ElevationAGL></GDC></WhereLocation><When>20180608142316.000</When><ReportID>20024</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6052284240723</Latitude><Longitude>16.6002445220947</Longitude><ElevationAGL>7613.70654296875</ElevationAGL></GDC></WhereLocation><When>20180608142316.000</When><ReportID>20025</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:12:05,286 INFO 4006  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5244560241699</Latitude><Longitude>16.0437049865723</Longitude><ElevationAGL>7587.94287109375</ElevationAGL></GDC></WhereLocation><When>20180608142356.000</When><ReportID>20026</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.60205078125</Latitude><Longitude>16.6429634094238</Longitude><ElevationAGL>7615.142578125</ElevationAGL></GDC></WhereLocation><When>20180608142356.000</When><ReportID>20027</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:12:27,398 INFO 4007  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS1</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00010</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.6193580627441</Latitude>
+                        <Longitude>16.7230453491211</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608142419.000</When>
+                <ReportID>5</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:12:46,635 INFO 4008  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5402793884277</Latitude><Longitude>16.074047088623</Longitude><ElevationAGL>7589.72802734375</ElevationAGL></GDC></WhereLocation><When>20180608142437.000</When><ReportID>20028</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5988693237305</Latitude><Longitude>16.6856117248535</Longitude><ElevationAGL>7614.16357421875</ElevationAGL></GDC></WhereLocation><When>20180608142437.000</When><ReportID>20029</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:13:25,690 INFO 4009  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5543365478516</Latitude><Longitude>16.1010398864746</Longitude><ElevationAGL>7589.7158203125</ElevationAGL></GDC></WhereLocation><When>20180608142517.000</When><ReportID>20030</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5957183837891</Latitude><Longitude>16.7276344299316</Longitude><ElevationAGL>7612.2373046875</ElevationAGL></GDC></WhereLocation><When>20180608142517.000</When><ReportID>20031</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:14:05,859 INFO 4010  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5700988769531</Latitude><Longitude>16.1313438415527</Longitude><ElevationAGL>7591.25830078125</ElevationAGL></GDC></WhereLocation><When>20180608142557.000</When><ReportID>20032</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5928497314453</Latitude><Longitude>16.7657222747803</Longitude><ElevationAGL>7609.66455078125</ElevationAGL></GDC></WhereLocation><When>20180608142557.000</When><ReportID>20033</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:14:46,256 INFO 4011  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5899467468262</Latitude><Longitude>16.1465892791748</Longitude><ElevationAGL>7594.55615234375</ElevationAGL></GDC></WhereLocation><When>20180608142637.000</When><ReportID>20034</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5980949401856</Latitude><Longitude>16.8011302947998</Longitude><ElevationAGL>7603.93359375</ElevationAGL></GDC></WhereLocation><When>20180608142637.000</When><ReportID>20035</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:15:26,067 INFO 4012  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6122779846192</Latitude><Longitude>16.1494045257568</Longitude><ElevationAGL>7595.23486328125</ElevationAGL></GDC></WhereLocation><When>20180608142717.000</When><ReportID>20036</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6108512878418</Latitude><Longitude>16.7691745758057</Longitude><ElevationAGL>7603.05419921875</ElevationAGL></GDC></WhereLocation><When>20180608142717.000</When><ReportID>20037</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:16:06,302 INFO 4013  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6346130371094</Latitude><Longitude>16.1522254943848</Longitude><ElevationAGL>7597.86962890625</ElevationAGL></GDC></WhereLocation><When>20180608142757.000</When><ReportID>20038</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6208648681641</Latitude><Longitude>16.7305774688721</Longitude><ElevationAGL>7603.0068359375</ElevationAGL></GDC></WhereLocation><When>20180608142757.000</When><ReportID>20039</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:16:46,402 INFO 4014  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6569366455078</Latitude><Longitude>16.1550483703613</Longitude><ElevationAGL>7601.2646484375</ElevationAGL></GDC></WhereLocation><When>20180608142837.000</When><ReportID>20040</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.630859375</Latitude><Longitude>16.6919822692871</Longitude><ElevationAGL>7607.67236328125</ElevationAGL></GDC></WhereLocation><When>20180608142837.000</When><ReportID>20041</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:17:26,510 INFO 4015  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6792144775391</Latitude><Longitude>16.1578674316406</Longitude><ElevationAGL>7603.68017578125</ElevationAGL></GDC></WhereLocation><When>20180608142917.000</When><ReportID>20042</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6408424377441</Latitude><Longitude>16.6533584594727</Longitude><ElevationAGL>7611.357421875</ElevationAGL></GDC></WhereLocation><When>20180608142917.000</When><ReportID>20043</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:18:06,633 INFO 4017  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.7015571594238</Latitude><Longitude>16.1606998443604</Longitude><ElevationAGL>7605.1298828125</ElevationAGL></GDC></WhereLocation><When>20180608142957.000</When><ReportID>20044</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.650691986084</Latitude><Longitude>16.6151866912842</Longitude><ElevationAGL>7613.87255859375</ElevationAGL></GDC></WhereLocation><When>20180608142957.000</When><ReportID>20045</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:18:46,731 INFO 4018  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.7166976928711</Latitude><Longitude>16.1433048248291</Longitude><ElevationAGL>7602.29931640625</ElevationAGL></GDC></WhereLocation><When>20180608143037.000</When><ReportID>20046</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6606597900391</Latitude><Longitude>16.5765037536621</Longitude><ElevationAGL>7614.99755859375</ElevationAGL></GDC></WhereLocation><When>20180608143037.000</When><ReportID>20047</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:19:26,957 INFO 4019  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6977500915527</Latitude><Longitude>16.1208324432373</Longitude><ElevationAGL>7598.1455078125</ElevationAGL></GDC></WhereLocation><When>20180608143117.000</When><ReportID>20048</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6706047058106</Latitude><Longitude>16.5378265380859</Longitude><ElevationAGL>7617.87353515625</ElevationAGL></GDC></WhereLocation><When>20180608143117.000</When><ReportID>20049</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:19:45,619 INFO 4020  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS1</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00014</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.6260833740234</Latitude>
+                        <Longitude>16.2202186584473</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608143135.000</When>
+                <ReportID>6</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:20:07,013 INFO 4021  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.677906036377</Latitude><Longitude>16.1010932922363</Longitude><ElevationAGL>7597.61474609375</ElevationAGL></GDC></WhereLocation><When>20180608143157.000</When><ReportID>20050</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6800804138184</Latitude><Longitude>16.4993534088135</Longitude><ElevationAGL>7619.77685546875</ElevationAGL></GDC></WhereLocation><When>20180608143157.000</When><ReportID>20051</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:20:47,479 INFO 4022  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6602172851563</Latitude><Longitude>16.0835189819336</Longitude><ElevationAGL>7591.7529296875</ElevationAGL></GDC></WhereLocation><When>20180608143237.000</When><ReportID>20052</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.677906036377</Latitude><Longitude>16.4609432220459</Longitude><ElevationAGL>7621.22119140625</ElevationAGL></GDC></WhereLocation><When>20180608143237.000</When><ReportID>20053</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:21:11,127 INFO 4023  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS1</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00016</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.6260833740234</Latitude>
+                        <Longitude>16.2202186584473</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608143301.000</When>
+                <ReportID>7</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:21:27,276 INFO 4024  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.640380859375</Latitude><Longitude>16.0638370513916</Longitude><ElevationAGL>7593.15380859375</ElevationAGL></GDC></WhereLocation><When>20180608143317.000</When><ReportID>20054</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6752548217774</Latitude><Longitude>16.4186248779297</Longitude><ElevationAGL>7621.9091796875</ElevationAGL></GDC></WhereLocation><When>20180608143317.000</When><ReportID>20055</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:21:48,193 INFO 4025  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS2</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00017</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.4828948974609</Latitude>
+                        <Longitude>15.9028968811035</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608143337.000</When>
+                <ReportID>8</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:21:54,675 INFO 4026  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS2</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00018</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.4828948974609</Latitude>
+                        <Longitude>15.9028968811035</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608143344.000</When>
+                <ReportID>9</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:22:07,649 INFO 4027  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.620532989502</Latitude><Longitude>16.0441646575928</Longitude><ElevationAGL>7594.06591796875</ElevationAGL></GDC></WhereLocation><When>20180608143357.000</When><ReportID>20056</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.672550201416</Latitude><Longitude>16.3756694793701</Longitude><ElevationAGL>7621.6279296875</ElevationAGL></GDC></WhereLocation><When>20180608143357.000</When><ReportID>20057</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:22:19,536 INFO 4028  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS1</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00019</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.6260833740234</Latitude>
+                        <Longitude>16.2202186584473</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608143409.000</When>
+                <ReportID>10</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:22:47,646 INFO 4029  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6006202697754</Latitude><Longitude>16.0244579315186</Longitude><ElevationAGL>7594.97021484375</ElevationAGL></GDC></WhereLocation><When>20180608143437.000</When><ReportID>20058</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6698684692383</Latitude><Longitude>16.333288192749</Longitude><ElevationAGL>7622.93408203125</ElevationAGL></GDC></WhereLocation><When>20180608143437.000</When><ReportID>20059</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:23:02,408 INFO 4030  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>UKUAS2</UnitID>
+                </ReporterWho>
+                <Context>Contacts</Context>
+                <Hostility>HO</Hostility>
+                <Executer>
+                    
+                        <UnitID>RKU00021</UnitID>
+                    
+                </Executer>
+                <OpStatus>OPR</OpStatus>
+                <WhereLocation>
+                    <GDC>
+                        <Latitude>58.4828948974609</Latitude>
+                        <Longitude>15.9028968811035</Longitude>
+                    </GDC>
+                </WhereLocation>
+                <When>20180608143452.000</When>
+                <ReportID>11</ReportID>
+                <Credibility>
+                    <Source>GRDREC</Source>
+                    <Reliability>B</Reliability>
+                    <Certainty>RPTPLA</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>
+
+
+2018-06-08 09:23:27,708 INFO 4031  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5807723999023</Latitude><Longitude>16.0048389434814</Longitude><ElevationAGL>7591.2275390625</ElevationAGL></GDC></WhereLocation><When>20180608143517.000</When><ReportID>20060</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6671371459961</Latitude><Longitude>16.2903804779053</Longitude><ElevationAGL>7620.158203125</ElevationAGL></GDC></WhereLocation><When>20180608143517.000</When><ReportID>20061</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:24:07,834 INFO 4032  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5610008239746</Latitude><Longitude>15.9847288131714</Longitude><ElevationAGL>7587.78955078125</ElevationAGL></GDC></WhereLocation><When>20180608143557.000</When><ReportID>20062</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6644248962402</Latitude><Longitude>16.2480049133301</Longitude><ElevationAGL>7615.3505859375</ElevationAGL></GDC></WhereLocation><When>20180608143557.000</When><ReportID>20063</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:24:47,866 INFO 4034  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5428276062012</Latitude><Longitude>15.9607830047607</Longitude><ElevationAGL>7585.35986328125</ElevationAGL></GDC></WhereLocation><When>20180608143637.000</When><ReportID>20064</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6616630554199</Latitude><Longitude>16.2051239013672</Longitude><ElevationAGL>7609.5009765625</ElevationAGL></GDC></WhereLocation><When>20180608143637.000</When><ReportID>20065</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:25:28,135 INFO 4035  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5291290283203</Latitude><Longitude>15.9269208908081</Longitude><ElevationAGL>7585.6884765625</ElevationAGL></GDC></WhereLocation><When>20180608143717.000</When><ReportID>20066</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6613731384277</Latitude><Longitude>16.1972942352295</Longitude><ElevationAGL>1.77635683940025e-15</ElevationAGL></GDC></WhereLocation><When>20180608143717.000</When><ReportID>20067</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:26:08,377 INFO 4037  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5152778625488</Latitude><Longitude>15.8927240371704</Longitude><ElevationAGL>7585.79931640625</ElevationAGL></GDC></WhereLocation><When>20180608143757.000</When><ReportID>20068</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6613731384277</Latitude><Longitude>16.1972942352295</Longitude><ElevationAGL>1.77635683940025e-15</ElevationAGL></GDC></WhereLocation><When>20180608143757.000</When><ReportID>20069</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:26:48,427 INFO 4038  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.5015678405762</Latitude><Longitude>15.8589324951172</Longitude><ElevationAGL>7581.5546875</ElevationAGL></GDC></WhereLocation><When>20180608143837.000</When><ReportID>20070</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6613731384277</Latitude><Longitude>16.1972942352295</Longitude><ElevationAGL>1.77635683940025e-15</ElevationAGL></GDC></WhereLocation><When>20180608143837.000</When><ReportID>20071</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:27:28,500 INFO 4039  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4893531799316</Latitude><Longitude>15.8288631439209</Longitude><ElevationAGL>7571.10546875</ElevationAGL></GDC></WhereLocation><When>20180608143917.000</When><ReportID>20072</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6613731384277</Latitude><Longitude>16.1972942352295</Longitude><ElevationAGL>1.77635683940025e-15</ElevationAGL></GDC></WhereLocation><When>20180608143917.000</When><ReportID>20073</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:28:08,573 INFO 4040  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4756546020508</Latitude><Longitude>15.7951765060425</Longitude><ElevationAGL>7558.47119140625</ElevationAGL></GDC></WhereLocation><When>20180608143957.000</When><ReportID>20074</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6613731384277</Latitude><Longitude>16.1972942352295</Longitude><ElevationAGL>1.77635683940025e-15</ElevationAGL></GDC></WhereLocation><When>20180608143957.000</When><ReportID>20075</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+2018-06-08 09:28:49,003 INFO 4041  TestBW  <?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS2</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS2</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.4619369506836</Latitude><Longitude>15.7615003585815</Longitude><ElevationAGL>7550.7890625</ElevationAGL></GDC></WhereLocation><When>20180608144037.000</When><ReportID>20076</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report><Report><CategoryOfReport>StatusReport</CategoryOfReport><TypeOfReport>GeneralStatusReport</TypeOfReport><StatusReport><GeneralStatusReport><ReporterWho><UnitID>UKUAS1</UnitID></ReporterWho><Context>UkUASUnits</Context><Hostility>FR</Hostility><Executer><UnitID>UKUAS1</UnitID></Executer><OpStatus>OPR</OpStatus><WhereLocation><GDC><Latitude>58.6613731384277</Latitude><Longitude>16.1972942352295</Longitude><ElevationAGL>1.77635683940025e-15</ElevationAGL></GDC></WhereLocation><When>20180608144037.000</When><ReportID>20077</ReportID><Credibility><Source>AOBSR</Source><Reliability>A</Reliability><Certainty>RPTFCT</Certainty></Credibility></GeneralStatusReport></StatusReport></Report></BMLReport>
+
+
+
+
+
+

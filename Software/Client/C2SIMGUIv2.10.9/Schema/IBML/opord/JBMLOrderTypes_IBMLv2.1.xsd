@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://netlab.gmu.edu/IBML"
+			xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+            targetNamespace="http://netlab.gmu.edu/IBML" 
+            elementFormDefault="qualified" 
+            attributeFormDefault="unqualified">
+            
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 2.1
+			Source:  JBML 1.5
+			IBML Status: Legacy
+			IBML Schema Version: 2.1
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	
+	<xs:include schemaLocation="FiveWTypes_IBMLv2.1.xsd"/>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+     			Battle Management Language schema types definition.
+     			Copyright 2010 George Mason University C4I Center.
+  		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:annotation>
+		<xs:documentation>Provides the Domain for selective retrieval of Tasks within an Order</xs:documentation>
+	</xs:annotation>	
+	<xs:simpleType name="TaskDomainType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GROUND"/>
+			<xs:enumeration value="AIR"/>
+			<xs:enumeration value="MARITIME"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:annotation>
+		<xs:documentation>Provides basic information that applies to all Tasks in the order</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="OrderType">
+		<xs:sequence>
+			<xs:element name="OrderID" type="LabelType" minOccurs="0"/>
+			<xs:element name="TaskersIntent" type="FreeTextType" minOccurs="0"/>
+			<xs:element name="Task" type="TaskType" maxOccurs="unbounded"/>
+			<xs:element name="OrderIssuedWhen" type="jc3iedm:Datetime18XmlType"/>
+			<xs:element name="ReferenceOrderID" type="LabelType" minOccurs="0"/>
+			<xs:element name="Context" type="LabelType" minOccurs="0"/>
+			<xs:element name="TaskerWho" type="WhoType"/>
+			<xs:element name="TaskOrganization" type="TaskOrganizationType" minOccurs="0"/>
+			<xs:element name="ControlMeasures" type="OrderControlMeasuresType" minOccurs="0"/>
+			<xs:element name="TargetList" type="TargetListType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>Defines the domain of warfare associated with the task</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="TaskType">
+		<xs:choice>
+			<xs:element name="GroundTask" type="GroundTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AirTask" type="AirTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="MaritimeTask" type="MaritimeTaskType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>	
+
+	<xs:annotation>
+		<xs:documentation>
+			master list of control measures for the order;
+			these need to be coordinated across all Tasks
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="OrderControlMeasuresType">
+		<xs:sequence>
+			<xs:element name="ControlMeasure" type="WhereType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>Task control measures referencing OrderControlMeasure WhereLabels</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="TaskControlMeasuresType">
+		<xs:sequence>
+			<xs:element name="ControlMeasureLabel" type="LabelType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>Provides a list of targets and their locations.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="TargetListType">
+		<xs:sequence>
+			<xs:element name="TargetListItem" type="TargetType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>Defines the contents of a Task in the Ground domain</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="GroundTaskType">
+		<xs:sequence>
+			<xs:element name="TaskeeWho" type="WhoType">
+				<xs:annotation>
+					<xs:documentation>Specifies who is executing the task.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="What" type="WhatType">
+				<xs:annotation>
+					<xs:documentation>Specifies what actions are to take place.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Where" type="WhereType">
+				<xs:annotation>
+					<xs:documentation>Establishes where the order is to be executed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StartWhen" type="WhenType">
+				<xs:annotation>
+					<xs:documentation>Start Time of the Mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndWhen" type="WhenType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>End time of the mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Affected" type="AffectedType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						specifies a "Who" affected by the task (how affected is implicit to the What)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>			<xs:element name="Why" type="WhyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies reason for executing order.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaskControlMeasures" type="TaskControlMeasuresType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies labels of ControlMeasures in Order ControlMeasures.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaskLabel" type="LabelType"/>
+			<xs:element name="ReferenceTaskID" type="LabelType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>Defines the contents of a Task in the Air domain</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="AirTaskType">
+		<xs:sequence>
+			<xs:element name="TaskeeWho" type="WhoType">
+				<xs:annotation>
+					<xs:documentation>Specifies who is executing the task.</xs:documentation>
+				</xs:annotation>
+			</xs:element>	
+			<xs:element name="What" type="WhatType">
+				<xs:annotation>
+					<xs:documentation>Specifies what actions are to take place.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Where" type="WhereType">
+				<xs:annotation>
+					<xs:documentation>Establishes where the order is to be executed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StartWhen" type="WhenType">
+				<xs:annotation>
+					<xs:documentation>Start Time of the Mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndWhen" type="WhenType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>End time of the mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Why" type="WhyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies reason for executing order.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaskControlMeasures" type="TaskControlMeasuresType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies labels of ControlMeasures in Order ControlMeasures.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Label" type="LabelType"/>
+			<xs:element name="ReferenceTaskID" type="LabelType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>Defines the contents of a Task in the Maritime domain</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="MaritimeTaskType">
+		<xs:sequence>
+			<xs:element name="What" type="WhatType">
+				<xs:annotation>
+					<xs:documentation>Specifies what actions are to take place.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaskeeWho" type="WhoType">
+				<xs:annotation>
+					<xs:documentation>Specifies who is executing the task.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Where" type="WhereType">
+				<xs:annotation>
+					<xs:documentation>Establishes where the order is to be executed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StartWhen" type="WhenType">
+				<xs:annotation>
+					<xs:documentation>Start Time of the Mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndWhen" type="WhenType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>End time of the mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Why" type="WhyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies reason for executing order.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaskControlMeasures" type="TaskControlMeasuresType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						specifies labels of ControlMeasures in Order ControlMeasures
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Label" type="LabelType"/>
+			<xs:element name="ReferenceTaskID" type="LabelType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="TaskOrganizationType">
+	<xs:annotation>
+		<xs:documentation>
+			Defines the hierarchy of a military organization.
+			Self-reference allows a tree topology to be described.
+		</xs:documentation>
+	</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UnitID" type="LabelType"/>
+			<xs:element name="TaskOrganization" 
+						type="TaskOrganizationType" 
+						minOccurs="0" 
+						maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:annotation>
+		<xs:documentation>
+			free text for commander's intent; intended for human 
+			(not machine) interpretation
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="FreeTextType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[^?]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+</xs:schema>

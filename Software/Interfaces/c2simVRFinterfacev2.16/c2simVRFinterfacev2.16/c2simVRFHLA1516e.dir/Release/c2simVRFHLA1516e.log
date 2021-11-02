@@ -1,0 +1,15 @@
+﻿  C2SIMinterface.cpp
+  Unknown compiler version - please run the configure tests and report the results
+  C2SIMxmlHandler.cpp
+  Unknown compiler version - please run the configure tests and report the results
+  remoteControlInit.cxx
+  xerces_utils.cpp
+  main.cxx
+  Unknown compiler version - please run the configure tests and report the results
+  textIf.cxx
+  Unknown compiler version - please run the configure tests and report the results
+  Generating Code...
+     Creating library C:/MAK/vrforces4.9/examples/c2simVRF/build64/Release/c2simVRF.lib and object C:/MAK/vrforces4.9/examples/c2simVRF/build64/Release/c2simVRF.exp
+  c2simVRFHLA1516e.vcxproj -> C:\Users\c2sim\Desktop\C2SIM archive\c2simVRFinterfacev2.16\build64\Release\c2simVRFHLA1516e.exe
+  xcopy "C:\Users\c2sim\Desktop\C2SIM archive\c2simVRFinterfacev2.16\build64\Release\c2simVRFHLA1516e.exe" bin64 /y /q
+  1 File(s) copied

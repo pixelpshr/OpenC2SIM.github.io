@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:bml="http://netlab.gmu.edu/IBML" 
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified">
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 2.1
+			Source:  FGAN C2LG schema v1.3.080521 by GMU C4I Center 6-12-08
+			IBML Status: Experimental
+			IBML Schema Version: 2.1
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:import namespace="http://netlab.gmu.edu/IBML" 
+		schemaLocation="FiveWTypes_IBMLv2.1.xsd"/>
+	
+	
+	<xs:include schemaLocation="IBMLStatusReports.xsd"/>
+	<xs:include schemaLocation="IBMLSIMCIReports.xsd"/>
+	
+	<xs:element name="BMLREPORT">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Report" maxOccurs="unbounded"/>
+				<xs:element name="TypeOfReport" type="TypeOfReportType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:simpleType name="TypeOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AdvanceTaskReport"/>
+			<xs:enumeration value="AmbushTaskReport"/>
+			<xs:enumeration value="ArrestLegalTaskReport"/>
+			<xs:enumeration value="ArrestObstructTaskReport"/>
+			<xs:enumeration value="AssembleMaterielTaskReport"/>
+			<xs:enumeration value="AssemblePersonsTaskReport"/>
+			<xs:enumeration value="AssemblePersons"/>
+			<xs:enumeration value="AssignedToTaskReport"/>
+			<xs:enumeration value="AssistTaskReport"/>
+			<xs:enumeration value="AttachedToTaskReport"/>
+			<xs:enumeration value="AttackTaskReport"/>
+			<xs:enumeration value="AvoidTaskReport"/>
+			<xs:enumeration value="BlockTaskReport"/>
+			<xs:enumeration value="BreachTaskReport"/>
+			<xs:enumeration value="BuildUpTaskReport"/>
+			<xs:enumeration value="CanalizeTaskReport"/>
+			<xs:enumeration value="CancelTaskReport"/>
+			<xs:enumeration value="CaptureTaskReport"/>
+			<xs:enumeration value="ClearLandTaskReport"/>
+			<xs:enumeration value="ClearObstacleTaskReport"/>
+			<xs:enumeration value="ConcentrateTaskReport"/>
+			<xs:enumeration value="ConductTaskReport"/>
+			<xs:enumeration value="ConfiscateTaskReportType"/>
+			<xs:enumeration value="ConsolidateTaskReport"/>
+			<xs:enumeration value="ConstituteTaskReport"/>
+			<xs:enumeration value="ContainTaskReport"/>
+			<xs:enumeration value="CounterAttackTaskReport"/>
+			<xs:enumeration value="CoverTaskReport"/>
+			<xs:enumeration value="DefeatTaskReport"/>
+			<xs:enumeration value="DefendTaskReport"/>
+			<xs:enumeration value="DeflectTaskReport"/>
+			<xs:enumeration value="DemolishTaskReport"/>
+			<xs:enumeration value="DenyTaskReport"/>
+			<xs:enumeration value="DeployTaskReport"/>
+			<xs:enumeration value="DestroyTaskReport"/>
+			<xs:enumeration value="DisengageTaskReport"/>
+			<xs:enumeration value="DisruptTaskReport"/>
+			<xs:enumeration value="DistributeTaskReport"/>
+			<xs:enumeration value="EscortTaskReport"/>
+			<xs:enumeration value="EvacuateTaskReport"/>
+			<xs:enumeration value="ExploitTaskReport"/>
+			<xs:enumeration value="FixTaskReport"/>
+			<xs:enumeration value="GuardTaskReport"/>
+			<xs:enumeration value="HarassTaskReport"/>
+			<xs:enumeration value="HideTaskReport"/>
+			<xs:enumeration value="HoldDefensiveTaskReport"/>
+			<xs:enumeration value="HoldOffensiveTaskReport"/>
+			<xs:enumeration value="IdentifyTaskReport"/>
+			<xs:enumeration value="IlluminateTaskReport"/>
+			<xs:enumeration value="InfiltrateTaskReport"/>
+			<xs:enumeration value="IsolateTaskReport"/>
+			<xs:enumeration value="MarchTaskReport"/>
+			<xs:enumeration value="MopUpTaskReport"/>
+			<xs:enumeration value="MoveTaskReport"/>
+			<xs:enumeration value="ObserveTaskReport"/>
+			<xs:enumeration value="OccupyTaskReport"/>
+			<xs:enumeration value="PatrolTaskReport"/>
+			<xs:enumeration value="PenetrateTaskReport"/>
+			<xs:enumeration value="PlanTaskReport"/>
+			<xs:enumeration value="ProcureTaskReport"/>
+			<xs:enumeration value="PursueTaskReport"/>
+			<xs:enumeration value="ReconnaissanceTaskReport"/>
+			<xs:enumeration value="RecoverTaskReport"/>
+			<xs:enumeration value="ReinforceTaskReport"/>
+			<xs:enumeration value="ReliefInPlaceTaskReport"/>
+			<xs:enumeration value="RelieveTaskReport"/>
+			<xs:enumeration value="RestTaskReport"/>
+			<xs:enumeration value="ScreenTaskReport"/>
+			<xs:enumeration value="SecureTaskReport"/>
+			<xs:enumeration value="SeizeTaskReport"/>
+			<xs:enumeration value="SetUpTaskReport"/>
+			<xs:enumeration value="SupportTaskReport"/>
+			<xs:enumeration value="WithdrawTaskReport"/>
+			<xs:enumeration value="ProcureTaskReport"/>
+			<xs:enumeration value="AccidentTrafficEventReport"/>
+			<xs:enumeration value="PositionStatusReport"/>
+			<xs:enumeration value="GeneralStatusReport"/>
+			<xs:enumeration value="TaskStatusReport"/>
+			<xs:enumeration value="PersonnelStatusReport"/>
+			<xs:enumeration value="MaterielStatusReport"/>
+			<xs:enumeration value="FacilityStatusReport"/>
+			<xs:enumeration value="BRIDGEREP"/>
+			<xs:enumeration value="MINOBREP"/>
+			<xs:enumeration value="NATOSPOTREP"/>
+			<xs:enumeration value="SPOTREP"/>
+			<xs:enumeration value="TRKREP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+</xs:schema>

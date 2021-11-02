@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VBS3-C2Sim-plugin", "VBS3-C2Sim-plugin\VBS3-C2Sim-plugin.vcxproj", "{94B8FFF2-F038-43B0-A333-21B6869B726B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39} = {AB4BFF65-1A74-466B-9222-53D228A9FE39}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StompTest", "StompTest\StompTest.vcxproj", "{051A66DD-9917-44F4-907E-7CC21503037B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39} = {AB4BFF65-1A74-466B-9222-53D228A9FE39}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C2SIMClientLib", "C2SIMClientLib\C2SIMClientLib.vcxproj", "{AB4BFF65-1A74-466B-9222-53D228A9FE39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Debug|x64.ActiveCfg = Debug|x64
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Debug|x64.Build.0 = Debug|x64
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Debug|x86.ActiveCfg = Debug|Win32
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Debug|x86.Build.0 = Debug|Win32
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Release|x64.ActiveCfg = Release|x64
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Release|x64.Build.0 = Release|x64
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Release|x86.ActiveCfg = Release|Win32
+		{94B8FFF2-F038-43B0-A333-21B6869B726B}.Release|x86.Build.0 = Release|Win32
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Debug|x64.ActiveCfg = Debug|x64
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Debug|x64.Build.0 = Debug|x64
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Debug|x86.ActiveCfg = Debug|Win32
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Debug|x86.Build.0 = Debug|Win32
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Release|x64.ActiveCfg = Release|x64
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Release|x64.Build.0 = Release|x64
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Release|x86.ActiveCfg = Release|Win32
+		{051A66DD-9917-44F4-907E-7CC21503037B}.Release|x86.Build.0 = Release|Win32
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Debug|x64.ActiveCfg = Debug|x64
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Debug|x64.Build.0 = Debug|x64
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Debug|x86.ActiveCfg = Debug|Win32
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Debug|x86.Build.0 = Debug|Win32
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Release|x64.ActiveCfg = Release|x64
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Release|x64.Build.0 = Release|x64
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Release|x86.ActiveCfg = Release|Win32
+		{AB4BFF65-1A74-466B-9222-53D228A9FE39}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8EDA37FB-8F64-4092-A830-5AD283F3FEE1}
+	EndGlobalSection
+EndGlobal

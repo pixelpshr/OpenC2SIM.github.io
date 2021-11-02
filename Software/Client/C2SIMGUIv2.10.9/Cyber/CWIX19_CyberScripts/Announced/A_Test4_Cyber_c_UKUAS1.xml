@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CyberAttack xmlns="http://www.sisostds.org/schemas/C2SIM/1.1">
+    <Category3>
+        <Cyber_c>
+            <reporterName>00000000-0005-0001-0010-000000000000</reporterName>
+        </Cyber_c>
+    </Category3>
+</CyberAttack>

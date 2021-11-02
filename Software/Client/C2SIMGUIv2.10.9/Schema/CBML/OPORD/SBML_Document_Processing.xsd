@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+	xmlns:cbml="http://www.sisostds.org/schemas/c-bml/1.0"
+	targetNamespace="http://www.sisostds.org/schemas/c-bml/1.0" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+		schemaLocation="../jc3iedm-simple-types/3.0.2/jc3iedm-simple-types.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 2.1
+			Source: IBML
+			IBML Status: IBML Baseline Version
+			IBML Schema Version: 2.1
+		</xs:documentation>
+	</xs:annotation>
+
+
+	<xs:include schemaLocation="../cbml-composites-light/1.0/cbml-composites-light.xsd"/>
+	<xs:include schemaLocation="../cbml-feature-types/1.0/cbml-feature-types.xsd"/>
+	<xs:include schemaLocation="NATO_OPORD.xsd"></xs:include>
+	
+
+	<!--
+		DocumentPush - Used to test capture of XML text without JC3 DB access
+	-->
+	<xs:element name="DocumentPush" type="cbml:OperationsOrderType"/>
+
+	<xs:element name="DocumentPull" type="cbml:DocumentPullType"/>
+
+	<xs:complexType name="DocumentPullType">
+		<xs:sequence>
+			<xs:element name="OrderID" type="cbml:LabelType" minOccurs="0"/>
+			<xs:element name="ReportID" type="cbml:LabelType" minOccurs="0"/>
+			<xs:element name="Category" type="cbml:LabelType" minOccurs="0"/>
+			<xs:element name="Topic" type="cbml:LabelType" minOccurs="0"/>
+			<xs:element name="GetLatest" type="cbml:YN_Type" minOccurs="0"/>
+			<xs:element name="EarliestDatetime" type="jc3iedm:DatetimeTypeFix18" minOccurs="0"/>
+			<xs:element name="LatestDatetime" type="jc3iedm:DatetimeTypeFix18" minOccurs="0"/>
+		</xs:sequence>
+
+	</xs:complexType>
+
+	<xs:simpleType name="YN_Type">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="NO"/>
+			<xs:enumeration value="YES"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+</xs:schema>

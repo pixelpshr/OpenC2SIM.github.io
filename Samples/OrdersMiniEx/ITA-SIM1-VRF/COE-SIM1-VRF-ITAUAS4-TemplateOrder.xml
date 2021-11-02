@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c2s:MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIMv9_SMXv9_LOXplusv5.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<!-- MSCOE-VRForces order template for MSG-145 C2SIM Validation Distrubuted Mission Planning MiniEx -->
+<c2s:DomainMessageBody>
+<c2s:OrderBody>
+    <c2s:FromSender>00000000-0000-0001-0001-000000000000</c2s:FromSender>
+    <c2s:ToReceiver>00000000-0003-0001-0000-000000000000</c2s:ToReceiver>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:DesiredEffectCode>NKN</c2s:DesiredEffectCode>
+        <c2s:TaskNameCode>MOVE</c2s:TaskNameCode>
+        <c2s:StartTime>
+            <c2s:Name>0.00</c2s:Name>
+            <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+        </c2s:StartTime>
+        <c2s:AffectedEntity>00000000-0003-0001-0011-000000000000</c2s:AffectedEntity>       
+        <c2s:PerformingEntity>00000000-0003-0001-0011-000000000000</c2s:PerformingEntity>
+        <c2s:Location><c2s:Coordinate><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.594</c2s:Latitude>
+            <c2s:Longitude>16.396</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Coordinate></c2s:Location>
+        <c2s:UUID>00000000-0003-0001-0011-000000000000</c2s:UUID>
+        <c2s:Name>COE-VRF test 2</c2s:Name>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+    <c2s:IssuedTime><c2s:DateTime>
+        <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+    </c2s:DateTime></c2s:IssuedTime>
+    <c2s:OrderID>00000000-0003-0001-0001-000000000000</c2s:OrderID>
+</c2s:OrderBody>
+</c2s:DomainMessageBody>
+</c2s:MessageBody>

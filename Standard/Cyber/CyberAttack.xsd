@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.sisostds.org/schemas/c2sim/1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1">
+    <!-- NOTE - 
+-->
+    
+    <xs:annotation>
+        <xs:documentation>
+            Distances in (integer meters   
+            Lat/Lon expressed as degrees and decimal fractions   e.g Latitude = 45.234 degrees 
+            Time in (integer) seconds               
+        </xs:documentation>
+             
+    </xs:annotation>
+    
+    <xs:element name="CyberAttack" >
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Category1">
+                    <xs:complexType>
+                        <xs:choice>
+                            <!-- Block a specified fraction of message for a specified duration -->
+                            <xs:element name="EWa">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Fraction" type="xs:float"/>
+                                        <xs:element name="Duration" type="xs:int"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- EWb - Block a specified fraction of messages at random intervals -->
+                            <xs:element name="EWb">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Fraction" type="xs:float"/>
+                                        <xs:element name="MeanOnTime" type="xs:int"/>
+                                        <xs:element name="MeanOffTime" type="xs:int"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- EWc - Block every Nth message -->
+                            <xs:element name="EWc">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="N" type="xs:int"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Category2">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Cat_2a">
+
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="latOffset" type="xs:float"/>
+                                        <xs:element name="lonOffset" type="xs:float"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Category3">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- Block all messages from specific area for specified minutes -->
+                            <xs:element name="EWd">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="latCenter" type="xs:float"/>
+                                        <xs:element name="lonCenter" type="xs:float"/>
+                                        <xs:element name="distance" type="xs:float"/>
+                                        <xs:element name="duration" type="xs:int"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Modify report time by specified offset -->
+                            <xs:element name="Cyber_b">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="offsetSeconds" type="xs:int"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Block all messages from a specified reporting device -->
+                            <xs:element name="Cyber_c">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="reporterName" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- Modify report location by a specified distance and bearing for a specific unit -->
+                            <xs:element name= "Cyber_x">
+                                <xs:complexType>
+                                    <xs:sequence>                            
+                                        <xs:element name="reporter" type="xs:string"/>
+                                        <xs:element name="distance" type="xs:float"/>
+                                        <xs:element name="bearing" type="xs:float"/>                                       
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+
+    </xs:element>
+
+
+</xs:schema>

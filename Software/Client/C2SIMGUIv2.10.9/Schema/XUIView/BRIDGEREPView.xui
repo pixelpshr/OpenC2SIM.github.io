@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jaxfront version=2.61;time=2010-02-03 14:26:18.812;xsd=IBMLSIMCIReports.xsd;nsMapping=%KEYhttp://www.jaxfront.com/xui%VAL%KEYhttp://www.w3.org/2001/XMLSchema%VALxsd%KEYhttp://www.w3.org/2001/XMLSchema-instance%VALxsi?>
+<XUI  xsi:schemaLocation="http://www.jaxfront.com/xui jar:file:/C:/Program%20Files/JAXFront-2.6/lib/jaxfront-core.jar!/xui.xsd" xmlns="http://www.jaxfront.com/xui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       <component xpath="/BRIDGEREP">
+              <style>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+              </style>
+       </component>
+       <component xpath="/BRIDGEREP/WhereLocation/ControlFeature">
+              <style>
+                     <mode visible="false">
+                            <message/>
+                     </mode>
+              </style>
+       </component>
+       <component xpath="/BRIDGEREP/Parameters/ByPassLocation/ControlFeature">
+              <style>
+                     <mode visible="false">
+                            <message/>
+                     </mode>
+              </style>
+       </component>
+</XUI>

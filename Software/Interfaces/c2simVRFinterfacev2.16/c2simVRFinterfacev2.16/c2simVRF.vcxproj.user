@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LocalDebuggerCommandArguments>10.2.10.30 8080 61613 USA-SIM2 0 0 1 10.2.10.52 0</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommand>$(ProjectDir)\bin64\c2simVRFd</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>bin64</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerEnvironment>PATH=C:/MAK/vrforces4.9/bin64
+C:/MAK/vrlink5.6/bin64</LocalDebuggerEnvironment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>10.2.10.30 8080 61613 VRFORCES 0 0 0</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>

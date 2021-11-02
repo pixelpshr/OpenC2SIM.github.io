@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+	xmlns="http://netlab.gmu.edu/IBML" 
+           	targetNamespace="http://netlab.gmu.edu/IBML" 
+           	elementFormDefault="qualified" 
+           	attributeFormDefault="unqualified">
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 4.0
+			Source: IBML
+			IBML Status: IBML Baseline Version
+			IBML Schema Version: 2.0
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:include schemaLocation="Coordinates.xsd"/>
+	
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+     			Battle Management Language proposed schema types definition.
+     			Copyright 2009 George Mason University C4I Center.
+  		</xs:documentation>
+	</xs:annotation>
+
+	<!--************* Who section *************-->
+
+	<xs:complexType name="WhoType">
+		<xs:annotation>
+			<xs:documentation>
+				corresponds to JC3IEDM UnitUD; optionally includes 
+			        weapon platform, e.g. airframe or vessel
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!-- BMLReview: grammar allows Who to take on range of 
+			  types, e.g. Facility; schema should support that -->
+			<xs:choice>
+				<xs:element ref="jc3iedm:AnyUnit"/>
+				<xs:element name="NameText" type="jc3iedm:Text100XmlType"/>
+			</xs:choice>
+		<xs:element name="Equipment" type="jc3iedm:Text100XmlType" maxOccurs="unbounded" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name="AnyUnit"/>
+	
+
+	<!--************* What section *************-->
+
+	<xs:complexType name="WhatType">
+		<xs:annotation>
+			<xs:documentation>What is the tasked unit to do.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="WhatCode" type="jc3iedm:ActionTaskActivityCodeXmlType"/>			
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name="TaskRef" substitutionGroup="AnyTask">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="jc3iedm:OID"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="AnyTask"/>
+	
+
+	<!--************* When section *************-->
+
+	<xs:complexType name="WhenType">
+		<xs:annotation>
+			<xs:documentation>
+				Basic temporal parameter: 
+				WhenTime is a start/end pair; 
+				WhenEvent provides synch for action; 
+				RelativeWhen provides for task sequencing
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="WhenTime" type="WhenTimeType"/>
+			<xs:element name="WhenEvent" type="WhenEventType"/>
+			<xs:element name="RelativeWhen" type="RelativeWhenType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="WhenTimeType">
+		<xs:annotation>
+			<xs:documentation>Army BML definition of When</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="WhenQualifier"/>
+			<xs:element name="DateTime" type="jc3iedm:Datetime18XmlType"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="WhenQualifier"/>
+	
+	<xs:element name="StartTimeQualifier" 
+		type="jc3iedm:ActionTaskStartQualifierCodeXmlType" 
+		substitutionGroup="WhenQualifier"/>
+	<xs:element name="EndTimeQualifier" 
+		type="jc3iedm:ActionTaskEndQualifierCodeXmlType" 
+		substitutionGroup="WhenQualifier"/>
+
+	<xs:complexType name="WhenEventType">
+		<xs:annotation>
+			<xs:documentation>Army BML form of When that defines time with respect to another Task</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Qualifier" type="BmlActionTemporalAssociationCategoryCodeXmlType"/>
+			<xs:element name="Event" type="EventType"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EventType"><!-- from Army BML OPORD -->
+		<xs:sequence>
+			<xs:element name="Who" type="WhoType" minOccurs="0"/>
+			<xs:element name="Activity" type="jc3iedm:ActionEventCategoryCodeXmlType"/>
+			<xs:element name="Where" type="WhereType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="RelativeWhenType">
+		<xs:sequence>
+			<xs:element name="Qualifier" type="jc3iedm:ActionTemporalAssociationCategoryCodeXmlType"/>
+			<xs:element ref="AnyTask"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<!--*********** Affected section ************-->
+	
+	<xs:complexType name="AffectedType">
+		<xs:annotation>
+			<xs:documentation>
+				grammatical role
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="AffectedWho" type="WhoType"/>
+			<xs:element name="Target" type="TargetType"/>
+		</xs:choice>
+	</xs:complexType>
+
+
+	<!--************* Where section *************-->
+
+	<xs:complexType name="WhereType">
+		<xs:annotation>
+			<xs:documentation>
+				Grammatically, Where consists of location and relationship to that location
+				AtWhere defines a place
+				RouteWhere defines a how to go somewhere (grammatically different from a place)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="jc3iedm:OID"/> 
+			<xs:choice>
+				<xs:element name="AtWhere" type="AtWhereType"/>
+				<xs:element name="RouteWhere" type="RouteWhereType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AtWhereType">
+		<xs:annotation>
+			<xs:documentation>Defines Where an action is done</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="At" type="LocationType"/>
+			<xs:element name="Qualifier" type="jc3iedm:ActionObjectiveQualifierCodeXmlType"/>
+			<xs:element ref="ControlFeature" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="RouteWhereType">
+		<xs:annotation>
+			<xs:documentation>Defines a route to be followed in action</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RouteID" type="LabelType">
+				<xs:annotation>
+					<xs:documentation> 
+							if From-Via-To is missing, RouteID must exist in database
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="From-Via-To">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="From" type="LocationType" minOccurs="0"/>
+						<xs:element name="Via" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence maxOccurs="unbounded">
+									<xs:element name="Waypoint">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Location" type="LocationType"/>
+											</xs:sequence>
+											<xs:attribute name="sequence" type="xs:int" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="To" type="LocationType"/>
+					</xs:all>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name="ControlFeature" type="jc3iedm:ControlFeatureXmlType"/>
+
+
+	<!--************* Why section *************-->
+
+	<xs:complexType name="WhyType">
+		<xs:annotation>
+			<xs:documentation>
+				Specifies reasons for executing order. These can be
+				effects and/or other tasks supported.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TaskQualifier" type="TaskQualifierType" minOccurs="0"/>
+			<xs:element name="Effect" type="EffectType"/>
+			<xs:element ref="AnyTask" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EffectType" >
+		<xs:annotation>
+			<xs:documentation>
+				Defines an effect on an optional set of objects.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DesiredEffect" type="jc3iedm:ActionEffectDescriptionCodeXmlType"/>
+			<xs:element name="Objective" type="jc3iedm:ObjectItemXmlType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+
+	<!--************* Type Definition section *************-->
+	
+	<xs:complexType name="OrderIdentificationType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines who issues the order, who is tasked, and uniquely identifies the order
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OrderID" type="LabelType"/>
+			<xs:element name="TaskerWho" type="WhoType"/>
+			<xs:choice>
+				<xs:element name="OrderIssuedWhen" type="WhenType" minOccurs="0"/>
+				<xs:element name="FRAGOID" type="LabelType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="OrderCategoryCodeType">
+		<xs:restriction base="jc3iedm:OrderCategoryCodeXmlType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="IntentType">
+		<xs:simpleContent>
+			<xs:extension base="jc3iedm:Text4000XmlType"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:simpleType name="TextType">
+		<xs:restriction base="jc3iedm:Text4000XmlType"/>
+	</xs:simpleType>
+	
+	<xs:simpleType name="LabelType">
+		<xs:annotation>
+			<xs:documentation>Text to identify some object</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9_. ]+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="LocationType">
+		<xs:annotation>
+			<xs:documentation>Defines format for a location; Lat/Lon, MGRS, etc.</xs:documentation>
+			<!-- JMP: replace MSDL Coordinates with simple GDC type (lat,lon,elevation) coded here? -->
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="LocationID" type="LabelType"/>
+			<!-- ssingapo needed to make Coords unbounded to accept multiple points -->
+			<xs:element name="Coords" type="Coordinates" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:element name="WhereRelative">
+		<xs:annotation>
+			<xs:documentation>
+				used to specify a distance from a known object at a given time
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="WhereOffset" type="WhereOffsetType"/>
+				<xs:element name="OffsetFromWho" type="WhoType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="WhereOffsetType">
+		<xs:annotation>
+			<xs:documentation>
+				bearing in degrees, range in meters, altitude angle in degrees
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BearingFromNorth" type="AngleType"/>
+			<xs:element name="Range" type="xs:integer"/>
+			<xs:element name="AltitudeAngle" type="AngleType"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TargetType">
+		<xs:annotation>
+			<xs:documentation>Defines the location and identification of a target</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TargetLocation" type="ControlFeaturePolygon"/>
+			<xs:element name="TargetName" type="LabelType"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="YesNoType">
+		<xs:annotation>
+			<xs:documentation>Defines a binary option</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Yes"/>
+			<xs:enumeration value="No"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="ControlFeaturePolygon">
+		<xs:annotation>
+			<xs:documentation>Defines the corner locations of a polygon control feature</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CornerLocation" type="LocationType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="AngleType">
+		<xs:annotation>
+			<xs:documentation>Value of an angle in degrees</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:float">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxExclusive value="360.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="BmlActionTemporalAssociationCategoryCodeXmlType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This restricts the USJC3IEDM 
+				ActionTemporalAssociationCategoryCodeXmlType to values valid in BML.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="ActionTemporalAssociationCategoryCodeXmlType">
+			<xs:enumeration value="STRBEF"/>
+			<xs:enumeration value="STRDUR"/>
+			<xs:enumeration value="STRAFT"/>
+			<xs:enumeration value="ENDBEF"/>
+			<xs:enumeration value="ENDDUR"/>
+			<xs:enumeration value="STRSTR"/>
+			<xs:enumeration value="STREND"/>
+			<xs:enumeration value="ENDSTR"/>
+			<xs:enumeration value="ENDEND"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!--************* Reports section *************-->
+
+	<xs:complexType name="ExecuterType">
+		<xs:annotation>
+			<xs:documentation>Defines the type of Who that is reported executing some action</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Taskee" type="WhoType"/>
+			<xs:element name="Agent" type="AgentType"/>
+			<xs:element name="Accessory" type="AccessoryType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="AgentType">
+		<xs:annotation>
+			<xs:documentation>An Agent is an object with intrinisic ability to act</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Size" type="jc3iedm:UnitTypeSizeCodeXmlType"/>
+			<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+			<xs:element name="UnitFunction" type="jc3iedm:UnitTypeArmCategoryCodeXmlType"/>
+			<xs:element name="AgentLabel" type="LabelType"/>
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="AccessoryType">
+		<xs:annotation>
+			<xs:documentation>
+			 	An Accessory (in grammar,a Theme) is an object 
+			  	without instrinsic ability to act
+			</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Count" type="xs:integer"/>
+			<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+			<xs:element name="Equipment" type="jc3iedm:VehicleTypeCategoryCodeXmlType"/>
+			<xs:element name="AccessoryLabel" type="LabelType"/>
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="CredibilityType">
+		<xs:annotation>
+			<xs:documentation>Defines Reporter's confidence in reported information</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Source" type="jc3iedm:ReportingDataSourceTypeCodeXmlType"/>
+			<xs:element name="Reliability" type="jc3iedm:ReportingDataReliabilityCodeXmlType"/>
+			<xs:element name="Certainty" type="jc3iedm:ReportingDataCredibilityCodeXmlType"/>
+		</xs:all>
+	</xs:complexType>
+	
+	<!--************* USJC3IEDM extensions section *************-->
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			The following simpleType contains a proposed extension for the ActionTemporalAssociationCategoryCode
+			found in US-JC3IEDM-v3_1b-BaseTypes.xsd to meet grammatical correctness needs of BML.
+		</xs:documentation>
+	</xs:annotation>	
+	<xs:simpleType name="ActionTemporalAssociationCategoryCodeXmlType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The specific value that represents the class of chronological relationship of a subject ACTION to an object ACTION for a specific ACTION-TEMPORAL-ASSOCIATION.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:maxLength value="6"/>
+			<xs:enumeration value="ENDEND">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION ends after the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Ends after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDSTR">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION ends after the object ACTION starts.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Ends after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDENE">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION ends no earlier than the end of the object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Ends no earlier than after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDSNE">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION ends no earlier than the start of the object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Ends no earlier than after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDENL">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION ends no later than the end of object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Ends no later than after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDSNL">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION ends no later than the start of object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Ends no later than after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STREND">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts after the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRSTR">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts after the object ACTION starts.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SDUREB">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts after the start of object ACTION and ends before the end of object ACTION.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts and ends during</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SAEAST">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The two ACTIONs are concurrent.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts at and ends at the same time as</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SASTEA">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION begins concurrently with the object ACTION, but will extend beyond the object ACTION.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts at the same time and ends after</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SAENDO">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION begins before the object ACTION and ends before the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts before and ends before end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SDUREA">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION is sequential but overlapping with the object ACTION.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts during and ends after</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SBEAST">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The start of the object ACTION precedes that of the subject ACTION, but they will end concurrently.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts during and ends at the same time as</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRENE">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts no earlier than the end of the object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts no earlier than after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRSNE">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts no earlier than the start of the object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts no earlier than after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRENL">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts no later than the end of object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts no later than after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRSNL">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition xml:lang="en">The subject ACTION starts no later than the start of object ACTION augmented by a fixed duration.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts no later than after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<!-- the BML extensions are from here to end of ActionTemporalAssociationCategoryCodeXmlType -->
+			<xs:enumeration value="STRBEF">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition>The subject ACTION starts before the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue>Starts before end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRDUR">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition>The subject ACTION starts during the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue xml:lang="en">Starts during</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STRAFT">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition>The subject ACTION starts after the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue>Starts after start of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDBEF">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition>The subject ACTION ends before the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue>Ends before end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDDUR">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition>The subject ACTION ends during the object ACTION.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue>Ends before end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENDAFT">
+				<xs:annotation>
+					<xs:documentation>
+						<xs:Definition>The subject ACTION ends after the object ACTION ends.</xs:Definition>
+					</xs:documentation>
+					<xs:appinfo>
+						<xs:DisplayValue>Ends after end of</xs:DisplayValue>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+    <!-- this is to be replaced with USJC3IEDM equivalent -->	
+	<xs:simpleType name="FormationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="column"/>
+			<xs:enumeration value="patrol"/>
+			<xs:enumeration value="wedge"/>
+			<xs:enumeration value="line"/>
+			<xs:enumeration value="coil"/>
+			<xs:enumeration value="echelon"/>
+			<xs:enumeration value="herringbone"/>
+			<xs:enumeration value="march"/>
+			<xs:enumeration value="deployed"/>
+			<xs:enumeration value="vee"/>
+			<xs:enumeration value="air formation"/>
+			<xs:enumeration value="naval formation"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+    <!-- should put this forward to USJC3IEDM as extension -->
+	<xs:simpleType name="InMannerType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FAST"/>
+			<xs:enumeration value="SLOW"/>
+			<xs:enumeration value="CAUTIOUS"/>
+			<xs:enumeration value="AGGRESSIVE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- should put this forward to USJC3IEDM as extension -->
+	<xs:simpleType name="TaskQualifierType">
+		<xs:annotation>
+			<xs:documentation>These modify two forms of Why</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ALLOW"/>
+			<xs:enumeration value="ASSIST"/>
+			<xs:enumeration value="CAUSE"/>
+			<xs:enumeration value="ENABLE"/>
+			<xs:enumeration value="PREVENT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+</xs:schema>

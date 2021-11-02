@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CyberAttack xmlns="http://www.sisostds.org/schemas/C2SIM/1.1">
+    <Category1>
+        <EWa>
+            <Fraction>1.0</Fraction>
+            <Duration>120</Duration>
+        </EWa>
+    </Category1>
+</CyberAttack>

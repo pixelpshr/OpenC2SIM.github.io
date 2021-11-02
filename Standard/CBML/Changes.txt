@@ -1,0 +1,20 @@
+Changes:
+
+In cbml-composites.xsd
+	In RouteWhereLight
+		FromWhere, ViaWhere, and ToWhere type was changed from AtWhere to FVTWhere
+		Added FVTWhereType so that we end up with
+			<RouteWhere>
+				<SpecificRoute>
+					<FromWhere>
+						<AtWhere>
+							<SpecificLocation>
+
+		Rather than:
+			<RouteWhere>
+				<SpecificRoute>
+					<FromWhere>
+						<SpecificLocation>
+
+		
+			

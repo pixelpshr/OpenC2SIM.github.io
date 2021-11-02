@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- this schema derived from FGAN C2LG schema v1.3.080521 by GMU C4I Center 6-11-08 -->
+<xs:schema xmlns:bml="http://netlab.gmu.edu/IBML" xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:import namespace="http://netlab.gmu.edu/IBML" schemaLocation="FiveWTypes.xsd"/>
+	<xs:complexType name="StatusReportsType">
+		<xs:annotation>
+			<xs:documentation>
+						The ReportID must be unique for every instance of
+						report from a given ReporterWho.	
+  					</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!-- <xs:element name="PositionStatusReport"> -->
+			<!-- <xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="ReporterWho" type="bml:WhoType"/>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/> -->
+			<!-- Not Implemented -->
+			<!--<xs:element name="WhereLocation" type="bml:WhereLocationType"/>-->
+			<!-- Not Implemented -->
+			<!-- <xs:element name="VelocityVector" type="bml:VelocityVectorType" minOccurs="0"/> -->
+			<!-- Not Implemented -->
+			<!--<xs:element name="When" type="mip:Datetime18XmlType"/>-->
+			<!-- <xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element> -->
+			<xs:element name="GeneralStatusReport">
+				<xs:annotation>
+					<xs:documentation>
+						GeneralStatusReport is for reporting the operational  
+						status of an organization.
+  					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Needed but Not Implemented -->
+						<xs:element name="ReporterWho" type="bml:WhoType"/>
+						<!-- Needed but Not Implemented -->
+						<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="OpStatus" type="mip:OrganisationStatusOperationalStatusCodeXmlType"/>
+						<!-- Needed and Not Implemented -->
+						<xs:element name="WhereLocation" type="bml:WhereLocationType"/>
+						<!-- Needed and Not Implemented -->
+						<xs:element name="VelocityVector" type="bml:VelocityVectorType" minOccurs="0"/>
+						<xs:element name="When" type="mip:Datetime18XmlType"/>
+						<xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TaskStatusReport">
+				<xs:annotation>
+					<xs:documentation>
+						TaskStatusReport is about the status of the progress of a task.
+  					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Needed but Not Implemented -->
+						<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="TaskStatus" type="mip:ActionTaskStatusProgressCodeXmlType"/>
+						<xs:element name="TaskID" type="bml:LabelType"/>
+						<xs:element name="When" type="mip:Datetime18XmlType"/>
+						<xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!-- <xs:element name="PersonnelStatusReport">-->
+			<!--<xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:integer" minOccurs="0"/>
+						<xs:element name="OpStatus" type="mip:OrganisationStatusOperationalStatusCodeXmlType" minOccurs="0"/>
+						<xs:element name="PersonnelType" type="mip:PersonTypeRankCodeXmlType"/>
+						<xs:element name="Status" type="mip:PersonStatusDutyStatusCodeXmlType"/>-->
+			<!-- Not Implemented -->
+			<!-- <xs:element name="WhereLocation" type="bml:WhereLocationType"/>-->
+			<!-- <xs:element name="When" type="mip:Datetime18XmlType"/>
+						<xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>-->
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!--<xs:element name="MaterielStatusReport">-->
+			<!--<xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:integer"/>
+						<xs:element name="MaterielType" type="mip:VehicleTypeCategoryCodeXmlType"/>
+						<xs:element name="OpStatus" type="mip:MaterielStatusOperationalStatusCodeXmlType"/>
+						<xs:element name="WhereLocation" type="bml:WhereLocationType"/>-->
+			<!-- Not Implemented -->
+			<!--<xs:element name="When" type="mip:Datetime18XmlType"/>-->
+			<!-- Not Implemented -->
+			<!--<xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>-->
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!--<xs:element name="FacilityStatusReport">-->
+			<!--<xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Facility">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Name"/>
+									<xs:element name="FacilityType"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="FacilityStatus" type="mip:FacilityStatusOperationalStatusCodeXmlType"/>-->
+			<!-- Not Implemented -->
+			<!--<xs:element name="WhereLocation" type="bml:WhereLocationType"/>
+						<xs:element name="When" type="mip:Datetime18XmlType"/>-->
+			<!-- <xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element> -->
+		</xs:choice>
+		<!-- NOTE: this a sample of possible status reports; more can be added as needed -->
+	</xs:complexType>
+</xs:schema>

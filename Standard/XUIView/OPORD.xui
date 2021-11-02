@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jaxfront version=2.69;time=2011-05-12 11:14:15.422;xui=file:/C:/eclipse/Workspace/BMLC2GUI/XUIView/OPORDview.xui;xsd=NATO_OPORD.xsd;nsMapping=%KEYhttp://www.jaxfront.com/xui%VAL%KEYhttp://www.w3.org/2001/XMLSchema%VALxsd%KEYhttp://www.w3.org/2001/XMLSchema-instance%VALxsi?>
+<XUI  xsi:schemaLocation="http://www.jaxfront.com/xui jar:file:/C:/Program%20Files%20(x86)/JAXFront-2.6/lib/jaxfront-core.jar!/xui.xsd" xmlns="http://www.jaxfront.com/xui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       <component xpath="/C_BML:OperationsOrder">
+              <style>
+                     <mode childrenView="tab">
+                            <message/>
+                     </mode>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+              </style>
+       </component>
+       <component xpath="/bml:OrderPush">
+              <style>
+                     <mode childrenView="tab">
+                            <message/>
+                     </mode>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+              </style>
+       </component>
+</XUI>

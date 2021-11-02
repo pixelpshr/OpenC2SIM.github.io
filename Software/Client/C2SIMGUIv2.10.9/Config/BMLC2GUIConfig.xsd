@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <xs:element name="SBMLServer">
+    <xs:complexType>
+      <xs:sequence>
+        <!--  -->
+      
+        <!--  -->
+        <xs:element ref="MapScale"/>
+	<xs:element ref="StartSubscribed"/>
+        <xs:element ref="CenterUnit"/>
+        <xs:element ref="SubmitterID"/>
+	<xs:element ref="ServerName"/>
+	<xs:element ref="ServerPassword"/>
+        <xs:element ref="C2SIMprotocolVersion"/>
+	<xs:element ref="C2SIMns"/>
+        <xs:element ref="CBMLns"/>
+        <xs:element ref="IBMLns"/>
+        <xs:element ref="LateJoinerMode"/>   
+        <xs:element ref="InitMapLat"/>
+        <xs:element ref="InitMapLon"/>
+        <xs:element ref="ReportOrderScale"/>
+        <xs:element ref="AutoDisplayInit"/>
+        <xs:element ref="AutoDisplayReports"/>
+        <xs:element ref="AutoDisplayOrders"/>
+        <xs:element ref="DisplayBluePosition"/>
+        <xs:element ref="DisplayBlueObservation"/>
+        <xs:element ref="DisplayRedPosition"/>
+        <xs:element ref="DisplayRedObservation"/>
+        <xs:element ref="DisplayOtherPosition"/>
+        <xs:element ref="DisplayOtherObservation"/>
+        <xs:element ref="StartWithListeningOn"/>
+	<xs:element ref="RecordingProtocol"/>
+	<xs:element ref="PlaybackProtocol"/>
+	<xs:element ref="PlaybackSubmitter"/>
+	<xs:element ref="PlaybackTimescale"/>
+	<xs:element ref="PlaybackTimelimit"/>
+        <xs:element ref="WarnOnReportSeq"/>
+        <xs:element ref="OrderIDXPATH"/>
+        <xs:element ref="LocationXPATH"/>
+        <xs:element ref="LocationRouteWhereXPATH"/>    
+        <xs:element ref="latlonParentTag"/>
+        <xs:element ref="latTag"/>
+        <xs:element ref="lonTag"/>
+        <xs:element ref="whereIdLabelTag"/>
+        <xs:element ref="whereShapeTypeTag"/>
+        <xs:element ref="routeIdLabelTag"/>
+        <xs:element ref="routeFromViaToTag"/>
+        <xs:element ref="serverTestStompWait"/>
+        <xs:element ref="blueSideName"/>
+        <xs:element ref="checkForDuplicateID"/>
+        <xs:element ref="askAboutCheckDuplicateID"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MapScale" type="xs:string"/>
+  <xs:element name="StartSubscribed" type="xs:string"/>
+  <xs:element name="CenterUnit" type="xs:string"/>
+  <xs:element name="ServerName" type="xs:string"/>
+  <xs:element name="SubmitterID" type="xs:string"/>
+  <xs:element name="ServerPassword" type="xs:string"/>
+  <xs:element name="C2SIMprotocolVersion" type="xs:string"/>
+  <xs:element name="C2SIMns" type="xs:string"/>
+  <xs:element name="CBMLns" type="xs:string"/>
+  <xs:element name="IBMLns" type="xs:string"/>
+  <xs:element name="ReportInfoDomain" type="xs:string"/>
+  <xs:element name="ReportPullDomain" type="xs:string"/>
+  <xs:element name="UnitInfoDomain" type="xs:string"/>
+  <xs:element name="LateJoinerMode" type="xs:string"/>
+  <xs:element name="InitMapLat" type="xs:string"/>
+  <xs:element name="InitMapLon" type="xs:string"/>
+  <xs:element name="ReportOrderScale" type="xs:string"/>
+  <xs:element name="AutoDisplayInit" type="xs:string"/>
+  <xs:element name="AutoDisplayReports" type="xs:string"/>
+  <xs:element name="AutoDisplayOrders" type="xs:string"/>
+  <xs:element name="DisplayBluePosition" type="xs:string"/>
+  <xs:element name="DisplayBlueObservation" type="xs:string"/>
+  <xs:element name="DisplayRedPosition" type="xs:string"/>
+  <xs:element name="DisplayRedObservation" type="xs:string"/>
+  <xs:element name="DisplayOtherPosition" type="xs:string"/>
+  <xs:element name="DisplayOtherObservation" type="xs:string"/>
+  <xs:element name="StartWithListeningOn" type="xs:string"/>
+  <xs:element name="RecordingProtocol" type="xs:string"/>
+  <xs:element name="PlaybackProtocol" type="xs:string"/>
+  <xs:element name="PlaybackSubmitter" type="xs:string"/>
+  <xs:element name="PlaybackTimescale" type="xs:string"/>
+  <xs:element name="PlaybackTimelimit" type="xs:string"/>
+  <xs:element name="SchemaLocation" type="xs:string"/> 
+  <xs:element name="OPORD_C2CoreSchema" type="xs:string"/>
+  <xs:element name="OPORD_C2CoreRoot" type="xs:string"/>
+  <xs:element name="WarnOnReportSeq" type="xs:string"/>
+  <xs:element name="OPORD_C2CoreXUI" type="xs:string"/>
+  <xs:element name="OrderIDXPATH" type="xs:string"/>
+  <xs:element name="LocationXPATH" type="xs:string"/>
+  <xs:element name="LocationRouteWhereXPATH" type="xs:string"/>
+  <xs:element name="latlonParentTag" type="xs:string"/>
+  <xs:element name="latTag" type="xs:string"/>
+  <xs:element name="lonTag" type="xs:string"/>
+  <xs:element name="whereIdLabelTag" type="xs:string"/>
+  <xs:element name="whereShapeTypeTag" type="xs:string"/>
+  <xs:element name="routeIdLabelTag" type="xs:string"/>
+  <xs:element name="routeFromViaToTag" type="xs:string"/>
+  <xs:element name="serverTestStompWait" type="xs:string"/>
+  <xs:element name="blueSideName" type="xs:string"/>
+  <xs:element name="checkForDuplicateID" type="xs:string"/>
+  <xs:element name="askAboutCheckDuplicateID" type="xs:string"/>
+</xs:schema>

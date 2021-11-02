@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:bml="http://netlab.gmu.edu/IBML" 
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+              	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           	elementFormDefault="qualified" 
+           	attributeFormDefault="unqualified">
+           
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 2.1
+			Source:  FGAN C2LG schema v1.3.080521 
+			by GMU C4I Center 2010
+			IBML Status: Experimental
+			IBML Schema Version: 2.1
+		</xs:documentation>
+	</xs:annotation>
+           
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:import namespace="http://netlab.gmu.edu/IBML" 
+		   schemaLocation="FiveWTypes_IBMLv2.1.xsd"/>
+
+	<xs:complexType name="StatusReportsType">
+		<xs:annotation>
+			<xs:documentation>
+				The ReportID must be unique for every instance of
+				report from a given ReporterWho..	
+  			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+		
+			<xs:element name="PositionStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Per MSG048 need to add ReporterWho -->
+						<xs:element name="ReporterWho" type="bml:WhoType"/>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+						<xs:element name="Context" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		
+			<xs:element name="GeneralStatusReport">
+				<xs:annotation>
+					<xs:documentation>
+						GeneralStatusReport is for reporting the operational  
+						status of an organization.	.	
+  					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Per MSG048 need to add ReporterWho -->
+						<xs:element name="ReporterWho" type="bml:WhoType"/>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="OpStatus" 
+							type = "jc3iedm:OrganisationStatusOperationalStatusCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+						<xs:element name="Context" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="TaskStatusReport">
+				<xs:annotation>
+					<xs:documentation>
+						TaskStatusReport is about the status of the progress of a task.
+  					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="TaskStatus" type="jc3iedm:ActionTaskStatusProgressCodeXmlType"/>
+						<xs:element name="TaskID" type="bml:LabelType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="PersonnelStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:integer"/>
+						<xs:element name="PersonnelType" type="jc3iedm:PersonTypeRankCodeXmlType"/>
+						<xs:element name="Status" type="jc3iedm:PersonStatusDutyStatusCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="MaterielStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:string"/>
+						<xs:element name="MaterielType" type="jc3iedm:VehicleTypeCategoryCodeXmlType"/>
+						<xs:element name="OpStatus" 
+							type="jc3iedm:MaterielStatusOperationalStatusQualifierCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="FacilityStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Facility">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Name"/>
+									<xs:element name="FacilityType"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="FacilityStatus" 
+							type="jc3iedm:FacilityStatusOperationalStatusCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+		</xs:choice>
+	</xs:complexType>
+	
+</xs:schema>

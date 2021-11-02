@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	targetNamespace="http://netlab.gmu.edu/IBML" 
+	xmlns="http://netlab.gmu.edu/IBML" 
+	xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+	xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- Not Needed for NMSG-048 2009 Experiments -->
+	<!-- <xsd:import namespace="http://netlab.gmu.edu/JBML/MSDL" schemaLocation="msdlTypesV0.6plus.xsd"/> -->
+	<xsd:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-BaseTypes.xsd"/>
+	<xsd:include schemaLocation="FiveWTypes.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+     			Battle Management Language proposed schema types definition.
+     			Copyright 2007 George Mason University C4I Center.
+  		</xsd:documentation>
+	</xsd:annotation>
+	<!-- <xsd:annotation>
+		<xsd:documentation>Defines who issues the order, who is tasked, and uniquely identifes the order</xsd:documentation>-->
+	<!-- Not Supported -->
+	<!--</xsd:annotation>
+	<xsd:complexType name="OrderIdentificationType">
+		<xsd:sequence>
+			<xsd:element name="TaskeeWho" type="WhoType"/>
+			<xsd:element name="TaskerWho" type="WhoType" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:element name="OrderIssuedWhen" type="mip:Datetime18XmlType" minOccurs="0"/>
+				<xsd:element name="OrderID" type="LabelType" minOccurs="0"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType> -->
+	<xsd:annotation>
+		<xsd:documentation>Provides the Domain for selective retrieval of Tasks within an Order</xsd:documentation>
+	</xsd:annotation>
+	<xsd:simpleType name="TaskDomainType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="GROUND"/>
+			<xsd:enumeration value="AIR"/>
+			<!-- Needed but Not Implemented -->
+			<!-- Not Supported -->
+			<!-- <xsd:enumeration value="MARITIME"/> -->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:annotation>
+		<xsd:documentation>Provides basic information that applies to all Tasks in the order</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="OrderType">
+		<xsd:sequence>
+			<!-- <xsd:element name="OrderMode" type="OrderModeType" default="SINGLE" minOccurs="0"/> -->
+			<xsd:element name="TaskersIntent" type="FreeTextType" minOccurs="0"/>
+			<xsd:element name="Task" type="TaskType" maxOccurs="unbounded"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="OrderIssuedWhen" type="mip:Datetime18XmlType"/>
+			<xsd:element name="OrderID" type="LabelType"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="ReferenceOrderID" type="LabelType" minOccurs="0"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="Context" type="LabelType" minOccurs="0"/>
+			<xsd:element name="TaskerWho" type="WhoType"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="TaskOrganization" type="TaskOrganizationType" minOccurs="0"/>
+			<!-- Not Supported -->
+			<!-- <xsd:element name="EnemyTaskOrg" type="msdl:TaskOrgType" minOccurs="0"/> -->
+			<xsd:element name="ControlMeasures" type="OrderControlMeasuresType" minOccurs="0"/>
+			<!-- Not Supported -->
+			<!-- <xsd:element name="TargetList" type="TargetListType" minOccurs="0"/> -->
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:documentation>Defines the task organisation associated with the order</xsd:documentation>
+	</xsd:annotation>
+	<!-- Needed but Not Implemented -->
+	<xsd:complexType name="TaskOrganizationType">
+		<xsd:sequence>
+			<xsd:element name="UnitID" type="LabelType"/>
+			<!-- Task Organization Unit's position and status will be provided by another SBML service. -->
+			<!-- <xsd:element name="WhereLocation" type="WhereLocationType" minOccurs="0"/> -->
+			<xsd:element name="TaskOrganization" type="TaskOrganizationType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:documentation>Defines the domain of warfare associated with the task</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="TaskType">
+		<xsd:choice>
+			<xsd:element name="GroundTask" type="GroundTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="AirTask" type="AirTaskType" minOccurs="0" maxOccurs="unbounded"/>
+			<!-- Not Supported -->
+			<!-- <xsd:element name="MaritimeTask" type="MaritimeTaskType" minOccurs="0" maxOccurs="unbounded"/> -->
+		</xsd:choice>
+	</xsd:complexType>
+	<!-- <xsd:annotation>-->
+	<!-- Not Used -->
+	<!--<xsd:documentation>Defines whether the order must be provided in a single transmission or may be
+		                   entered in multiple trasmissions with identical OrderIdentificationType</xsd:documentation>
+	</xsd:annotation>
+	<xsd:simpleType name="OrderModeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SINGLE"/>
+			<xsd:enumeration value="MULTIPLE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:annotation>
+		<xsd:documentation>A unique identifying code associated with only this order</xsd:documentation>
+	</xsd:annotation>-->
+	<!-- Not Used -->
+	<!--<xsd:simpleType name="OrderIDType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[a-zA-Z0-9_\-]*"/>
+		</xsd:restriction>
+	</xsd:simpleType> -->
+	<xsd:annotation>
+		<xsd:documentation>optional control measures element</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="OrderControlMeasuresType">
+		<xsd:sequence>
+			<xsd:element name="ControlMeasure" type="WhereType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:documentation>Task control measures referencing OrderControlMeasure WhereLabels</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="TaskControlMeasuresType">
+		<xsd:sequence>
+			<xsd:element name="ControlMeasureLabel" type="LabelType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- <xsd:annotation>-->
+	<!-- Not Supported -->
+	<!-- <xsd:documentation>Defines possible transport modes</xsd:documentation>
+	</xsd:annotation>
+	<xsd:simpleType name="TransportType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="APC"/>
+			<xsd:enumeration value="ARMRCC"/>
+			<xsd:enumeration value="ARVELT"/>
+			<xsd:enumeration value="AUTOMO"/>
+			<xsd:enumeration value="TRUCK"/>
+			<xsd:enumeration value="AIRRW"/>
+			<xsd:enumeration value="AIRTRS"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:annotation>-->
+	<!-- Not Supported -->
+	<!-- <xsd:documentation>Provides a list of targets and their locations.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="TargetListType">
+		<xsd:sequence>
+			<xsd:element name="TargetListItem" type="TargetType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType> -->
+	<xsd:annotation>
+		<xsd:documentation>Defines the contents of a Task in the Ground domain</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="GroundTaskType">
+		<xsd:sequence>
+			<xsd:element name="TaskeeWho" type="WhoType">
+				<xsd:annotation>
+					<xsd:documentation>Specifies who is executing the task.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="What" type="WhatType">
+				<xsd:annotation>
+					<xsd:documentation>Specifies what actions are to take place.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Where" type="WhereType">
+				<xsd:annotation>
+					<xsd:documentation>Establishes where the order is to be executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!-- StartWhen and EndWhen modified by JMP 2Aug2013 to have their own types,
+			     thus avoiding substitution groups that don't work in JAXFront
+			     this is consistent with original schema -->
+			<xsd:element name="StartWhen" type="StartWhenType">
+				<xsd:annotation>
+					<xsd:documentation>Start Time of the Mission</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EndWhen" type="EndWhenType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>End time of the mission</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!-- end JMP mods 2Aug2013 -->
+			<xsd:element name="AffectedWho" type="WhoType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifices a "who" affected by the task (how affected is implicit to the What).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Why" type="WhyType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies reason for executing order.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaskControlMeasures" type="TaskControlMeasuresType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies labels of ControlMeasures in Order ControlMeasures.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!-- Not Supported -->
+			<!-- <xsd:element name="Transport" type="TransportType" minOccurs="0">-->
+			<!-- <xsd:annotation>
+					<xsd:documentation>Specifies the mode of transport used to
+					accomplish the task, if not implied by the Who.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element> -->
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="TaskID" type="LabelType"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="ReferenceTaskID" type="LabelType" minOccurs="0"/>
+			<!-- Not Supported -->
+			<!-- <xsd:element name="TaskUpdateTime" type="DTGType" minOccurs="0">-->
+			<!-- <xsd:annotation>
+					<xsd:documentation>Task update time as assigned by server, returned on pull.
+					                   If value is present in OrderPush, it is ignored.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element> -->
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:documentation>Defines the contents of a Task in the Air domain</xsd:documentation>
+	</xsd:annotation>
+	<!-- Needed but Not Implemented -->
+	<xsd:complexType name="AirTaskType">
+		<xsd:sequence>
+			<xsd:element name="TaskeeWho" type="WhoType">
+				<xsd:annotation>
+					<xsd:documentation>Specifies who is executing the task.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="What" type="WhatType">
+				<xsd:annotation>
+					<xsd:documentation>Specifies what actions are to take place.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Where" type="WhereType">
+				<xsd:annotation>
+					<xsd:documentation>Establishes where the order is to be executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StartWhen" type="WhenType">
+				<xsd:annotation>
+					<xsd:documentation>Start Time of the Mission</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EndWhen" type="WhenType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>End time of the mission</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AffectedWho" type="WhoType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifices a "who" affected by the task (how affected is implicit to the What).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Why" type="WhyType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies reason for executing order.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaskControlMeasures" type="TaskControlMeasuresType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies labels of ControlMeasures in Order ControlMeasures.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="TaskID" type="LabelType"/>
+			<!-- Needed but Not Implemented -->
+			<xsd:element name="ReferenceTaskID" type="LabelType" minOccurs="0"/>
+			<!-- Not Supported -->
+			<!-- <xsd:element name="TaskUpdateTime" type="DTGType" minOccurs="0">-->
+			<!--<xsd:annotation>
+					<xsd:documentation>Task update time as assigned by server, returned on pull.
+					                   If value is present in OrderPush, it is ignored.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element> -->
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- <xsd:annotation>-->
+	<!-- Not Supported -->
+	<!-- <xsd:documentation>Defines the contents of a Task in the Maritime domain</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="MaritimeTaskType">
+		<xsd:sequence>
+			<xsd:element name="What" type="WhatType">
+				<xsd:annotation>
+					<xsd:documentation>Specifies what actions are to take place.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaskeeWho" type="WhoType">
+				<xsd:annotation>
+					<xsd:documentation>Specifies who is executing the task.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Where" type="WhereType">
+				<xsd:annotation>
+					<xsd:documentation>Establishes where the order is to be executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StartWhen" type="WhenType">
+				<xsd:annotation>
+					<xsd:documentation>Start Time of the Mission</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EndWhen" type="WhenType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>End time of the mission</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Why" type="WhyType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies reason for executing order.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaskControlMeasures" type="TaskControlMeasuresType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies labels of ControlMeasures in Order ControlMeasures.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaskID" type="LabelType"/>
+			<xsd:element name="ReferenceTaskID" type="LabelType" minOccurs="0"/>
+			<xsd:element name="TaskUpdateTime" type="DTGType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Task update time as assigned by server, returned on pull.
+					                   If value is present in OrderPush, it is ignored.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element> 
+		</xsd:sequence>
+	</xsd:complexType> -->
+	<xsd:annotation>
+		<xsd:documentation>free text for commander's intent; intended for human (not machine) interpretation</xsd:documentation>
+	</xsd:annotation>
+	<xsd:simpleType name="FreeTextType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[^?]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
