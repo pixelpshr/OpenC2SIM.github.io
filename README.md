@@ -2,7 +2,7 @@
 
 Forked from the [OpenC2SIM Project](https://github.com/OpenC2SIM/OpenC2SIM.github.io). Adds folder structure for easier access to current versions of documentation and software.
 
-For a comprehensive C2SIM description, see the [C2SIM Overview](Referece/C2SIM-Overview1.pdf).
+For a comprehensive C2SIM description, see the [C2SIM Overview](Reference\C2SIM-Overview1.pdf).
 
 ## Contents of this repository
 
