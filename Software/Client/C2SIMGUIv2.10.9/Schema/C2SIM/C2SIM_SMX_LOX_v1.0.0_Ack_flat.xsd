@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+    targetNamespace="http://www.sisostds.org/schemas/C2SIM/1.1">
+
+    <!-- Not part of the original OpenC2SIM repository -->
+    <!-- repackaging of C2SIM_SMX_LOX_v1.0.0.xsd from C2SIM Core/SMX/LOX Ontologies v11 -->
+    
+	<xs:element name="MessageBody" type="MessageBodyType"/>
+
+	<xs:complexType name="MessageBodyType">
+		<xs:choice>
+			<xs:element ref="SystemAcknowledgementBody"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="SystemAcknowledgementBody" type="SystemAcknowledgementBodyType"/>
+
+	<xs:complexType name="SystemAcknowledgementBodyType">
+		<xs:annotation>
+			<xs:documentation>An acknowledgement from one C2SIM system to another that a message was received.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#SystemAcknowledgementBody</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="AcknowledgeTypeCode" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="AcknowledgeTypeCode" type="AcknowledgeTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#hasAcknowledgeTypeCode</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:simpleType name="AcknowledgeTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>Enumeration of different types of acknowledgements.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#AcknowledgeTypeCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACKFAIL"/>
+			<xs:enumeration value="ACKNOTEXEC"/>
+			<xs:enumeration value="ACKNOTRECGNZ"/>
+			<xs:enumeration value="ACKNOTUNDSTD"/>
+			<xs:enumeration value="ACKRCVD"/>
+			<xs:enumeration value="ACKREQDEN"/>
+			<xs:enumeration value="ACKREQGRT"/>
+			<xs:enumeration value="ACKSUCC"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

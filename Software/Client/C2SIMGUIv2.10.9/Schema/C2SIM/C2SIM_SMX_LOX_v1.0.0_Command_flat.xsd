@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+    targetNamespace="http://www.sisostds.org/schemas/C2SIM/1.1">
+
+    <!-- Not part of the original OpenC2SIM repository -->
+    <!-- repackaging of C2SIM_SMX_LOX_v1.0.0.xsd from C2SIM Core/SMX/LOX Ontologies v11 -->
+
+	<xs:element name="MessageBody" type="MessageBodyType"/>
+
+	<xs:complexType name="MessageBodyType">
+		<xs:choice>
+			<xs:element ref="SystemCommandBody"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:element name="SystemCommandBody" type="SystemCommandBodyType"/>
+    
+	<xs:complexType name="SystemCommandBodyType">
+		<xs:annotation>
+			<xs:documentation>The body of a message that is used to send system commands between C2SIM systems.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#SystemCommandBody</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="SystemCommandTypeCode" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="SystemCommandTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>The codes (enumerated individuals) that indicate what command is being sent in a system command message.</xs:documentation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#SystemCommandTypeCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="InitializationComplete"/>
+			<xs:enumeration value="ShareScenario"/>
+			<xs:enumeration value="StartScenario"/>
+			<xs:enumeration value="StopScenario"/>
+			<xs:enumeration value="SubmitInitialization"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>
