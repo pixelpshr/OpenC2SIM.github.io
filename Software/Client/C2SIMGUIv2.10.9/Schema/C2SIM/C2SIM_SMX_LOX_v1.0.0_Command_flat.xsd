@@ -26,6 +26,12 @@
 		</xs:sequence>
 	</xs:complexType>
 	
+	<xs:element name="SystemCommandTypeCode" type="SystemCommandTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>http://www.sisostds.org/ontologies/C2SIM#hasSystemCommandTypeCode</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
 	<xs:simpleType name="SystemCommandTypeCodeType">
 		<xs:annotation>
 			<xs:documentation>The codes (enumerated individuals) that indicate what command is being sent in a system command message.</xs:documentation>
