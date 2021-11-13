@@ -1,0 +1,565 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace C2SimClientLib;
+
+/// <summary>
+/// REST services settings
+public class C2SIMClientRESTSettings
+{
+    /// <summary>
+    /// Identifier of the client submitting requests
+    /// </summary>
+    public string SubmitterId { get; set; }
+    /// <summary>
+    /// REST service host
+    /// </summary>
+    public string Host { get; set; }
+    /// <summary>
+    /// REST service port
+    /// </summary>
+    public string Port { get; set; }
+    /// <summary>
+    /// REST service path (e.g. C2SIMServer
+    /// </summary>
+    public string Path { get; set; }
+    /// <summary>
+    /// Type of message request (e.g. INFORM, ORDER, REPORT)
+    /// </summary>
+    public string Performative { get; set; }
+    /// <summary>
+    /// "SISO-STD-C2SIM" (or "BML")
+    /// </summary>
+    public string Protocol { get; set; }
+    /// <summary>
+    /// "1.0.0" for published C2SIM standard, or legacy version (e.g. v9="0.0.9")
+    /// </summary>
+    public string ProtocolVersion { get; set; }
+}
+
+/// <summary>C2Sim Server Web Services REST Client
+/// This client does the following:
+///      Open a connection with the server on specified port (Default is 8080)
+///      Build an HTTP POST transaction from parameters and BML XML document
+///      Submit the transaction
+///      Read the result
+///      Disconnect from the server
+///      Return the result received from the server to the caller
+/// </summary>
+public class C2SIMClientREST_Lib
+{
+    #region Static properties
+    private static string _protocol = string.Empty;   // C2SIM 
+    private static string _protocolVersion;
+    #endregion
+
+    #region Constants
+    const string SISOSTD = "SISO-STD-C2SIM";
+    const string XML_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    #endregion
+
+    #region Instance variables
+    private ILogger _logger;
+    private static string _clientVersion = string.Empty;
+    private string _host = "localhost";
+    private string _port = "8080";
+    private string _path = "C2SIMServer/c2sim";
+    private string _submitter = "NotSet";
+    private string _firstForwarders = string.Empty;   // C2SIM
+    private string _domain;      // Not used any more.  Older client code may still set it
+    private C2SIMHeader _c2s;
+
+    private static int _cachedXDocHash;
+    private static XDocument _cachedXDoc;
+    #endregion
+
+    #region Construction
+    /// <summary>
+    /// Constructc REST request object
+    /// </summary>
+    /// <param name="logger">Logger to use</param>
+    /// <param name="options">REST service settings</param>
+    public C2SIMClientREST_Lib(ILogger logger, C2SIMClientRESTSettings settings)
+    {
+        _logger = logger;
+
+        _submitter = settings.SubmitterId;
+        _host = settings.Host;
+        _port = settings.Port;
+        _path = settings.Path;
+        _protocol = settings.Protocol; 
+        _protocolVersion = settings.ProtocolVersion;
+        // Instantiate C2SIM Header if protocol is C2SIM
+        _c2s = null;
+        if (_protocol == SISOSTD)
+        {
+            _c2s = new C2SIMHeader()
+            {
+                FromSendingSystem = _submitter,
+                ToReceivingSystem = _host,
+                CommunicativeActTypeCode = settings.Performative,
+                Protocol = SISOSTD,
+                ProtocolVersion = _protocolVersion,
+            };
+            _c2s.GenerateConversationID();
+            _c2s.GenerateMessageID();
+        }
+        // Make sure we have version of ClientLib 
+        if (string.IsNullOrWhiteSpace(_clientVersion))
+            _clientVersion = GetVersion();
+    }
+
+    /// <summary>
+    /// Constructor taking IOption, to be used with service.AddOptions()
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="options"></param>
+    public C2SIMClientREST_Lib(ILogger logger, IOptions<C2SIMClientRESTSettings> options)
+    :this(logger, options.Value)
+    {
+    }
+    #endregion
+
+    #region Public methods
+    /// <summary>
+    /// Get status of C2SIM Server. - Confirm that server is running and return initialization status
+    /// setHost()  and setSubmitter() must have must have been executed before calling this method.
+    /// </summary>
+    /// <returns>>XML Document indicating current status of the server.
+    /// Sample output:
+    /// &lt;?xml clientVersion = &quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+    /// &lt;result&gt;
+    ///    &lt;status&gt;OK&lt;/status&gt;
+    ///    &lt;message&gt;Server is operating&lt;/message&gt;
+    ///    &lt;serverInitialized&gt;false&lt;/serverInitialized&gt;
+    ///    &lt;sessionInitialized&gt;false&lt;/sessionInitialized&gt;
+    ///    &lt;unitDatabaseName&gt;defaultDB&lt;/unitDatabaseName&gt;
+    ///    &lt;unitDatabaseSize&gt;0&lt;/unitDatabaseSize&gt;
+    ///    &lt;msgNumber&gt;0&lt;/msgNumber&gt;
+    ///    &lt;time&gt; 0.000&lt;/time&gt;
+    /// &lt;/result&gt;
+    /// </returns>
+    /// <exception cref="C2SIMClientException"></exception>
+    public async Task<string> ServerStatus()
+    {
+        Uri url;
+        string result;
+        try
+        {
+            url = new Uri(BuildC2SIMEndpoint("status"));
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("text/plain"));
+                result = await httpClient.GetStringAsync(url);
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            string emsg = "HTTP Request Exception";
+            _logger?.LogError(emsg, e);
+            throw new C2SIMClientException(emsg, e);
+        }
+        // Did we get an error from the server? (The server returns XML)
+        if (result.Contains("<status>Error</status>"))
+        {
+            string msg = "Error received from server " + result;
+            _logger?.LogError(msg);
+            throw new C2SIMClientException(msg);
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// c2simCommand pass a command to the C2SIM Server
+    /// Current commands are NEW, LOAD, SAVE, SAVEAS, DELETE, SHARE, QUERYUNIT, QUERYINIT<
+    /// See the latest clientVersion of C2SIM Server Reference Implementation for details.
+    /// https://github.com/OpenC2SIM/OpenC2SIM.github.io/blob/master/C2SIM%20Server%20Reference%20Implementation%20Documentation%204.8.0.X%20.pdf]
+    /// Result is an XML document which may contain &lt;status&gt;OK&lt;/status&gt;
+    /// </summary>
+    /// <param name="cmd">Command to be processed.  </param>
+    /// <param name="parm1">Optional first parameter</param>
+    /// <param name="parm2">Optional second parameter</param>
+    /// <returns>string result - XML Document giving results of command and server status similar to serverStatus method.</returns>
+    // <exception cref="C2SIMClientException"> = Primary and secondary causes are transmitted within the C2SIMClientException object</exception>
+    public async Task<string> C2SimCommand(string cmd, string parm1, string parm2)
+    {
+        string xml = "<C2SIM_Statistics xmlns=\"http://www.sisostds.org/schemas/c2sim/1.0\"/>";
+        // Make sure we have version of ClientLib 
+        if (string.IsNullOrWhiteSpace(_clientVersion))
+            _clientVersion = GetVersion();
+        // Make sure the required parameters have been provided
+        if (string.IsNullOrWhiteSpace(_submitter))
+        {
+            string emsg = "Error - Submitter not specified";
+            _logger?.LogError(emsg);
+            throw new C2SIMClientException(emsg);
+        }
+        if ((cmd == null) || (string.IsNullOrWhiteSpace(cmd)))
+        {
+            string emsg = "No command specified";
+            _logger?.LogError(emsg);
+            throw new C2SIMClientException(emsg);
+        }
+        if (parm1 == null)
+            parm1 = string.Empty;
+        if (parm2 == null)
+            parm2 = string.Empty;
+        if (_submitter == null)
+            _submitter = string.Empty;
+        // Build the parameter string to include
+        //       try {
+        string u = BuildC2SIMEndpoint("command", $"submitterID={_submitter}"
+            + $"&command={cmd}"
+            + $"&parm1={parm1}"
+            + $"&parm2={parm2}"
+            + $"&version={_clientVersion}");
+        string result = await SendTrans(u, xml);
+        return result;
+    }
+
+    /// <summary>
+    /// Submit a request to a BML/C2SIM Server
+    /// This method performs the same function as the bmlRequest method and is included as part of the migration from BML to C2SIM 
+    /// </summary>
+    /// <param name="xml">The xml document being submitted</param>
+    /// <returns>Indication of success of operation along with server status.  See serverStatus method.</returns>
+    /// <exception cref="C2SIMClientException"></exception>
+    public async Task<string> C2SimRequest(string xml)
+    {
+        return await BmlRequest(xml);
+    }
+
+    /// <summary>
+    /// Submit a BML transaction to a BML/C2SIM Server host
+    /// As a minimum setHost() and setSubmitter() must have been executed before 
+    /// calling this method.
+    /// </summary>
+    /// <param name="xml">An XML string containing a BML or C2SIM xml document.</param>
+    ///    If the document is C2SIM the C2SIM message envelope should not be 
+    ///    included it will be generated by this method
+    /// <returns> XML - The response received from the host BML server</returns>
+    /// <exception cref="C2SIMClientException"></exception
+    public async Task<string> BmlRequest(string xml)
+    {
+        long startTime;
+        long endTime;
+        DateTime startDate;
+        DateTime endDate;
+        string header;
+        string body;
+        string msg = string.Empty;
+        string sdf = "yyyy-MM-dd HH:mm:ss,SSS";
+        // Make sure the required parameters have been provided
+        if (string.IsNullOrWhiteSpace(_submitter))
+        {
+            string emsg = "Error - Submitter not specified";
+            _logger?.LogError(emsg);
+            throw new C2SIMClientException(emsg);
+        }
+        // Determine the protocol for this message based on the root element (MessageBody is C2SIM, else BML),
+        // overriding whatever the user may have set in the constructor
+        _protocol = DetermineProtocol(xml);
+        string u = BuildC2SIMEndpoint("c2sim", $"submitterID={_submitter}"
+            + $"&protocol={_protocol}"
+            + $"&version={_clientVersion}");
+
+        // If protocol is BML then use the message as received
+        if (_protocol.Equals("BML", StringComparison.InvariantCultureIgnoreCase))
+        {
+            // No extra headers
+            msg = xml;
+        }
+        else
+        {
+            System.Diagnostics.Debug.Assert(_protocol == "C2SIM" || _protocol.Equals(SISOSTD, StringComparison.InvariantCultureIgnoreCase));
+            header = _c2s.ToXMLString();
+            // Locate the message body (After the xml preamble)
+            body = LocateXmlBody(xml);
+            // Now build the message and frame with with C2SIM_Message
+            msg = XML_PREAMBLE + "<Message xmlns=\"http://www.sisostds.org/schemas/C2SIM/1.1\">" + header + body + "</Message>";
+            // C2SIM takes extra querystring parameters
+            u += $"&sender={_c2s.FromSendingSystem}"
+                    + $"&receiver={_c2s.ToReceivingSystem}"
+                    + $"&conversationid={_c2s.ConversationID}";
+        }
+        // If first forwarder is set add it
+        if (!string.IsNullOrWhiteSpace(_firstForwarders))
+            u += $"&forwarders={_firstForwarders}";
+        // Record the start time
+        startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        startDate = DateTime.Now;
+        _logger?.LogTrace(u);
+        _logger?.LogTrace(msg);
+        string result = await SendTrans(u, msg);
+        // If the server indicates that response time statistics should be collected, send them.
+        if (GetElementValue(result, "collectResponseTime").Equals("T", StringComparison.InvariantCultureIgnoreCase))
+        {
+            // Record the end time for the transaction
+            endTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            endDate = DateTime.Now;
+            Double elapsedTime = (1.0 * endTime - startTime) / 1000;
+            // Send the response time to the stats collector on the BML Server
+            u = BuildC2SIMEndpoint("stats", "submitterID=" + _submitter);
+            // Set up the xml with the response time of the first transaction
+            string responseTimeResult = XML_PREAMBLE
+                    + "<C2SIM_Statistics xmlns=\"http://www.sisostds.org/schemas/c2sim/1.0\">"
+                    + "<REST_ResponseTime>"
+                    + "<submitterID>" + _submitter + "</submitterID>"
+                    + "<msgNumber>" + GetElementValue(result, "msgNumber") + "</msgNumber>"
+                    + "<startTime>" + startDate.ToString(sdf) + "</startTime>"
+                    + "<endTime>" + endDate.ToString(sdf) + "</endTime>"
+                    + "<elapsedTime>" + elapsedTime + "</elapsedTime>"
+                    + "<serverTime>" + GetElementValue(result, "time") + "</serverTime>"
+                    + "</REST_ResponseTime></C2SIM_Statistics>";
+            // Send the response time to be recorded on the server
+            await SendTrans(u, responseTimeResult);
+        }
+        // Did we get an error from the server, (The server returns XML)
+        if (result.Contains("<status>Error</status>"))
+        {
+            string emsg ="Error received from server\n" + result;
+            _logger?.LogError(emsg);
+            throw new C2SIMClientException(emsg);
+        }
+        return result;
+    }
+
+    /// <summary>
+    ///   Search an xml string looking for the first instance of a tag.
+    ///   If found, return the value associated with that tag
+    /// </summary>
+    /// <param name="xml">The xml string to be searched</param>
+    /// <param name="target">The string (Tag) being searched for</param>
+    /// <returns>The value of the element named by that tag</returns>
+    public static string GetElementValue(string xml, string target)
+    {
+        if (string.IsNullOrWhiteSpace(xml))
+        {
+            return string.Empty;
+        }
+        try
+        {
+            int hash = xml.GetHashCode();
+            if (hash != _cachedXDocHash)
+            {
+                _cachedXDoc = XDocument.Parse(xml);
+                _cachedXDocHash = hash;
+            }
+            IEnumerable<XElement> result = _cachedXDoc?.Descendants().Where(p => p.Name.LocalName == target);
+            return result?.First().Value ?? string.Empty;
+        }
+        catch (Exception e)
+        {
+            // Failure means it is not there
+            return string.Empty;
+        }
+    }
+    #endregion
+
+
+    #region Private methods
+    private async Task<string> SendTrans(string u, string xml)
+    {
+        string result;
+        try
+        {
+            Uri url = new Uri(u);
+            // Set up parameters to do a POST of the xml BML transaction
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/xml"));
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+                request.Content = new StringContent(xml, Encoding.UTF8, "application/xml");//CONTENT-TYPE header
+                HttpResponseMessage resp = await httpClient.SendAsync(request);
+                result = await resp.Content.ReadAsStringAsync();
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            string emsg = "Malformed Uri Exception";
+            _logger?.LogError(emsg, e);
+            throw new C2SIMClientException(emsg, e);
+        }
+        return result;
+    }
+
+    internal string GetVersion()
+    {
+        string ver = "UNKNOWN";
+        try
+        {
+            ver = this.GetType()
+            .GetTypeInfo()
+            .Assembly
+            .GetCustomAttribute<AssemblyFileVersionAttribute>()
+            .Version;
+        }
+        catch (Exception e)
+        {
+            // Just log, but ignore
+            _logger?.LogWarning($"Failed to extract version from assembly: {e}");
+        }
+        return ver;
+    }
+
+    private string BuildC2SIMEndpoint(string cmdPath, string queryString = null)
+    {
+        string u = string.Empty;
+        if (!_host.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
+            u += "http://";
+        u += _host;
+        if (!string.IsNullOrWhiteSpace(_port))
+            u += $":{_port}";
+        if (!string.IsNullOrWhiteSpace(_path))
+            u += $"/{_path.Trim('/')}";
+        u += $"/{cmdPath}";
+        if (queryString != null)
+            u += $"?{queryString}";
+        return u;
+    }
+
+    /// <summary>
+    // Extract the root element and separate it from a namespace prefix if present
+    // Determine the protocol code to use with this root element
+    /// </summary>
+    static string DetermineProtocol(string xml)
+    {
+        string temp = LocateXmlBody(xml);
+        string root = string.Empty;
+        string prot = string.Empty;
+        // Locate the root tag accounting for possible namespace prefix.
+        Regex p = new Regex("\\s*<(\\w+:)?(\\w+)");
+        Match m = p.Match(temp);
+        if (m.Success && m.Groups.Count > 2)
+        {
+            // Tag is second match.  First match is prefix: which is optional
+            root = m.Groups[2].Value;
+        }
+        switch (root)
+        {
+            case "MessageBody":
+                prot = _protocol;
+                break;
+            default:
+                prot = "BML";
+                break;
+        }
+        // Return the protocol
+        return prot;
+    }
+
+    /// <summary>
+    // Locate the xml body following 
+    /// </summary>
+    static string LocateXmlBody(string xml)
+    {
+        string body = string.Empty;
+        // Is the XML preamble present?
+        if (xml.StartsWith("<?xml version"))
+        {
+            // Locate the actual beginning of the xml (Find the second "<")
+            int start = xml.IndexOf("<", 1);
+            // Get the xml after the XML preamble
+            body = xml.Substring(start);
+        }
+        else
+            body = xml;
+        return body;
+    }
+    #endregion
+
+
+    #region Public properties
+    /// <summary>
+    /// Domain
+    /// </summary>
+    [Obsolete]
+    public string Domain { get => _domain; set => this._domain = value; }
+
+    /// <summary>
+    /// Name or IP address of BML/C2SIM server host
+    /// <summary>
+    public string Host { get => _host; set => this._host = value; }
+
+    /// <summary>
+    /// Server TCP port number to use (defaults to 8080)
+    /// </summary>
+    public string Port { get => _port; set => this._port = value; }
+
+    /// <summary>
+    /// C2SIM service server path
+    /// </summary>
+    public string Path { get => _path; set => this._path = value; }
+
+    /// <summary>
+    /// Set the Requestor property indicating the identity of the client <BR>
+    ///    This is the same as Submitter and provides compatibility with earlier versions of the library.
+    /// </summary>
+    public string Requestor { get => _submitter; set => this._submitter = value; }
+
+    /// <summary>
+    /// Indicates the identity of the client
+    /// </summary>
+    public string Submitter { get => _submitter; set => this._submitter = value; }
+
+    /// <summary>
+    /// Indicates the first server to handle the XML document
+    /// </summary>
+    public string FirstForwarders { get => _firstForwarders; set => this._firstForwarders = value; }
+
+    /// <summary>
+    ///C2SIMHeader to be used with submission of C2SIM transaction
+    /// Should not normally be used as the header is automatically generated by the client code.
+    /// </summary>
+    public C2SIMHeader C2SIMHeader => _c2s;
+
+    /// <summary>
+    /// Protocol to use: BML and C2SIM
+    /// </summary>
+    /// <exception cref="C2SIMClientException"></exception>
+    public string Protocol
+    {
+        get => _protocol;
+        set
+        {
+            _protocol = value;
+            if (_c2s != null)
+            {
+                _c2s.Protocol = value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Version of the protocol, e.g. 1.0.0 for the C2SIM published standard or 0.0.9 for pre-publication/legacy v9
+    /// </summary>
+    /// <exception cref="C2SIMClientException"></exception>
+    public string ProtocolVersion
+    {
+        get => _protocolVersion;
+        set
+        {
+            _protocolVersion = value;
+            if (_c2s != null)
+            {
+                _c2s.ProtocolVersion = value;
+            }
+        }
+    }
+    #endregion
+
+
+}
+
