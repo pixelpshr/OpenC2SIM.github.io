@@ -31,10 +31,11 @@ In brief, C2SIM, including SMX and LOX extensions, define three primary types of
 1. Reports - execution reports
 
 Main published XML schema (xsd):
-* [C2SIM_SMX_LOX_v1.0.0.xsd](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=51853) -  XML Schema Document generated from the merged C2SIM core, SMX, and LOX ontologies (merged using Protégé)
-* [C2SIMOntologyToC2SIMSchemaV1.0.0.xslt](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=51854)- extensible stylesheet language transformations (XSLT) file used to render the ontology into the xsd
+* [C2SIM_SMX_LOX_v1.0.1.xsd](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=53123) -  XML Schema Document generated from the merged C2SIM core, SMX, and LOX ontologies (merged using Protégé) - [local unzipped copy](https://github.com/hyssostech/OpenC2SIM.github.io/blob/4ad6ccd41d12b0003a78f6c03ef7cbc157e699c1/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_V1.0.1.xsd)
+* [C2SIMOntologyToC2SIMSchemaV1.0.1.xslt](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=53123)- extensible stylesheet language transformations (XSLT) file used to render the ontology into the xsd - [local unzipped copy](https://github.com/hyssostech/OpenC2SIM.github.io/blob/4ad6ccd41d12b0003a78f6c03ef7cbc157e699c1/Standard/C2SIM/Schemas/C2SIMOntologyToC2SIMSchemaV1.0.1.xslt)
 
 Other schemas:
 * [C2SIM_SMX_LOX_v1.0.0_Init_flat.xsd](Schemas/C2SIM_SMX_LOX_v1.0.0_Init_flat.xsd) - flattened schema covering Initialization documents
 * [C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd](Schemas/C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd) - flattened schema covering Order documents (includes Autonomous Systems Extension)
 * [C2SIM_SMX_LOX_ASX_v1.0.0_Report_flat.xsd](Schemas/C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd) - flattened schema covering Report documents (includes Autonomous Systems Extension)
+* [C2SIM_SMX_LOX_v1.0.0_Command_augmented.xsd](https://github.com/hyssostech/OpenC2SIM.github.io/blob/d9a1a01522201f8d5af1106e42049dc65d4539d2/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_v1.0.0_Command_augmented.xsd) - not part of the original OpenC2SIM repository, and it was extracted from the all encompassing C2SIM_SMX_LOX_v1.0.0.xsd. Additional elements had then to be included to make it comply with the actual content of messages received from a reference server
