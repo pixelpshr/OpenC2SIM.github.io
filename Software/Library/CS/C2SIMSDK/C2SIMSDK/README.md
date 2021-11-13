@@ -3,7 +3,7 @@
 Resources for controlling C2SIM servers and handling C2SIM messages. This class is built on top of the `C2SIMClientLib`, and 
 encapsulates common parameters required to interact with a C2SIM environment running a REST and STOMP services, and potentially 
 connected to other systems, such as C2 and Simulators. For an overview of this interaction, see the 
-[C2SIM Server Reference Implementation Documentation](https://github.com/hyssostech/OpenC2SIM.github.io/blob/9bd71a494be97a8da2f4320aae9adc2923e72d3a/Software/Server/C2SIM Server Reference Implementation Documentation 4.8.0.X .pdf#L1))
+[C2SIM Server Reference Implementation Documentation](https://github.com/hyssostech/OpenC2SIM.github.io/blob/c7717ca492b7e9f48c489476c873f7ce047906f6/Reference/C2SIM Server Reference Implementation Documentation 4.8.0.X .pdf))
 
 
 The focus is specifically on the C2SIM protocol, rather than legacy ones (e.g. CBML, IBML, IBML9, MSDL) which may be supported by C2SIM 
