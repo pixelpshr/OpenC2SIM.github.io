@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace C2SimClientLib;
+﻿namespace C2SimClientLib;
 
 /// <summary>
 /// C2Sim exception wrapper - may contain details in an InnerException indicating the real cause

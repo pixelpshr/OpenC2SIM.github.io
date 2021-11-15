@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -355,7 +355,7 @@ public class C2SIMClientREST_Lib
             IEnumerable<XElement> result = _cachedXDoc?.Descendants().Where(p => p.Name.LocalName == target);
             return result?.First().Value ?? string.Empty;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // Failure means it is not there
             return string.Empty;

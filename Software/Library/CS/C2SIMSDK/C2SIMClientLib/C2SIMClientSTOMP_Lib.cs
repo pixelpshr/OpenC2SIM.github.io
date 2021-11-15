@@ -71,13 +71,6 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     /// </summary>
     private string _subscriptionId;
     /// <summary>
-    /// subscriptions - Vector of message types (e.g. BML_Report).
-    /// These will be submitted at connection time so that only 
-    /// messages with message matching one of the 
-    /// </summary>
-    [Obsolete("Use _adv_subscriptions or addAdvSubscription instead")]
-    private List<string> _subscriptions;
-    /// <summary>
     /// adv_subscriptions - These are subscriptions that can address any 
     /// header in the message using SQL-like statements.
     /// </summary>
@@ -123,7 +116,6 @@ public class C2SIMClientSTOMP_Lib : IDisposable
         _port = Int32.Parse(settings.Port);
         _destination = settings.Destination;
 
-        _subscriptions = new List<string>();
         _adv_subscriptions = new List<string>();
         _subscriptionId = DateTime.Now.ToFileTime().ToString();
     }
@@ -231,18 +223,6 @@ public class C2SIMClientSTOMP_Lib : IDisposable
             // Send subscription
             string subscribeFrame = "SUBSCRIBE\n";
             // Add any message selector
-            // Old style - deprecated member - replaced by _adv_subscriptions below
-            if (_subscriptions.Count() != 0)
-            {
-                subscribeFrame += "selector: message-selector = '" +
-                    _subscriptions.ElementAt(0) + "'";
-                for (int i = 1; i < _subscriptions.Count(); ++i)
-                {
-                    subscribeFrame += " OR message-selector = '" +
-                        _subscriptions.ElementAt(i) + "'";
-                }
-                subscribeFrame += "\n";
-            }
             if (_adv_subscriptions.Count() != 0)
             {
                 subscribeFrame += "selector: ";
@@ -460,22 +440,6 @@ public class C2SIMClientSTOMP_Lib : IDisposable
         headers.Add("protocol" + SISOSTD + "\n");
         // Publish the message    
         await Publish("SEND", headers, msg);
-    }
-
-    /// <summary>
-    /// addSubscription - Add a Message Selector to list of selectors submitted with SUBSCRIBE
-    ///   Host will only publish messages matching one of the selectors.
-    ///   If no addSubscriptions are submitted then all messages will be received.
-    /// </summary>
-    /// <param name="msgSelector">string - Name of a BML Message Type to be added to subscription list.  
-    ///  If the list contains at least one Message Selector then the only messages 
-    ///  that will be received on the current connection will be those on the list.  
-    ///  If no subscriptions are submitted then this system will receive all messages published to the topic
-    ///  </param>
-    [Obsolete("Use AddAdvSubscription instead")]
-    public void AddSubscription(string msgSelector)
-    {
-        _subscriptions.Add(msgSelector);
     }
 
     /// <summary>
