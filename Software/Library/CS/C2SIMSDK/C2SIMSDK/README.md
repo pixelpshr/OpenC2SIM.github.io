@@ -44,29 +44,29 @@ Install-Package HyssosTeck.Sdk.C2SIM
 
 1. Create a `C2SIMSDK` object and subscribe to events
 
-```cs
-// ... obtain reference to logger that should be used by the SDK
-ILogger logger = ...
-C2SIMSDK c2SimSDK = new C2SIMSDK(
-    logger,
-    new C2SIMSDKSettings(
-        // Id string of this app - use C2SIMSDK.GetMachineID() to get a unique id based on the client hardware
-        <submitter id>, 
-        // Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer"
-        <rest endpoint>, 
-        // C2SIM server password
-        <rest password>        
-        // Full STOMP service endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
-        <stomp endpoint>, 
-        // Protocol - could also be "BML" for example, but the SDK focuses on C2SIM
-        "SISO-STD-C2SIM",
-        // Version of the protocol - 1.0.0 is the published standard
-        "1.0.0"
-    )
-);
-```
+    ```cs
+    // ... obtain reference to logger that should be used by the SDK
+    ILogger logger = ...
+    C2SIMSDK c2SimSDK = new C2SIMSDK(
+        logger,
+        new C2SIMSDKSettings(
+            // Id string of this app - use C2SIMSDK.GetMachineID() to get a unique id based on the client hardware
+            <submitter id>, 
+            // Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer"
+            <rest endpoint>, 
+            // C2SIM server password
+            <rest password>        
+            // Full STOMP service endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
+            <stomp endpoint>, 
+            // Protocol - could also be "BML" for example, but the SDK focuses on C2SIM
+            "SISO-STD-C2SIM",
+            // Version of the protocol - 1.0.0 is the published standard
+            "1.0.0"
+        )
+    );
+    ```
 
-*NOTE*: the constructor above is crafted to support Dependency Injection as part os a [.NET Generic Host](https://docs.microsoft.com/en-us/dotnet/core/extensions/generic-host), which simplifies handling of logging and configuration settings. See the [Sample App](https://github.com/hyssostech/OpenC2SIM.github.io/blob/0def573bcde1e3ff40248bc327775200e6eba095/Software/Library/CS/C2SIMSDK/C2SIMSDKSampleApp) for an example of how to implement that.
+    *NOTE*: the SDK supports Dependency Injection as part os a [.NET Generic Host](https://docs.microsoft.com/en-us/dotnet/core/extensions/generic-host), which simplifies handling of logging and configuration settings. See the [Sample App](https://github.com/hyssostech/OpenC2SIM.github.io/blob/0def573bcde1e3ff40248bc327775200e6eba095/Software/Library/CS/C2SIMSDK/C2SIMSDKSampleApp) for an example of how to implement that.
 
 
 1. Subscribe to notification events, implementing  handlers
