@@ -1,48 +1,34 @@
 ﻿# C2SIM SDK
 
-Resources for controlling C2SIM servers and handling C2SIM messages. This class is built on top of the [C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/0def573bcde1e3ff40248bc327775200e6eba095/Software/Library/CS/C2SIMSDK/C2SIMClientLib), and 
-encapsulates common parameters required to interact with a C2SIM environment running a REST and STOMP services, and potentially 
-connected to other systems, such as C2 and Simulators. For an overview of this interaction, see the 
-[C2SIM Server Reference Implementation Documentation](https://bit.ly/30y40RI)
+Resources for controlling state and handling messages in a C2SIM environment. For an overview of C2SIM and its capabilities to support multiple connected Command and Control (C2) and Simulation systems, see the [C2SIM Server Reference Implementation Documentation](https://bit.ly/30y40RI)
 
+The focus of the SDK is specifically on the C2SIM protocol, rather than legacy ones (e.g. CBML, IBML, IBML9, MSDL) which may be supported by C2SIM environments as well.
 
-The focus is specifically on the C2SIM protocol, rather than legacy ones (e.g. CBML, IBML, IBML9, MSDL) which may be supported by C2SIM environments as well.
+The SDK is built on top of generic capabilities offered by a [(ported) Client Library]((https://github.com/hyssostech/OpenC2SIM.github.io/tree/0def573bcde1e3ff40248bc327775200e6eba095/Software/Library/CS/C2SIMSDK/C2SIMClientLib)), configured with specific parameters obtained by examining the 
+[C2SIM GUI Editor code](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Client/C2SIMGUIv2.10.9) 
+use of the [Java C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib).
 
-The methods in this class make use of generic capabilities offered by the (ported) Client Library to offer higher-level functionality, 
-for example:
+In a nutshell, the SDK:
 
-- Wrapping a series of basic Library Commands to make a server transition to a state where it is ready to accept Initializations,
-or Orders, or to join an ongoing session
-- Issuing Library messages with required parameters for pushing Orders, Initializations and Reports
-- Serializing and deserializing XML messages from/into plain old C# objects
-- Exposing generic Library STOMP messages as finer grained events signaling the reception of Initialization, 
+- Wraps a series of basic Library Commands required to make C2SIM server transition to a state where it is ready to accept Initializations, or Orders, or to join an ongoing session
+- Issues Library messages with required parameters for pushing specific messages containing Orders, Initializations and Reports
+- Serializes and deserializes XML messages from/into plain old C# objects
+- Exposes generic Library (STOMP) notification messages as finer grained events signaling the reception of Initialization, 
 Orders, Reports, and server status changes
 
-To obtain these effects, the Library functionality is invoked with specific parameters, which were obtained by examining the 
-[C2SIM GUI Editor code](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Client/C2SIMGUIv2.10.9) 
-use of the Java [C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib)
 
+## Nuget Install
 
-## Nuget Installation
+The [HyssosTeck.Sdk.C2SIM](https://www.nuget.org/packages/HyssosTech.Sdk.C2SIM/) nuget provides support for: 
 
-A nuget proving support for .NET 6 and .NET Standard 2.0 (compatible with versions of the .NET Framework) is available to install
+* .NET 6 projects
+* .NET Standard 2.0 - compatible with recent .NET Framework projects
 
-.NET CLI
-
-```
-dotnet add package HyssosTeck.Sdk.C2SIM
-```
-
-Package Manager
-
-```
-Install-Package HyssosTeck.Sdk.C2SIM
-```
-
+As such, it should be compatible with Windows, macOs and Linux platforms, provided these have the required [.NET Runtime/SDK](https://dotnet.microsoft.com/download/dotnet/6.0) installed
 
 ## Quick Start
 
-1. Create a `C2SIMSDK` object and subscribe to events
+1. Create a `C2SIMSDK` object pointing to a C2SIM server
 
     ```cs
     // ... obtain reference to logger that should be used by the SDK
@@ -69,7 +55,7 @@ Install-Package HyssosTeck.Sdk.C2SIM
     *NOTE*: the SDK supports Dependency Injection as part of a [.NET Generic Host](https://docs.microsoft.com/en-us/dotnet/core/extensions/generic-host), which simplifies handling of logging and configuration settings. See the [Sample App](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDKSampleApp) for an example of how to implement that.
 
 
-1. Subscribe to notification events, implementing  handlers
+1. Subscribe to notification events
 
     ```cs
     c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangedReceived;
@@ -78,7 +64,7 @@ Install-Package HyssosTeck.Sdk.C2SIM
     c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
     ```
 
-1. Establish the connection to the notification service to start the message flow
+1. Establish the connection to the C2SIM notification service to start the message flow
 
     ```cs
     try
