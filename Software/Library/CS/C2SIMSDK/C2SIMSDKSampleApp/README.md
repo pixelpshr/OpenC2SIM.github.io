@@ -15,14 +15,14 @@ For a description of commands and messages, see the [C2SIM Server Reference Impl
 
 Default parameters are set in [appsettings.json](./appsettings.json):
 
-* C2SIMSubmitterId - Id string of the submitter</param>
-* C2SIMRestUrl - Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer</param>
-* C2SIMRestPassword - C2SIM server password</param>
-* C2SIMStompUrl - Full notification service (STOMP) endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"</param>
-* C2SIMProtocol - "SISO-STD-C2SIM" (or "BML")</param>
-* C2SIMProtocolVersion - "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")</param>
+* C2SIMSubmitterId - Id string of the submitter
+* C2SIMRestUrl - Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer
+* C2SIMRestPassword - C2SIM server password
+* C2SIMStompUrl - Full notification service (STOMP) endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
+* C2SIMProtocol - "SISO-STD-C2SIM" (or "BML")
+* C2SIMProtocolVersion - "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
 
-These settings can be overriden via command line parameters (described below)
+These settings can be overridden via command line parameters (described below)
 
 ## Building and Running
 
@@ -33,7 +33,7 @@ cd C2SIMSDKSampleApp
 dotnet build
 dotnet run 
 ```
-Or using command line parameters to override the default `appconfig.json` settins:
+Or using command line parameters to override the default `appconfig.json` settings:
 
 ```
 dotnet run C2SIMRestUrl="http://10.2.10.70:8080/C2SIMServer"
