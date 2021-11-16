@@ -44,7 +44,7 @@ class C2SIMConsole : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         // Subscribe to C2SIM notification (STOMP) events
-        _c2SimSDK.StatusChangdReceived += C2SimSDK_StatusChangdReceived;
+        _c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangdReceived;
         _c2SimSDK.InitializationReceived += C2SimSDK_InitializationReceived;
         _c2SimSDK.OderReceived += C2SimSDK_OderReceived;
         _c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;

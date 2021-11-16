@@ -37,7 +37,33 @@ public class C2SIMSDKSettings
     /// "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
     /// </summary>
     public string C2SIMProtocolVersion { get; set; }
- }
+
+    /// <summary>
+    /// Construct Settings object
+    /// </summary>
+    /// <param name="submitterId"></param>
+    /// <param name="restUrl"></param>
+    /// <param name="restPassword"></param>
+    /// <param name="stompUrl"></param>
+    /// <param name="protocol"></param>
+    /// <param name="protocolVersion"></param>
+    public C2SIMSDKSettings(string submitterId, string restUrl, string restPassword, string stompUrl, string protocol, string protocolVersion)
+    {
+        C2SIMSubmitterId = submitterId;
+        C2SIMRestUrl = restUrl;
+        C2SIMRestPassword = restPassword;
+        C2SIMStompUrl = stompUrl;
+        C2SIMProtocol = protocol;
+        C2SIMProtocolVersion = protocolVersion;
+    }
+    
+    /// <summary>
+    /// Parameterless constructor - used by Dependency Injection
+    /// </summary>
+    public C2SIMSDKSettings()
+    { 
+    }
+}
 
 /// <summary>
 /// Methods and events for interacting with a C2SIM environment, issuing commands and messages, and receiving notifications
@@ -48,11 +74,13 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Commands accepted by the C2SIM server
     /// </summary>
+#pragma warning disable 1591
     public enum C2SIMCommands { STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT };
     /// <summary>
     /// Server status
     /// </summary>
     public enum C2SIMServerStatus { UNKNOWN, UNINITIALIZED, INITIALIZING, INITIALIZED, RUNNING, PAUSED }
+#pragma warning restore 1591
     #endregion
 
     #region Private properties
@@ -63,7 +91,7 @@ public class C2SIMSDK : IC2SIMSDK
     private string _protocolVersion;
     private Uri _stompUri;
 
-    private C2SIMClientSTOMP_Lib _c2SimStompClient;
+    private C2SIMClientSTOMPLib _c2SimStompClient;
     private CancellationTokenSource _cancellationSource;
 
     internal static ILogger _logger;
@@ -71,14 +99,23 @@ public class C2SIMSDK : IC2SIMSDK
 
     #region Construction / teardown
     /// <summary>
+    /// Construct SDK object from IOptions - configured 
+    /// </summary>
+    /// <param name="logger">Logger to use</param>
+    /// <param name="options">Configuration settings wrapped in IOptions</param>
+    public C2SIMSDK(ILogger<C2SIMSDK> logger, IOptions<C2SIMSDKSettings> options)
+    :this(logger, options.Value)
+    {
+    }
+    
+    /// <summary>
     /// Construct SDK object
     /// </summary>
     /// <param name="logger">Logger to use</param>
-    /// <param name="options">Configuration settings</param>
-    public C2SIMSDK(ILogger<C2SIMSDK> logger, IOptions<C2SIMSDKSettings> options)
+    /// <param name="settings">Configuration settings</param>
+    public C2SIMSDK(ILogger<C2SIMSDK> logger, C2SIMSDKSettings settings)
     {
         _logger = logger;
-        C2SIMSDKSettings settings = options.Value;
 
         _submitterId = settings.C2SIMSubmitterId;
         _restUri = new Uri(settings.C2SIMRestUrl);
@@ -92,14 +129,13 @@ public class C2SIMSDK : IC2SIMSDK
         {
             stompHost = _stompUri.Scheme + "://" + stompHost;
         }
-        _c2SimStompClient = new C2SIMClientSTOMP_Lib(
+        _c2SimStompClient = new C2SIMClientSTOMPLib(
             _logger,
-            new C2SIMClientSTOMPSettings()
-            {
-                Host = stompHost,
-                Port = _stompUri.Port.ToString(),
-                Destination = _stompUri.PathAndQuery
-            }
+            new C2SIMClientSTOMPSettings(
+                stompHost,
+                _stompUri.Port.ToString(),
+                _stompUri.PathAndQuery
+            )
         );
 
         _protocol = settings.C2SIMProtocol;
@@ -133,7 +169,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Triggered when a Command message is received, signaling a change in the server status 
     /// </summary>
-    public event EventHandler<C2SIMNotificationEventParams> StatusChangdReceived;
+    public event EventHandler<C2SIMNotificationEventParams> StatusChangedReceived;
 
     /// <summary>
     /// Triggered when an Initialization message is received
@@ -166,9 +202,12 @@ public class C2SIMSDK : IC2SIMSDK
         public NotificationHeader Header { get; set; }
 
         /// <summary>
-        /// Message body. Can be one of the following depending on the type of message
-        /// C2SimCommand.MessageBodyType, C2SimInit.MessageBodyType, C2SimOrder.MessageBodyType, C2SimReport.MessageBodyType
+        /// Message body
         /// </summary>
+        /// <remarks>
+        /// Can be one of the following depending on the type of message
+        /// C2SimCommand.MessageBodyType, C2SimInit.MessageBodyType, C2SimOrder.MessageBodyType, C2SimReport.MessageBodyType
+        /// </remarks>
         public object Body { get; set; }
 
         /// <summary>
@@ -270,7 +309,7 @@ public class C2SIMSDK : IC2SIMSDK
         */
         // Get the current status
         string respXml = await PushCommand(C2SIMCommands.STATUS);
-        string stateString = C2SIMClientREST_Lib.GetElementValue(respXml, "sessionState");
+        string stateString = C2SIMClientRESTLib.GetElementValue(respXml, "sessionState");
         if (!Enum.TryParse<C2SIMServerStatus>(stateString, out C2SIMServerStatus status))
         {
             string emsg = "Failed to extract the status from server's response";
@@ -333,9 +372,12 @@ public class C2SIMSDK : IC2SIMSDK
     }
 
     /// <summary>
-    /// Send amessage to the server - this is a generic verion of the specialized PushInitializeMessage,
-    /// PushOrderMessage and PushReportMessage, which should be preferred
+    /// Send amessage to the server
     /// </summary>
+    /// <remarks>
+    /// This is a generic verion of the specialized PushInitializeMessage,
+    /// PushOrderMessage and PushReportMessage, which should be preferred
+    /// </remarks>
     /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
     /// <param name="performative">INFORM, ORDER, REPORT - need to match the type of xmlMessage - Initialization, Order, or Report</param>
     /// <returns>Server response - formats vary depending on the command</returns>
@@ -520,12 +562,15 @@ public class C2SIMSDK : IC2SIMSDK
     }
 
     /// <summary>
-    /// Publish a message to STOMP - low level control over the server
+    /// Publish a message to STOMP
+    /// </summary>
+    /// <remarks>
+    /// Low level control over the server
     /// Use with care, as this may interfere with the state that is set by the C2SIM procedures
     /// embedded in the library
-    /// See  https://stomp.github.io/stomp-specification-1.2.html#Connecting
+    /// See <see  href="https://stomp.github.io/stomp-specification-1.2.html#Connecting">for additional details</see>
     /// SEND, SUBSCRIBE, UNSUBSCRIBE, BEGIN, COMMIT, ABORT, ACK,NACK, DISCONNECT
-    /// </summary>
+    /// </remarks>
     /// <param name="cmd"></param>
     /// <param name="headers"></param>
     /// <param name="xml"></param>
@@ -534,6 +579,37 @@ public class C2SIMSDK : IC2SIMSDK
     {
         // TODO: what commands are supported?? headeres?? Make this more high level
         await _c2SimStompClient.Publish(cmd, headers, xml);
+    }
+
+    /// <summary>
+    /// Get a unique id for a machine
+    /// </summary>
+    /// <returns>Unique Id (MAC address-based)</returns>
+    public static string GetMachineID()
+    {
+        string macAddress = null;
+        try
+        {
+            List<System.Net.NetworkInformation.NetworkInterface> nics =
+                new List<NetworkInterface>(NetworkInterface.GetAllNetworkInterfaces());
+            foreach (NetworkInterface nic in nics)
+            {
+                string thisMacAddress = "";
+                if (null == nic.GetPhysicalAddress() || !nic.OperationalStatus.Equals(OperationalStatus.Up))
+                    continue;
+                byte[] bytes = nic.GetPhysicalAddress().GetAddressBytes();
+                for (int i = 0; i < bytes.Length; i++)
+                    thisMacAddress += string.Format("{0:X2}{1}", bytes[i],
+                            (i < bytes.Length - 1) ? "-" : "");
+                if (thisMacAddress.CompareTo(macAddress) > 0)
+                    macAddress = thisMacAddress;
+            }
+        }
+        catch (Exception)
+        {
+            macAddress = null;
+        }
+        return macAddress;
     }
     #endregion
 
@@ -548,7 +624,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnStatusChangeReceived(C2SIMNotificationEventParams e)
     {
-        StatusChangdReceived?.Invoke(this, e);
+        StatusChangedReceived?.Invoke(this, e);
     }
 
     /// <summary>
@@ -590,55 +666,20 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     /// <param name="performative">"INFORM - initializations; ORDER - orders; REPORT - reports</param>
     /// <returns></returns>
-    private C2SIMClientREST_Lib CreateClientRestService(string performative)
+    private C2SIMClientRESTLib CreateClientRestService(string performative)
     {
-        return new C2SIMClientREST_Lib(
+        return new C2SIMClientRESTLib(
             _logger,
-            new C2SIMClientRESTSettings()
-            {
-                SubmitterId = _submitterId,
-                Host = $"{_restUri.Scheme}://{_restUri.Host}",
-                Port = _restUri.Port.ToString(),
-                Path = _restUri.PathAndQuery,
-                Performative = performative,
-                Protocol = _protocol,
-                ProtocolVersion = _protocolVersion
-            }
+            new C2SIMClientRESTSettings(
+                _submitterId,
+                $"{_restUri.Scheme}://{_restUri.Host}",
+                _restUri.Port.ToString(),
+                _restUri.PathAndQuery,
+                performative,
+                _protocol,
+                 _protocolVersion
+            )
         );
     }
     #endregion
-
-    #region Utility
-    /// <summary>
-    /// Get a unique id for a machine
-    /// </summary>
-    /// <returns>Unique Id (MAC address-based)</returns>
-    public static string GetMachineID()
-    {
-        string macAddress = null;
-        try
-        {
-            List<System.Net.NetworkInformation.NetworkInterface> nics =
-                new List<NetworkInterface>(NetworkInterface.GetAllNetworkInterfaces());
-            foreach (NetworkInterface nic in nics)
-            {
-                string thisMacAddress = "";
-                if (null == nic.GetPhysicalAddress() || !nic.OperationalStatus.Equals(OperationalStatus.Up))
-                    continue;
-                byte[] bytes = nic.GetPhysicalAddress().GetAddressBytes();
-                for (int i = 0; i < bytes.Length; i++)
-                    thisMacAddress += string.Format("{0:X2}{1}", bytes[i],
-                            (i < bytes.Length - 1) ? "-" : "");
-                if (thisMacAddress.CompareTo(macAddress) > 0)
-                    macAddress = thisMacAddress;
-            }
-        }
-        catch (Exception)
-        {
-            macAddress = null;
-        }
-        return macAddress;
-    }
-    #endregion
-
 }

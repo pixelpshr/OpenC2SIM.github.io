@@ -3,58 +3,65 @@
 namespace C2SimClientLib;
 
 /// <summary>
-///  C2SIMSTOMPMessage
 ///  Encapsulates a STOMP Message along with other data created during the processing of the message
+/// </summary>
+/// <remarks>
 ///  From original Java code implemented by Douglas Corner - George Mason University C4I and Cyber Center
+/// </remarks>
 public class C2SIMSTOMPMessage
 {
     #region Private properties
     /// <summary>
-    /// messageType  STRING - STOMP Message COMMAND received
+    /// STOMP Message COMMAND received
     /// </summary>
     internal string _messageType;                   // CONNECTED, MESSAGE, etc
     /// <summary>
-    /// messageSelector  STRING - Type of BML message as determined by XML matching
+    /// Type of BML message as determined by XML matching
     /// </summary>
     internal string _messageSelector;               // IBMLReport, ..
     /// <summary>
-    /// headers  Vector of STRINGs - Raw unparsed STOMP message headers
+    /// Raw unparsed STOMP message headers
     /// </summary>
     internal List<string> _headers;
     /// <summary>
-    ///  headerMap - HashMap of string,string = Maps header to header value
+    ///  Maps header to header value
     /// </summary>
     internal Dictionary<string, string> _headerMap;  // Header     
     /// <summary>
-    /// messageBody string = The body of the message not including terminating null
+    /// The body of the message not including terminating null
     /// </summary>
     internal string _messageBody;
     /// <summary>
-    /// contentLength long - Length of message body as received not including 
-    /// terminating null.  Obtained from content-length header    
+    /// Length of message body as received
     /// </summary>
+    /// <remarks>
+    /// Does not include terminating null.  Obtained from content-length header    
+    /// </remarks>
     internal long _contentLength;
     /// <summary>
-    /// messageLength - Length of the message after removing the C2SIM header.  
-    /// For non C2SIM messages this is the same as the contentLength
+    /// Length of the message after removing the C2SIM header.  
     /// </summary>
+    /// <remarks>
+    /// For non C2SIM messages this is the same as the contentLength
+    /// </remarks>
     internal long _messageLength;
     /// <summary>
     /// C2SIMHeader stripped from incoming Message
     /// </summary>
     internal C2SIMHeader _c2sim;
     /// <summary>
-    // Exception caught in background thread.  Used to 
-    // communicate exception to background.
-    // May be an otherwise empty message        
+    /// Exception caught in background thread
     /// </summary>
+    /// <remarks>
+    /// Used to communicate exception to background.
+    /// May be an otherwise empty message        
+    /// </remarks>
     internal Exception _error;
     #endregion
 
     #region Construction / teardown
-    // Constructor - Initialize properties
     /// <summary>
-    /// C2SIMSTOMPMessage Constructor
+    /// Constructor
     /// </summary>
     public C2SIMSTOMPMessage()
     {
@@ -69,8 +76,7 @@ public class C2SIMSTOMPMessage
 
     #region Public methods
     /// <summary>
-    ///   Move the values from headers Vector creating a HashMap of header 
-    ///   names and header values
+    ///   Move the values from headers Vector creating a HashMap of header names and header values
     /// </summary>
     /// <returns>string - messageSelector if one was found </returns>
     public string CreateHeaderMap()
@@ -135,9 +141,11 @@ public class C2SIMSTOMPMessage
 
     #region Public properties
     /// <summary>
-    /// STOMP command for this message.  
-    /// Normally CONNECTED or MESSAGE
+    /// STOMP command for this message
     /// </summary>
+    /// <remarks>
+    /// Normally CONNECTED or MESSAGE
+    /// </remarks>
     public string MessageType => _messageType;
     /// <summary>
     /// Message type determined when the server receives 
@@ -145,14 +153,18 @@ public class C2SIMSTOMPMessage
     /// </summary>
     public string MessageSelector => _messageSelector;
     /// <summary>
-    /// Body of the message, i.e. the part of the message 
-    /// following the headers.  Does not include the terminating NULL
+    /// Body of the message
     /// </summary>
+    /// <remarks>
+    /// Part of the message following the headers.  Does not include the terminating NULL
+    /// </remarks>
     public string MessageBody => _messageBody;
     /// <summary>
-    /// Length of the message without the C2SIM Header <BR>
-    ///  For non C2SIM messages this is the same as the contentLength.
+    /// Length of the message without the C2SIM Header
     /// </summary>
+    /// <remarks>
+    ///  For non C2SIM messages this is the same as the contentLength.
+    /// </remarks>
     public long MessageLength => _messageLength;
     /// <summary>
     /// Length of the message as determined by the content-length header

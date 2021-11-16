@@ -11,6 +11,7 @@ namespace C2SimClientLib;
 
 /// <summary>
 /// STOMP service settings
+/// </summary>
 public class C2SIMClientSTOMPSettings
 {
     /// <summary>
@@ -25,15 +26,44 @@ public class C2SIMClientSTOMPSettings
     /// STOMP service topic/destination
     /// </summary>
     public string Destination { get; set; }
+    
+    
+    /// <summary>
+    /// COnstruct Settings object
+    /// </summary>
+    /// <param name="host"></param>
+    /// <param name="port"></param>
+    /// <param name="destination"></param>
+    public C2SIMClientSTOMPSettings(string host, string port, string destination)
+    {
+        Host = host;
+        Port = port;
+        Destination = destination;
+    }
 }
 
 /// <summary>
 ///  STOMP server messaging
 /// </summary>
-public class C2SIMClientSTOMP_Lib : IDisposable
+public class C2SIMClientSTOMPLib : IDisposable
 {
     #region Public constants
-    public enum MessageType { MESSAGE, CONNECTED, ERROR };
+    /// <summary>
+    /// Type of message
+    /// </summary>
+    public enum MessageType { 
+        /// <summary>
+        /// Regular message
+        /// </summary>
+        MESSAGE, 
+        /// <summary>
+        /// Message indicating successful connection
+        /// </summary>
+        CONNECTED, 
+        /// <summary>
+        /// Error message
+        /// </summary>
+        ERROR };
     #endregion
 
     #region Private constants
@@ -98,7 +128,7 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     /// <summary>
     /// There is only one queue (It is a static variable).  Initialize it in a static block
     /// </summary>
-    static C2SIMClientSTOMP_Lib()
+    static C2SIMClientSTOMPLib()
     {
         _queue = new BufferBlock<C2SIMSTOMPMessage>(); 
     }
@@ -107,8 +137,8 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     /// Construct a library object
     /// </summary>
     /// <param name="logger">Logger to use</param>
-    /// <param name="options">STOMP service settings</param>
-    public C2SIMClientSTOMP_Lib(ILogger logger, C2SIMClientSTOMPSettings settings)
+    /// <param name="settings">STOMP service settings</param>
+    public C2SIMClientSTOMPLib(ILogger logger, C2SIMClientSTOMPSettings settings)
     {
         _logger = logger;
 
@@ -125,11 +155,15 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="options"></param>
-    public C2SIMClientSTOMP_Lib(ILogger logger, IOptions<C2SIMClientSTOMPSettings> options)
+    public C2SIMClientSTOMPLib(ILogger logger, IOptions<C2SIMClientSTOMPSettings> options)
     :this(logger, options.Value)
     {
     }
 
+    /// <summary>
+    /// Dispose object
+    /// </summary>
+    /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposedValue)
@@ -155,12 +189,17 @@ public class C2SIMClientSTOMP_Lib : IDisposable
             _disposedValue = true;
         }
     }
+
     // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
     // ~C2SIMClientSTOMP_Lib()
     // {
     //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
     //     Dispose(disposing: false);
     // }
+
+    /// <summary>
+    /// Dispose of object
+    /// </summary>
     public void Dispose()
     {
         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
@@ -171,8 +210,7 @@ public class C2SIMClientSTOMP_Lib : IDisposable
 
     #region Public methods
     /// <summary>
-    /// Connect to Stomp host
-    ///  Wait for CONNECTED Message
+    /// Connect to Stomp host, checking for a CONNECTED response
     /// </summary>
     /// <returns>STOMPMessage - Response from host if connection - Response should be CONNECTED</returns>
     /// <exception cref="C2SIMClientException">Includes various exceptions</exception>
@@ -306,8 +344,10 @@ public class C2SIMClientSTOMP_Lib : IDisposable
 
     /// <summary>
     /// Returns the next message received from the STOMP messaging server.  
-    /// The calling thread will NOT be blocked if a STOMPMessage is not available; .
     /// </summary>
+    /// <remarks>
+    /// The calling thread will NOT be blocked if a STOMPMessage is not available; .
+    /// </remarks>
     /// <returns>STOMPMessage - The next STOMP message or NULL if no message is available at this time.  Message should be MESSAGE.</returns>
     /// <exception cref="C2SIMClientException">Encapsulates several specific exceptions</exception>
     public C2SIMSTOMPMessage GetNext_NoBlock()
@@ -324,9 +364,11 @@ public class C2SIMClientSTOMP_Lib : IDisposable
 
     /// <summary>
     /// Returns the message received from the STOMP messaging server.  
+    /// </summary>
+    /// <remarks>
     /// The original Java method blocks the calling thread. Here we make this method asynchronous
     /// so the user can wait for the result, but do that in an await that will _not_ block the thread
-    /// </summary>
+    /// </remarks>
     /// <returns>STOMPMessage - The next STOMP message.  Message should be MESSAGE.</returns>
     /// <exception cref="C2SIMClientException">Encapsulates several specific exceptions</exception>
     public async Task<C2SIMSTOMPMessage> GetNext_Block()
@@ -347,8 +389,10 @@ public class C2SIMClientSTOMP_Lib : IDisposable
 
     /// <summary>
     /// Create C2SIM header from a message content and cleans up the message body
-    /// Throw exceptions sent over as messages posted by the background thread
     /// </summary>
+    /// <remarks>
+    /// Throw exceptions sent over as messages posted by the background thread
+    /// </remarks>
     /// <param name="currentMsg"></param>
     /// <returns>Processed STOMPMessage</returns>
     /// <exception cref="C2SIMClientException">Multiple potential exceptions detected by the background thread and sent over within a message</exception>
@@ -387,11 +431,14 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     }
 
     /// <summary>
-    /// sendC2SIM_Response - Send a C2SIM response to an incoming C2SIM request.  
+    /// Send a C2SIM response to an incoming C2SIM request.  
+    /// </summary>
+    /// <remarks>
     /// Response will be sent via STOMP
+    /// </remarks>
     /// <returns>STOMPMessage - The next STOMP message.  Message should be MESSAGE.</returns>
     /// <param name="oldMsg">Message that is being responded to</param>
-    /// <param name="c2sResp">Response code to be sent*</param>
+    /// <param name="c2sResp">Response code to be sent</param>
     /// <param name="ackCode">Code describing the acknowledgment</param>
     public async Task SendC2SIM_Response(
         C2SIMSTOMPMessage oldMsg,
@@ -443,10 +490,12 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     }
 
     /// <summary>
-    /// addAdvSubscription - Add a general selector expression to be used with SUBSCRIBE
+    /// Add a general selector expression to be used with SUBSCRIBE
+    /// </summary>
+    /// <remarks>
     ///   Host will only publish messages matching one of the selectors.
     ///   If no addSubscriptions are submitted then all messages will be received.
-    /// </summary>
+    /// </remarks>
     /// <param name="subString">string - Expression to be added to subscription list.  Expression will provide a header value to be used as a filter. 
     ///  If specified  the only messages
     ///  that will be received on the current connection will be those Satisfying the expression or those msgSelectors specified in addSubscription.
@@ -458,7 +507,8 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     }
 
     /// <summary>
-    /// Disconnect from STOMP server and close client.
+    /// Disconnect from STOMP server and close client
+    /// </summary>
     /// <returns>string - "OK" indicating successful completion of disconnect or else throws an exception</returns>
     /// <exception cref="C2SIMClientException">Encapsulates various exceptions</exception>
     public async Task<string> Disconnect()
@@ -507,8 +557,9 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     }
 
     /// <summary>
-    /// Run method used internally to create a background thread for receiving 
-    /// and queuing messages form STOMP server <BR>
+    /// STOMP server message pump
+    /// </summary>
+    /// <remarks>
     /// Read command
     ///     Only commands we should get are CONNECTED and MESSAGE
     /// Read headers, one per line
@@ -521,7 +572,7 @@ public class C2SIMClientSTOMP_Lib : IDisposable
     ///     Message headers (Vector)
     ///     Message content as single string
     /// Add STOMPMessage to quque for background processing
-    /// <summary>
+    /// </remarks>
     private async Task Run()
     {
         // Main Foreground Loop 
@@ -682,8 +733,10 @@ public class C2SIMClientSTOMP_Lib : IDisposable
 
     /// <summary>
     /// Destination queue or topic
-    ///  If there is a trailing slash it will be removed.
     /// </summary>
+    /// <remarks>
+    ///  If there is a trailing slash it will be removed.
+    /// </remarks>
     public string Destination { set => _destination = value.Trim('/'); }
     #endregion
 }

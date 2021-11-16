@@ -9,8 +9,10 @@ using Microsoft.Extensions.Options;
 
 namespace C2SimClientLib;
 
+
 /// <summary>
 /// REST services settings
+/// </summary>
 public class C2SIMClientRESTSettings
 {
     /// <summary>
@@ -41,9 +43,34 @@ public class C2SIMClientRESTSettings
     /// "1.0.0" for published C2SIM standard, or legacy version (e.g. v9="0.0.9")
     /// </summary>
     public string ProtocolVersion { get; set; }
+
+    /// <summary>
+    /// Construct Settings object
+    /// </summary>
+    /// <param name="submitterId"></param>
+    /// <param name="host"></param>
+    /// <param name="port"></param>
+    /// <param name="path"></param>
+    /// <param name="performative"></param>
+    /// <param name="protocol"></param>
+    /// <param name="protocolVersion"></param>
+    public C2SIMClientRESTSettings(string submitterId, string host, string port, string path, string performative, string protocol, string protocolVersion)
+    {
+        SubmitterId = submitterId;
+        Host = host;
+        Port = port;
+        Path = path;
+        Performative = performative;
+        Protocol = protocol;
+        ProtocolVersion = protocolVersion;
+    }
+
 }
 
-/// <summary>C2Sim Server Web Services REST Client
+/// <summary>
+/// C2Sim Server Web Services REST Client
+/// </summary>
+/// <remarks>
 /// This client does the following:
 ///      Open a connection with the server on specified port (Default is 8080)
 ///      Build an HTTP POST transaction from parameters and BML XML document
@@ -51,8 +78,8 @@ public class C2SIMClientRESTSettings
 ///      Read the result
 ///      Disconnect from the server
 ///      Return the result received from the server to the caller
-/// </summary>
-public class C2SIMClientREST_Lib
+/// </remarks>
+public class C2SIMClientRESTLib
 {
     #region Static properties
     private static string _protocol = string.Empty;   // C2SIM 
@@ -84,8 +111,8 @@ public class C2SIMClientREST_Lib
     /// Constructc REST request object
     /// </summary>
     /// <param name="logger">Logger to use</param>
-    /// <param name="options">REST service settings</param>
-    public C2SIMClientREST_Lib(ILogger logger, C2SIMClientRESTSettings settings)
+    /// <param name="settings">REST service settings</param>
+    public C2SIMClientRESTLib(ILogger logger, C2SIMClientRESTSettings settings)
     {
         _logger = logger;
 
@@ -120,7 +147,7 @@ public class C2SIMClientREST_Lib
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="options"></param>
-    public C2SIMClientREST_Lib(ILogger logger, IOptions<C2SIMClientRESTSettings> options)
+    public C2SIMClientRESTLib(ILogger logger, IOptions<C2SIMClientRESTSettings> options)
     :this(logger, options.Value)
     {
     }
@@ -128,10 +155,11 @@ public class C2SIMClientREST_Lib
 
     #region Public methods
     /// <summary>
-    /// Get status of C2SIM Server. - Confirm that server is running and return initialization status
-    /// setHost()  and setSubmitter() must have must have been executed before calling this method.
+    /// Get status of C2SIM Server. 
     /// </summary>
-    /// <returns>>XML Document indicating current status of the server.
+    /// <remarks>
+    /// Confirm that server is running and return initialization statussetHost()  and setSubmitter() must 
+    /// have must have been executed before calling this method.
     /// Sample output:
     /// &lt;?xml clientVersion = &quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
     /// &lt;result&gt;
@@ -144,7 +172,8 @@ public class C2SIMClientREST_Lib
     ///    &lt;msgNumber&gt;0&lt;/msgNumber&gt;
     ///    &lt;time&gt; 0.000&lt;/time&gt;
     /// &lt;/result&gt;
-    /// </returns>
+    /// </remarks>
+    /// <returns>>XML Document indicating current status of the server</returns>
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> ServerStatus()
     {
@@ -177,17 +206,19 @@ public class C2SIMClientREST_Lib
     }
 
     /// <summary>
-    /// c2simCommand pass a command to the C2SIM Server
-    /// Current commands are NEW, LOAD, SAVE, SAVEAS, DELETE, SHARE, QUERYUNIT, QUERYINIT<
-    /// See the latest clientVersion of C2SIM Server Reference Implementation for details.
-    /// https://github.com/OpenC2SIM/OpenC2SIM.github.io/blob/master/C2SIM%20Server%20Reference%20Implementation%20Documentation%204.8.0.X%20.pdf]
-    /// Result is an XML document which may contain &lt;status&gt;OK&lt;/status&gt;
+    /// Execute a 2SIM Server command
     /// </summary>
+    /// <remarks>
+    /// Current commands are NEW, LOAD, SAVE, SAVEAS, DELETE, SHARE, QUERYUNIT, QUERYINIT
+    /// See the  <see href="https://github.com/OpenC2SIM/OpenC2SIM.github.io/blob/master/C2SIM%20Server%20Reference%20Implementation%20Documentation%204.8.0.X%20.pdf">C2SIM Server Reference Implementation</see> 
+    /// for details.
+    /// Result is an XML document which may contain a 'status' xml element
+    /// </remarks>
     /// <param name="cmd">Command to be processed.  </param>
     /// <param name="parm1">Optional first parameter</param>
     /// <param name="parm2">Optional second parameter</param>
     /// <returns>string result - XML Document giving results of command and server status similar to serverStatus method.</returns>
-    // <exception cref="C2SIMClientException"> = Primary and secondary causes are transmitted within the C2SIMClientException object</exception>
+    /// <exception cref="C2SIMClientException">Primary and secondary causes are transmitted within the C2SIMClientException object</exception>
     public async Task<string> C2SimCommand(string cmd, string parm1, string parm2)
     {
         string xml = "<C2SIM_Statistics xmlns=\"http://www.sisostds.org/schemas/c2sim/1.0\"/>";
@@ -226,8 +257,10 @@ public class C2SIMClientREST_Lib
 
     /// <summary>
     /// Submit a request to a BML/C2SIM Server
-    /// This method performs the same function as the bmlRequest method and is included as part of the migration from BML to C2SIM 
     /// </summary>
+    /// <remarks>
+    /// This method performs the same function as the bmlRequest method and is included as part of the migration from BML to C2SIM 
+    /// </remarks>
     /// <param name="xml">The xml document being submitted</param>
     /// <returns>Indication of success of operation along with server status.  See serverStatus method.</returns>
     /// <exception cref="C2SIMClientException"></exception>
@@ -238,14 +271,16 @@ public class C2SIMClientREST_Lib
 
     /// <summary>
     /// Submit a BML transaction to a BML/C2SIM Server host
+    /// </summary>
+    /// <remarks>
     /// As a minimum setHost() and setSubmitter() must have been executed before 
     /// calling this method.
-    /// </summary>
+    /// If the document is C2SIM the C2SIM message envelope should not be 
+    /// included it will be generated by this method
+    /// </remarks>
     /// <param name="xml">An XML string containing a BML or C2SIM xml document.</param>
-    ///    If the document is C2SIM the C2SIM message envelope should not be 
-    ///    included it will be generated by this method
-    /// <returns> XML - The response received from the host BML server</returns>
-    /// <exception cref="C2SIMClientException"></exception
+    /// <returns>XML - The response received from the host BML server</returns>
+    /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> BmlRequest(string xml)
     {
         long startTime;
@@ -333,8 +368,10 @@ public class C2SIMClientREST_Lib
 
     /// <summary>
     ///   Search an xml string looking for the first instance of a tag.
-    ///   If found, return the value associated with that tag
     /// </summary>
+    /// <remarks>
+    ///   If found, return the value associated with that tag
+    /// </remarks>
     /// <param name="xml">The xml string to be searched</param>
     /// <param name="target">The string (Tag) being searched for</param>
     /// <returns>The value of the element named by that tag</returns>
@@ -365,6 +402,13 @@ public class C2SIMClientREST_Lib
 
 
     #region Private methods
+    /// <summary>
+    /// HTTP post
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="xml"></param>
+    /// <returns></returns>
+    /// <exception cref="C2SIMClientException"></exception>
     private async Task<string> SendTrans(string u, string xml)
     {
         string result;
@@ -391,6 +435,10 @@ public class C2SIMClientREST_Lib
         return result;
     }
 
+    /// <summary>
+    /// Assembly version info
+    /// </summary>
+    /// <returns></returns>
     internal string GetVersion()
     {
         string ver = "UNKNOWN";
@@ -410,6 +458,12 @@ public class C2SIMClientREST_Lib
         return ver;
     }
 
+    /// <summary>
+    /// Build C2SIM service request string
+    /// </summary>
+    /// <param name="cmdPath"></param>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
     private string BuildC2SIMEndpoint(string cmdPath, string queryString = null)
     {
         string u = string.Empty;
@@ -427,9 +481,10 @@ public class C2SIMClientREST_Lib
     }
 
     /// <summary>
-    // Extract the root element and separate it from a namespace prefix if present
-    // Determine the protocol code to use with this root element
+    /// Determine the protocol code to use with a root element
     /// </summary>
+    /// <param name="xml"></param>
+    /// <returns></returns>
     static string DetermineProtocol(string xml)
     {
         string temp = LocateXmlBody(xml);
@@ -457,7 +512,7 @@ public class C2SIMClientREST_Lib
     }
 
     /// <summary>
-    // Locate the xml body following 
+    /// Locate the xml body following the xml preamble
     /// </summary>
     static string LocateXmlBody(string xml)
     {
@@ -486,7 +541,7 @@ public class C2SIMClientREST_Lib
 
     /// <summary>
     /// Name or IP address of BML/C2SIM server host
-    /// <summary>
+    /// </summary>
     public string Host { get => _host; set => this._host = value; }
 
     /// <summary>
@@ -500,9 +555,11 @@ public class C2SIMClientREST_Lib
     public string Path { get => _path; set => this._path = value; }
 
     /// <summary>
-    /// Set the Requestor property indicating the identity of the client <BR>
-    ///    This is the same as Submitter and provides compatibility with earlier versions of the library.
+    /// Set the Requestor property indicating the identity of the client
     /// </summary>
+    /// <remarks>
+    /// This is the same as Submitter and provides compatibility with earlier versions of the library.
+    /// </remarks>
     public string Requestor { get => _submitter; set => this._submitter = value; }
 
     /// <summary>
@@ -516,9 +573,11 @@ public class C2SIMClientREST_Lib
     public string FirstForwarders { get => _firstForwarders; set => this._firstForwarders = value; }
 
     /// <summary>
-    ///C2SIMHeader to be used with submission of C2SIM transaction
-    /// Should not normally be used as the header is automatically generated by the client code.
+    /// C2SIMHeader to be used with submission of C2SIM transaction
     /// </summary>
+    /// <remarks>
+    /// Should not normally be used as the header is automatically generated by the client code.
+    /// </remarks>
     public C2SIMHeader C2SIMHeader => _c2s;
 
     /// <summary>

@@ -7,6 +7,7 @@ namespace C2SimClientLib;
 /// <summary>
 /// C2SIM message header
 /// From original Java code implemented by  Douglas Corner - George Mason University C4I Center
+/// </summary>
 public class C2SIMHeader : IC2SIMHeader
 {
     #region Constants
@@ -17,38 +18,44 @@ public class C2SIMHeader : IC2SIMHeader
     #endregion
 
     #region Private properties
-    // Instance variables
     /// <summary>
-    /// CommunicativeActTypeCode - Communicative act; one of the values 
-    /// from enumCommunicativeActCategoryCode indicating type of message
+    /// Communicative act
     /// </summary>
+    /// <remarks>
+    /// One of the values 
+    /// from enumCommunicativeActCategoryCode indicating type of message
+    /// </remarks>
     internal string _communicativeActTypeCode = string.Empty;
     /// <summary>
-    /// securityClassificationCode -  Indicates the security 
-    /// classification of this message
+    /// Indicates the security classification of this message
     /// </summary>
     internal string _securityClassificationCode = string.Empty;
     /// <summary>
-    /// conversationID - Unique identifier for the conversation. 
-    /// Should be kept identical for all replies.<BR> 
+    /// Unique identifier for the conversation. 
+    /// </summary>
+    /// <remarks>
+    /// Should be kept identical for all replies.
     ///   The conversationID may be used to associate a number of 
     /// messages into a logical grouping.
-    /// </summary>
+    /// </remarks>
     internal string _conversationID = string.Empty;
     /// <summary>
-    /// messageID - Unique identifier for the message. Other messages refer to the message using this ID. 
+    /// Unique identifier for the message. 
     /// </summary>
+    /// <remarks>
+    /// Other messages refer to the message using this ID. 
+    /// </remarks>
     internal string _messageID = string.Empty;
     /// <summary>
-    /// protocol - The protocol of the this message
+    /// The protocol of the this message
     /// </summary>
     internal string _protocol = SISOSTD;
     /// <summary>
-    /// protocolVersion - The version of the protocol of the this message
+    /// The version of the protocol of the this message
     /// </summary>
     internal string _protocolVersion = SISOSTDProtocolVersion;
     /// <summary>
-    /// - replyToSystem - Specifies what system to reply to.<BR>
+    /// Specifies what system to reply to
     /// </summary>
     internal string _replyToSystem = string.Empty;
     /// <summary>
@@ -56,15 +63,15 @@ public class C2SIMHeader : IC2SIMHeader
     /// </summary>
     internal string _sendingTime = DateTime.Now.ToString(C2SimDateFormat);
     /// <summary>
-    /// fromSendingSystem - ID of sending system (UUID)
+    /// ID of sending system (UUID)
     /// </summary>
     internal string _fromSendingSystem = string.Empty;
     /// <summary>
-    /// toReceivingSystem -  ID of destination system (UUID))
+    /// ID of destination system (UUID))
     /// </summary>
     internal string _toReceivingSystem = string.Empty;
     /// <summary>
-    /// inReplyToMessageID - ID of message being replied to (UUID)
+    /// ID of message being replied to (UUID)
     /// </summary>
     internal string _inReplyToMessageID = string.Empty;
     #endregion
@@ -73,7 +80,6 @@ public class C2SIMHeader : IC2SIMHeader
     /// <summary>
     /// Constructs a header object
     /// </summary>
-    /// <param name="logger">Logger to use</param>
     public C2SIMHeader()
     {
     }
@@ -86,10 +92,9 @@ public class C2SIMHeader : IC2SIMHeader
     /// <param name="xml">The xml string that header is to be inserted into</param>
     /// <param name="sender">The C2SIM Sender</param>
     /// <param name="receiver">The C2SIM Receiver</param>
-    /// <param name="performative">One of the C2SIM performatives
-    /// Possible values for CommunicativeActTypeCode are: Inform, Confirm, Refuse, Accept, Agree, Request
-    /// </param>
-    /// <returns>The updated XML string with the header inserted</returns>
+    /// <param name="performative">One of the C2SIM performatives</param>
+    /// <param name="version">Protocol version</param>
+    /// <returns></returns>
     public static string InsertC2SIM(string xml, string sender, string receiver, string performative, string version)
     {
         // Create a new C2SIMHeader and add the parameters passed to this routine
@@ -142,9 +147,11 @@ public class C2SIMHeader : IC2SIMHeader
     }
 
     /// <summary>
-    ///   xmlDoc - return a DOM Document representing this message header <BR>
-    ///   NOT IMPLEMENTED AT THIS TIME
+    ///   xmlDoc - return a DOM Document representing this message header 
     /// </summary>
+    /// <remarks>
+    ///   NOT IMPLEMENTED AT THIS TIME
+    /// </remarks>
     /// <returns>null</returns>
     public XDocument ToDoc()
     {
@@ -156,7 +163,7 @@ public class C2SIMHeader : IC2SIMHeader
     /// </summary>
     /// <param name="xmlString"></param>
     /// <returns>The C2SIMHeader object that was passed as a parameter</returns>
-    /// <exception cref="C2SIMClientException"</exception>
+    /// <exception cref="C2SIMClientException"></exception>
     public static C2SIMHeader PopulateC2SIM(string xmlString)
     {
         if (string.IsNullOrWhiteSpace(xmlString))
@@ -176,7 +183,7 @@ public class C2SIMHeader : IC2SIMHeader
             throw new C2SIMClientException(emsg, e);
         }
 
-        /// Work through the parsed document and build a C2SIMHeader object
+        // Work through the parsed document and build a C2SIMHeader object
         XNamespace c2simNS = "http://www.sisostds.org/schemas/C2SIM/1.1";
         XElement header = c2sDoc?.Root;
         if (header.Name.LocalName != "C2SIMHeader")
@@ -276,8 +283,7 @@ public class C2SIMHeader : IC2SIMHeader
     }
 
     /// <summary>
-    /// Generate a new Conversation ID (UIID format) 
-    /// for this C2SIM Header
+    /// Generate a new Conversation ID (UIID format) for this C2SIM Header
     /// </summary>
     public void GenerateConversationID()
     {
