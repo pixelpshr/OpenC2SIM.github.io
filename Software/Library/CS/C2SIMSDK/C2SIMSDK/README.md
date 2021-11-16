@@ -115,7 +115,7 @@ connected to the same server (e.g. the [Sketch-Thru-Plan planning workstation](h
 
 ## Objects generated from the C2SIM XSD
 
-Classes representing the four main types of C2SIM messages were generated from the [Schemas](Schema)using the `xsd` tool:
+Classes representing the four main types of C2SIM messages were generated from the [Schemas](Schema) using the `xsd` tool:
 
 - C2SimXSDInitObject - `xsd C2SIM_SMX_LOX_v1.0.0_Init_flat.xsd /c /namespace:C2SimInit`
 - C2SimXSDOrderObject - `xsd C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd /c /namespace:C2SimOrder` 

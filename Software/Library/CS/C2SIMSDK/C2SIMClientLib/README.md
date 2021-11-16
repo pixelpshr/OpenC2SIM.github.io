@@ -3,7 +3,7 @@
 Library providing means for client applications to interact with C2SIM environments, ported from the
 [Java OpenC2SIM Client Library v4.8.0.2](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib)
 
-It provides methods for performing REST endpoint calls and interact with the STOMP notification service. See the [C2SIM Server Reference Implementation Documentation 4.8.0.X)https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Software/Server/C2SIM%20Server%20Reference%20Implementation%20Documentation%204.8.0.X%20.pdf) for details
+It provides methods for performing REST endpoint calls and interact with the STOMP notification service. See the [C2SIM Server Reference Implementation Documentation 4.8.0.X](https://bit.ly/30y40RI) for details
 
 Below the differences between the Java version and .NET's are described.
 
@@ -26,13 +26,13 @@ patterns, taking an ILogger parameter, and a structured record packaging the dif
 
 ## Exceptions
 
-C2SIMException, used to wraps exceptions, does that now by packing the wrapped exception as a standard `InnerException`. 
+C2SIMException, used to wrap exceptions, does that now by packing the wrapped exception as a standard `InnerException`. 
 The Java code used a property for that. 
 
 ## Parsing of STOMP messages' C2SIM header and C2SIM body
 
 Java's `getNext_Block/NoBlock()` return a `C2SIMSTOMPMessage` where the `C2SIMHeader` property is always null. The `MessageBody` property
-contains the XML for both the messages' 'C2SIM header a well as the C2SIM body. 
+contains the XML for both the messages' C2SIM header a well as the C2SIM body. 
 
 Code in `getNext_Block()` that would parse things out, populating the C2SIMHeader and removing the corresponding XML from MessageBody exists, 
 but is in practice never executed, since it relies on a test for a "protocol" headerMap key. But headerMap is never instantiated, so the
