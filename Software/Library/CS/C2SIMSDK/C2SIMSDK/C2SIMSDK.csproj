@@ -41,21 +41,23 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>0.9.1-prerelease</Version>
+    <Version>0.9.3-prerelease</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company>
     <Description>
-    .NET SDK for C2SIM environments. C2SIM is a SISO standard for
-    interoperation of Command and Control (C2) and Simulation systems, used for Planning
+    .NET SDK for C2SIM. C2SIM is a SISO standard for interoperation of 
+    Command and Control (C2) and Simulation systems, used for Planning
     Wargaming and in coalition settings
     </Description>
-    <Copyright>Compyright (c) Hyssos Tech 2021</Copyright>
+    <Copyright>Copyright (c) Hyssos Tech 2021</Copyright>
     <Licensing>MIT</Licensing>
     <LicenseFile>LICENSE.md</LicenseFile>
-    <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/blob/e3408f2719bb883704d2e784e6e8aa284d4d8c0d/Software/Library/CS/C2SIMSDK</ProjectUrl>
+    <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;"Command an Control";Planning;Wargaming;Rehearsal</PackageTags>
     <ReleaseNotes>Initial release</ReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
