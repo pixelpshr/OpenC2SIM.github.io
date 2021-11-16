@@ -20,7 +20,7 @@ Orders, Reports, and server status changes
 
 To obtain these effects, the Library functionality is invoked with specific parameters, which were obtained by examining the 
 [C2SIM GUI Editor code](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Client/C2SIMGUIv2.10.9) 
-use of the Java [C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/C2SIMClientLibv4.8.0.2)
+use of the Java [C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib)
 
 
 ## Nuget Installation
@@ -46,7 +46,7 @@ Install-Package HyssosTeck.Sdk.C2SIM
 
     ```cs
     // ... obtain reference to logger that should be used by the SDK
-    ILogger logger = ...
+    ILogger logger = null; // Create an appropriate logger here
     C2SIMSDK c2SimSDK = new C2SIMSDK(
         logger,
         new C2SIMSDKSettings(

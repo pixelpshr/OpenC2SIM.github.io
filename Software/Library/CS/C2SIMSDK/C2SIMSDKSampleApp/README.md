@@ -2,7 +2,7 @@
 
 This app illustrates the use of the [C2SIM SDK](..). It provides a simple command line interface for interacting with C2SIM servers:
 
-- Issue commands - send "stop", "reset", "initialize", "share", "start", "queryinit", "status" 
+- Issue commands - send `stop`, `reset`, `initialize`, `share`, `start`, `queryinit`, `status` 
 - Push messages - `push <type> <path to xml>` - where type is "init", "order", or "report"; the XML must be properly formatted according to the 
 [C2SIM standard](https://github.com/hyssostech/OpenC2SIM.github.io/blob/f1a345912a3fbbbc87f26ed25a0863b6939bf813/Standard)
 - Observe server notifications - the STOMP message stream is displayed
