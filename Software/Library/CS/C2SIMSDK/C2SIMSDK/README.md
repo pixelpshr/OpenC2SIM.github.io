@@ -1,6 +1,6 @@
 ﻿# C2SIM SDK
 
-Resources for controlling C2SIM servers and handling C2SIM messages. This class is built on top of the `C2SIMClientLib`, and 
+Resources for controlling C2SIM servers and handling C2SIM messages. This class is built on top of the [C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/0def573bcde1e3ff40248bc327775200e6eba095/Software/Library/CS/C2SIMSDK/C2SIMClientLib), and 
 encapsulates common parameters required to interact with a C2SIM environment running a REST and STOMP services, and potentially 
 connected to other systems, such as C2 and Simulators. For an overview of this interaction, see the 
 [C2SIM Server Reference Implementation Documentation](https://bit.ly/30y40RI)
