@@ -66,7 +66,7 @@ Install-Package HyssosTeck.Sdk.C2SIM
     );
     ```
 
-    *NOTE*: the SDK supports Dependency Injection as part os a [.NET Generic Host](https://docs.microsoft.com/en-us/dotnet/core/extensions/generic-host), which simplifies handling of logging and configuration settings. See the [Sample App](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDKSampleApp) for an example of how to implement that.
+    *NOTE*: the SDK supports Dependency Injection as part of a [.NET Generic Host](https://docs.microsoft.com/en-us/dotnet/core/extensions/generic-host), which simplifies handling of logging and configuration settings. See the [Sample App](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDKSampleApp) for an example of how to implement that.
 
 
 1. Subscribe to notification events, implementing  handlers
