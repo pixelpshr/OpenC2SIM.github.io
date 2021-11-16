@@ -1,23 +1,69 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
     <Version>1.0.0</Version>
+    <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\C2SIMClientLib\C2SIMClientLib.csproj" />
+    <!-- PrivateAssets="all" flags this project for including in the nuget package 
+     via the Teronis.MSBuild.Packaging.ProjectBuildInPackage -->
+    <ProjectReference Include="..\C2SIMClientLib\C2SIMClientLib.csproj" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Must include references from dependent projects as well, or nuget pack fails to 
+     include them in the package -->
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
+    <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="0.1.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
-    <NoWarn>1701;1702;1705;1591</NoWarn>
+  <PropertyGroup> <!-- Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+    <NoWarn>1701;1702;1705</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
+    <Version>0.9.1-prerelease</Version>
+    <Authors>Hyssos Tech</Authors>
+    <Company>Hyssos Tech</Company>
+    <Description>
+    .NET SDK for C2SIM environments. C2SIM is a SISO standard for
+    interoperation of Command and Control (C2) and Simulation systems, used for Planning
+    Wargaming and in coalition settings
+    </Description>
+    <Copyright>Compyright (c) Hyssos Tech 2021</Copyright>
+    <Licensing>MIT</Licensing>
+    <LicenseFile>LICENSE.md</LicenseFile>
+    <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/blob/e3408f2719bb883704d2e784e6e8aa284d4d8c0d/Software/Library/CS/C2SIMSDK</ProjectUrl>
+    <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;"Command an Control";Planning;Wargaming;Rehearsal</PackageTags>
+    <ReleaseNotes>Initial release</ReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+  </ItemGroup>
 
 </Project>
