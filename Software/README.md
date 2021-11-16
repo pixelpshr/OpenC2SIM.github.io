@@ -8,4 +8,4 @@
 * [Library](Software/Library) - Client libraries / SDK for multiple languages
 * [Interfaces](Software/Interfaces) - Interfaces / adaptors for C2SIM compatible systems (VR-Forces, VBS)
 * [Sandbox](Software/Sandbox) - Sandbox environment configuration materials
-* [Tools](Software/Tools) - Miscelaneous tools
+* [Tools](Software/Tools) - Miscellaneous tools
