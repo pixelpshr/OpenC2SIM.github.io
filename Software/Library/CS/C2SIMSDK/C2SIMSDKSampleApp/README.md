@@ -4,7 +4,7 @@ This app illustrates the use of the [C2SIM SDK](..). It provides a simple comman
 
 - Issue commands - send `stop`, `reset`, `initialize`, `share`, `start`, `queryinit`, `status` 
 - Push messages - `push <type> <path to xml>` - where type is "init", "order", or "report"; the XML must be properly formatted according to the 
-[C2SIM standard](https://github.com/hyssostech/OpenC2SIM.github.io/blob/f1a345912a3fbbbc87f26ed25a0863b6939bf813/Standard)
+[C2SIM standard](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Standard)
 - Observe server notifications - the STOMP message stream is displayed
 
 To exit, enter `quit`

@@ -1,6 +1,6 @@
 # C2SIM Reference Documents
 
-THe published standard can be downloaded from the [SISO Digital Library](https://www.sisostds.org/DigitalLibrary.aspx?EntryId=41978)
+The published standard can be downloaded from the [SISO Digital Library](https://www.sisostds.org/DigitalLibrary.aspx?EntryId=41978)
 
 This folder contains other OpenC2SIM documents that discuss the standard, and provide additional technical information on available software implementations and samples.
 
