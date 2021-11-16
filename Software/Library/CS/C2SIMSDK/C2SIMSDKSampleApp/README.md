@@ -9,7 +9,7 @@ This app illustrates the use of the [C2SIM SDK](..). It provides a simple comman
 
 To exit, enter `quit`
 
-For a description of commands and messages, see the [C2SIM Server Reference Implementation Documentation](https://github.com/hyssostech/OpenC2SIM.github.io/blob/9bd71a494be97a8da2f4320aae9adc2923e72d3a/Software/Server/C2SIM Server Reference Implementation Documentation 4.8.0.X .pdf#L1))
+For a description of commands and messages, see the [C2SIM Server Reference Implementation Documentation](https://bit.ly/30y40RI#L1)
 
 ## Configuration settings
 

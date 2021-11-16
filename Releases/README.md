@@ -43,7 +43,7 @@ https://www.youtube.com/watch?v=3L_Hhxuh6Zc
 - Server 4.8.0.x message flow documentation [link](C2SIM%20Server%20Message%20Flow_20200325.pdf)
 - Server 4.8.0.x class diagram documentation [link](C2SIM_Server_UML.pdf)
 - Server 4.8.0.x javadoc documentation [link](C2SIMClientLib_JavaDoc.zip)
-- Server 4.8.0.x user guide documentation [link](C2SIM%20Server%20Reference%20Implementation%20Documentation%204.8.0.X%20.pdf)
+- Server 4.8.0.x user guide documentation [link](https://bit.ly/30y40RI)
 
 #### C2SIM Sandbox
 - C2SIM Overvewi 1 [link](C2SIMoverview2%2Cpdf.pdf)
