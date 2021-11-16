@@ -17,4 +17,3 @@ For a comprehensive C2SIM description, see the [C2SIM Overview](Reference/C2SIM-
 * [Samples](Samples) - C2SIM examples from various sources 
 * [Reference](Reference) - Papers and presentations
 * [Releases](Releases) - Zipped C2SIM release files (main OpenC2SIM project content)
-
