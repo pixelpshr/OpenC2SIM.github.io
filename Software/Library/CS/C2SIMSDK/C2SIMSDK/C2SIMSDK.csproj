@@ -39,9 +39,13 @@
     <NoWarn>1701;1702;1705</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>0.9.3-prerelease</Version>
+    <Version>1.0.0</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company>
     <Description>
@@ -53,11 +57,15 @@
     <Licensing>MIT</Licensing>
     <LicenseFile>LICENSE.md</LicenseFile>
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
-    <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;"Command an Control";Planning;Wargaming;Rehearsal</PackageTags>
+    <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
     <ReleaseNotes>Initial release</ReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</RepositoryUrl>
+    <!-- Include symbol files (*.pdb) in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <!-- Include compiler-generated source (e.g. AssemblyInfo) in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
