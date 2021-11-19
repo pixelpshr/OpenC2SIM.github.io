@@ -114,8 +114,8 @@ make it comply with the actual content of messages received from a
 reference server
 
 
-## SDK Documentation
+## Documentation
 
-The SDK documentation can be found in the [Help](https://htmlpreview.github.io/?https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/Help/index.html) folder
+* [C2SIM .NET SDK Reference](<https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/docs/C2SIM .NET SDK Reference.docx>)
 
 

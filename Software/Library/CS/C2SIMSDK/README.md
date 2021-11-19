@@ -2,7 +2,7 @@
 
 Resources for interacting with C2SIM in .NET code:
 
-* [C2SIMSDK](./C2SIMSDK) - Offers higher-level classes encapsulating common functionality required to interact with a C2SIM environment
+* [C2SIMSDK](./C2SIMSDK) - Offers higher-level classes encapsulating common functionality required to interact with a C2SIM environment - see the [C2SIM .NET SDK Reference](<./docs/C2SIM .NET SDK Reference.docx>) for details
 
 * [C2SIMClinetLib](C2SIMClinetLib) - Lower-level access to REST and STOMP C2SIM services, ported from the [Java C2SIMClientLib 4.8.0.2 version](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib)
 
@@ -10,4 +10,3 @@ Resources for interacting with C2SIM in .NET code:
 
 The SDK is available as a nuget package supporting .NET 6 and .NET Standard 2.0 (Framework) projects: [HyssosTech.Sdk.C2SIM](https://www.nuget.org/packages/HyssosTech.Sdk.C2SIM/)
 
-SDK documentation can be found in the [Help](https://htmlpreview.github.io/?https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/Help/index.html) folder
