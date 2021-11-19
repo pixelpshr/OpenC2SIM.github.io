@@ -181,7 +181,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     }
 
     // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~C2SIMClientSTOMP_Lib()
+    // ~C2SIMClientSTOMPLib()
     // {
     //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
     //     Dispose(disposing: false);
@@ -241,7 +241,7 @@ public class C2SIMClientSTOMPLib : IDisposable
 
             // Send connection message
             string connectFrame = "CONNECT\n"
-                    //+ "accept-version: 1.2"
+                    + "accept-version: 1.2\n"
                     + "login:\n"
                     + "passcode:\n"
                     + "\n"
@@ -533,7 +533,10 @@ public class C2SIMClientSTOMPLib : IDisposable
         try
         {
             // Use leaveOpen so the next frames can be sent over the networkStream
-            using (var streamWriter = new StreamWriter(_networkStream, Encoding.UTF8, 1024, leaveOpen: true))
+            // NB: Encoding.UTF8 causes a Byte Order MArk to be added, which STOMP does not like
+            // use new UTF8Encoding(false) to avoid that
+            // https://stackoverflow.com/a/52187936
+            using (var streamWriter = new StreamWriter(_networkStream, new UTF8Encoding(false), 1024, leaveOpen: true))
             {
                 streamWriter.AutoFlush = true;
                 await streamWriter.WriteAsync(data);
