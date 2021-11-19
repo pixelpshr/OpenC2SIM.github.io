@@ -13,7 +13,7 @@ For a description of commands and messages, see the [C2SIM Server Reference Impl
 
 ## Configuration settings
 
-Default parameters are set in [appsettings.json](./appsettings.json):
+Default parameters are set in [appsettings.json](./appsettings.json), within an `Application` section:
 
 * C2SIMSubmitterId - Id string of the submitter
 * C2SIMRestUrl - Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer
@@ -22,7 +22,7 @@ Default parameters are set in [appsettings.json](./appsettings.json):
 * C2SIMProtocol - "SISO-STD-C2SIM" (or "BML")
 * C2SIMProtocolVersion - "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
 
-These settings can be overridden via command line parameters (described below)
+These settings can be overridden via command line parameters (described further down)
 
 ## Building and Running
 
@@ -33,8 +33,10 @@ cd C2SIMSDKSampleApp
 dotnet build
 dotnet run 
 ```
-Or using command line parameters to override the default `appconfig.json` settings:
+Or using command line parameters to override the default `appsettings.json` settings:
 
 ```
-dotnet run C2SIMRestUrl="http://10.2.10.70:8080/C2SIMServer"
+dotnet run Application:C2SIMRestUrl="http://10.2.10.70:8080/C2SIMServer"
 ```
+
+Notice that the name of the `appsettings.json` section containing the application parameters - `Application` - needs to be used as a prefix
