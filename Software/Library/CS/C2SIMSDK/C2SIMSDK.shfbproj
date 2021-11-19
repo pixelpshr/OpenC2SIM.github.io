@@ -17,15 +17,15 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
-    <OutputPath>.\Help\</OutputPath>
-    <HtmlHelpName>C2SIMSDKDocumentation</HtmlHelpName>
+    <OutputPath>docs\</OutputPath>
+    <HtmlHelpName>C2SIM .NET SDK Reference</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="C2SIMSDK\C2SIMSDK.csproj" />
 <DocumentationSource sourceFile="C2SIMClientLib\C2SIMClientLib.csproj" /></DocumentationSources>
-    <HelpFileFormat>Website</HelpFileFormat>
-    <SyntaxFilters>C#, Managed C++, F#</SyntaxFilters>
-    <PresentationStyle>VS2013</PresentationStyle>
+    <HelpFileFormat>OpenXml</HelpFileFormat>
+    <SyntaxFilters>C#, Managed C++, F#, JavaScript</SyntaxFilters>
+    <PresentationStyle>OpenXML</PresentationStyle>
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
@@ -46,6 +46,7 @@
     <ApiFilter>
       <Filter entryType="Namespace" fullName="C2SimAck" isExposed="False" xmlns="" />
     </ApiFilter>
+    <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
