@@ -21,8 +21,8 @@
     <HtmlHelpName>C2SIMSDKDocumentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\C2SIMSDK\C2SIMSDK.csproj" />
-<DocumentationSource sourceFile="..\C2SIMClientLib\C2SIMClientLib.csproj" /></DocumentationSources>
+      <DocumentationSource sourceFile="C2SIMSDK\C2SIMSDK.csproj" />
+<DocumentationSource sourceFile="C2SIMClientLib\C2SIMClientLib.csproj" /></DocumentationSources>
     <HelpFileFormat>Website</HelpFileFormat>
     <SyntaxFilters>C#, Managed C++, F#</SyntaxFilters>
     <PresentationStyle>VS2013</PresentationStyle>

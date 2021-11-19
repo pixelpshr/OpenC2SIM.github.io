@@ -9,3 +9,5 @@ Resources for interacting with C2SIM in .NET code:
 * [C2SIMSDKSampleApp](C2SIMSDKSampleApp) - Simple command line interface for interacting with C2SIM servers that illustrates the use of the .NET SDK
 
 The SDK is available as a nuget package supporting .NET 6 and .NET Standard 2.0 (Framework) projects: [HyssosTech.Sdk.C2SIM](https://www.nuget.org/packages/HyssosTech.Sdk.C2SIM/)
+
+SDK documentation can be found in the [Help](https://htmlpreview.github.io/?https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/Help/index.html) folder
