@@ -51,19 +51,9 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <summary>
     /// Type of message
     /// </summary>
-    public enum MessageType { 
-        /// <summary>
-        /// Regular message
-        /// </summary>
-        MESSAGE, 
-        /// <summary>
-        /// Message indicating successful connection
-        /// </summary>
-        CONNECTED, 
-        /// <summary>
-        /// Error message
-        /// </summary>
-        ERROR };
+#pragma warning disable 1591
+    public enum MessageType { MESSAGE, CONNECTED, ERROR };
+#pragma warning restore 1591
     #endregion
 
     #region Private constants
@@ -346,7 +336,8 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// Returns the next message received from the STOMP messaging server.  
     /// </summary>
     /// <remarks>
-    /// The calling thread will NOT be blocked if a STOMPMessage is not available; .
+    /// The calling thread will NOT be blocked if a STOMPMessage is not available - a null is immediately returned instead.
+    /// Use await GetNext_Block() to interrupt execution until a message becomes available. 
     /// </remarks>
     /// <returns>STOMPMessage - The next STOMP message or NULL if no message is available at this time.  Message should be MESSAGE.</returns>
     /// <exception cref="C2SIMClientException">Encapsulates several specific exceptions</exception>
@@ -541,7 +532,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     {
         try
         {
-            //byte[] bytes = Encoding.UTF8.GetBytes(data);
+            // Use leaveOpen so the next frames can be sent over the networkStream
             using (var streamWriter = new StreamWriter(_networkStream, Encoding.UTF8, 1024, leaveOpen: true))
             {
                 streamWriter.AutoFlush = true;
