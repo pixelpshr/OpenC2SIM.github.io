@@ -76,9 +76,11 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
 #pragma warning disable 1591
     public enum C2SIMCommands { STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT };
+#pragma warning restore 1591
     /// <summary>
     /// Server status
     /// </summary>
+#pragma warning disable 1591
     public enum C2SIMServerStatus { UNKNOWN, UNINITIALIZED, INITIALIZING, INITIALIZED, RUNNING, PAUSED }
 #pragma warning restore 1591
     #endregion
@@ -610,6 +612,23 @@ public class C2SIMSDK : IC2SIMSDK
             macAddress = null;
         }
         return macAddress;
+    }
+
+    /// <summary>
+    /// Get the original / innermost exception wrapped within the C2SIMClientException
+    /// </summary>
+    /// <remarks>
+    /// The actual original exception may be nested within multiple Exception layers
+    /// </remarks>
+    /// <returns>Original exception</returns>
+    public static Exception GetRootException(Exception e)
+    {
+        // Drill down to the innermost (original/root) exception
+        while (e.InnerException != null)
+        {
+            e = e.InnerException;
+        }
+        return e;
     }
     #endregion
 
