@@ -11,6 +11,8 @@ To exit, enter `quit`
 
 For a description of commands and messages, see the [C2SIM Server Reference Implementation Documentation](https://bit.ly/30y40RI#L1)
 
+*NOTE*: default logging is set to display on the Console. This may result in some clash between the app's messages and logs. Configure log to save to file instead to avoid that.
+
 ## Configuration settings
 
 Default parameters are set in [appsettings.json](./appsettings.json), within an `Application` section:
