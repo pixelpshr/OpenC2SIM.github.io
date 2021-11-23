@@ -5,7 +5,11 @@
 
   <!-- Not part of the original OpenC2SIM repository -->
   <!-- repackaging of C2SIM_SMX_LOX_v1.0.0.xsd from C2SIM Core/SMX/LOX Ontologies v11 -->
-  <!-- Note that SessionStateCode is nto present in the main xsd above, but is used by the C2SIM Java Reference Server -->
+  <!-- Changes are made so that the xsd matches the content that is currently delivered
+       by the C2SIM Java Reference Server v4.8.0.11:
+       - Adds SessionStateCode element to SystemCommandBodyType
+       - Adds ResetScenario enumeration to SystemCommandTypeCodeType
+  -->
 
 	<xs:element name="MessageBody" type="MessageBodyType"/>
     

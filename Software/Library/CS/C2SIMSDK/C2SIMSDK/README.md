@@ -81,6 +81,9 @@ As such, it should be compatible with Windows, macOs and Linux platforms, provid
     ```
 
 1. Send commands and messages as required
+
+    See the [C2SIM .NET SDK Reference](<https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/docs/C2SIM .NET SDK Reference.docx>) for details of the methods summarized below
+
 	1. Change the state of the server
 		- ResetToInitializing() - get the server to an `Initializing` state, issuing `STOP, RESET, INITIALIZE` individual commands as needed
 		- SwitchToRunning() - get the server to a `Running` state, issuing `SHARE, START` individual commands as needed 
@@ -103,19 +106,25 @@ connected to the same server, e.g. the [Sketch-Thru-Plan Planning Workstation](h
 
 Classes representing the four main types of C2SIM messages were generated from the [Schemas](Schema) using the `xsd` tool:
 
-- C2SimXSDInitObject - `xsd C2SIM_SMX_LOX_v1.0.0_Init_flat.xsd /c /namespace:C2SimInit`
-- C2SimXSDOrderObject - `xsd C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd /c /namespace:C2SimOrder` 
-- C2SimXSDReportObject - `xsd C2SIM_SMX_LOX_ASX_v1.0.0_Report_flat.xsd /c /namespace:C2SimReport`
-- C2SimXSDCommandObject - `xsd C2SIM_SMX_LOX_v1.0.0_Command_flat.xsd /c /namespace:C2SimCommand`
+```
+xsd schemas\C2SIM_SMX_LOX_V1.0.1.xsd /c /l:CS
+```
 
-`C2SIM_SMX_LOX_v1.0.0_Command_flat.xsd` is not part of the original OpenC2SIM repository, and it was extracted from the all 
-encompassing `C2SIM_SMX_LOX_v1.0.0.xsd`. Additional elements had then to be included to 
-make it comply with the actual content of messages received from a
-reference server
+`MessageBody.Item` contains a reference to one of the messages of interest, differentiated by the following types:
 
+* Schemas.SystemCommandBodyType - Command results notifications (see the NOTE below)
+* Schemas.C2SIMInitializationBodyType - Initialization message notification
+* Schemas.DomainMessageBodyType - Contains sub-types of interest
+    * Schemas.OrderBodyType - Order message notification
+    * Schemas.ReportBodyType - Report message notification
 
-## Documentation
+*NOTE*: `SystemCommandBodyType`'s schema definition does not match the actual content of messages received from 
+the current C2SIM Reference Server (v4.8.0.11):
+* `SystemCommandBodyType` includes an additional element - `SessionStateCode`
+* `SystemCommandTypeCodeType` includes an additional `ResetScenario` enumeration 
 
-* [C2SIM .NET SDK Reference](<https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/docs/C2SIM .NET SDK Reference.docx>)
+A separate augmented `C2SIM_SMX_LOX_v1.0.0_Command.xsd` containing these elements has been created, and a corresponding set of classes is used here instead of the standard one so that the server responses can be processed.
 
-
+```
+xsd schemas\C2SIM_SMX_LOX_v1.0.0_Command.xsd /c /l:CS /n:CustomSchemas
+```

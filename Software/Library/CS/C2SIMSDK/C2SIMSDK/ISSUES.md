@@ -1,8 +1,6 @@
 ﻿# Issues to investigate regarding the OpenC2SIM content
 
-# C2SIM_SMX_LOX_v1.0.0.xsd
-
-Missing types in MessageBodyType: SystemCommandBody
+# C2SIM_SMX_LOX_v1.0.1.xsd
 
 'ResetScenario' is not a valid value for SystemCommandTypeCodeType
 

@@ -16,27 +16,27 @@ public class C2SIMSDKSettings
     /// <summary>
     /// Id string of the submitter
     /// </summary>
-    public string C2SIMSubmitterId { get; set; }
+    public string SubmitterId { get; set; }
     /// <summary>
     /// Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer
     /// </summary>
-    public string C2SIMRestUrl { get; set; }
+    public string RestUrl { get; set; }
     /// <summary>
     /// C2SIM server password
     /// </summary>
-    public string C2SIMRestPassword { get; set; }
+    public string RestPassword { get; set; }
     /// <summary>
     /// Full notification service (STOMP) endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
     /// </summary>
-    public string C2SIMStompUrl { get; set; }
+    public string StompUrl { get; set; }
     /// <summary>
     /// SISO-STD-C2SIM" (or "BML")
     /// </summary>
-    public string C2SIMProtocol { get; set; }
+    public string Protocol { get; set; }
     /// <summary>
     /// "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
     /// </summary>
-    public string C2SIMProtocolVersion { get; set; }
+    public string ProtocolVersion { get; set; }
 
     /// <summary>
     /// Construct Settings object
@@ -49,12 +49,12 @@ public class C2SIMSDKSettings
     /// <param name="protocolVersion"></param>
     public C2SIMSDKSettings(string submitterId, string restUrl, string restPassword, string stompUrl, string protocol, string protocolVersion)
     {
-        C2SIMSubmitterId = submitterId;
-        C2SIMRestUrl = restUrl;
-        C2SIMRestPassword = restPassword;
-        C2SIMStompUrl = stompUrl;
-        C2SIMProtocol = protocol;
-        C2SIMProtocolVersion = protocolVersion;
+        SubmitterId = submitterId;
+        RestUrl = restUrl;
+        RestPassword = restPassword;
+        StompUrl = stompUrl;
+        Protocol = protocol;
+        ProtocolVersion = protocolVersion;
     }
     
     /// <summary>
@@ -119,11 +119,11 @@ public class C2SIMSDK : IC2SIMSDK
     {
         _logger = logger;
 
-        _submitterId = settings.C2SIMSubmitterId;
-        _restUri = new Uri(settings.C2SIMRestUrl);
-        _password = settings.C2SIMRestPassword;
+        _submitterId = settings.SubmitterId;
+        _restUri = new Uri(settings.RestUrl);
+        _password = settings.RestPassword;
 
-        _stompUri = new Uri(settings.C2SIMStompUrl);
+        _stompUri = new Uri(settings.StompUrl);
 
         string stompHost = _stompUri.Host;
         // Add scheme prefix if not an IP
@@ -140,8 +140,8 @@ public class C2SIMSDK : IC2SIMSDK
             )
         );
 
-        _protocol = settings.C2SIMProtocol;
-        _protocolVersion = settings.C2SIMProtocolVersion;
+        _protocol = settings.Protocol;
+        _protocolVersion = settings.ProtocolVersion;
     }
     #endregion
 
@@ -189,6 +189,11 @@ public class C2SIMSDK : IC2SIMSDK
     public event EventHandler<C2SIMNotificationEventParams> ReportReceived;
 
     /// <summary>
+    /// Triggered for every message received - provides raw XML for all (unparsed) received messages 
+    /// </summary>
+    public event EventHandler<string> XmlMessageReceived;
+
+    /// <summary>
     /// Triggered when an SDK processing error occurs
     /// </summary>
     public event EventHandler<Exception> Error;
@@ -207,8 +212,8 @@ public class C2SIMSDK : IC2SIMSDK
         /// Message body
         /// </summary>
         /// <remarks>
-        /// Can be one of the following depending on the type of message
-        /// C2SimCommand.MessageBodyType, C2SimInit.MessageBodyType, C2SimOrder.MessageBodyType, C2SimReport.MessageBodyType
+        /// Can be one of the following depending on the type of message:
+        /// SystemCommandBodyType, C2SIMInitializationBodyType, OrderBodyType, ReportBodyType
         /// </remarks>
         public object Body { get; set; }
 
@@ -455,18 +460,30 @@ public class C2SIMSDK : IC2SIMSDK
                             // Expose the C2SIM header as an SDK object to avoid client having to add another reference just for this
                             NotificationHeader header = new NotificationHeader(stompMsg.C2SIMHeader);
 
+                            // Notify subscribers interested in the raw message
+                            OnXmlMessageReceived(stompMsg.MessageBody);
+
                             // Parse message and dispatch specific events: status changes, initializations, orders, reports 
                             // From C2SIM_SMX_LOX_v1.0.0.xsd:
                             // <xs:complexType name="MessageBodyType">
                             //	<xs:choice>
                             //		<xs:element ref="C2SIMInitializationBody"/>
-                            //		<xs:element ref="DomainMessageBody"/>
+                            //		<xs:element ref="DomainMessageBody"/> 
+                            //            <xs:choice>
+                            //                <xs:element ref="AcknowledgementBody"/>
+                            //                <xs:element ref="OrderBody"/>
+                            //                <xs:element ref="PlanBody"/>
+                            //                <xs:element ref="ReportBody"/>
+                            //                <xs:element ref="RequestBody"/>
+                            //            </xs:choice>
                             //		<xs:element ref="ObjectInitializationBody"/>
                             //		<xs:element ref="SystemAcknowledgementBody"/>
                             //		<xs:element ref="SystemCommandBody"/>
                             //      ReportBody is also a type, even though it is not listed in C2SIM_SMX_LOX_v1.0.0.xsd
                             //	</xs:choice>
                             //</xs:complexType>
+                            /////////////////////////////////////////////////////////////////////////
+                            // TODO: remove this once the schema matches the contents delivered by the server
                             // Get the name of the first element - that is what tells us what kind of message we got
                             // NB: The library returns the full message content, including the header within MessageBody
                             // We leave that unchanged there for compatibility reasons, and fix it here
@@ -484,48 +501,72 @@ public class C2SIMSDK : IC2SIMSDK
                                 continue;
                             }
                             string bodyName = (mb.FirstNode as XElement)?.Name.LocalName.ToString();
-                            XmlSerializer serializer;
-                            switch (bodyName)
+                            if (bodyName == "SystemCommandBody")
                             {
-                                case "SystemCommandBody":
-                                    serializer = new XmlSerializer(typeof(C2SimCommand.MessageBodyType));
-                                    var commandMessage = (C2SimCommand.MessageBodyType)serializer.Deserialize(mb.CreateReader());
-                                    OnStatusChangeReceived(new C2SIMNotificationEventParams(header, commandMessage));
-                                    break;
-                                case "C2SIMInitializationBody":
-                                    serializer = new XmlSerializer(typeof(C2SimInit.MessageBodyType));
-                                    var initMessage = (C2SimInit.MessageBodyType)serializer.Deserialize(mb.CreateReader());
-                                    OnInitializationReceived(new C2SIMNotificationEventParams(header, initMessage));
-                                    break;
-                                case "DomainMessageBody":
-                                    serializer = new XmlSerializer(typeof(C2SimOrder.MessageBodyType));
-                                    var orderMessage = (C2SimOrder.MessageBodyType)serializer.Deserialize(mb.CreateReader());
-                                    OnOderReceived(new C2SIMNotificationEventParams(header, orderMessage));
-                                    break;
-                                case "ReportBody":
-                                    serializer = new XmlSerializer(typeof(C2SimReport.MessageBodyType));
-                                    var reportMessage = (C2SimReport.MessageBodyType)serializer.Deserialize(mb.CreateReader());
-                                    OnReportReceived(new C2SIMNotificationEventParams(header, reportMessage));
-                                    break;
-                                default:
-                                    if (bodyName != null)
+                                // Use the customized SystemCOmmandBodyType that contains the elements missing
+                                // from the standard - SessionStateCode and ResetScenario
+                                XmlSerializer serializer = new XmlSerializer(typeof(CustomSchemas.MessageBodyType));
+                                CustomSchemas.MessageBodyType command = null;
+                                using (TextReader reader = new StringReader(stompMsg.MessageBody))
+                                {
+                                    command = (CustomSchemas.MessageBodyType)serializer.Deserialize(reader);
+                                }
+                                OnStatusChangeReceived(new C2SIMNotificationEventParams(header, command.Item));
+                            }
+                            /////////////////////////////////////////////////////////////////////////
+                            else
+                            {
+                                XmlSerializer serializer = new XmlSerializer(typeof(Schemas.MessageBodyType));
+                                Schemas.MessageBodyType message = null;
+                                using (TextReader reader = new StringReader(stompMsg.MessageBody))
+                                {
+                                    message = (Schemas.MessageBodyType)serializer.Deserialize(reader);
+                                }
+                                ////// if (message.Item is Schemas.SystemCommandBodyType sc)
+                                ////// {
+                                //////     OnStatusChangeReceived(new C2SIMNotificationEventParams(header, sc));
+                                ////// }
+                                //////else 
+                                if (message.Item is Schemas.C2SIMInitializationBodyType ib)
+                                {
+                                    OnInitializationReceived(new C2SIMNotificationEventParams(header, ib));
+                                }
+                                else if (message.Item is Schemas.DomainMessageBodyType dmb)
+                                {
+                                    if (dmb.Item is Schemas.OrderBodyType ob)
+                                    {
+                                        OnOderReceived(new C2SIMNotificationEventParams(header, ob));
+                                    }
+                                    else if (dmb.Item is Schemas.ReportBodyType rb)
+                                    {
+                                        OnReportReceived(new C2SIMNotificationEventParams(header, rb));
+                                    }
+                                    else
+                                    {
+                                        _logger?.LogWarning($"Ignoring C2SIM notification message with DomainMessageBody item of type {dmb.Item.GetType()}");
+                                    }
+                                }
+                                else
+                                {
+                                    if (message.Item != null)
                                     {
                                         // Ignore others - ObjectInitializationBody (IBML9?) and SystemAcknowledgementBody, perhaps others
-                                        _logger?.LogWarning($"Ignoring C2SIM {bodyName} notification message");
+                                        _logger?.LogWarning($"Ignoring C2SIM {message.Item.GetType()} notification message");
                                     }
                                     else
                                     {
                                         _logger?.LogWarning($"Ignoring C2SIM notification message with no MessageBody element");
                                     }
                                     break;
+                                }
                             }
                         }
                     }
                     catch (Exception e)
                     {
+                        // May result from message types we are not interested in, so just log
                         string emsg = $"Error processing notification {e.Message}";
-                        _logger?.LogError(emsg + " " + e.ToString());
-                        OnError(e);
+                        _logger?.LogWarning(emsg + " " + e.ToString());
                     }
                 }
             }, _cancellationSource.Token);
@@ -668,6 +709,14 @@ public class C2SIMSDK : IC2SIMSDK
     protected void OnReportReceived(C2SIMNotificationEventParams e)
     {
         ReportReceived?.Invoke(this, e);
+    }
+
+    /// <summary>
+    /// Message received - provides raw (unparsed) XML for every message
+    /// </summary>
+    protected void OnXmlMessageReceived(string e)
+    {
+        XmlMessageReceived?.Invoke(this, e);
     }
 
     /// <summary>

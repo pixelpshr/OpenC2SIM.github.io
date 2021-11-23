@@ -38,7 +38,7 @@ dotnet run
 Or using command line parameters to override the default `appsettings.json` settings:
 
 ```
-dotnet run Application:C2SIMRestUrl="http://10.2.10.70:8080/C2SIMServer"
+dotnet run C2SIM:RestUrl="http://10.2.10.70:8080/C2SIMServer"
 ```
 
-Notice that the name of the `appsettings.json` section containing the application parameters - `Application` - needs to be used as a prefix
+Notice that the name of the `appsettings.json` section containing the application parameters - `C2SIM` - needs to be used as a prefix

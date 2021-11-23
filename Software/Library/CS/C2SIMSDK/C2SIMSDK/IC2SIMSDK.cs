@@ -21,7 +21,6 @@ public interface IC2SIMSDK
     /// Protocol version
     /// </summary>
     string ProtocolVersion { get; }
-
     /// <summary>
     /// Server changed status
     /// </summary>
@@ -38,6 +37,10 @@ public interface IC2SIMSDK
     /// Report message received
     /// </summary>
     event EventHandler<C2SIMSDK.C2SIMNotificationEventParams> ReportReceived;
+    /// <summary>
+    /// Provides raw XML for all (unparsed) received messages 
+    /// </summary>
+    event EventHandler<string> XmlMessageReceived;
     /// <summary>
     /// Error notification received
     /// </summary>
