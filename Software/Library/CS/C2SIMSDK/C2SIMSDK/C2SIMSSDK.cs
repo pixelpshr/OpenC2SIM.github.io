@@ -9,63 +9,6 @@ using C2SimClientLib;
 namespace C2SIM;
 
 /// <summary>
-/// C2SIM SDK configuration settings
-/// </summary>
-public class C2SIMSDKSettings
-{
-    /// <summary>
-    /// Id string of the submitter
-    /// </summary>
-    public string SubmitterId { get; set; }
-    /// <summary>
-    /// Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer
-    /// </summary>
-    public string RestUrl { get; set; }
-    /// <summary>
-    /// C2SIM server password
-    /// </summary>
-    public string RestPassword { get; set; }
-    /// <summary>
-    /// Full notification service (STOMP) endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
-    /// </summary>
-    public string StompUrl { get; set; }
-    /// <summary>
-    /// SISO-STD-C2SIM" (or "BML")
-    /// </summary>
-    public string Protocol { get; set; }
-    /// <summary>
-    /// "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
-    /// </summary>
-    public string ProtocolVersion { get; set; }
-
-    /// <summary>
-    /// Construct Settings object
-    /// </summary>
-    /// <param name="submitterId"></param>
-    /// <param name="restUrl"></param>
-    /// <param name="restPassword"></param>
-    /// <param name="stompUrl"></param>
-    /// <param name="protocol"></param>
-    /// <param name="protocolVersion"></param>
-    public C2SIMSDKSettings(string submitterId, string restUrl, string restPassword, string stompUrl, string protocol, string protocolVersion)
-    {
-        SubmitterId = submitterId;
-        RestUrl = restUrl;
-        RestPassword = restPassword;
-        StompUrl = stompUrl;
-        Protocol = protocol;
-        ProtocolVersion = protocolVersion;
-    }
-    
-    /// <summary>
-    /// Parameterless constructor - used by Dependency Injection
-    /// </summary>
-    public C2SIMSDKSettings()
-    { 
-    }
-}
-
-/// <summary>
 /// Methods and events for interacting with a C2SIM environment, issuing commands and messages, and receiving notifications
 /// </summary>
 public class C2SIMSDK : IC2SIMSDK
@@ -300,11 +243,11 @@ public class C2SIMSDK : IC2SIMSDK
             return;
         }
         // Send share + start
-        string resp = await PushCommand(C2SIMCommands.SHARE);
-        if (await GetStatus() != C2SIMServerStatus.INITIALIZED)
+        var resp = await PushCommand(C2SIMCommands.SHARE);
+        if (! resp.IsSuccess || await GetStatus() != C2SIMServerStatus.INITIALIZED)
         {
             // Abort with the response produced by Share - likely indicating that no initialization data was present
-            throw new C2SIMClientException($"Failed to SHARE: {resp}");
+            throw new C2SIMClientException($"Failed to SHARE: {resp.Message}");
         }
         await PushCommand(C2SIMCommands.START);
         // Assert will fail if attempting to transition when no initialization data was present
@@ -312,11 +255,14 @@ public class C2SIMSDK : IC2SIMSDK
     }
 
     /// <summary>
-    /// Join a potentially ongoing session, where initialization messages have already been published
+    /// Request to join a potentially ongoing session, where initialization messages have already been published
     /// </summary>
-    /// <returns>Null if no initialization was shared, or the C2SIM Initialize message content</returns>
+    /// <remarks>
+    /// The C2SIM Initialize message content is returned indirectly via an InitializationReceived notification
+    /// </remarks>
+    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> JoinSession()
+    public async Task<C2SIMServerResponse> JoinSession()
     {
         // What is the payload returned?
         if (await GetStatus() == C2SIMServerStatus.INITIALIZING)
@@ -325,14 +271,14 @@ public class C2SIMSDK : IC2SIMSDK
             return null;
         }
         // Issue command to get already published initialization
-        string xmlResp = await PushCommand(C2SIMCommands.QUERYINIT);
-        return xmlResp;
+        return await PushCommand(C2SIMCommands.QUERYINIT);
     }
 
     /// <summary>
     /// Get the current server status
     /// </summary>
-    ///<exception cref="C2SIMClientException">Thrown if unable to retrieve the status from a server response</exception>
+    /// <returns>Server status - UNKNOWN, UNINITIALIZED, INITIALIZING, INITIALIZED, RUNNING, PAUSED</returns>
+    /// <exception cref="C2SIMClientException">Thrown if unable to retrieve the status from a server response</exception>
     public async Task<C2SIMServerStatus> GetStatus()
     {
         /*
@@ -351,12 +297,11 @@ public class C2SIMSDK : IC2SIMSDK
             </result>
         */
         // Get the current status
-        string respXml = await PushCommand(C2SIMCommands.STATUS);
-        string stateString = C2SIMClientRESTLib.GetElementValue(respXml, "sessionState");
-        if (!Enum.TryParse<C2SIMServerStatus>(stateString, out C2SIMServerStatus status))
+        C2SIMServerResponse resp = await PushCommand(C2SIMCommands.STATUS);
+        if (resp.Status != C2SIMServerResponse.ResponseStatus.OK ||  !Enum.TryParse<C2SIMServerStatus>(resp.SessionState, out C2SIMServerStatus status))
         {
-            string emsg = "Failed to extract the status from server's response";
-            _logger?.LogError(emsg + " " + respXml);
+            string emsg = $"Failed to get the server's status: {resp.Message}";
+            _logger?.LogError(emsg + " " + resp.ToString());
             throw new C2SIMClientException(emsg);
         }
         return status;
@@ -381,58 +326,88 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Send an Initialization message to the server
     /// </summary>
-    /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
-    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <param name="xmlMessage">Serialized C2SIMInitializationBodyType or full MessageBodyType</param>
+    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> PushInitializationMessage(string xmlMessage)
+    public async Task<C2SIMServerResponse> PushInitializationMessage(string xmlMessage)
     {
         _logger?.LogTrace($"Pushing C2SIM Initialization message");
-        return await PushMessage(xmlMessage, "INFORM");
+        return await PushMessage(WrappedMessage(xmlMessage), "INFORM");
     }
 
     /// <summary>
     /// Send an Order message to the server
     /// </summary>
-    /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
-    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <param name="xmlMessage">Serialized OrderBodyType or full MessageBodyType</param>
+    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> PushOrderMessage(string xmlMessage)
+    public async Task<C2SIMServerResponse> PushOrderMessage(string xmlMessage)
     {
         _logger?.LogTrace($"Pushing C2SIM Order message");
-        return await PushMessage(xmlMessage, "ORDER");
+        return await PushMessage(WrappedMessage(xmlMessage), "ORDER");
     }
 
     /// <summary>
     /// Send a Report message to the server
     /// </summary>
-    /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
-    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <param name="xmlMessage">Serialized ReportBodyType or full MessageBodyType</param>
+    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> PushReportMessage(string xmlMessage)
+    public async Task<C2SIMServerResponse> PushReportMessage(string xmlMessage)
     {
         _logger?.LogTrace($"Pushing C2SIM Report message");
-        return await PushMessage(xmlMessage, "REPORT");
+        return  await PushMessage(WrappedMessage(xmlMessage), "REPORT");
     }
 
     /// <summary>
-    /// Send amessage to the server
+    /// Add MesageBody and DomainMessageBody wrappers around C2SIMInitializationBody, OrderBody or ReportBody if needed
+    /// </summary>
+    /// <param name="xmlMessage">Message that may need to be wrapped</param>
+    /// <returns>Message that is guaranteed to be wrapped in a MessageBody element</returns>
+    /// <exception cref="ArgumentException">Message could not be parsed or did not contain a C2SIMInitializationBody, OrderBody or ReportBody root</exception>
+    private string WrappedMessage(string xmlMessage)
+    {
+        XNamespace ns = "http://www.sisostds.org/schemas/C2SIM/1.1";
+        XElement root = XElement.Parse(xmlMessage);
+        if (root?.Name.LocalName == "MessageBody")
+        {
+            // Nothing to do - already wrapped
+            return xmlMessage;
+        }
+        if (root?.Name.LocalName == "OrderBody" || root?.Name.LocalName == "ReportBody")
+        {
+            // Add Domain and Message wrappers
+            root = new XElement("MessageBody", new XElement("DomainMessageBody", root));
+            return root.ToString();
+        }
+        else if (root?.Name.LocalName == "C2SIMInitializationBody" || root?.Name.LocalName == "DomainMessageBody")
+        {
+            // Add just a Message wrapper
+            root = new XElement("MessageBody", root);
+            return root.ToString();
+        }
+        throw new ArgumentException("Expected C2SIM message with MessageBody, C2SIMInitializationBody, OrderBody or ReportBody");
+    }
+
+    /// <summary>
+    /// Send a message to the server
     /// </summary>
     /// <remarks>
-    /// This is a generic verion of the specialized PushInitializeMessage,
+    /// This is a generic version of the specialized PushInitializeMessage,
     /// PushOrderMessage and PushReportMessage, which should be preferred
     /// </remarks>
-    /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
+    /// <param name="xmlMessage">Serialized MessageBodyType</param>
     /// <param name="performative">INFORM, ORDER, REPORT - need to match the type of xmlMessage - Initialization, Order, or Report</param>
-    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> PushMessage(string xmlMessage, string performative)
+    public async Task<C2SIMServerResponse> PushMessage(string xmlMessage, string performative)
     {
         _logger?.LogTrace($"Pushing C2SIM message");
         var c2SimRestClient = CreateClientRestService(performative);
         try
         {
-            string responseString = await c2SimRestClient.C2SimRequest(xmlMessage);
-            return responseString;
+            string resp = await c2SimRestClient.C2SimRequest(xmlMessage);
+            return ToC2SIMObject<C2SIMServerResponse>(resp);
         }
         catch (C2SIMClientException e)
         {
@@ -445,22 +420,22 @@ public class C2SIMSDK : IC2SIMSDK
     /// Issue a command
     /// </summary>
     /// <param name="command"></param>
-    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command)
+    public async Task<C2SIMServerResponse> PushCommand(C2SIMSDK.C2SIMCommands command)
     {
         _logger?.LogTrace($"Pushing C2SIM command {command}");
         var c2SimRestClient = CreateClientRestService("INFORM");
-        string responseString = null;
+        string resp = null;
         try
         {
-            responseString = await c2SimRestClient.C2SimCommand(command.ToString(), _password, "");
+            resp = await c2SimRestClient.C2SimCommand(command.ToString(), _password, "");
         }
         catch (C2SIMClientException e)
         {
             _logger?.LogError($"Error pushing {command} command: {e}");
         }
-        return responseString;
+        return ToC2SIMObject<C2SIMServerResponse>(resp);
     }
     #endregion
 
@@ -586,64 +561,6 @@ public class C2SIMSDK : IC2SIMSDK
             throw new C2SIMClientException(emsg, e);
         }
     }
-
-    /// <summary>
-    /// Deserialize object T from xml string
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="xml"></param>
-    /// <returns></returns>
-    public static T ToC2SIMObject<T>(string xml)
-    {
-        try
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (TextReader reader = new StringReader(xml))
-            {
-                T obj = (T)serializer.Deserialize(reader);
-                return obj;
-            }
-        }
-        catch (System.Exception e)
-        {
-            _logger.LogError($"Failed to deserialize xml to type {typeof(T).ToString()}: {e.Message}", e);
-            throw;
-        }
-    }
-
-    /// <summary>
-    /// Serialize object T to xml string
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    public static string FromC2SIMObject<T>(T obj)
-    {
-        try
-        {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-            // Write to text, UTF8-encoded
-            using (Utf8StringWriter textWriter = new Utf8StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, obj);
-                return textWriter.ToString();
-            }
-        }
-        catch (System.Exception e)
-        {
-            _logger.LogError($"Failed to serialize obj type {typeof(T).ToString()} to xml string: {e.Message}", e);
-            throw;
-        }
-    }
-
-    /// <summary>
-    /// Force encoding on a writer - the Encoding property is readonly so requires <see href="https://stackoverflow.com/a/3862106">this trick</see>
-    /// </summary>
-    private class Utf8StringWriter : StringWriter
-    {
-        public override Encoding Encoding => Encoding.UTF8;
-    }
-
     /// <summary>
     /// Disconnect from the notification service (STOMP)
     /// </summary>
@@ -684,6 +601,70 @@ public class C2SIMSDK : IC2SIMSDK
         // TODO: what commands are supported?? headeres?? Make this more high level
         await _c2SimStompClient.Publish(cmd, headers, xml);
     }
+
+    /// <summary>
+    /// Deserialize object T from xml string
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="xml"></param>
+    /// <returns></returns>
+    public static T ToC2SIMObject<T>(string xml)
+    {
+        if (string.IsNullOrWhiteSpace(xml))
+        {
+            return default(T);
+        }
+        try
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            using (TextReader reader = new StringReader(xml))
+            {
+                T obj = (T)serializer.Deserialize(reader);
+                return obj;
+            }
+        }
+        catch (System.Exception e)
+        {
+            _logger.LogError($"Failed to deserialize xml to type {typeof(T).ToString()}: {e.Message}", e);
+            throw;
+        }
+    }
+    #endregion
+
+    #region Public utility methods
+    /// <summary>
+    /// Serialize object T to xml string
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public static string FromC2SIMObject<T>(T obj)
+    {
+        try
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            // Write to text, UTF8-encoded
+            using (Utf8StringWriter textWriter = new Utf8StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, obj);
+                return textWriter.ToString();
+            }
+        }
+        catch (System.Exception e)
+        {
+            _logger.LogError($"Failed to serialize obj type {typeof(T).ToString()} to xml string: {e.Message}", e);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Force encoding on a writer - the Encoding property is readonly so requires <see href="https://stackoverflow.com/a/3862106">this trick</see>
+    /// </summary>
+    private class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding => Encoding.UTF8;
+    }
+
 
     /// <summary>
     /// Get a unique id for a machine

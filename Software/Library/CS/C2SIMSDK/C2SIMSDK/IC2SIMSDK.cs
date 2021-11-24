@@ -67,19 +67,19 @@ public interface IC2SIMSDK
     /// Join a potentially ongoing session, where initialization messages have already been published
     /// </summary>
     /// <returns>Null if no initialization was shared, or the C2SIM Initialize message content</returns>
-    Task<string> JoinSession();
+    Task<C2SIMServerResponse> JoinSession();
     /// <summary>
     /// Issue a command
     /// </summary>
     /// <param name="command"></param>
     /// <returns>Server response - formats vary depending on the command</returns>
-    Task<string> PushCommand(C2SIMSDK.C2SIMCommands command);
+    Task<C2SIMServerResponse> PushCommand(C2SIMSDK.C2SIMCommands command);
     /// <summary>
     /// Send an Initialization message to the server
     /// </summary>
     /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
     /// <returns>Server response - formats vary depending on the command</returns>
-    Task<string> PushInitializationMessage(string xmlMessage);
+    Task<C2SIMServerResponse> PushInitializationMessage(string xmlMessage);
     /// <summary>
     /// Send amessage to the server
     /// </summary>
@@ -90,19 +90,19 @@ public interface IC2SIMSDK
     /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
     /// <param name="performative">INFORM, ORDER, REPORT - need to match the type of xmlMessage - Initialization, Order, or Report</param>
     /// <returns>Server response - formats vary depending on the command</returns>
-    Task<string> PushMessage(string xmlMessage, string performative);
+    Task<C2SIMServerResponse> PushMessage(string xmlMessage, string performative);
     /// <summary>
     /// Send an Order message to the server
     /// </summary>
     /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
     /// <returns>Server response - formats vary depending on the command</returns>
-    Task<string> PushOrderMessage(string xmlMessage);
+    Task<C2SIMServerResponse> PushOrderMessage(string xmlMessage);
     /// <summary>
     /// Send a Report message to the server
     /// </summary>
     /// <param name="xmlMessage">C2SIM message to send - formatted according to the standard</param>
     /// <returns>Server response - formats vary depending on the command</returns>
-    Task<string> PushReportMessage(string xmlMessage);
+    Task<C2SIMServerResponse> PushReportMessage(string xmlMessage);
     /// <summary>
     /// Reset the server to a state where it accepts initialization messages
     /// </summary>

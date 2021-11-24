@@ -126,8 +126,8 @@ XML strings, rather than already serialized object, so that the client app can d
     * `PushInitializationMessage` - `C2SIMInitializationBodyType`
     * `PushOrderMessage` - `OrderBodyType`
     * `PushReportMessage` - `ReportBodyType`
-    XML containing wrapping `MessageBody` and `MessageBody/DOmainMessageBody` elements are also accepted by the
-    push methods
+    XML containing `MessageBody` and `MessageBody/DomainMessageBody` elements wrapping the types above are also accepted by the
+    push methods. If these elements are missing, they are automatically added 
 
 * Notification event handlers are invoked by the SDK with XML representations of the message bodies provided as parameters:
     * `StatusChangedReceived` - `SystemCommandBodyType`

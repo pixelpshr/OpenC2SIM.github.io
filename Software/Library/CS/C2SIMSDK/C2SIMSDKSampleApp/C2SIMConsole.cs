@@ -79,6 +79,7 @@ class C2SIMConsole : BackgroundService
             {
                 Prompt();
                 string cmd = Console.ReadLine();
+                C2SIMServerResponse resp = null;
                 if (cmd.Equals("quit", StringComparison.InvariantCultureIgnoreCase))
                 {
                     break;
@@ -88,7 +89,6 @@ class C2SIMConsole : BackgroundService
                     (string type, string xmlMessage) = LoadMessage(cmd);
                     if (xmlMessage != null)
                     {
-                        string resp = null;
                         if (type.Equals("initialization", StringComparison.InvariantCultureIgnoreCase) || type.Equals("init", StringComparison.InvariantCultureIgnoreCase))
                         {
                             await _c2SimSDK.ResetToInitializing();
@@ -108,16 +108,16 @@ class C2SIMConsole : BackgroundService
                         {
                             Console.WriteLine("Message type should be Init, Order or Report");
                         }
-                        if (!string.IsNullOrWhiteSpace(resp))
+                        if (resp != null)
                         {
-                            Console.WriteLine(FormatResponse(resp));
+                            DisplayXml(resp);
                         }
                     }
                 }
                 else if (Enum.TryParse<C2SIMSDK.C2SIMCommands>(cmd.ToUpperInvariant(), out C2SIMSDK.C2SIMCommands c2SimCmd))
                 {
-                    string resp = await _c2SimSDK.PushCommand(c2SimCmd);
-                    Console.WriteLine(FormatResponse(resp));
+                    resp = await _c2SimSDK.PushCommand(c2SimCmd);
+                    DisplayXml(resp);
                 }
                 else
                 {
