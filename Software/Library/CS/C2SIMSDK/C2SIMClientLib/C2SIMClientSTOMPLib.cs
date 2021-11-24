@@ -253,15 +253,15 @@ public class C2SIMClientSTOMPLib : IDisposable
             // Add any message selector
             if (_adv_subscriptions.Count() != 0)
             {
-                subscribeFrame += "selector: ";
+                subscribeFrame += "selector:";
                 foreach (string adv in _adv_subscriptions)
                 {
                     subscribeFrame += adv + "\n";
                 }
             }
-            subscribeFrame += $"destination: {_destination}\n";
+            subscribeFrame += $"destination:{_destination}\n";
             // Add message ID, blank line and null
-            subscribeFrame += $"id: {_subscriptionId}\n"
+            subscribeFrame += $"id:{_subscriptionId}\n"
                         + "\n" 
                         + END_OF_FRAME;
             // Send the SUBSCRIBE frame
@@ -422,11 +422,8 @@ public class C2SIMClientSTOMPLib : IDisposable
     }
 
     /// <summary>
-    /// Send a C2SIM response to an incoming C2SIM request.  
+    /// Send a C2SIM Ack response to an incoming C2SIM request
     /// </summary>
-    /// <remarks>
-    /// Response will be sent via STOMP
-    /// </remarks>
     /// <returns>STOMPMessage - The next STOMP message.  Message should be MESSAGE.</returns>
     /// <param name="oldMsg">Message that is being responded to</param>
     /// <param name="c2sResp">Response code to be sent</param>
@@ -533,7 +530,7 @@ public class C2SIMClientSTOMPLib : IDisposable
         try
         {
             // Use leaveOpen so the next frames can be sent over the networkStream
-            // NB: Encoding.UTF8 causes a Byte Order MArk to be added, which STOMP does not like
+            // NB: Encoding.UTF8 causes a Byte Order Mark to be added, which STOMP does not like
             // use new UTF8Encoding(false) to avoid that
             // https://stackoverflow.com/a/52187936
             using (var streamWriter = new StreamWriter(_networkStream, new UTF8Encoding(false), 1024, leaveOpen: true))
@@ -565,7 +562,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     ///     Command
     ///     Message headers (Vector)
     ///     Message content as single string
-    /// Add STOMPMessage to quque for background processing
+    /// Add STOMPMessage to queue for background processing
     /// </remarks>
     private async Task Run()
     {
@@ -637,7 +634,7 @@ public class C2SIMClientSTOMPLib : IDisposable
                     msg._messageLength = contentLength;          // This may be modified later if this is a C2SIM message
 
                     // Populate the header map
-                    // NOTE: the original Java code (v4.8.0.2)does not do that, and the map remains empty throughout
+                    // NOTE: the original Java code (v4.8.0.2) does not do that, and the map remains empty throughout
                     msg.CreateHeaderMap();
 
                     // Read message content if any
@@ -657,7 +654,7 @@ public class C2SIMClientSTOMPLib : IDisposable
                         }
                     }
 
-                    // NB: The original Java (v4.8.0.2) code places the the full message content, including the header
+                    // NB: The original Java (v4.8.0.2) code places the full message content, including the header
                     // into _messageBody
                     // The C2SIMHeader would then be populated in post processing as part of GetNext_No/Block()
                     // That parsing depends on the header map though, that as noted above is not populated in Java
