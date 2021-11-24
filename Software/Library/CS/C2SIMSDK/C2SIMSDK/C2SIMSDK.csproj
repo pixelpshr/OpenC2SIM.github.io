@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -45,7 +45,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -54,11 +54,28 @@
     Wargaming and in coalition settings
     </Description>
     <Copyright>Copyright (c) Hyssos Tech 2021</Copyright>
-    <Licensing>MIT</Licensing>
+    <Licensing>MIT</Licensing> 
     <LicenseFile>LICENSE.md</LicenseFile>
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
-    <ReleaseNotes>Changes to make it possible to handle both versions of the schema - v1.0.0 and v1.0.1</ReleaseNotes>
+    <PackageReleaseNotes>
+    ## Version 1.2.1
+
+    * Wrapping Initialization, Order and Report messages in MessageBody if not already present
+    * Returning push message server results as strongly typed  objects
+
+    ## Version 1.2.0
+
+    * Changes to make it possible to handle both versions of the schema - v1.0.0 and v1.0.1
+
+    ## Version 1.1.0
+
+    * Updated to C2SIM schema v1.0.1
+
+    ## Version 1.0.0
+
+    * Initial release    
+    </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</RepositoryUrl>
