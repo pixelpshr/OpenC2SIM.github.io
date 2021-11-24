@@ -134,6 +134,7 @@ XML strings, rather than already serialized object, so that the client app can d
     * `InitializationReceived` - `C2SIMInitializationBodyType`
     * `OderReceived` - `OrderBodyType`
     * `ReportReceived` - `ReportBodyType`
+    * A generic `C2SIMMessageReceived` notification is issued for every message. The parameter contains the unparsed contend of the received message body. If the Header indicates that the message is C2SIM-compliant (rather than say CBML or other format), then it can be deserialized using a `MessageBodyType` wrapper type
 
 For convenience, the following utility methods are provided to handle de/serialization:
 * `C2SIMSDK.ToC2SIMObject<T>(string xml)` - returns an object of type `T` deserialized from the string parameter

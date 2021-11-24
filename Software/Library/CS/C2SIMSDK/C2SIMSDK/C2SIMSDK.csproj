@@ -45,9 +45,9 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.0-prerelease</Version>
+    <Version>1.2.0</Version>
     <Authors>Hyssos Tech</Authors>
-    <Company>Hyssos Tech</Company>
+    <Company>Hyssos Tech</Company> 
     <Description>
     .NET SDK for C2SIM. C2SIM is a SISO standard for interoperation of 
     Command and Control (C2) and Simulation systems, used for Planning

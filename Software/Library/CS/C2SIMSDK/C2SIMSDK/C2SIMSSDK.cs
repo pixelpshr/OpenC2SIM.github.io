@@ -171,26 +171,62 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Triggered when a Command message is received, signaling a change in the server status 
     /// </summary>
+    /// <remarks>
+    /// Event Body contains a serialized SystemCommandBodyType. To deserialize:
+    /// <code>
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.CustomSchema.SystemCommandBodyType&gt;(e.Body);
+    /// </code>
+    /// </remarks>
     public event EventHandler<C2SIMNotificationEventParams> StatusChangedReceived;
 
     /// <summary>
-    /// Triggered when an Initialization message is received
+    /// Triggered when an Initialization message is received - provides serialized C2SIMInitializationBodyType content
     /// </summary>
+    /// <remarks>
+    /// Event Body contains a serialized C2SIMInitializationBodyType. To deserialize:
+    /// <code>
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema100.C2SIMInitializationBodyType&gt;(e.Body);
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema101.C2SIMInitializationBodyType&gt;(e.Body);
+    /// </code>
+    /// </remarks>
     public event EventHandler<C2SIMNotificationEventParams> InitializationReceived;
 
     /// <summary>
-    /// Triggered when an Order message is received
+    /// Triggered when an Order message is received - provides serialized OrderBodyType content
     /// </summary>
+    /// <remarks>
+    /// Event Body contains a serialized OrderBodyType. To deserialize:
+    /// <code>
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema100.OrderBodyType&gt;(e.Body);
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema101.OrderBodyType&gt;(e.Body);
+    /// </code>
+    /// </remarks>
     public event EventHandler<C2SIMNotificationEventParams> OderReceived;
 
     /// <summary>
-    /// Triggered when a Report message is received
+    /// Triggered when a Report message is received - provides serialized ReportBodyType content
     /// </summary>
+    /// <remarks>
+    /// Event Body contains a serialized ReportBodyType. To deserialize:
+    /// <code>
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema100.ReportBodyType&gt;(e.Body);
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema101.ReportBodyType&gt;(e.Body);
+    /// </code>
+    /// </remarks>
     public event EventHandler<C2SIMNotificationEventParams> ReportReceived;
 
     /// <summary>
-    /// Triggered for every message received - provides raw XML for all (unparsed) received messages 
+    /// Triggered for every message received - provides unparsed serialized MessageBodyType content
     /// </summary>
+    /// <remarks>
+    /// Messages in formats other than C2SIM, for example CBML, can be contained in the body.
+    /// If the Header shows it is a C2SIM message, then the content is a serialized MessageBodyType.
+    /// To deserialize:
+    /// <code>
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema100.MessageBodyType&gt;(e.Body);
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema101.MessageBodyType&gt;(e.Body);
+    /// </code>
+    /// </remarks>
     public event EventHandler<C2SIMNotificationEventParams> C2SIMMessageReceived;
 
     /// <summary>
