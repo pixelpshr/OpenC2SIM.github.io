@@ -191,7 +191,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Triggered for every message received - provides raw XML for all (unparsed) received messages 
     /// </summary>
-    public event EventHandler<string> XmlMessageReceived;
+    public event EventHandler<C2SIMNotificationEventParams> C2SIMMessageReceived;
 
     /// <summary>
     /// Triggered when an SDK processing error occurs
@@ -215,14 +215,14 @@ public class C2SIMSDK : IC2SIMSDK
         /// Can be one of the following depending on the type of message:
         /// SystemCommandBodyType, C2SIMInitializationBodyType, OrderBodyType, ReportBodyType
         /// </remarks>
-        public object Body { get; set; }
+        public string Body { get; set; }
 
         /// <summary>
         /// Construct a notification parameter object
         /// </summary>
         /// <param name="header"></param>
         /// <param name="body"></param>
-        public C2SIMNotificationEventParams(NotificationHeader header, object body)
+        public C2SIMNotificationEventParams(NotificationHeader header, string body)
         {
             Header = header;
             Body = body;
@@ -461,7 +461,7 @@ public class C2SIMSDK : IC2SIMSDK
                             NotificationHeader header = new NotificationHeader(stompMsg.C2SIMHeader);
 
                             // Notify subscribers interested in the raw message
-                            OnXmlMessageReceived(stompMsg.MessageBody);
+                            OnC2SIMMessageReceived(new C2SIMNotificationEventParams(header, stompMsg.MessageBody));
 
                             // Parse message and dispatch specific events: status changes, initializations, orders, reports 
                             // From C2SIM_SMX_LOX_v1.0.0.xsd:
@@ -482,16 +482,12 @@ public class C2SIMSDK : IC2SIMSDK
                             //      ReportBody is also a type, even though it is not listed in C2SIM_SMX_LOX_v1.0.0.xsd
                             //	</xs:choice>
                             //</xs:complexType>
-                            /////////////////////////////////////////////////////////////////////////
-                            // TODO: remove this once the schema matches the contents delivered by the server
                             // Get the name of the first element - that is what tells us what kind of message we got
-                            // NB: The library returns the full message content, including the header within MessageBody
-                            // We leave that unchanged there for compatibility reasons, and fix it here
                             XNamespace ns = "http://www.sisostds.org/schemas/C2SIM/1.1";
                             XElement mb = XElement.Parse(stompMsg.MessageBody);
                             if (mb?.Name.LocalName != "MessageBody")
                             {
-                                // Looked for nested element
+                                // Look for nested element
                                 mb = mb?.Descendants(ns + "MessageBody").FirstOrDefault();
                             }
                             if (mb is null)
@@ -500,65 +496,37 @@ public class C2SIMSDK : IC2SIMSDK
                                 _logger?.LogWarning($"Could not find MessageBody in notification message: {stompMsg.MessageBody}. Ignoring");
                                 continue;
                             }
-                            string bodyName = (mb.FirstNode as XElement)?.Name.LocalName.ToString();
-                            if (bodyName == "SystemCommandBody")
+                            XElement bodyElement = mb.FirstNode as XElement;
+                            string bodyName = bodyElement?.Name.LocalName.ToString();
+                            switch (bodyName)
                             {
-                                // Use the customized SystemCOmmandBodyType that contains the elements missing
-                                // from the standard - SessionStateCode and ResetScenario
-                                XmlSerializer serializer = new XmlSerializer(typeof(CustomSchemas.MessageBodyType));
-                                CustomSchemas.MessageBodyType command = null;
-                                using (TextReader reader = new StringReader(stompMsg.MessageBody))
-                                {
-                                    command = (CustomSchemas.MessageBodyType)serializer.Deserialize(reader);
-                                }
-                                OnStatusChangeReceived(new C2SIMNotificationEventParams(header, command.Item));
-                            }
-                            /////////////////////////////////////////////////////////////////////////
-                            else
-                            {
-                                XmlSerializer serializer = new XmlSerializer(typeof(Schemas.MessageBodyType));
-                                Schemas.MessageBodyType message = null;
-                                using (TextReader reader = new StringReader(stompMsg.MessageBody))
-                                {
-                                    message = (Schemas.MessageBodyType)serializer.Deserialize(reader);
-                                }
-                                ////// if (message.Item is Schemas.SystemCommandBodyType sc)
-                                ////// {
-                                //////     OnStatusChangeReceived(new C2SIMNotificationEventParams(header, sc));
-                                ////// }
-                                //////else 
-                                if (message.Item is Schemas.C2SIMInitializationBodyType ib)
-                                {
-                                    OnInitializationReceived(new C2SIMNotificationEventParams(header, ib));
-                                }
-                                else if (message.Item is Schemas.DomainMessageBodyType dmb)
-                                {
-                                    if (dmb.Item is Schemas.OrderBodyType ob)
+                                case "SystemCommandBody":
+                                    OnStatusChangeReceived(new C2SIMNotificationEventParams(header, bodyElement.ToString()));
+                                    break;
+                                case "C2SIMInitializationBody":
+                                    OnInitializationReceived(new C2SIMNotificationEventParams(header,bodyElement.ToString()));
+                                    break;
+                                case "DomainMessageBody":
+                                    // The actual body is the next node down
+                                    bodyElement = bodyElement.FirstNode as XElement;
+                                    bodyName = bodyElement?.Name.LocalName.ToString();
+                                    switch (bodyName)
                                     {
-                                        OnOderReceived(new C2SIMNotificationEventParams(header, ob));
-                                    }
-                                    else if (dmb.Item is Schemas.ReportBodyType rb)
-                                    {
-                                        OnReportReceived(new C2SIMNotificationEventParams(header, rb));
-                                    }
-                                    else
-                                    {
-                                        _logger?.LogWarning($"Ignoring C2SIM notification message with DomainMessageBody item of type {dmb.Item.GetType()}");
-                                    }
-                                }
-                                else
-                                {
-                                    if (message.Item != null)
-                                    {
-                                        // Ignore others - ObjectInitializationBody (IBML9?) and SystemAcknowledgementBody, perhaps others
-                                        _logger?.LogWarning($"Ignoring C2SIM {message.Item.GetType()} notification message");
-                                    }
-                                    else
-                                    {
-                                        _logger?.LogWarning($"Ignoring C2SIM notification message with no MessageBody element");
+                                        case "OrderBody":
+                                            OnOderReceived(new C2SIMNotificationEventParams(header, bodyElement.ToString()));
+                                            break;
+                                        case "ReportBody":
+                                            OnReportReceived(new C2SIMNotificationEventParams(header, bodyElement.ToString()));
+                                            break;
+                                        default:
+                                            _logger?.LogWarning($"Ignoring C2SIM notification message with DomainMessageBody item of type {bodyName ?? "empty name"}");
+                                            break;
                                     }
                                     break;
-                                }
+                                default:
+                                    // Ignore others - ObjectInitializationBody (IBML9?) and SystemAcknowledgementBody, perhaps others
+                                    _logger?.LogInformation($"Ignoring C2SIM {bodyName ?? "empty name"} notification message");
+                                    break;
                             }
                         }
                     }
@@ -581,6 +549,63 @@ public class C2SIMSDK : IC2SIMSDK
             _logger?.LogError(emsg + " " + e.ToString());
             throw new C2SIMClientException(emsg, e);
         }
+    }
+
+    /// <summary>
+    /// Deserialize object T from xml string
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="xml"></param>
+    /// <returns></returns>
+    public static T ToC2SIMObject<T>(string xml)
+    {
+        try
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            using (TextReader reader = new StringReader(xml))
+            {
+                T obj = (T)serializer.Deserialize(reader);
+                return obj;
+            }
+        }
+        catch (System.Exception e)
+        {
+            _logger.LogError($"Failed to deserialize xml to type {typeof(T).ToString()}: {e.Message}", e);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Serialize object T to xml string
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public static string FromC2SIMObject<T>(T obj)
+    {
+        try
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            // Write to text, UTF8-encoded
+            using (Utf8StringWriter textWriter = new Utf8StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, obj);
+                return textWriter.ToString();
+            }
+        }
+        catch (System.Exception e)
+        {
+            _logger.LogError($"Failed to serialize obj type {typeof(T).ToString()} to xml string: {e.Message}", e);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Force encoding on a writer - the Encoding property is readonly so requires <see href="https://stackoverflow.com/a/3862106">this trick</see>
+    /// </summary>
+    private class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding => Encoding.UTF8;
     }
 
     /// <summary>
@@ -714,9 +739,9 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Message received - provides raw (unparsed) XML for every message
     /// </summary>
-    protected void OnXmlMessageReceived(string e)
+    protected void OnC2SIMMessageReceived(C2SIMNotificationEventParams e)
     {
-        XmlMessageReceived?.Invoke(this, e);
+        C2SIMMessageReceived?.Invoke(this, e);
     }
 
     /// <summary>

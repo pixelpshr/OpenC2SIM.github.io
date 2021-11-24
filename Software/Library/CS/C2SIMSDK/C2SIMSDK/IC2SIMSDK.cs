@@ -40,7 +40,7 @@ public interface IC2SIMSDK
     /// <summary>
     /// Provides raw XML for all (unparsed) received messages 
     /// </summary>
-    event EventHandler<string> XmlMessageReceived;
+    event EventHandler<C2SIMSDK.C2SIMNotificationEventParams> C2SIMMessageReceived;
     /// <summary>
     /// Error notification received
     /// </summary>

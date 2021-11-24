@@ -154,9 +154,14 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_StatusChangedReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        // Use the CustomSchemas version that contains the elements used by the C2SIM Server 4.8.0.11 that
-        // are missing from C2SIM_SMX_LOX_V1.0.1.xsd
-        DisplayXml((CustomSchemas.SystemCommandBodyType)e.Body);
+        // To serialize, use the CustomSchemas version that contains the elements used by the C2SIM Server 
+        // 4.8.0.11 that are missing from C2SIM_SMX_LOX_V1.0.1.xsd
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.CustomSchema.SystemCommandBodyType>(e.Body);
+
+        // Here we just display the xml from string
+        Console.WriteLine();
+        Console.WriteLine(FormatResponse(e.Body));
+        Prompt();
     }
 
     /// <summary>
@@ -166,7 +171,14 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_InitializationReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        DisplayXml((Schemas.C2SIMInitializationBodyType)e.Body);
+        // To serialize use the ToC2SIMObject<T> methods with either the 1.0.0 or 1.0.1 version of the schema
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.SystemCommandBodyType>(e.Body);
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.SystemCommandBodyType>(e.Body);
+
+        // Here we just display the xml from string
+        Console.WriteLine();
+        Console.WriteLine(FormatResponse(e.Body));
+        Prompt();
     }
 
     /// <summary>
@@ -176,7 +188,14 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_OderReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        DisplayXml((Schemas.OrderBodyType)e.Body);
+        // To serialize use the ToC2SIMObject<T> methods with either the 1.0.0 or 1.0.1 version of the schema
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.OrderBodyType>(e.Body);
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.OrderBodyType>(e.Body);
+
+        // Here we just display the xml from string
+        Console.WriteLine();
+        Console.WriteLine(FormatResponse(e.Body));
+        Prompt();
     }
 
     /// <summary>
@@ -186,7 +205,14 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_ReportReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        DisplayXml((Schemas.ReportBodyType)e.Body);
+        // To serialize use the ToC2SIMObject<T> methods with either the 1.0.0 or 1.0.1 version of the schema
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.ReportBodyType>(e.Body);
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.ReportBodyType>(e.Body);
+
+        // Here we just display the xml from string
+        Console.WriteLine();
+        Console.WriteLine(FormatResponse(e.Body));
+        Prompt();
     }
 
     /// <summary>
