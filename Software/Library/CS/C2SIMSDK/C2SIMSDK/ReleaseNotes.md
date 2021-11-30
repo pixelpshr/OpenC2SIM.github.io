@@ -1,5 +1,8 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.2
+* Fixed issue with server responses, which may sometimes be just strings rather than xml d
+
 ## Version 1.2.1
 
 * Wrapping Initialization, Order and Report messages in MessageBody if not already present
