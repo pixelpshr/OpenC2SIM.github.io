@@ -244,10 +244,10 @@ public class C2SIMSDK : IC2SIMSDK
         }
         // Send share + start
         var resp = await PushCommand(C2SIMCommands.SHARE);
-        if (! resp.IsSuccess || await GetStatus() != C2SIMServerStatus.INITIALIZED)
+        if (resp.Contains("error", StringComparison.InvariantCultureIgnoreCase))
         {
             // Abort with the response produced by Share - likely indicating that no initialization data was present
-            throw new C2SIMClientException($"Failed to SHARE: {resp.Message}");
+            throw new C2SIMClientException($"Failed to SHARE: resp");
         }
         await PushCommand(C2SIMCommands.START);
         // Assert will fail if attempting to transition when no initialization data was present
@@ -262,7 +262,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </remarks>
     /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<C2SIMServerResponse> JoinSession()
+    public async Task<string> JoinSession()
     {
         // What is the payload returned?
         if (await GetStatus() == C2SIMServerStatus.INITIALIZING)
@@ -297,7 +297,8 @@ public class C2SIMSDK : IC2SIMSDK
             </result>
         */
         // Get the current status
-        C2SIMServerResponse resp = await PushCommand(C2SIMCommands.STATUS);
+        string r = await PushCommand(C2SIMCommands.STATUS);
+        var resp = ToC2SIMObject<C2SIMServerResponse>(r);
         if (resp.Status != C2SIMServerResponse.ResponseStatus.OK ||  !Enum.TryParse<C2SIMServerStatus>(resp.SessionState, out C2SIMServerStatus status))
         {
             string emsg = $"Failed to get the server's status: {resp.Message}";
@@ -420,9 +421,9 @@ public class C2SIMSDK : IC2SIMSDK
     /// Issue a command
     /// </summary>
     /// <param name="command"></param>
-    /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
+    /// <returns>Server response - formats vary depending on the command</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<C2SIMServerResponse> PushCommand(C2SIMSDK.C2SIMCommands command)
+    public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command)
     {
         _logger?.LogTrace($"Pushing C2SIM command {command}");
         var c2SimRestClient = CreateClientRestService("INFORM");
@@ -435,7 +436,7 @@ public class C2SIMSDK : IC2SIMSDK
         {
             _logger?.LogError($"Error pushing {command} command: {e}");
         }
-        return ToC2SIMObject<C2SIMServerResponse>(resp);
+        return resp;
     }
     #endregion
 
