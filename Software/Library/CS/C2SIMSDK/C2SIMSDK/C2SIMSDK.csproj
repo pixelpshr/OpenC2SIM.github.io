@@ -2,20 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
+    <!--GeneratePackageOnBuild>true</GeneratePackageOnBuild-->
 
+  </PropertyGroup>
   <ItemGroup>
     <!-- PrivateAssets="all" flags this project for including in the nuget package 
      via the Teronis.MSBuild.Packaging.ProjectBuildInPackage -->
@@ -45,7 +38,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -59,6 +52,9 @@
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
     <PackageReleaseNotes>
+    ## Version 1.2.3
+    *  More detailed logging
+    
     ## Version 1.2.2
     * Fixed issue with server responses, which may sometimes be just strings rather than xml 
 
@@ -86,6 +82,11 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <!-- Include compiler-generated source (e.g. AssemblyInfo) in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
