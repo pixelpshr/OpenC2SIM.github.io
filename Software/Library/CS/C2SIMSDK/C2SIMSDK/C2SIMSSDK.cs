@@ -442,6 +442,7 @@ public class C2SIMSDK : IC2SIMSDK
         catch (C2SIMClientException e)
         {
             _logger?.LogError($"Error pushing {command} command: {e}");
+            throw;
         }
         _logger?.LogTrace($"Result = {resp}");
         return resp;

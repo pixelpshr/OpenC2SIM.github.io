@@ -435,7 +435,7 @@ public class C2SIMClientRESTLib
         }
         catch (HttpRequestException e)
         {
-            string emsg = "Malformed Uri Exception";
+            string emsg = $"Connection error: {e.Message}";
             _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
