@@ -216,6 +216,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException">Thrown if there is a failure during the setup or if the final state is not Initializing</exception>
     public async Task ResetToInitializing()
     {
+        _logger?.LogTrace("Entering method");
         // Send stop + reset + initialize
         var status = await GetStatus();
         if (status == C2SIMServerStatus.INITIALIZING)
@@ -236,6 +237,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException">Thrown if there is a failure during the setup or if the final state is not Running</exception>
     public async Task SwitchToRunning()
     {
+        _logger?.LogTrace("Entering method");
         var status = await GetStatus();
         if (status == C2SIMServerStatus.RUNNING)
         {
@@ -243,8 +245,8 @@ public class C2SIMSDK : IC2SIMSDK
             return;
         }
         // Send share + start
-        var resp = await PushCommand(C2SIMCommands.SHARE);
-        if (resp.Contains("error", StringComparison.InvariantCultureIgnoreCase))
+        string resp = await PushCommand(C2SIMCommands.SHARE);
+        if (resp.Contains("ERROR"))
         {
             // Abort with the response produced by Share - likely indicating that no initialization data was present
             throw new C2SIMClientException($"Failed to SHARE: resp");
@@ -264,6 +266,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> JoinSession()
     {
+        _logger?.LogTrace("Entering method");
         // What is the payload returned?
         if (await GetStatus() == C2SIMServerStatus.INITIALIZING)
         {
@@ -281,6 +284,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException">Thrown if unable to retrieve the status from a server response</exception>
     public async Task<C2SIMServerStatus> GetStatus()
     {
+        _logger?.LogTrace("Entering method");
         /*
         <?xml version="1.0" encoding="UTF-8"?>
             <result>
@@ -305,6 +309,7 @@ public class C2SIMSDK : IC2SIMSDK
             _logger?.LogError(emsg + " " + resp.ToString());
             throw new C2SIMClientException(emsg);
         }
+        _logger?.LogTrace($"Result = {status}");
         return status;
     }
 
@@ -315,6 +320,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException">If current status does not match the post condition</exception>
     public async Task AssertStatus(C2SIMServerStatus postCondition)
     {
+        _logger?.LogTrace("Entering method");
         var status = await GetStatus();
         if (status != postCondition)
         {
@@ -332,7 +338,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<C2SIMServerResponse> PushInitializationMessage(string xmlMessage)
     {
-        _logger?.LogTrace($"Pushing C2SIM Initialization message");
+        _logger?.LogTrace("Entering method");
         return await PushMessage(WrappedMessage(xmlMessage), "INFORM");
     }
 
@@ -344,7 +350,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<C2SIMServerResponse> PushOrderMessage(string xmlMessage)
     {
-        _logger?.LogTrace($"Pushing C2SIM Order message");
+        _logger?.LogTrace("Entering method");
         return await PushMessage(WrappedMessage(xmlMessage), "ORDER");
     }
 
@@ -356,7 +362,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<C2SIMServerResponse> PushReportMessage(string xmlMessage)
     {
-        _logger?.LogTrace($"Pushing C2SIM Report message");
+        _logger?.LogTrace("Entering method");
         return  await PushMessage(WrappedMessage(xmlMessage), "REPORT");
     }
 
@@ -403,11 +409,12 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<C2SIMServerResponse> PushMessage(string xmlMessage, string performative)
     {
-        _logger?.LogTrace($"Pushing C2SIM message");
+        _logger?.LogTrace("Entering method");
         var c2SimRestClient = CreateClientRestService(performative);
         try
         {
             string resp = await c2SimRestClient.C2SimRequest(xmlMessage);
+            _logger?.LogTrace($"Result = {resp}");
             return ToC2SIMObject<C2SIMServerResponse>(resp);
         }
         catch (C2SIMClientException e)
@@ -425,7 +432,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command)
     {
-        _logger?.LogTrace($"Pushing C2SIM command {command}");
+        _logger?.LogTrace($"Entering method {command.ToString()}");
         var c2SimRestClient = CreateClientRestService("INFORM");
         string resp = null;
         try
@@ -436,6 +443,7 @@ public class C2SIMSDK : IC2SIMSDK
         {
             _logger?.LogError($"Error pushing {command} command: {e}");
         }
+        _logger?.LogTrace($"Result = {resp}");
         return resp;
     }
     #endregion
@@ -447,6 +455,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task Connect()
     {
+        _logger?.LogTrace("Entering method");
         try
         {
             // TODO: the following can be found in the C2SIM GUI app, but using it results in no messages being received
@@ -462,11 +471,13 @@ public class C2SIMSDK : IC2SIMSDK
             _cancellationSource = new CancellationTokenSource();
             Task _stompMessagePump = Task.Run(async () =>
             {
+                _logger?.LogTrace($"Starting STOMP message pump");
                 while (!_cancellationSource.Token.IsCancellationRequested)
                 {
                     try
                     {
                         var stompMsg = await _c2SimStompClient.GetNext_Block();
+                        _logger?.LogTrace($"Got STOMP message");
                         if (stompMsg != null && !string.IsNullOrWhiteSpace(stompMsg.MessageBody))
                         {
                             // Expose the C2SIM header as an SDK object to avoid client having to add another reference just for this
@@ -510,6 +521,7 @@ public class C2SIMSDK : IC2SIMSDK
                             }
                             XElement bodyElement = mb.FirstNode as XElement;
                             string bodyName = bodyElement?.Name.LocalName.ToString();
+                            _logger?.LogTrace($"Message type = {bodyName}");
                             switch (bodyName)
                             {
                                 case "SystemCommandBody":
@@ -522,6 +534,7 @@ public class C2SIMSDK : IC2SIMSDK
                                     // The actual body is the next node down
                                     bodyElement = bodyElement.FirstNode as XElement;
                                     bodyName = bodyElement?.Name.LocalName.ToString();
+                                    _logger?.LogTrace($"DomainMessage type = {bodyName}");
                                     switch (bodyName)
                                     {
                                         case "OrderBody":
@@ -546,7 +559,7 @@ public class C2SIMSDK : IC2SIMSDK
                     {
                         // May result from message types we are not interested in, so just log
                         string emsg = $"Error processing notification {e.Message}";
-                        _logger?.LogWarning(emsg + " " + e.ToString());
+                        _logger?.LogError(e ,emsg);
                     }
                 }
             }, _cancellationSource.Token);
@@ -558,7 +571,7 @@ public class C2SIMSDK : IC2SIMSDK
         catch (Exception e)
         {
             string emsg = $"Error connecting to notification service {e.Message}";
-            _logger?.LogError(emsg + " " + e.ToString());
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
     }
@@ -568,17 +581,19 @@ public class C2SIMSDK : IC2SIMSDK
     /// <exception cref="C2SIMClientException"></exception>
     public async Task Disconnect()
     {
+        _logger?.LogTrace("Entering method");
         try
         {
             // Cancel the message pump
             _cancellationSource.Cancel();
             // Disconnect from server
             await _c2SimStompClient.Disconnect();
+            _logger?.LogTrace($"Disconnected from STOMP");
         }
         catch (Exception e)
         {
             string emsg = $"Error disconnecting from STOMP {e.Message}";
-            _logger?.LogError(emsg + " " + e.ToString());
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
     }
@@ -599,6 +614,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <returns></returns>
     public async Task StompPublish(string cmd, List<string> headers, string xml)
     {
+        _logger?.LogTrace("Entering method");
         // TODO: what commands are supported?? headeres?? Make this more high level
         await _c2SimStompClient.Publish(cmd, headers, xml);
     }
@@ -611,6 +627,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <returns></returns>
     public static T ToC2SIMObject<T>(string xml)
     {
+        _logger?.LogTrace("Entering method");
         if (string.IsNullOrWhiteSpace(xml))
         {
             return default(T);
@@ -626,7 +643,7 @@ public class C2SIMSDK : IC2SIMSDK
         }
         catch (System.Exception e)
         {
-            _logger.LogError($"Failed to deserialize xml to type {typeof(T).ToString()}: {e.Message}", e);
+            _logger?.LogError($"Failed to deserialize xml to type {typeof(T).ToString()}: {e.Message}", e);
             throw;
         }
     }
@@ -641,6 +658,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <returns></returns>
     public static string FromC2SIMObject<T>(T obj)
     {
+        _logger?.LogTrace("Entering method");
         try
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
@@ -653,7 +671,7 @@ public class C2SIMSDK : IC2SIMSDK
         }
         catch (System.Exception e)
         {
-            _logger.LogError($"Failed to serialize obj type {typeof(T).ToString()} to xml string: {e.Message}", e);
+            _logger?.LogError($"Failed to serialize obj type {typeof(T).ToString()} to xml string: {e.Message}", e);
             throw;
         }
     }
@@ -673,6 +691,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <returns>Unique Id (MAC address-based)</returns>
     public static string GetMachineID()
     {
+        _logger?.LogTrace("Entering method");
         string macAddress = null;
         try
         {
@@ -707,6 +726,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// <returns>Original exception</returns>
     public static Exception GetRootException(Exception e)
     {
+        _logger?.LogTrace("Entering method");
         // Drill down to the innermost (original/root) exception
         while (e.InnerException != null)
         {
@@ -727,6 +747,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnStatusChangeReceived(C2SIMNotificationEventParams e)
     {
+        _logger?.LogTrace("Entering method");
         StatusChangedReceived?.Invoke(this, e);
     }
 
@@ -735,6 +756,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnInitializationReceived(C2SIMNotificationEventParams e)
     {
+        _logger?.LogTrace("Entering method");
         InitializationReceived?.Invoke(this, e);
     }
 
@@ -743,6 +765,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnOderReceived(C2SIMNotificationEventParams e)
     {
+        _logger?.LogTrace("Entering method");
         OderReceived?.Invoke(this, e);
     }
 
@@ -751,6 +774,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnReportReceived(C2SIMNotificationEventParams e)
     {
+        _logger?.LogTrace("Entering method");
         ReportReceived?.Invoke(this, e);
     }
 
@@ -759,6 +783,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnC2SIMMessageReceived(C2SIMNotificationEventParams e)
     {
+        _logger?.LogTrace("Entering method");
         C2SIMMessageReceived?.Invoke(this, e);
     }
 
@@ -767,6 +792,7 @@ public class C2SIMSDK : IC2SIMSDK
     /// </summary>
     protected void OnError(Exception e)
     {
+        _logger?.LogTrace("Entering method");
         Error?.Invoke(this, e);
     }
     #endregion

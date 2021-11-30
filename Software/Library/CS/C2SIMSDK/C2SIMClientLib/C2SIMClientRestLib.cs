@@ -92,7 +92,7 @@ public class C2SIMClientRESTLib
     #endregion
 
     #region Instance variables
-    private ILogger _logger;
+    private static ILogger _logger;
     private static string _clientVersion = string.Empty;
     private string _host = "localhost";
     private string _port = "8080";
@@ -177,6 +177,7 @@ public class C2SIMClientRESTLib
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> ServerStatus()
     {
+        _logger?.LogTrace("Entering method");
         Uri url;
         string result;
         try
@@ -192,7 +193,7 @@ public class C2SIMClientRESTLib
         catch (HttpRequestException e)
         {
             string emsg = "HTTP Request Exception";
-            _logger?.LogError(emsg, e);
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
         // Did we get an error from the server? (The server returns XML)
@@ -202,6 +203,7 @@ public class C2SIMClientRESTLib
             _logger?.LogError(msg);
             throw new C2SIMClientException(msg);
         }
+        _logger?.LogTrace($"Result = {result}");
         return result;
     }
 
@@ -221,6 +223,7 @@ public class C2SIMClientRESTLib
     /// <exception cref="C2SIMClientException">Primary and secondary causes are transmitted within the C2SIMClientException object</exception>
     public async Task<string> C2SimCommand(string cmd, string parm1, string parm2)
     {
+        _logger?.LogTrace("Entering method");
         string xml = "<C2SIM_Statistics xmlns=\"http://www.sisostds.org/schemas/c2sim/1.0\"/>";
         // Make sure we have version of ClientLib 
         if (string.IsNullOrWhiteSpace(_clientVersion))
@@ -266,6 +269,7 @@ public class C2SIMClientRESTLib
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> C2SimRequest(string xml)
     {
+        _logger?.LogTrace("Entering method");
         return await BmlRequest(xml);
     }
 
@@ -283,6 +287,7 @@ public class C2SIMClientRESTLib
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> BmlRequest(string xml)
     {
+        _logger?.LogTrace("Entering method");
         long startTime;
         long endTime;
         DateTime startDate;
@@ -377,6 +382,7 @@ public class C2SIMClientRESTLib
     /// <returns>The value of the element named by that tag</returns>
     public static string GetElementValue(string xml, string target)
     {
+        _logger?.LogTrace("Entering method");
         if (string.IsNullOrWhiteSpace(xml))
         {
             return string.Empty;
@@ -411,6 +417,7 @@ public class C2SIMClientRESTLib
     /// <exception cref="C2SIMClientException"></exception>
     private async Task<string> SendTrans(string u, string xml)
     {
+        _logger?.LogTrace("Entering method");
         string result;
         try
         {
@@ -429,7 +436,7 @@ public class C2SIMClientRESTLib
         catch (HttpRequestException e)
         {
             string emsg = "Malformed Uri Exception";
-            _logger?.LogError(emsg, e);
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
         return result;
@@ -441,6 +448,7 @@ public class C2SIMClientRESTLib
     /// <returns></returns>
     internal string GetVersion()
     {
+        _logger?.LogTrace("Entering method");
         string ver = "UNKNOWN";
         try
         {
@@ -466,6 +474,7 @@ public class C2SIMClientRESTLib
     /// <returns></returns>
     private string BuildC2SIMEndpoint(string cmdPath, string queryString = null)
     {
+        _logger?.LogTrace("Entering method");
         string u = string.Empty;
         if (!_host.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
             u += "http://";
@@ -487,6 +496,7 @@ public class C2SIMClientRESTLib
     /// <returns></returns>
     static string DetermineProtocol(string xml)
     {
+        _logger?.LogTrace("Entering method");
         string temp = LocateXmlBody(xml);
         string root = string.Empty;
         string prot = string.Empty;
@@ -516,6 +526,7 @@ public class C2SIMClientRESTLib
     /// </summary>
     static string LocateXmlBody(string xml)
     {
+        _logger?.LogTrace("Entering method");
         string body = string.Empty;
         // Is the XML preamble present?
         if (xml.StartsWith("<?xml version"))

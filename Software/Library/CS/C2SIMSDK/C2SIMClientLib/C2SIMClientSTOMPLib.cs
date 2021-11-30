@@ -69,7 +69,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <summary>
     /// Logger to use - injected during construction
     /// </summary>
-    private ILogger _logger;
+    private static ILogger _logger;
 
     /// <summary> 
     /// host - Name of STOMP host
@@ -206,6 +206,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <exception cref="C2SIMClientException">Includes various exceptions</exception>
     public async Task<C2SIMSTOMPMessage> Connect()
     {
+        _logger?.LogTrace("Entering method");
         try
         {
             if (!IPAddress.TryParse(_host, out IPAddress ipAddress))
@@ -235,11 +236,13 @@ public class C2SIMClientSTOMPLib : IDisposable
             }
 
             // Create client, connect and get stream to read and write
+            _logger.LogTrace($"Connecting to TCP host {ipAddress}:{_port}");
             _client = new TcpClient();
             await _client.ConnectAsync(ipAddress, _port);
             _networkStream = _client.GetStream();
 
             // Send connection message
+            _logger.LogTrace("Sending CONNECT");
             string connectFrame = "CONNECT\n"
                     + "accept-version: 1.2\n"
                     + "login:\n"
@@ -249,6 +252,7 @@ public class C2SIMClientSTOMPLib : IDisposable
             await SendFrame(connectFrame);
 
             // Send subscription
+            _logger.LogTrace("Sending SUBSCRIBE");
             string subscribeFrame = "SUBSCRIBE\n";
             // Add any message selector
             if (_adv_subscriptions.Count() != 0)
@@ -273,6 +277,7 @@ public class C2SIMClientSTOMPLib : IDisposable
             // Are we connected?  If so return the message.  If not throw an exception
             if (resp.MessageType.Equals("CONNECTED"))
             {
+                _logger?.LogTrace("Connected");
                 return resp;
             }
             else
@@ -285,13 +290,13 @@ public class C2SIMClientSTOMPLib : IDisposable
         catch (SocketException e)
         {
             string emsg = "Socket exception";
-            _logger?.LogError(emsg, e);
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
         catch (Exception e)
         {
             string emsg = "Exception";
-            _logger?.LogError(emsg, e);
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
     }
@@ -301,6 +306,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// </summary>
     public void Start()
     {
+        _logger?.LogTrace("Entering method");
         _cancellationSource = new CancellationTokenSource();
         _messagePump = Task.Run(() => Run(), _cancellationSource.Token);
     }
@@ -314,6 +320,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <exception cref="C2SIMClientException">Thrown by sendFrame()</exception>
     public async Task Publish(string cmd, List<string> headers, string xml)
     {
+        _logger?.LogTrace("Entering method");
         // Compute the content-length including the terminating NL and add a header
         headers.Add($"content-length:{xml.Length + 1}\n");
         headers.Add("content-type:text/plain"); // TODO: Should this be xml?
@@ -343,6 +350,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <exception cref="C2SIMClientException">Encapsulates several specific exceptions</exception>
     public C2SIMSTOMPMessage GetNext_NoBlock()
     {
+        _logger?.LogTrace("Entering method");
         if (_queue.TryReceive(out _currentMsg))
         {
             return ProcessSTOMPMessage(_currentMsg);
@@ -364,6 +372,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <exception cref="C2SIMClientException">Encapsulates several specific exceptions</exception>
     public async Task<C2SIMSTOMPMessage> GetNext_Block()
     {
+        _logger?.LogTrace("Entering method");
         try
         {
             // Wait for next STOMP Message
@@ -389,6 +398,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <exception cref="C2SIMClientException">Multiple potential exceptions detected by the background thread and sent over within a message</exception>
     private C2SIMSTOMPMessage ProcessSTOMPMessage(C2SIMSTOMPMessage currentMsg)
     {
+        _logger?.LogTrace("Entering method");
         // Background thread can't throw an exception as there is no caller.
         //   Check for a STOMPMsg object in the queue with something in error
         if (currentMsg.Error != null)
@@ -433,6 +443,7 @@ public class C2SIMClientSTOMPLib : IDisposable
         string c2sResp,
         string ackCode)
     {
+        _logger?.LogTrace("Entering method");
         C2SIMHeader c2s;
         C2SIMHeader oldc2s;
         string xml = string.Empty;
@@ -491,6 +502,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     ///  </param>
     public void AddAdvSubscription(string subString)
     {
+        _logger?.LogTrace("Entering method");
         _adv_subscriptions.Add(subString);
     }
 
@@ -501,6 +513,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <exception cref="C2SIMClientException">Encapsulates various exceptions</exception>
     public async Task<string> Disconnect()
     {
+        _logger?.LogTrace("Entering method");
         string disconnectFrame = "DISCONNECT\n"
                     + "\n"
                     + END_OF_FRAME;
@@ -508,15 +521,15 @@ public class C2SIMClientSTOMPLib : IDisposable
         {
             await SendFrame (disconnectFrame);
             _client.Close();
-            //interrupt();
         }
         catch (Exception e)
         {
             string emsg = "Exception thrown in call to disconnect";
-            _logger?.LogError(emsg, e);
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
         // Disconnect was successful return OK
+        _logger?.LogTrace("Disconnected");
         return "OK";
     }
     #endregion
@@ -527,6 +540,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// </summary>
     private async Task SendFrame(string data)
     {
+        _logger?.LogTrace("Entering method");
         try
         {
             // Use leaveOpen so the next frames can be sent over the networkStream
@@ -542,7 +556,7 @@ public class C2SIMClientSTOMPLib : IDisposable
         catch (Exception e)
         {
             string emsg = "Exception while sending frame";
-            _logger?.LogError(emsg, e);
+            _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
     }
@@ -566,6 +580,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// </remarks>
     private async Task Run()
     {
+        _logger?.LogTrace("Entering method");
         // Main Foreground Loop 
         //     Read messages from the STOMP server
         //     Process the message building a STOMPMessage object
@@ -685,12 +700,14 @@ public class C2SIMClientSTOMPLib : IDisposable
                     {
                         // Find server message in headers
                         const string ErrorHeader = "message:";
-                        string emsg = msg._headers.Where(p => p.StartsWith(ErrorHeader))?.First().Substring(ErrorHeader.Length);
-                        throw new ApplicationException($"Server exception: {emsg ?? string.Empty}");
+                        string em = msg._headers.Where(p => p.StartsWith(ErrorHeader))?.First().Substring(ErrorHeader.Length);
+                        string emsg = $"Server exception {em ?? string.Empty}";
+                        throw new ApplicationException(emsg);
                     }
                     else
                     {
                         // Add the message to the queue
+                        _logger?.LogTrace("Adding message to the queue");
                         await _queue.SendAsync(msg);
                     }
                 }
@@ -700,12 +717,14 @@ public class C2SIMClientSTOMPLib : IDisposable
                     // Add the exception to an otherwise blank STOMPMesaege and add it to the queue
                     C2SIMSTOMPMessage sm = new C2SIMSTOMPMessage();
                     sm._error = e;
+                    _logger?.LogError(e , "Error in STOMP message pump");
                     await _queue.SendAsync(sm);
                     // Exit loop if there was a communication error - the connection is likely dead at this point
                     if (e.InnerException is SocketException)
                         return;
                 }
             }
+            _logger?.LogTrace("Exiting STOMP message pump");
             await _queue.SendAsync(new C2SIMSTOMPMessage() { _messageBody = "Disconnected from STOMP" });
         }
     }
