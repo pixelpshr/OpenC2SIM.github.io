@@ -107,7 +107,7 @@ xsd schemas\C2SIM_SMX_LOX_V1.0.0.xsd /c /l:CS /n:C2SIM.Schema100
 ```
 
 A separate augmented `C2SIM_SMX_LOX_v1.0.x_Command.xsd` is also provided. It includes some elements that are present in the 
-messages sent by the current C2SIM Reference Server (v4.8.0.11), that are not present int he published schemas 
+messages sent by the current C2SIM Reference Server (v4.8.0.11), that are not present in the published schemas 
 (either in v1.0.0 or v1.0.1):
 * `SystemCommandBodyType` includes an additional element - `SessionStateCode`
 * `SystemCommandTypeCodeType` includes an additional `ResetScenario` enumeration 
