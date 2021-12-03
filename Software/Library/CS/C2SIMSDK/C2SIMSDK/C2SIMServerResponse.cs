@@ -40,9 +40,9 @@ public partial class C2SIMServerResponse
 
     private string unitDatabaseNameField;
 
-    private byte unitDatabaseSizeField;
+    private long unitDatabaseSizeField;
 
-    private byte msgNumberField;
+    private long msgNumberField;
 
     private decimal timeField;
 
@@ -111,13 +111,13 @@ public partial class C2SIMServerResponse
     /// Size of the Unit database
     /// </summary>
     [System.Xml.Serialization.XmlElementAttribute("unitDatabaseSize")]
-    public byte UnitDatabaseSize { get => this.unitDatabaseSizeField; set => this.unitDatabaseSizeField = value; }
+    public long UnitDatabaseSize { get => this.unitDatabaseSizeField; set => this.unitDatabaseSizeField = value; }
 
     /// <summary>
     /// Message identifier / index
     /// </summary>
     [System.Xml.Serialization.XmlElementAttribute("msgNumber")]
-    public byte MsgNumber { get => this.msgNumberField; set => this.msgNumberField = value; }
+    public long MsgNumber { get => this.msgNumberField; set => this.msgNumberField = value; }
 
     /// <summary>
     /// Execution time?

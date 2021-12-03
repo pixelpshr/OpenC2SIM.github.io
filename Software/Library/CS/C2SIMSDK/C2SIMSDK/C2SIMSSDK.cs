@@ -673,7 +673,7 @@ public class C2SIMSDK : IC2SIMSDK
         catch (System.Exception e)
         {
             _logger?.LogError($"Failed to serialize obj type {typeof(T).ToString()} to xml string: {e.Message}", e);
-            throw;
+            throw; 
         }
     }
 

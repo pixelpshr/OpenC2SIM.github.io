@@ -1,5 +1,9 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.4
+* Improved reporting on connection error
+* Fixed issue with larger message numbers in C2SIM server response object
+
 ## Version 1.2.3
 *  More detailed logging
     
