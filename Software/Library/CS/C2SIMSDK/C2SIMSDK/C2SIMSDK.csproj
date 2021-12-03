@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -38,7 +38,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -52,6 +52,10 @@
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
     <PackageReleaseNotes>
+    ## Version 1.2.4
+    * Improved reporting on connection error
+    * Fixed issue with larger message numbers in C2SIM server response object
+
     ## Version 1.2.3
     *  More detailed logging
     
