@@ -2,6 +2,15 @@
 
 ## Overview
 
+Command and Control Systems to Simulation Systems Interoperation (C2SIM) is defined in [SISO-STD-019-2020]((https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=51765) 
+as a standard for expressing 
+and  exchanging  Command  and  Control  (C2)  information  among  C2  systems,  simulation  systems,  and  
+robotic and autonomous (RAS) systems in a coalition context. 
+Military operations in today’s world are increasingly driven towards coalition participation and as such are 
+dependent  on  effective  interoperation  among  participating  coalition  systems.  The  growth  of  digitized  C2  
+systems  and  the  need  for  coalition  interoperation  has  created  a  need  for  standards  to  represent  and  
+exchange digitized C2 information and for these systems to interoperate. 
+
 The C2SIM stadard is defined by a *Core* that can be extended. Current extensions include:
 1. SMX - Standard Military Extention
 1. LOX - Land Operations Extension
