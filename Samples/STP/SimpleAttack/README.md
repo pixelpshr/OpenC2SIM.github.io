@@ -23,15 +23,15 @@ Task Org snippets are also defined:
 Two sets of documents are produced, matching the original ([v1.0.0](https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_v1.0.0.xsd)) version of the xml schema, and another matching the more recent ([v1.0.1](https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_v1.0.1.xsd)) amended version.
 
 Version 1.0.1 documents:
-* [SimpleAttack_Initialization101.xml]()
-* [SimpleAttack_Order101.xml]()
+* [SimpleAttack_Initialization101.xml](./SimpleAttack_Initialization101.xml)
+* [SimpleAttack_Order101.xml](./SimpleAttack_Order101.xml)
 
 Version 1.0.0 documents:
-* [SimpleAttack_Initialization100.xml]()
-* [SimpleAttack_Order100.xml]()
+* [SimpleAttack_Initialization100.xml](./SimpleAttack_Initialization100.xml)
+* [SimpleAttack_Order100.xml](./SimpleAttack_Order100.xml)
 
 Sketch-Thru-Plan loadable data:
-* [SimpleAttack.op]()
+* [SimpleAttack.op](./SimpleAttack.op)
 
 ## Mappings
 
@@ -41,6 +41,7 @@ Sketch-Thru-Plan loadable data:
     * MOOTW symbols (such as IED) are represented as PhysicalEntity elements
     * Tactical Graphics (TG) are represented as PhysicalEntity elements
     * Location elements, when provided (in CurrentState elements) correspond to the symbols' APP6/2525C standard anchor points. Some of these can therefore represent aspects other than a location per se, for example the width of an Axis of Advance 
+    
 * Order
     * Tasks are represented as ManeuverWarfareTask elements
     * Location elements provide coordinates of the route TGs. If not is present, then the Location of the center of the Objective is used
