@@ -20,7 +20,7 @@ Task Org snippets are also defined:
 
 ## Documents
 
-Two sets of documents are produced, matching the original (v1.0.0) version of the xml schema, and another matching the more recent (v1.0.1) amended version.
+Two sets of documents are produced, matching the original ([v1.0.0](https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_v1.0.0.xsd)) version of the xml schema, and another matching the more recent ([v1.0.1](https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_v1.0.1.xsd)) amended version.
 
 Version 1.0.1 documents:
 * [SimpleAttack_Initialization101.xml]()
