@@ -2,17 +2,13 @@
 
 ## Overview
 
-Command and Control Systems to Simulation Systems Interoperation (C2SIM) is defined in [SISO-STD-019-2020]((https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=51765) 
-as a standard for expressing 
-and  exchanging  Command  and  Control  (C2)  information  among  C2  systems,  simulation  systems,  and  
-robotic and autonomous (RAS) systems in a coalition context. 
-Military operations in today’s world are increasingly driven towards coalition participation and as such are 
-dependent  on  effective  interoperation  among  participating  coalition  systems.  The  growth  of  digitized  C2  
-systems  and  the  need  for  coalition  interoperation  has  created  a  need  for  standards  to  represent  and  
-exchange digitized C2 information and for these systems to interoperate. 
+Command and Control Systems to Simulation Systems Interoperation (C2SIM) is defined in [SISO-STD-019-2020](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=51765) 
+as a standard for expressing
+and  exchanging  Command  and  Control  (C2)  information  among  C2  systems,  simulation  systems,  and
+robotic and autonomous (RAS) systems in a coalition context.  
 
-The C2SIM stadard is defined by a *Core* that can be extended. Current extensions include:
-1. SMX - Standard Military Extention
+The C2SIM standard is defined by a *Core* that can be extended. Current extensions include:
+1. SMX - Standard Military Extension
 1. LOX - Land Operations Extension
 1. ASX - Autonomous Systems Extension
 
@@ -43,8 +39,5 @@ Main published XML schema (xsd):
 * [C2SIM_SMX_LOX_v1.0.1.xsd](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=53123) -  XML Schema Document generated from the merged C2SIM core, SMX, and LOX ontologies (merged using Protégé) - [local unzipped copy](https://github.com/hyssostech/OpenC2SIM.github.io/blob/4ad6ccd41d12b0003a78f6c03ef7cbc157e699c1/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_V1.0.1.xsd)
 * [C2SIMOntologyToC2SIMSchemaV1.0.1.xslt](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=53123)- extensible stylesheet language transformations (XSLT) file used to render the ontology into the xsd - [local unzipped copy](https://github.com/hyssostech/OpenC2SIM.github.io/blob/4ad6ccd41d12b0003a78f6c03ef7cbc157e699c1/Standard/C2SIM/Schemas/C2SIMOntologyToC2SIMSchemaV1.0.1.xslt)
 
-Other schemas:
-* [C2SIM_SMX_LOX_v1.0.0_Init_flat.xsd](Schemas/C2SIM_SMX_LOX_v1.0.0_Init_flat.xsd) - flattened schema covering Initialization documents
-* [C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd](Schemas/C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd) - flattened schema covering Order documents (includes Autonomous Systems Extension)
-* [C2SIM_SMX_LOX_ASX_v1.0.0_Report_flat.xsd](Schemas/C2SIM_SMX_LOX_ASX_v1.0.0_Order_flat.xsd) - flattened schema covering Report documents (includes Autonomous Systems Extension)
-* [C2SIM_SMX_LOX_v1.0.0_Command_augmented.xsd](https://github.com/hyssostech/OpenC2SIM.github.io/blob/d9a1a01522201f8d5af1106e42049dc65d4539d2/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_v1.0.0_Command_augmented.xsd) - not part of the original OpenC2SIM repository, and it was extracted from the all encompassing C2SIM_SMX_LOX_v1.0.0.xsd. Additional elements had then to be included to make it comply with the actual content of messages received from a reference server
+Older schema versions - many of the current tools only support version v1.0.0:
+* [C2SIM_SMX_LOX_v1.0.0.xsd](Schemas/C2SIM_SMX_LOX_v1.0.0.xsd)
