@@ -5,9 +5,9 @@
       <FromSender>00000000-0000-0001-0001-000000000000</FromSender>
       <ToReceiver>00000000-0007-0001-0000-000000000000</ToReceiver>
       <IssuedTime>
-        <IsoDateTime>2021-12-13T11:59:13Z</IsoDateTime>
+        <IsoDateTime>2021-12-15T13:18:47Z</IsoDateTime>
       </IssuedTime>
-      <OrderID>cfd14370-b667-46d3-981b-9638dc9b219d</OrderID>
+      <OrderID>34db1e40-d659-4136-8dea-3a2786deb5c7</OrderID>
       <Task>
         <ManeuverWarfareTask>
           <Location>
@@ -37,7 +37,7 @@
           <MapGraphicID>00000000-0000-0001-15B6-423C2DC83A42</MapGraphicID>
           <MapGraphicID>00000000-0000-0001-8640-AFDBAA75069A</MapGraphicID>
           <Name>T1_BOSTON</Name>
-          <UUID>65d9a338-744b-4a1b-a64c-821e3df97c4a</UUID>
+          <UUID>7018ad33-32ee-493c-bb6a-07447043461c</UUID>
           <DesiredEffectCode>DSTRYK</DesiredEffectCode>
           <PerformingEntity>00000000-0000-0001-E690-F29EEE51393B</PerformingEntity>
           <StartTime>
@@ -58,7 +58,7 @@
       <Task>
         <ManeuverWarfareTask>
           <Name>T2_DefendInPlace</Name>
-          <UUID>9eb12dbc-3717-4299-95cc-8f0feae77268</UUID>
+          <UUID>13e3aaae-0612-4bbd-a80c-12c3a9d546e1</UUID>
           <DesiredEffectCode>NOS</DesiredEffectCode>
           <PerformingEntity>00000000-0000-0002-7DDB-0D8D73938919</PerformingEntity>
           <StartTime>
