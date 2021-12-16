@@ -1,7 +1,7 @@
 # C2SIM Project Files
 
 Command and Control Systems to Simulation Systems Interoperation (C2SIM) is defined in [SISO-STD-019-2020](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=51765) 
-as a standard for expressing 
+as a standard for expressing
 and  exchanging  Command  and  Control  (C2)  information  among  C2  systems,  simulation  systems,  and 
 robotic and autonomous (RAS) systems in a coalition context. 
 
