@@ -1,0 +1,354 @@
+version=23;
+class Mission
+{
+	addOns[]=
+	{
+		"vbs2_vehicles_land_wheeled_datsun_620_iq_datsun_620_technicals",
+		"vbs2_vehicles_land_wheeled_mowag_piranha_lav3_nz_lav3",
+		"vbs2_vehicles_water_boats_boghammar_ir_boghammar",
+		"vbs2_vehicles_air_planes_aai_rq7_us_rq7",
+		"vbs2_people_invisible_man",
+		"vbs2_people_nz_nzdf_ifvcrew",
+		"vbs2_people_wp_wp_rifleman",
+		"vbs2_iq_insurgents"
+	};
+	addOnsAuto[]=
+	{
+		"vbs2_vehicles_land_wheeled_datsun_620_iq_datsun_620_technicals",
+		"vbs2_vehicles_land_wheeled_mowag_piranha_lav3_nz_lav3",
+		"vbs2_vehicles_water_boats_boghammar_ir_boghammar",
+		"vbs2_vehicles_air_planes_aai_rq7_us_rq7",
+		"vbs2_people_invisible_man",
+		"vbs2_people_nz_nzdf_ifvcrew",
+		"vbs2_people_wp_wp_rifleman",
+		"vbs2_iq_insurgents"
+	};
+	randomSeed=180004;
+	class Intel
+	{
+		briefingName="c2sim-test";
+		startWeather=0.1;
+		forecastWeather=0.30000001;
+		year=2007;
+		month=6;
+		day=7;
+		hour=8;
+		startFogDecay=0.0049999999;
+		forecastFogDecay=0.0049999999;
+		declination=14.29;
+	};
+	class Groups
+	{
+		items=7;
+		class Item0
+		{
+			side="WEST";
+			name="1-1-A-1";
+			class Vehicles
+			{
+				items=3;
+				class Item0
+				{
+					position[]={2296.9226,21.647011,2683.6533};
+					positionASL[]={2296.9226,21.647011,2683.6533};
+					special="CAN_COLLIDE";
+					id=0;
+					side="WEST";
+					vehicle="VBS2_NZ_Army_IFVCrew_W_SteyrIWc";
+					player="PLAY CDG";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_0";
+					description="LAV III Commander";
+				};
+				class Item1
+				{
+					position[]={2296.9226,21.647011,2683.6533};
+					positionASL[]={2296.9226,21.647011,2683.6533};
+					special="CAN_COLLIDE";
+					id=3;
+					side="WEST";
+					vehicle="VBS2_NZ_Army_IFVCrew_W_SteyrIWc";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_1";
+					description="LAV III Driver";
+				};
+				class Item2
+				{
+					position[]={2296.9226,21.647011,2683.6533};
+					positionASL[]={2296.9226,21.647011,2683.6533};
+					special="CAN_COLLIDE";
+					id=4;
+					side="WEST";
+					vehicle="VBS2_NZ_Army_IFVCrew_W_SteyrIWc";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_2";
+					description="LAV III Gunner";
+				};
+			};
+		};
+		class Item1
+		{
+			side="EAST";
+			name="1-1-A-2";
+			class Vehicles
+			{
+				items=2;
+				class Item0
+				{
+					position[]={2798.4558,0.37401,3534.5627};
+					positionASL[]={2798.4558,0.37401,3534.5627};
+					special="CAN_COLLIDE";
+					id=1;
+					side="EAST";
+					vehicle="vbs2_wp_soldier_ak74";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_13";
+					description="Boghammar Driver";
+				};
+				class Item1
+				{
+					position[]={2798.4558,0.37401,3534.5627};
+					positionASL[]={2798.4558,0.37401,3534.5627};
+					special="CAN_COLLIDE";
+					id=2;
+					side="EAST";
+					vehicle="vbs2_wp_soldier_ak74";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_14";
+					description="Boghammar Gunner";
+				};
+			};
+		};
+		class Item2
+		{
+			side="CIV";
+			name="1-1-A-1";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={2292.4087,20.696251,2670.8333};
+					positionASL[]={2292.4087,20.696251,2670.8333};
+					special="CAN_COLLIDE";
+					id=5;
+					side="CIV";
+					vehicle="vbs2_invisible_man_freeCamera";
+					player="PLAY CDG";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="invisibleCam";
+				};
+			};
+		};
+		class Item3
+		{
+			side="EAST";
+			name="1-1-A-1";
+			class Vehicles
+			{
+				items=2;
+				class Item0
+				{
+					position[]={3290.5149,24.193239,2761.9873};
+					positionASL[]={3290.5149,24.193239,2761.9873};
+					special="CAN_COLLIDE";
+					id=6;
+					side="EAST";
+					vehicle="vbs2_iq_insurg_03_akm";
+					player="PLAY CDG";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_11";
+					description="Technical - PKM / Datsun pickup, white, red stripe Gunner";
+				};
+				class Item1
+				{
+					position[]={3290.5149,24.193239,2761.9873};
+					positionASL[]={3290.5149,24.193239,2761.9873};
+					special="CAN_COLLIDE";
+					id=9;
+					side="EAST";
+					vehicle="vbs2_iq_insurg_03_akm";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_12";
+					description="Technical - PKM / Datsun pickup, white, red stripe Driver";
+				};
+			};
+		};
+		class Item4
+		{
+			side="WEST";
+			name="1-1-A-2";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={2539.1467,13.63458,2414.9436};
+					positionASL[]={2539.1467,13.63458,2414.9436};
+					special="CAN_COLLIDE";
+					id=7;
+					side="WEST";
+					vehicle="vbs2_invisible_man_west";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_16";
+					description="RQ-7 Shadow Pilot";
+				};
+			};
+		};
+		class Item5
+		{
+			side="WEST";
+			name="1-1-A-3";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={2539.1467,13.63458,2414.9436};
+					positionASL[]={2539.1467,13.63458,2414.9436};
+					special="CAN_COLLIDE";
+					id=8;
+					side="WEST";
+					vehicle="vbs2_invisible_man_west";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_17";
+					description="RQ-7 Shadow Operator";
+				};
+			};
+		};
+		class Item6
+		{
+			side="CIV";
+			name="1-1-A-2";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={2804.2129,0.47099,3531.876};
+					positionASL[]={2804.2129,0.47099,3531.876};
+					special="CAN_COLLIDE";
+					id=10;
+					side="CIV";
+					vehicle="vbs2_invisible_man_admin";
+					player="PLAYER COMMANDER";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="invisBoat";
+				};
+			};
+		};
+	};
+	Biotope="";
+	BiotopeFile="";
+	BiotopeSource=0;
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+	TerrainModifs[]={0,0,0,0,0};
+	RiverModifs[]={0,0,0,0,0};
+	SnowModifs[]={0,0,0,0,0};
+	SeastatesRandomSeed=11249989;
+};
+class Intro
+{
+	randomSeed=1356831;
+	class Intel
+	{
+		startWeather=0.1;
+		forecastWeather=0.30000001;
+		year=2007;
+		month=6;
+		day=7;
+		hour=8;
+		startFogDecay=0.0049999999;
+		forecastFogDecay=0.0049999999;
+		declination=14.29;
+	};
+	Biotope="";
+	BiotopeFile="";
+	BiotopeSource=0;
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+	TerrainModifs[]={0,0,0,0,0};
+	RiverModifs[]={0,0,0,0,0};
+	SnowModifs[]={0,0,0,0,0};
+	SeastatesRandomSeed=11249989;
+};
+class OutroWin
+{
+	randomSeed=10499216;
+	class Intel
+	{
+		startWeather=0.1;
+		forecastWeather=0.30000001;
+		year=2007;
+		month=6;
+		day=7;
+		hour=8;
+		startFogDecay=0.0049999999;
+		forecastFogDecay=0.0049999999;
+		declination=14.29;
+	};
+	Biotope="";
+	BiotopeFile="";
+	BiotopeSource=0;
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+	TerrainModifs[]={0,0,0,0,0};
+	RiverModifs[]={0,0,0,0,0};
+	SnowModifs[]={0,0,0,0,0};
+	SeastatesRandomSeed=11249989;
+};
+class OutroLoose
+{
+	randomSeed=10475468;
+	class Intel
+	{
+		startWeather=0.1;
+		forecastWeather=0.30000001;
+		year=2007;
+		month=6;
+		day=7;
+		hour=8;
+		startFogDecay=0.0049999999;
+		forecastFogDecay=0.0049999999;
+		declination=14.29;
+	};
+	Biotope="";
+	BiotopeFile="";
+	BiotopeSource=0;
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+	TerrainModifs[]={0,0,0,0,0};
+	RiverModifs[]={0,0,0,0,0};
+	SnowModifs[]={0,0,0,0,0};
+	SeastatesRandomSeed=11249989;
+};

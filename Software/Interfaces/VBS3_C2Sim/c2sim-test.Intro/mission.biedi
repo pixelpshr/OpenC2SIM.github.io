@@ -1,0 +1,1394 @@
+class _prefix_0
+{
+	objectType="prefix";
+	class Arguments
+	{
+		TITLE="c2sim-test";
+		VERSION="9";
+		ADDON[]=
+		{
+			"vbs2_vehicles_land_wheeled_datsun_620_iq_datsun_620_technicals",
+			"vbs2_vehicles_land_wheeled_mowag_piranha_lav3_nz_lav3",
+			"vbs2_vehicles_water_boats_boghammar_ir_boghammar",
+			"vbs2_vehicles_air_planes_aai_rq7_us_rq7",
+			"vbs2_people_invisible_man",
+			"vbs2_people_nz_nzdf_ifvcrew",
+			"vbs2_people_wp_wp_rifleman",
+			"vbs2_iq_insurgents"
+		};
+	};
+	layers[]={};
+	DeletedMapObjects[]={};
+	Biotope="";
+	BiotopeFile="";
+	BiotopeSource=0;
+	TerrainModifs[]={0,0,0,0,0};
+	RiverModifs[]={0,0,0,0,0};
+	SnowModifs[]={0,0,0,0,0};
+	SeastatesRandomSeed=11249989;
+};
+class _group_0
+{
+	objectType="group";
+	height=0.28103176;
+	class Arguments
+	{
+		NAME="1-1-A-1";
+		DISPLAY_NAME="B 1-1-A-1";
+		DISPLAY_NAME_TREE="B 1-1-A-1";
+		POSITION="[2296.92270, 2683.65332, 21.64701]";
+		SIDE="WEST";
+		TACTICAL_MARKER="m2_1";
+		COLLAPSED="FALSE";
+	};
+};
+class _group_2
+{
+	objectType="group";
+	height=0.19315417;
+	class Arguments
+	{
+		NAME="1-1-A-1";
+		DISPLAY_NAME="R 1-1-A-1";
+		DISPLAY_NAME_TREE="R 1-1-A-1";
+		POSITION="[3290.51495, 2761.98739, 24.19324]";
+		SIDE="GUER";
+		TACTICAL_MARKER="m2_3";
+		COLLAPSED="FALSE";
+	};
+};
+class _group_3
+{
+	objectType="group";
+	height=-1.8145943e-06;
+	class Arguments
+	{
+		NAME="1-1-A-2";
+		DISPLAY_NAME="O 1-1-A-2";
+		DISPLAY_NAME_TREE="O 1-1-A-2";
+		POSITION="[2798.45581, 3534.56268, 0.37401]";
+		SIDE="EAST";
+		TACTICAL_MARKER="m2_4";
+		COLLAPSED="FALSE";
+	};
+};
+class _vehicle_4
+{
+	objectType="vehicle";
+	height=0.19315417;
+	class Arguments
+	{
+		OME_ID="5169";
+		NAME="BadGuyGroup";
+		URN="BadGuyGroup";
+		SUB_TEAM="";
+		SIDE="all";
+		FILTER_BY_FORCE="";
+		STR_FILTER="tech";
+		TYPE="VBS2_IQ_Insurg_datsuntruck_pickup_02_pkm_X";
+		EDIT_UNIT="";
+		NEW_UNIT="";
+		DELETE_UNIT="";
+		IS_EDIT="";
+		PLAYABLE="10";
+		ADVANCED="";
+		LOCK="UNLOCKED";
+		COMBATMODE="YELLOW";
+		BG1="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG2="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		HITZONES_TOGGLE="";
+		BG3="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG4="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		IFF_CLASSIFICATION="Pending";
+		AZIMUT="-2.817";
+		VECTORDIR="[-0.048496,0.98557,0.16215]";
+		VECTORUP="[-0.28241,-0.16925,0.94425]";
+		POSITION="[3290.51495, 2761.98739, 24.19324]";
+		PARENT="_group_2";
+		SUPERIOR_GROUP="";
+		SUBORDINATE_GROUP="";
+		TOWED_BY="";
+		COLOR="[0.999982476234436,0.501951992511749,0.501951992511749]";
+		TASK_CONTROLAI="";
+		DISPLAY_NAME="(BadGuyGroup) (BadGuyGroup) Technical - PKM / Datsun pickup, white, red stripe";
+		DISPLAY_NAME_TREE="(BadGuyGroup) (BadGuyGroup) Technical - PKM / Datsun pickup, white, red stripe";
+		LOADOUT="";
+		BASE_TYPE="";
+		VEHICLE_COMMANDER="_unit_11";
+		SUBPART_OF="";
+	};
+};
+class _vehicle_0
+{
+	objectType="vehicle";
+	height=0.28103176;
+	class Arguments
+	{
+		OME_ID="5175";
+		NAME="TESTMOBSQUAD";
+		URN="TESTMOBSQUAD";
+		SUB_TEAM="";
+		SIDE="all";
+		FILTER_BY_FORCE="";
+		TYPE="VBS2_NZ_Army_Lav3_W_25_X";
+		EDIT_UNIT="";
+		NEW_UNIT="";
+		DELETE_UNIT="";
+		IS_EDIT="";
+		PLAYABLE="10";
+		ADVANCED="";
+		LOCK="UNLOCKED";
+		COMBATMODE="YELLOW";
+		BG1="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG2="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		HITZONES_TOGGLE="";
+		BG3="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG4="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		IFF_CLASSIFICATION="Pending";
+		AZIMUT="87.97";
+		VECTORDIR="[0.98941,0.035074,-0.14085]";
+		VECTORUP="[0.14213,-0.037076,0.98915]";
+		POSITION="[2296.92270, 2683.65332, 21.64701]";
+		PARENT="_group_0";
+		SUPERIOR_GROUP="";
+		SUBORDINATE_GROUP="";
+		TOWED_BY="";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		TASK_CONTROLAI="";
+		DISPLAY_NAME="(TESTMOBSQUAD) (TESTMOBSQUAD) LAV III";
+		DISPLAY_NAME_TREE="(TESTMOBSQUAD) (TESTMOBSQUAD) LAV III";
+		LOADOUT="";
+		BASE_TYPE="";
+		VEHICLE_COMMANDER="_unit_0";
+		SUBPART_OF="";
+	};
+};
+class _vehicle_5
+{
+	objectType="vehicle";
+	height=-1.8145943e-06;
+	class Arguments
+	{
+		OME_ID="5178";
+		NAME="BadGuyBoat";
+		URN="BadGuyBoat";
+		SUB_TEAM="";
+		SIDE="east";
+		FILTER_BY_FORCE="";
+		STR_FILTER="water";
+		TYPE="vbs2_ir_boghammar_x";
+		EDIT_UNIT="";
+		NEW_UNIT="";
+		DELETE_UNIT="";
+		IS_EDIT="";
+		ADVANCED="";
+		BG1="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG2="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		HITZONES_TOGGLE="";
+		BG3="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG4="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		IFF_CLASSIFICATION="Pending";
+		VECTORDIR="[0,1,0]";
+		VECTORUP="[-0,-0,1]";
+		POSITION="[2798.45581, 3534.56268, 0.37401]";
+		PARENT="_group_3";
+		COLOR="[0.999982476234436,0.501951992511749,0.501951992511749]";
+		DISPLAY_NAME="(BadGuyBoat) (BadGuyBoat) Boghammar";
+		DISPLAY_NAME_TREE="(BadGuyBoat) (BadGuyBoat) Boghammar";
+		LOADOUT="";
+		BASE_TYPE="";
+		VEHICLE_COMMANDER="_unit_13";
+		SUBPART_OF="";
+	};
+};
+class _vehicle_6
+{
+	objectType="vehicle";
+	height=-9.1952516e-06;
+	class Arguments
+	{
+		OME_ID="5181";
+		NAME="TESTUAS";
+		SUB_TEAM="";
+		SIDE="all";
+		FILTER_BY_FORCE="";
+		TYPE="vbs_us_army_rq7_gry_X";
+		EDIT_UNIT="";
+		NEW_UNIT="";
+		DELETE_UNIT="";
+		IS_EDIT="";
+		ADVANCED="";
+		LOCK="LOCKED";
+		COMBATMODE="YELLOW";
+		BG1="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG2="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		HITZONES_TOGGLE="";
+		BG3="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		BG4="\vbs2\ui\Data\NewEditor\slider_back_rad.paa";
+		IFF_CLASSIFICATION="Pending";
+		VECTORDIR="[0,0.999,0.044743]";
+		VECTORUP="[0,-0.044743,0.999]";
+		POSITION="[2539.14674, 2414.94352, 13.63458]";
+		PARENT="";
+		SUPERIOR_GROUP="";
+		SUBORDINATE_GROUP="";
+		TOWED_BY="";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		TASK_CONTROLAI="";
+		DISPLAY_NAME="(TESTUAS) RQ-7 Shadow";
+		DISPLAY_NAME_TREE="(TESTUAS) RQ-7 Shadow";
+		LOADOUT="";
+		BASE_TYPE="";
+		VEHICLE_COMMANDER="";
+		SUBPART_OF="";
+	};
+};
+class _unit_0
+{
+	objectType="unit";
+	height=0.28103176;
+	class Arguments
+	{
+		OME_ID="5184";
+		DESCRIPTION="LAV III Commander";
+		SIDE="WEST";
+		TYPE="VBS2_NZ_Army_IFVCrew_W_SteyrIWc";
+		SPECIAL="CARGO";
+		PLAYABLE="true";
+		AZIMUT="87.97";
+		POSITION="[2296.92270, 2683.65332, 21.64701]";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		COMMANDER="_vehicle_0";
+		DRIVER="";
+		GUNNER="_vehicle_0";
+		GUNNER_TURRET="[0,0]";
+		DISPLAY_NAME="(PL) LAV III Commander";
+		DISPLAY_NAME_TREE="(PL) LAV III Commander";
+		PARENT="_group_0";
+	};
+};
+class _unit_13
+{
+	objectType="unit";
+	height=-1.8145943e-06;
+	class Arguments
+	{
+		OME_ID="5189";
+		DESCRIPTION="Boghammar Driver";
+		SIDE="EAST";
+		TYPE="vbs2_wp_soldier_ak74";
+		SPECIAL="CARGO";
+		POSITION="[2798.45581, 3534.56268, 0.37401]";
+		COLOR="[0.999982476234436,0.501951992511749,0.501951992511749]";
+		COMMANDER="";
+		DRIVER="_vehicle_5";
+		GUNNER="";
+		DISPLAY_NAME="Boghammar Driver";
+		DISPLAY_NAME_TREE="Boghammar Driver";
+		PARENT="_group_3";
+	};
+};
+class _unit_14
+{
+	objectType="unit";
+	height=-1.8145943e-06;
+	class Arguments
+	{
+		OME_ID="5194";
+		DESCRIPTION="Boghammar Gunner";
+		SIDE="EAST";
+		TYPE="vbs2_wp_soldier_ak74";
+		SPECIAL="CARGO";
+		POSITION="[2798.45581, 3534.56268, 0.37401]";
+		COLOR="[0.999982476234436,0.501951992511749,0.501951992511749]";
+		COMMANDER="";
+		DRIVER="";
+		GUNNER="_vehicle_5";
+		GUNNER_TURRET="[0]";
+		LEADER="_unit_13";
+		DISPLAY_NAME="Boghammar Gunner";
+		DISPLAY_NAME_TREE="Boghammar Gunner";
+		PARENT="_group_3";
+	};
+};
+class _marker_3
+{
+	objectType="marker";
+	height=-1.8145943e-06;
+	class Arguments
+	{
+		POSITION="[2798.45581, 3534.56268, 0.37401]";
+		NAME="m2_4";
+		LASTNAME="m2_4";
+		TEXT="1-1-A-2";
+		MARKER_TYPE="TacticalMarker";
+		COLOR="ColorRed";
+		CONDITION="playerSide == east";
+		PARENT="_group_3";
+		PARENT_UNIT="_unit_13";
+		DISPLAY_NAME="Marker m2_4 (1-1-A-2)";
+		SIDE="F2";
+		UNIT="I22";
+		SIZE="M2";
+		PREVIEW_SIDE="\vbs2\ui\tacticmarkers\data\Frames\Hostile_Surface";
+		PREVIEW_UNIT="\vbs2\ui\tacticmarkers\data\Icons\H_Infantry";
+		PREVIEW_SIZE="\vbs2\ui\tacticmarkers\data\Modifiers\S_Team";
+		PREVIEW_MODIFIER="\vbs2\ui\tacticmarkers\data\SubRoles\Blanc";
+	};
+	class DynamicArguments
+	{
+		name="TacticalMarker";
+		class Params
+		{
+			class CUSTOM_MARKER
+			{
+				type="config";
+				subtype="CfgMarkers,name";
+				description="Custom Marker";
+				w=0.34;
+				idc=5001;
+				onInit="_control_CUSTOM_MARKER ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_CUSTOM_MARKER');";
+				onChanged="[_map] call compile preprocessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomLBChanged.sqf""";
+			};
+			class CUSTOM_DELETE
+			{
+				type="button";
+				x=0.56;
+				y=0.11;
+				w=0.1;
+				onInit="_control_CUSTOM_DELETE ctrlSetText (localize ""STR_DIK_DELETE""); _control_CUSTOM_DELETE ctrlSetEventHandler [""ButtonClick"",preProcessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomDelete.sqf""]";
+			};
+			class CUSTOM_NAME
+			{
+				type="text";
+				description="Save As";
+				w=0.34;
+				idc=5002;
+				onInit="_control_CUSTOM_NAME ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SAVE_AS');";
+			};
+			class CUSTOM_SAVE
+			{
+				type="button";
+				x=0.56;
+				y=0.14;
+				w=0.1;
+				onInit="_control_CUSTOM_SAVE ctrlSetText (localize ""STR_DISP_ARCMAP_SAVE""); _control_CUSTOM_SAVE ctrlSetEventHandler [""ButtonClick"",preProcessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomSave.sqf""]";
+			};
+			class SIDE
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Sides,name";
+				description="Side Icon";
+				default="f1";
+				w=0.25;
+				idc=5026;
+				onInit="_control_SIDE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIDE_ICON_X'); _sel = _control_SIDE lbData lbCurSel _control_SIDE; lbSort _control_SIDE; _was = _sel; for '_i' from 0 to (lbSize _control_SIDE) -1 do {if (_control_SIDE lbData _i == _sel) then {_was = _i;_control_SIDE lbSetCurSel _i}};['addMRK_SIDE', ctrlText _control_NAME != '', 0, 'lb', _control_SIDE,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class SIDE_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="Side Icon";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIDE,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIDE_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIDE,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIDE_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.17;
+				w=0.15000001;
+				idc=5027;
+				onInit="_control_SIDE_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X');";
+				onChanged="[_this,_control_PREVIEW_SIDE,_control_SIDE_POSITION,_control_SIDE_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class UNIT
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Units,name";
+				description="Unit Icon";
+				default="I1";
+				w=0.25;
+				idc=5028;
+				onInit="_control_UNIT ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_UNIT_ICON_X'); _sel = _control_UNIT lbData lbCurSel _control_UNIT; lbSort _control_UNIT; _was = _sel; for '_i' from 0 to (lbSize _control_UNIT) -1 do {if (_control_UNIT lbData _i == _sel) then {_was = _i;_control_UNIT lbSetCurSel _i}};['addMRK_UNIT', ctrlText _control_NAME != '', 0, 'lb', _control_UNIT,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class UNIT_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_UNIT,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class UNIT_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.25999999;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_UNIT,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class UNIT_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.2;
+				w=0.15000001;
+				idc=5029;
+				onInit="_control_UNIT_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_UNIT_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_UNIT_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_UNIT,_control_UNIT_POSITION,_control_UNIT_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class SIZE
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Size,name";
+				description="Size Icon";
+				w=0.25;
+				idc=5030;
+				onInit="_control_SIZE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_ICON_X'); ['addMRK_SIZE', ctrlText _control_NAME != '', 0, 'lb', _control_SIZE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class SIZE_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIZE,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIZE_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.31999999;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIZE,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIZE_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.23;
+				w=0.15000001;
+				idc=5031;
+				onInit="_control_SIZE_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_SIZE_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_SIZE_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_SIZE,_control_SIZE_POSITION,_control_SIZE_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class MODIFIER
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Modifiers,name";
+				description="Modifier Icon";
+				default="S0";
+				w=0.25;
+				idc=5032;
+				onInit="_control_MODIFIER ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_MODIFIER_ICON_X'); _sel = _control_MODIFIER lbData lbCurSel _control_MODIFIER; lbSort _control_MODIFIER; _was = _sel; for '_i' from 0 to (lbSize _control_MODIFIER) -1 do {if (_control_MODIFIER lbData _i == _sel) then {_was = _i;_control_MODIFIER lbSetCurSel _i}};['addMRK_MODIFIER', ctrlText _control_NAME != '', 0, 'lb', _control_MODIFIER,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class MODIFIER_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_MODIFIER,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class MODIFIER_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.38;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_MODIFIER,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class MODIFIER_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.25999999;
+				w=0.15000001;
+				idc=5033;
+				onInit="_control_MODIFIER_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_MODIFIER_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_MODIFIER_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_MODIFIER,_control_MODIFIER_POSITION,_control_MODIFIER_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class PROXY_OFFSET
+			{
+				type="string";
+				default="[0,0,0]";
+				hidden=1;
+			};
+			class PREVIEW_SIDE
+			{
+				type="picture";
+				description="Preview";
+			};
+			class PREVIEW_UNIT
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+			class PREVIEW_SIZE
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+			class PREVIEW_MODIFIER
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+		};
+		create[]=
+		{
+			"%VARIABLE_NAME = ([""%VARIABLE_NAME"",%NAME,%TEXT,%MARKER_TYPE,"""",%COLOR,[%A, %B],%ANGLE,%POSITION,%CONDITION,%PREVIEW_SIDE,%PREVIEW_UNIT,%PREVIEW_SIZE,%PREVIEW_MODIFIER,[%SIDE_POSITION,%SIDE_DOWN],%SIDE_SCALE,[%SIZE_POSITION,%SIZE_DOWN],%SIZE_SCALE,[%UNIT_POSITION,%UNIT_DOWN],%UNIT_SCALE,[%MODIFIER_POSITION,%MODIFIER_DOWN],%MODIFIER_SCALE,%AUTOSCALE,1] + [""%PARENT""]) call fn_vbs_editor_marker_tactical_create;"
+		};
+		update[]=
+		{
+			"[%NAME,%TEXT,%MARKER_TYPE,"""",%COLOR,[%A, %B],%ANGLE,%POSITION,%CONDITION,%PREVIEW_SIDE,%PREVIEW_UNIT,%PREVIEW_SIZE,%PREVIEW_MODIFIER,[%SIDE_POSITION,%SIDE_DOWN],%SIDE_SCALE,[%SIZE_POSITION,%SIZE_DOWN],%SIZE_SCALE,[%UNIT_POSITION,%UNIT_DOWN],%UNIT_SCALE,[%MODIFIER_POSITION,%MODIFIER_DOWN],%MODIFIER_SCALE,""%PARENT"",""%VARIABLE_NAME"",%AUTOSCALE,%ALPHA] call fn_vbs_editor_marker_tactical_update;"
+		};
+		execDrawMap="false";
+	};
+};
+class _unit_1
+{
+	objectType="unit";
+	height=0.28103176;
+	class Arguments
+	{
+		OME_ID="5199";
+		DESCRIPTION="LAV III Driver";
+		SIDE="WEST";
+		TYPE="VBS2_NZ_Army_IFVCrew_W_SteyrIWc";
+		SPECIAL="CARGO";
+		PLAYABLE="true";
+		AZIMUT="87.97";
+		POSITION="[2296.92270, 2683.65332, 21.64701]";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		COMMANDER="";
+		DRIVER="_vehicle_0";
+		GUNNER="";
+		LEADER="_unit_0";
+		DISPLAY_NAME="(PL) LAV III Driver";
+		DISPLAY_NAME_TREE="(PL) LAV III Driver";
+		PARENT="_group_0";
+	};
+};
+class _unit_2
+{
+	objectType="unit";
+	height=0.28103176;
+	class Arguments
+	{
+		OME_ID="5203";
+		DESCRIPTION="LAV III Gunner";
+		SIDE="WEST";
+		TYPE="VBS2_NZ_Army_IFVCrew_W_SteyrIWc";
+		SPECIAL="CARGO";
+		PLAYABLE="true";
+		AZIMUT="87.97";
+		POSITION="[2296.92270, 2683.65332, 21.64701]";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		COMMANDER="";
+		DRIVER="";
+		GUNNER="_vehicle_0";
+		GUNNER_TURRET="[0]";
+		LEADER="_unit_0";
+		DISPLAY_NAME="(PL) LAV III Gunner";
+		DISPLAY_NAME_TREE="(PL) LAV III Gunner";
+		PARENT="_group_0";
+	};
+};
+class _marker_0
+{
+	objectType="marker";
+	height=0.28103176;
+	class Arguments
+	{
+		POSITION="[2296.92270, 2683.65332, 21.64701]";
+		NAME="m2_1";
+		LASTNAME="m2_1";
+		TEXT="1-1-A-1";
+		MARKER_TYPE="TacticalMarker";
+		COLOR="ColorBlue";
+		CONDITION="playerSide == west";
+		PARENT="_group_0";
+		PARENT_UNIT="_unit_0";
+		DISPLAY_NAME="Marker m2_1 (1-1-A-1)";
+		SIDE="F1";
+		SIZE="M2";
+		MODIFIER="S13";
+		PREVIEW_SIDE="\vbs2\ui\tacticmarkers\data\Frames\Friend_Units";
+		PREVIEW_UNIT="\vbs2\ui\tacticmarkers\data\Icons\Blanc";
+		PREVIEW_SIZE="\vbs2\ui\tacticmarkers\data\Modifiers\S_Team";
+		PREVIEW_MODIFIER="\vbs2\ui\tacticmarkers\data\SubRoles\Motorised";
+	};
+	class DynamicArguments
+	{
+		name="TacticalMarker";
+		class Params
+		{
+			class CUSTOM_MARKER
+			{
+				type="config";
+				subtype="CfgMarkers,name";
+				description="Custom Marker";
+				w=0.34;
+				idc=5001;
+				onInit="_control_CUSTOM_MARKER ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_CUSTOM_MARKER');";
+				onChanged="[_map] call compile preprocessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomLBChanged.sqf""";
+			};
+			class CUSTOM_DELETE
+			{
+				type="button";
+				x=0.56;
+				y=0.11;
+				w=0.1;
+				onInit="_control_CUSTOM_DELETE ctrlSetText (localize ""STR_DIK_DELETE""); _control_CUSTOM_DELETE ctrlSetEventHandler [""ButtonClick"",preProcessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomDelete.sqf""]";
+			};
+			class CUSTOM_NAME
+			{
+				type="text";
+				description="Save As";
+				w=0.34;
+				idc=5002;
+				onInit="_control_CUSTOM_NAME ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SAVE_AS');";
+			};
+			class CUSTOM_SAVE
+			{
+				type="button";
+				x=0.56;
+				y=0.14;
+				w=0.1;
+				onInit="_control_CUSTOM_SAVE ctrlSetText (localize ""STR_DISP_ARCMAP_SAVE""); _control_CUSTOM_SAVE ctrlSetEventHandler [""ButtonClick"",preProcessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomSave.sqf""]";
+			};
+			class SIDE
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Sides,name";
+				description="Side Icon";
+				default="f1";
+				w=0.25;
+				idc=5026;
+				onInit="_control_SIDE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIDE_ICON_X'); _sel = _control_SIDE lbData lbCurSel _control_SIDE; lbSort _control_SIDE; _was = _sel; for '_i' from 0 to (lbSize _control_SIDE) -1 do {if (_control_SIDE lbData _i == _sel) then {_was = _i;_control_SIDE lbSetCurSel _i}};['addMRK_SIDE', ctrlText _control_NAME != '', 0, 'lb', _control_SIDE,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class SIDE_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="Side Icon";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIDE,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIDE_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIDE,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIDE_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.17;
+				w=0.15000001;
+				idc=5027;
+				onInit="_control_SIDE_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X');";
+				onChanged="[_this,_control_PREVIEW_SIDE,_control_SIDE_POSITION,_control_SIDE_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class UNIT
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Units,name";
+				description="Unit Icon";
+				default="I1";
+				w=0.25;
+				idc=5028;
+				onInit="_control_UNIT ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_UNIT_ICON_X'); _sel = _control_UNIT lbData lbCurSel _control_UNIT; lbSort _control_UNIT; _was = _sel; for '_i' from 0 to (lbSize _control_UNIT) -1 do {if (_control_UNIT lbData _i == _sel) then {_was = _i;_control_UNIT lbSetCurSel _i}};['addMRK_UNIT', ctrlText _control_NAME != '', 0, 'lb', _control_UNIT,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class UNIT_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_UNIT,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class UNIT_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.25999999;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_UNIT,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class UNIT_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.2;
+				w=0.15000001;
+				idc=5029;
+				onInit="_control_UNIT_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_UNIT_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_UNIT_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_UNIT,_control_UNIT_POSITION,_control_UNIT_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class SIZE
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Size,name";
+				description="Size Icon";
+				w=0.25;
+				idc=5030;
+				onInit="_control_SIZE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_ICON_X'); ['addMRK_SIZE', ctrlText _control_NAME != '', 0, 'lb', _control_SIZE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class SIZE_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIZE,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIZE_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.31999999;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIZE,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIZE_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.23;
+				w=0.15000001;
+				idc=5031;
+				onInit="_control_SIZE_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_SIZE_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_SIZE_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_SIZE,_control_SIZE_POSITION,_control_SIZE_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class MODIFIER
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Modifiers,name";
+				description="Modifier Icon";
+				default="S0";
+				w=0.25;
+				idc=5032;
+				onInit="_control_MODIFIER ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_MODIFIER_ICON_X'); _sel = _control_MODIFIER lbData lbCurSel _control_MODIFIER; lbSort _control_MODIFIER; _was = _sel; for '_i' from 0 to (lbSize _control_MODIFIER) -1 do {if (_control_MODIFIER lbData _i == _sel) then {_was = _i;_control_MODIFIER lbSetCurSel _i}};['addMRK_MODIFIER', ctrlText _control_NAME != '', 0, 'lb', _control_MODIFIER,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class MODIFIER_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_MODIFIER,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class MODIFIER_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.38;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_MODIFIER,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class MODIFIER_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.25999999;
+				w=0.15000001;
+				idc=5033;
+				onInit="_control_MODIFIER_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_MODIFIER_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_MODIFIER_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_MODIFIER,_control_MODIFIER_POSITION,_control_MODIFIER_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class PROXY_OFFSET
+			{
+				type="string";
+				default="[0,0,0]";
+				hidden=1;
+			};
+			class PREVIEW_SIDE
+			{
+				type="picture";
+				description="Preview";
+			};
+			class PREVIEW_UNIT
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+			class PREVIEW_SIZE
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+			class PREVIEW_MODIFIER
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+		};
+		create[]=
+		{
+			"%VARIABLE_NAME = ([""%VARIABLE_NAME"",%NAME,%TEXT,%MARKER_TYPE,"""",%COLOR,[%A, %B],%ANGLE,%POSITION,%CONDITION,%PREVIEW_SIDE,%PREVIEW_UNIT,%PREVIEW_SIZE,%PREVIEW_MODIFIER,[%SIDE_POSITION,%SIDE_DOWN],%SIDE_SCALE,[%SIZE_POSITION,%SIZE_DOWN],%SIZE_SCALE,[%UNIT_POSITION,%UNIT_DOWN],%UNIT_SCALE,[%MODIFIER_POSITION,%MODIFIER_DOWN],%MODIFIER_SCALE,%AUTOSCALE,1] + [""%PARENT""]) call fn_vbs_editor_marker_tactical_create;"
+		};
+		update[]=
+		{
+			"[%NAME,%TEXT,%MARKER_TYPE,"""",%COLOR,[%A, %B],%ANGLE,%POSITION,%CONDITION,%PREVIEW_SIDE,%PREVIEW_UNIT,%PREVIEW_SIZE,%PREVIEW_MODIFIER,[%SIDE_POSITION,%SIDE_DOWN],%SIDE_SCALE,[%SIZE_POSITION,%SIZE_DOWN],%SIZE_SCALE,[%UNIT_POSITION,%UNIT_DOWN],%UNIT_SCALE,[%MODIFIER_POSITION,%MODIFIER_DOWN],%MODIFIER_SCALE,""%PARENT"",""%VARIABLE_NAME"",%AUTOSCALE,%ALPHA] call fn_vbs_editor_marker_tactical_update;"
+		};
+		execDrawMap="false";
+	};
+};
+class _unit_15
+{
+	objectType="unit";
+	height=-2.822876e-06;
+	class Arguments
+	{
+		OME_ID="5208";
+		NAME="invisibleCam";
+		SIDE="civ";
+		TYPE="vbs2_invisible_man_freeCamera";
+		INIT="this moveInCargo TESTMOBSQUAD";
+		PLAYABLE="true";
+		POSITION="[2292.40869, 2670.83313, 20.69625]";
+		COLOR="[0.501951992511749,0.999982476234436,0.501951992511749]";
+		DISPLAY_NAME="(PL) (invisibleCam) Invisible spectator (free camera)";
+		DISPLAY_NAME_TREE="(PL) (invisibleCam) Invisible spectator (free camera)";
+		TASK_CONTROLAI="";
+	};
+};
+class _unit_11
+{
+	objectType="unit";
+	height=0.19315417;
+	class Arguments
+	{
+		OME_ID="5212";
+		DESCRIPTION="Technical - PKM / Datsun pickup, white, red stripe Gunner";
+		SIDE="EAST";
+		TYPE="vbs2_iq_insurg_03_akm";
+		SPECIAL="CARGO";
+		PLAYABLE="true";
+		AZIMUT="-2.817";
+		POSITION="[3290.51495, 2761.98739, 24.19324]";
+		COLOR="[0.999982476234436,0.999982476234436,0]";
+		COMMANDER="";
+		DRIVER="";
+		GUNNER="_vehicle_4";
+		GUNNER_TURRET="[0]";
+		DISPLAY_NAME="(PL) Technical - PKM / Datsun pickup, white, red stripe Gunner";
+		DISPLAY_NAME_TREE="(PL) Technical - PKM / Datsun pickup, white, red stripe Gunner";
+		PARENT="_group_2";
+	};
+};
+class _unit_16
+{
+	objectType="unit";
+	height=-9.1952516e-06;
+	class Arguments
+	{
+		OME_ID="5217";
+		DESCRIPTION="RQ-7 Shadow Pilot";
+		SIDE="WEST";
+		TYPE="vbs2_invisible_man_west";
+		SPECIAL="CARGO";
+		POSITION="[2539.14674, 2414.94352, 13.63458]";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		COMMANDER="";
+		DRIVER="_vehicle_6";
+		GUNNER="";
+		LEADER[]=
+		{
+			"",
+			""
+		};
+		DISPLAY_NAME="RQ-7 Shadow Pilot";
+		DISPLAY_NAME_TREE="RQ-7 Shadow Pilot";
+		PARENT="";
+	};
+};
+class _unit_17
+{
+	objectType="unit";
+	height=-9.1952516e-06;
+	class Arguments
+	{
+		OME_ID="5221";
+		DESCRIPTION="RQ-7 Shadow Operator";
+		SIDE="WEST";
+		TYPE="vbs2_invisible_man_west";
+		SPECIAL="CARGO";
+		POSITION="[2539.14674, 2414.94352, 13.63458]";
+		COLOR="[0.599989473819733,0.599989473819733,0.999982476234436]";
+		COMMANDER="";
+		DRIVER="";
+		GUNNER="_vehicle_6";
+		GUNNER_TURRET="[0]";
+		LEADER[]=
+		{
+			"",
+			""
+		};
+		DISPLAY_NAME="RQ-7 Shadow Operator";
+		DISPLAY_NAME_TREE="RQ-7 Shadow Operator";
+		PARENT="";
+	};
+};
+class _unit_12
+{
+	objectType="unit";
+	height=0.19315417;
+	class Arguments
+	{
+		OME_ID="5225";
+		DESCRIPTION="Technical - PKM / Datsun pickup, white, red stripe Driver";
+		SIDE="EAST";
+		TYPE="vbs2_iq_insurg_03_akm";
+		SPECIAL="CARGO";
+		PLAYABLE="true";
+		AZIMUT="-2.817";
+		POSITION="[3290.51495, 2761.98739, 24.19324]";
+		COLOR="[0.999982476234436,0.999982476234436,0]";
+		COMMANDER="";
+		DRIVER="_vehicle_4";
+		GUNNER="";
+		LEADER="_unit_11";
+		DISPLAY_NAME="(PL) Technical - PKM / Datsun pickup, white, red stripe Driver";
+		DISPLAY_NAME_TREE="(PL) Technical - PKM / Datsun pickup, white, red stripe Driver";
+		PARENT="_group_2";
+	};
+};
+class _marker_2
+{
+	objectType="marker";
+	height=0.19315417;
+	class Arguments
+	{
+		POSITION="[3290.51495, 2761.98739, 24.19324]";
+		NAME="m2_3";
+		LASTNAME="m2_3";
+		TEXT="1-1-A-1";
+		MARKER_TYPE="TacticalMarker";
+		COLOR="ColorRed";
+		CONDITION="playerSide == resistance";
+		PARENT="_group_2";
+		PARENT_UNIT="_unit_11";
+		DISPLAY_NAME="Marker m2_3 (1-1-A-1)";
+		SIDE="F2";
+		SIZE="M2";
+		MODIFIER="S13";
+		PREVIEW_SIDE="\vbs2\ui\tacticmarkers\data\Frames\Hostile_Surface";
+		PREVIEW_UNIT="\vbs2\ui\tacticmarkers\data\Icons\Blanc";
+		PREVIEW_SIZE="\vbs2\ui\tacticmarkers\data\Modifiers\S_Team";
+		PREVIEW_MODIFIER="\vbs2\ui\tacticmarkers\data\SubRoles\Motorised";
+	};
+	class DynamicArguments
+	{
+		name="TacticalMarker";
+		class Params
+		{
+			class CUSTOM_MARKER
+			{
+				type="config";
+				subtype="CfgMarkers,name";
+				description="Custom Marker";
+				w=0.34;
+				idc=5001;
+				onInit="_control_CUSTOM_MARKER ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_CUSTOM_MARKER');";
+				onChanged="[_map] call compile preprocessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomLBChanged.sqf""";
+			};
+			class CUSTOM_DELETE
+			{
+				type="button";
+				x=0.56;
+				y=0.11;
+				w=0.1;
+				onInit="_control_CUSTOM_DELETE ctrlSetText (localize ""STR_DIK_DELETE""); _control_CUSTOM_DELETE ctrlSetEventHandler [""ButtonClick"",preProcessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomDelete.sqf""]";
+			};
+			class CUSTOM_NAME
+			{
+				type="text";
+				description="Save As";
+				w=0.34;
+				idc=5002;
+				onInit="_control_CUSTOM_NAME ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SAVE_AS');";
+			};
+			class CUSTOM_SAVE
+			{
+				type="button";
+				x=0.56;
+				y=0.14;
+				w=0.1;
+				onInit="_control_CUSTOM_SAVE ctrlSetText (localize ""STR_DISP_ARCMAP_SAVE""); _control_CUSTOM_SAVE ctrlSetEventHandler [""ButtonClick"",preProcessFile ""\vbs2\editor\Data\Scripts\marker\customMarkers\markerUIcustomSave.sqf""]";
+			};
+			class SIDE
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Sides,name";
+				description="Side Icon";
+				default="f1";
+				w=0.25;
+				idc=5026;
+				onInit="_control_SIDE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIDE_ICON_X'); _sel = _control_SIDE lbData lbCurSel _control_SIDE; lbSort _control_SIDE; _was = _sel; for '_i' from 0 to (lbSize _control_SIDE) -1 do {if (_control_SIDE lbData _i == _sel) then {_was = _i;_control_SIDE lbSetCurSel _i}};['addMRK_SIDE', ctrlText _control_NAME != '', 0, 'lb', _control_SIDE,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class SIDE_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="Side Icon";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIDE,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIDE_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIDE,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIDE_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.17;
+				w=0.15000001;
+				idc=5027;
+				onInit="_control_SIDE_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X');";
+				onChanged="[_this,_control_PREVIEW_SIDE,_control_SIDE_POSITION,_control_SIDE_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class UNIT
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Units,name";
+				description="Unit Icon";
+				default="I1";
+				w=0.25;
+				idc=5028;
+				onInit="_control_UNIT ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_UNIT_ICON_X'); _sel = _control_UNIT lbData lbCurSel _control_UNIT; lbSort _control_UNIT; _was = _sel; for '_i' from 0 to (lbSize _control_UNIT) -1 do {if (_control_UNIT lbData _i == _sel) then {_was = _i;_control_UNIT lbSetCurSel _i}};['addMRK_UNIT', ctrlText _control_NAME != '', 0, 'lb', _control_UNIT,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class UNIT_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_UNIT,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class UNIT_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.25999999;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_UNIT,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class UNIT_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.2;
+				w=0.15000001;
+				idc=5029;
+				onInit="_control_UNIT_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_UNIT_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_UNIT_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_UNIT,_control_UNIT_POSITION,_control_UNIT_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class SIZE
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Size,name";
+				description="Size Icon";
+				w=0.25;
+				idc=5030;
+				onInit="_control_SIZE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_ICON_X'); ['addMRK_SIZE', ctrlText _control_NAME != '', 0, 'lb', _control_SIZE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class SIZE_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIZE,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIZE_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.31999999;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_SIZE,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class SIZE_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.23;
+				w=0.15000001;
+				idc=5031;
+				onInit="_control_SIZE_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_SIZE_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_SIZE_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_SIZE,_control_SIZE_POSITION,_control_SIZE_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class MODIFIER
+			{
+				type="configEx";
+				subtype="cfgTacticalSymbols.Modifiers,name";
+				description="Modifier Icon";
+				default="S0";
+				w=0.25;
+				idc=5032;
+				onInit="_control_MODIFIER ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_MODIFIER_ICON_X'); _sel = _control_MODIFIER lbData lbCurSel _control_MODIFIER; lbSort _control_MODIFIER; _was = _sel; for '_i' from 0 to (lbSize _control_MODIFIER) -1 do {if (_control_MODIFIER lbData _i == _sel) then {_was = _i;_control_MODIFIER lbSetCurSel _i}};['addMRK_MODIFIER', ctrlText _control_NAME != '', 0, 'lb', _control_MODIFIER,_was] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="_this call fn_vbs_editor_marker_dlgChanged";
+			};
+			class MODIFIER_POSITION
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_MODIFIER,""X""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class MODIFIER_DOWN
+			{
+				type="number";
+				subtype="range(-0.05, 0.05)";
+				description="str_editor_edobj_param_placeholder";
+				default="0";
+				hidden=1;
+				x=0.36250001;
+				y=0.38;
+				w=0.15000001;
+				onChanged="[_this,_control_PREVIEW_MODIFIER,""Y""] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerPosition.sqf"")";
+			};
+			class MODIFIER_SCALE
+			{
+				type="number";
+				subtype="range(0.5, 1.5)";
+				description="Scale";
+				default="1";
+				x=0.47;
+				y=0.25999999;
+				w=0.15000001;
+				idc=5033;
+				onInit="_control_MODIFIER_SCALE ctrlSetToolTip (localize 'STR_EDITOR_EDOBJ_TOOLTIP_MARKER_SIZE_SLIDER_X'); ['addMRK_MODIFIER_SCALE', ctrlText _control_NAME != '', 0, 'sld', _control_MODIFIER_SCALE] call compile preProcessFile '\vbs2\editor\Data\Scripts\UI\saveLastSelection.sqf';";
+				onChanged="[_this,_control_PREVIEW_MODIFIER,_control_MODIFIER_POSITION,_control_MODIFIER_DOWN] call compile preprocessfile (""\vbs2\editor\Data\Scripts\marker\layerScale.sqf"")";
+			};
+			class PROXY_OFFSET
+			{
+				type="string";
+				default="[0,0,0]";
+				hidden=1;
+			};
+			class PREVIEW_SIDE
+			{
+				type="picture";
+				description="Preview";
+			};
+			class PREVIEW_UNIT
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+			class PREVIEW_SIZE
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+			class PREVIEW_MODIFIER
+			{
+				type="picture";
+				description="str_editor_edobj_param_placeholder";
+				x=0.20999999;
+				y=0.28999999;
+				w=0.15000001;
+				h=0.2;
+			};
+		};
+		create[]=
+		{
+			"%VARIABLE_NAME = ([""%VARIABLE_NAME"",%NAME,%TEXT,%MARKER_TYPE,"""",%COLOR,[%A, %B],%ANGLE,%POSITION,%CONDITION,%PREVIEW_SIDE,%PREVIEW_UNIT,%PREVIEW_SIZE,%PREVIEW_MODIFIER,[%SIDE_POSITION,%SIDE_DOWN],%SIDE_SCALE,[%SIZE_POSITION,%SIZE_DOWN],%SIZE_SCALE,[%UNIT_POSITION,%UNIT_DOWN],%UNIT_SCALE,[%MODIFIER_POSITION,%MODIFIER_DOWN],%MODIFIER_SCALE,%AUTOSCALE,1] + [""%PARENT""]) call fn_vbs_editor_marker_tactical_create;"
+		};
+		update[]=
+		{
+			"[%NAME,%TEXT,%MARKER_TYPE,"""",%COLOR,[%A, %B],%ANGLE,%POSITION,%CONDITION,%PREVIEW_SIDE,%PREVIEW_UNIT,%PREVIEW_SIZE,%PREVIEW_MODIFIER,[%SIDE_POSITION,%SIDE_DOWN],%SIDE_SCALE,[%SIZE_POSITION,%SIZE_DOWN],%SIZE_SCALE,[%UNIT_POSITION,%UNIT_DOWN],%UNIT_SCALE,[%MODIFIER_POSITION,%MODIFIER_DOWN],%MODIFIER_SCALE,""%PARENT"",""%VARIABLE_NAME"",%AUTOSCALE,%ALPHA] call fn_vbs_editor_marker_tactical_update;"
+		};
+		execDrawMap="false";
+	};
+};
+class _unit_18
+{
+	objectType="unit";
+	height=5.958309e-06;
+	class Arguments
+	{
+		OME_ID="5230";
+		NAME="invisBoat";
+		SIDE="civ";
+		TYPE="vbs2_invisible_man_admin";
+		INIT="this moveInCargo BadGuyBoat";
+		PLAYER="Player";
+		PLAYABLE="true";
+		POSITION="[2804.21295, 3531.87607, 0.47099]";
+		COLOR="[0.501951992511749,0.999982476234436,0.501951992511749]";
+		DISPLAY_NAME="(P) (PL) (invisBoat) Invisible spectator (walking)";
+		DISPLAY_NAME_TREE="(P) (PL) (invisBoat) Invisible spectator (walking)";
+		TASK_CONTROLAI="";
+	};
+};
+class _postfix_0
+{
+	objectType="postfix";
+	class Arguments
+	{
+	};
+};
