@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 using C2SIM;
 
 /// <summary>
@@ -29,14 +30,22 @@ class C2SIMConsole : BackgroundService
     /// <summary>
     /// Create a C2SIM console service object
     /// </summary>
-    /// <param name="logger"></param>
+    /// <param name="loggerFactory"></param>
     /// <param name="appLifetime"></param>
     /// <param name="c2SimSDK"></param>
-    public C2SIMConsole(ILogger<C2SIMConsole> logger, IHostApplicationLifetime appLifetime, IC2SIMSDK c2SimSDK)
+    public C2SIMConsole(ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IOptions<C2SIMSDKSettings> options)
     {
-        _logger = logger;
+        _logger = loggerFactory.CreateLogger(this.GetType());
         _appLifetime = appLifetime;
-        _c2SimSDK = c2SimSDK;
+
+        // Create object to interact with C2SIM and subscribe to events of interest
+        _c2SimSDK = new C2SIMSDK(loggerFactory, options);
+        _c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangedReceived;
+        _c2SimSDK.InitializationReceived += C2SimSDK_InitializationReceived;
+        _c2SimSDK.OderReceived += C2SimSDK_OderReceived;
+        _c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
+        _c2SimSDK.C2SIMMessageReceived += C2SimSDK_C2SIMMessageReceived;
+        _c2SimSDK.Error += C2SimSDK_Error;
     }
 
     /// <summary>
@@ -46,13 +55,6 @@ class C2SIMConsole : BackgroundService
     /// <returns></returns>
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        // Subscribe to C2SIM notification (STOMP) events
-        _c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangedReceived;
-        _c2SimSDK.InitializationReceived += C2SimSDK_InitializationReceived;
-        _c2SimSDK.OderReceived += C2SimSDK_OderReceived;
-        _c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
-        _c2SimSDK.Error += C2SimSDK_Error;
-
         // Connect to start receiving notifications
         try
         {
@@ -159,6 +161,14 @@ class C2SIMConsole : BackgroundService
         // 4.8.0.11 that are missing from C2SIM_SMX_LOX_V1.0.1.xsd
         // var body = C2SIMSDK.ToC2SIMObject<C2SIM.CustomSchema.SystemCommandBodyType>(e.Body);
 
+        /// SystemCommandTypeCode main codes:
+        /// - SubmitInitialization - ready to receive Initialization messages - INITIALIZE command was issued
+        /// - StartScenario - ready to receive Order messages - START command was issued
+        /// Other intermediate states:
+        /// - ResetScenario - state becomes UNITIALIZED - RESET command was issued
+        /// - InitializationComplete - state becomes INITIALIZED - SHARE command was issued
+        /// - StopScenario - state reverts to INITIALIZED - STOP command was issued
+
         // Here we just display the xml from string
         Console.WriteLine();
         Console.WriteLine(FormatResponse(e.Body));
@@ -213,6 +223,23 @@ class C2SIMConsole : BackgroundService
         // Here we just display the xml from string
         Console.WriteLine();
         Console.WriteLine(FormatResponse(e.Body));
+        Prompt();
+    }
+
+    /// <summary>
+    /// Any C2SIM message received
+    /// </summary>
+    /// <remarks>
+    /// Includes the more specific Initialization, Order, Reports, as well others any
+    /// other types sent by the server
+    /// </remarks>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    static void C2SimSDK_C2SIMMessageReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
+    {
+        // Display snippet of XML message
+        Console.WriteLine();
+        Console.WriteLine(e.Body);
         Prompt();
     }
 

@@ -46,21 +46,21 @@ public class C2SIMSDK : IC2SIMSDK
     /// <summary>
     /// Construct SDK object from IOptions - configured 
     /// </summary>
-    /// <param name="logger">Logger to use</param>
+    /// <param name="loggerFactory">Logger factory to use</param>
     /// <param name="options">Configuration settings wrapped in IOptions</param>
-    public C2SIMSDK(ILogger<C2SIMSDK> logger, IOptions<C2SIMSDKSettings> options)
-    :this(logger, options.Value)
+    public C2SIMSDK(ILoggerFactory loggerFactory, IOptions<C2SIMSDKSettings> options)
+    :this(loggerFactory, options.Value)
     {
     }
-    
+
     /// <summary>
     /// Construct SDK object
     /// </summary>
-    /// <param name="logger">Logger to use</param>
+    /// <param name="loggerFactory">Logger facrory to use</param>
     /// <param name="settings">Configuration settings</param>
-    public C2SIMSDK(ILogger<C2SIMSDK> logger, C2SIMSDKSettings settings)
+    public C2SIMSDK(ILoggerFactory loggerFactory, C2SIMSDKSettings settings)
     {
-        _logger = logger;
+        _logger = loggerFactory.CreateLogger(this.GetType());
 
         _submitterId = settings.SubmitterId;
         _restUri = new Uri(settings.RestUrl);
@@ -119,6 +119,13 @@ public class C2SIMSDK : IC2SIMSDK
     /// <code>
     /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.CustomSchema.SystemCommandBodyType&gt;(e.Body);
     /// </code>
+    /// SystemCommandTypeCode main codes:
+    /// - SubmitInitialization - ready to receive Initialization messages - INITIALIZE command was issued
+    /// - StartScenario - ready to receive Order messages - START command was issued
+    /// Other intermediate states:
+    /// - ResetScenario - state becomes UNITIALIZED - RESET command was issued
+    /// - InitializationComplete - state becomes INITIALIZED - SHARE command was issued
+    /// - StopScenario - state reverts to INITIALIZED - STOP command was issued
     /// </remarks>
     public event EventHandler<C2SIMNotificationEventParams> StatusChangedReceived;
 
