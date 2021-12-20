@@ -1,5 +1,9 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.5
+* Injecting ILoggerFactory to simplify logger propagation when nested libraries are used
+* Documented Status changed events that signal that the server is waiting for Initialization, or for Orders / Reports
+
 ## Version 1.2.4
 * Improved reporting on connection error
 * Fixed issue with larger message numbers in C2SIM server response object
