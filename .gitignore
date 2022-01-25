@@ -2,3 +2,4 @@
 **/*.ipch
 **/*.pch
 **/*.VC.db
+/Software/Interfaces/SWORD
