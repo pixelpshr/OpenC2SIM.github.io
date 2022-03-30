@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <echo>ANT TASK - copying war to distribution....</echo>
+  <copy flatten="true" todir="/home/bmluser/NetBeansProjects/Server/C2SIMServer/../../distribution" overwrite="true">
+    <fileset dir="/home/bmluser/NetBeansProjects/Server/C2SIMServer">
+      <include name="target/*.war"/>
+    </fileset>
+  </copy>
+</target>
+</project>

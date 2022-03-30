@@ -16,7 +16,6 @@ Adds
 * Folder structure for easier access to current versions of documentation and software (see list below)
 * [.NET SDK / Client Library](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK)
 
-
 ## Content organization
 
 * [Standard](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Standard) - Ontology and schemas
