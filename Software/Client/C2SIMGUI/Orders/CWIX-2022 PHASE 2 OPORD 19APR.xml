@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIM_SMX_LOX_V1.0.2.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<DomainMessageBody>
+<!-- Operations Order Phase II for MSG-201 CWIX 2022 -->
+<OrderBody>
+    <FromSender>00000000-0000-0001-0001-000000000000</FromSender>
+    <ToReceiver>00000000-0007-0001-0000-000000000000</ToReceiver>
+    <IssuedTime>
+        <IsoDateTime>0000-00-00T00:00:00Z</IsoDateTime>
+    </IssuedTime>
+    <OrderID>00000000-0001-0001-1000-100000000000</OrderID>
+    
+    <Task><ManeuverWarfareTask> 
+        <!-- Row53 Move to OP CHICK prior to Phase II -->
+        <Location><GeodeticCoordinate>
+            <Latitude>58.582053</Latitude>
+            <Longitude>16.249418</Longitude>
+        </GeodeticCoordinate></Location>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.673917</Latitude>
+            <Longitude>16.266833</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-1BnCp3</Name>
+        <UUID>00000000-0001-0001-1000-000100000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1113-000000000000</AffectedEntity>   
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1113-000000000000</PerformingEntity>
+        <StartTime>
+            <SimulationTime><DelayTimeAmount>
+                <IsoTimeDuration>P00Y00M00DT00H00M00S</IsoTimeDuration>
+            </DelayTimeAmount></SimulationTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+             <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask> 
+        <!-- Row 54 Transport 1BnCp3 in 1 CH-47 with 1 AH-6 escort -->
+        <Location><GeodeticCoordinate>
+            <Latitude>58.586727</Latitude>
+            <Longitude>16.249418</Longitude>
+        </GeodeticCoordinate></Location>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.673917</Latitude>
+            <Longitude>16.266833</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-BdeQRF-1</Name>
+        <UUID>00000000-0001-0001-1000-000200000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1113-000000000000</AffectedEntity>   
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1113-000000000000</PerformingEntity>
+        <StartTime>
+            <SimulationTime><DelayTimeAmount>
+                <IsoTimeDuration>P00Y00M00DT00H00M00S</IsoTimeDuration>
+            </DelayTimeAmount></SimulationTime>
+        </StartTime>
+        <TaskActionCode>TRANS</TaskActionCode>
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask>
+        <!-- Row55 Return from OP CHICK to base -->
+        <ActionTemporalRelationship>
+            <ActionTemporalAssociationCode>STREND</ActionTemporalAssociationCode>
+            <TemporalAssociationWithAction>00000000-0001-0001-1000-000200000000</TemporalAssociationWithAction>
+        </ActionTemporalRelationship>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.673917</Latitude>
+            <Longitude>16.266833</Longitude>
+        </GeodeticCoordinate></Location>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.586727</Latitude>
+            <Longitude>16.249418</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-BdeQRF-2</Name>
+        <UUID>00000000-0007-0001-0007-000300000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1411-000000000000</AffectedEntity>
+        <DesiredEffectCode>IDNT</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1411-000000000000</PerformingEntity>
+        <StartTime>
+            <RelativeTime>
+                <DelayTimeAmount>
+                    <IsoTimeDuration>P00Y00M00DT00H00M60S</IsoTimeDuration>
+                </DelayTimeAmount>
+                <EventReference>00000000-0001-0001-1000-000200000000</EventReference>
+                <TimeReferenceCode>IntervalEndTime</TimeReferenceCode>
+            </RelativeTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>     
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+             <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask> 
+        <!-- Row56 Occupy and defend OP CHICK to observe ROUTE ORANGE and Braviken Bay  -->
+        <Location><GeodeticCoordinate>
+            <Latitude>58.673917</Latitude>
+            <Longitude>16.266833</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-1BnCp3</Name>
+        <UUID>00000000-0001-0001-1000-000400000000</UUID>   
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1113-000000000000</PerformingEntity>
+        <StartTime>
+            <SimulationTime><DelayTimeAmount>
+                <IsoTimeDuration>P00Y00M00DT00H00M00S</IsoTimeDuration>
+            </DelayTimeAmount></SimulationTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask> 
+        <!-- Row57 Start Phase II (3BnACoy as Advance Party to FOB Hawk). Initial Position to SP-ORANGE. (Distance 18 KM) -->
+        <Location><GeodeticCoordinate>
+            <Latitude>58.637863</Latitude>
+            <Longitude>16.162447</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-3BnACoy-1</Name>
+        <UUID>00000000-0001-0001-1000-000500000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1310-000000000000</AffectedEntity>   
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1310-000000000000</PerformingEntity>
+        <StartTime>
+            <SimulationTime><DelayTimeAmount>
+                <IsoTimeDuration>P00Y00M00DT00H00M00S</IsoTimeDuration>
+            </DelayTimeAmount></SimulationTime>
+        </StartTime>
+        <TaskActionCode>DEFEND</TaskActionCode>
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask> 
+        <!-- Row58 Establish ambush site vic 58.677858,16.271561 -->
+        <Location><GeodeticCoordinate>
+            <Latitude>58.66513</Latitude>
+            <Longitude>16.312227</Longitude>
+        </GeodeticCoordinate></Location>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.677858</Latitude>
+            <Longitude>16.271561</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-Kroc-1</Name>
+        <UUID>00000000-0002-0002-1000-000100000000</UUID>
+        <AffectedEntity>00000000-0002-0007-1004-000000000000</AffectedEntity>   
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0002-0007-1004-000000000000</PerformingEntity>
+        <StartTime>
+            <SimulationTime><DelayTimeAmount>
+                <IsoTimeDuration>P00Y00M00DT00H00M00S</IsoTimeDuration>
+            </DelayTimeAmount></SimulationTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEFree</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask>
+        <!-- Row59 Move from SP-ORANGE along Route ORANGE -->
+        <ActionTemporalRelationship>
+            <ActionTemporalAssociationCode>STREND</ActionTemporalAssociationCode>
+            <TemporalAssociationWithAction>00000000-0001-0001-1000-000500000000</TemporalAssociationWithAction>
+        </ActionTemporalRelationship>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.637863</Latitude>
+            <Longitude>16.162447</Longitude>
+        </GeodeticCoordinate></Location>
+        <MapGraphicID>00000000-0001-0001-1000-000000000002</MapGraphicID>
+        <Name>Move-3BnACoy-2</Name>
+        <UUID>00000000-0001-0001-1000-000600000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1310-000000000000</AffectedEntity>
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1310-000000000000</PerformingEntity>
+        <StartTime>
+            <RelativeTime>
+                <DelayTimeAmount>
+                    <IsoTimeDuration>P00Y00M00DT00H00M60S</IsoTimeDuration>
+                </DelayTimeAmount>
+                <EventReference>00000000-0001-0001-1000-000500000000</EventReference>
+                <TimeReferenceCode>IntervalEndTime</TimeReferenceCode>
+            </RelativeTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>     
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+    <Task><ManeuverWarfareTask>
+        <!-- Row60 Move from RP-ORANGE to FOB HAWK (10 KM) -->
+        <ActionTemporalRelationship>
+            <ActionTemporalAssociationCode>STREND</ActionTemporalAssociationCode>
+            <TemporalAssociationWithAction>00000000-0001-0001-1000-000600000000</TemporalAssociationWithAction>
+        </ActionTemporalRelationship>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.745235</Latitude>
+            <Longitude>16.939855</Longitude>
+        </GeodeticCoordinate></Location>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.734342</Latitude>
+            <Longitude>17.001257</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-3BnACoy-3</Name>
+        <UUID>00000000-0001-0001-1000-000700000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1310-000000000000</AffectedEntity>
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1310-000000000000</PerformingEntity>
+        <StartTime>
+            <RelativeTime>
+                <DelayTimeAmount>
+                    <IsoTimeDuration>P00Y00M00DT00H00M60S</IsoTimeDuration>
+                </DelayTimeAmount>
+                <EventReference>00000000-0001-0001-1000-000600000000</EventReference>
+                <TimeReferenceCode>IntervalEndTime</TimeReferenceCode>
+            </RelativeTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>     
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+    
+</OrderBody>
+</DomainMessageBody>
+</MessageBody>
+

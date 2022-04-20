@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import edu.gmu.netlab.C2SIMGUI.IconType;
 
 /**
  * parses C2SIMInitializationBody and saves results in this class
@@ -415,6 +416,7 @@ public class MilOrg {
                 if(uuid.length() > 0 && name.length() > 0 && hostility.length() > 0 &&
                     latitude.length() > 0 && longitude.length() > 0)
                     bml.drawLocation(null, null, null, -2, -2, milOrg);
+                bml.listAddIconUuid(milOrg.uuid,latitude,longitude,IconType.INITIALIZE);   
                 entityCount++;
             
             }// end else/if(startPhysicalEntity > 0)

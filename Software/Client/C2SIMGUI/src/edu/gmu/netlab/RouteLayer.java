@@ -57,6 +57,8 @@ import java.awt.BasicStroke;
 
 import java.util.HashMap;
 
+import edu.gmu.netlab.C2SIMGUI.IconType;
+
 /**
  * The Location Layer implementation. 
  *
@@ -450,7 +452,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
                 observationName = stringArray[i+1];
             if(isPositionReport)
                 if(stringArray[i].equals(bml.c2simReporterWhoTag))
-                    reporterID = stringArray[i+1];
+                    reporterID = stringArray[i+1];   
             if(isObservationReport)
                 if(stringArray[i].equals(bml.c2simObserveeTag))
                     reporterID = stringArray[i+1];
@@ -600,6 +602,9 @@ public class RouteLayer extends Layer implements MapMouseListener {
         if(lastOmGraphicNameAdded.equals(labelName)) {
             if(bml.debugMode)bml.printDebug("removing graphic:" + labelName + "|");
             this.removeGraphic(labelName);
+            bml.listRemoveIconUuid(unitID);        
+            bml.listAddIconUuid(unitID, lat, lon, IconType.REPORT);
+            
            
             // if showing tracks, post the track as
             // a sequence of points connected by lines
@@ -728,8 +733,8 @@ public class RouteLayer extends Layer implements MapMouseListener {
         isControlMeasure[0] = false;
         
         //The parser used for Task does not support parsing
-        // Route withough major changes; so to implement
-        // C2SIM v1.0.1 we use the newer parsing schme from 
+        // Route without major changes; so to implement
+        // C2SIM v1.0.1 we use the newer parsing scheme from 
         // MilOrg class
         //
         // Scan the raw XML for <Entity>...<Route>...<UUID>...
@@ -822,7 +827,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
             if (bml.c2simTagCompare(stringArray[stringArrayIndex],latitudeTag)){
                 taskUnitIDLat[taskIndex] = 
                         stringToFloat(stringArray[stringArrayIndex+1]);
-                if(!foundLat) {// first gep[point in Task
+                if(!foundLat) {// first geo point in Task
                 
                     // this is left for future LOX Control Measure
                     if(isControlMeasure[taskIndex])
@@ -847,7 +852,8 @@ public class RouteLayer extends Layer implements MapMouseListener {
                 foundUnitID = true;
             }
             
-            // look for the Task UUID (there could be more than one UUID in Task; this is the last)
+            // look for the Task UUID (there could be more than one UUID in Task; 
+            // this is the last)
             if (bml.c2simTagCompare(stringArray[stringArrayIndex],"UUID"))
                 taskUuid[taskIndex] = stringArray[stringArrayIndex+1];
             
@@ -855,6 +861,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
             if(stringArrayIndex > tasksStartInStringArray){
                 if(bml.c2simTagCompare(stringArray[stringArrayIndex],"MapGraphicID"))
                     taskMapGraphicID[taskIndex] = stringArray[stringArrayIndex +1];
+                else taskMapGraphicID[taskIndex] = "";
             }
            
             // look for the Task Name (there is more than one Name in Task; this is the last)
@@ -862,7 +869,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
                 taskNames[taskIndex] = stringArray[stringArrayIndex+1];
             }
             
-            // look for predecessor Task = this one will start at its last cooords
+            // look for predecessor Task = this one will start at its last coords
             if(bml.c2simTagCompare(stringArray[stringArrayIndex],"TemporalAssociationWithAction"))
                 prevTaskUuid[taskIndex] = stringArray[stringArrayIndex+1];
 
@@ -951,7 +958,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
         
         // creating a temp array for each graphical location
         // the length of the array will be twice as the number of lat,lon points	
-        // Area : the last lat,lon should be the same lat,lon
+        // Area: the last lat,lon should be the same lat,lon
  
         // generating graphics for each location previously captured
         for (taskIndex=0; taskIndex < numberOfTasks; taskIndex++){
@@ -962,7 +969,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
             // considering whether to use a pre-stored route
             String thisTaskMapGraphicID = taskMapGraphicID[taskIndex];
             int mapGraphicCount = 0;
-            if(taskMapGraphicID[taskIndex] != "") {
+            if(!taskMapGraphicID[taskIndex].equals("")) {
                 physicalRoute = 
                     bml.retrieveRoute(taskMapGraphicID[taskIndex]);
                 if(physicalRoute != null)
@@ -980,14 +987,54 @@ public class RouteLayer extends Layer implements MapMouseListener {
             // get class instance of Unit initial values
             MilOrg milOrg = bml.getUnit(taskUnitID[taskIndex]);
           
-            // to add other shapes here see comparable IBML09 code
-            if(milOrg == null && prevTaskUuid[taskIndex].equals("")){
-                tempArray = new float[tempArraySize];
-                tempArrayIndex = 0;
-            }else{
+            // if there was a predecessor task, take first point
+            // from destination, or endpoint of its route
+            int prevTaskIndex = -1;
+            if(!prevTaskUuid[taskIndex].equals("")){
+                
+                // get the task number for the predecessor
+                for(int i = 0; i < numberOfTasks; ++i){
+                    if(prevTaskUuid[taskIndex].equals(taskUuid[i])){
+                        prevTaskIndex = i;
+                        break;
+                    }
+                }
+            }// start with points from predecessor task
+            System.out.println("&&&&&&&&EXTEND "+prevTaskIndex+""+numberOfTasks+" "+
+ prevTaskUuid[taskIndex]+" "+ taskUuid[taskIndex]+" "+tempArraySize);//debugx
+            if(prevTaskIndex >= 0){
+                // add starting point (two array locations)
+                // if the predecessor task has no MapGraphic route
+                // use last point in the task
                 tempArraySize += 2;
                 tempArray = new float[tempArraySize];
                 tempArrayIndex = 2;
+                endGDC = descArray[taskIndex][2];
+                if(taskMapGraphicID[taskIndex].equals("")){
+                    tempArray[0] = stringToFloat(stringArray[endGDC-2]);
+                    tempArray[1] = stringToFloat(stringArray[endGDC]);
+                } else {
+                    PhysicalRoute physRoute = 
+                        bml.retrieveRoute(taskMapGraphicID[taskIndex]);
+                    if(physRoute == null){ // route not found
+                        tempArray[0] = stringToFloat(stringArray[endGDC-2]);
+                        tempArray[1] = stringToFloat(stringArray[endGDC]);
+                    } else {// task last point from the route
+                        int lastPoint = physRoute.getSize()-1;
+                        tempArray[0] = stringToFloat(physRoute.getLatitude(lastPoint));
+                        tempArray[1] = stringToFloat(physRoute.getLongitude(lastPoint));
+                    }
+                }
+            } else {
+            // to add other shapes here see comparable IBML09 code
+                if(milOrg == null){
+                    tempArray = new float[tempArraySize];
+                    tempArrayIndex = 0;
+                }else{
+                    tempArraySize += 2;
+                    tempArray = new float[tempArraySize];
+                    tempArrayIndex = 2;
+                }
             }
             
             // start tempArray with current position of the Unit
@@ -1150,6 +1197,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
                 }
                 latOpen = taskUnitIDLat[taskIndex];
                 lonOpen = taskUnitIDLon[taskIndex];
+                bml.listAddIconUuid(unitID,latOpen,lonOpen,IconType.ORDER);   
 /* this needs worked to deal with C2SIM Location Reference
    could be  EntityDefinedLocation to a UUID 
    or RelativeLocation offset from another UUID 
@@ -2372,6 +2420,7 @@ String icon2525b(String sbmlUnitID, String unitHostility){
         }
         
         // if in process of getting map coordinates, export the coordinates
+        if(bml.debugMode)bml.printDebug("received mouseclick "+bml.enteringCoords);
         if(bml.enteringCoords && (bml.transferIndex >= bml.coordIndex))return false;
         if(bml.gettingCoords || bml.enteringCoords) {
             LatLonPoint llp = bml.mapBean.getCoordinates(e);

@@ -84,7 +84,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     ItemListener, ActionListener {
     
     // Version
-    public static String version = "2.10.14";
+    public static String version = "2.11.1";
 
 /**
  * BMLC2 GUI (Initially BMLGUI) now C2SIMGUI
@@ -272,7 +272,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     static boolean reportsDupIdAsked = false;
     
     // possible things represented by icons on the map
-    enum IconType {
+    public enum IconType {
         NULL,
         INITIALIZE,
         ORDER,
@@ -331,6 +331,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     static boolean mapMSDL = false;
     static String osName;
     static boolean initializationDone = false;
+    float clickLatitude = 0;
+    float clickLongitude = 0;
     
     // parameters for XML document
     String root = null; // Document Root node
@@ -765,6 +767,82 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     void reportClearAllUnits() {
         reportUnitMap.clear();
     }
+    
+    /**
+     * holds an instance of icon UUID and its (lat,lon)
+     * @author mpullen
+     */
+    private class IconUuidCoords {
+
+       String iconUuid;
+       float iconLat, iconLon;
+       IconType iconType;
+       public IconUuidCoords(String uuid, float lat, float lon, IconType it){
+           iconUuid = uuid;
+           iconLat = lat;
+           iconLon = lon;
+           iconType = it;
+       }
+    }// end class iconCoords
+    
+    /**
+     * holds all reports on the current map in order added
+     */
+    Vector<IconUuidCoords> mapIcons = new Vector<IconUuidCoords>();
+    void listAddIconUuid(String uuid, String lat, String lon, IconType it){
+        listAddIconUuid(uuid, Float.parseFloat(lat), Float.parseFloat(lon), it);
+    }
+    void listAddIconUuid(String uuid, float lat, float lon, IconType it){
+        mapIcons.add(new IconUuidCoords(uuid, lat, lon, it));
+    }
+    
+    /**
+     * returns UUID for icon on map geometrically closest to args
+     * rather than take square root we compare square of distance
+     */
+    String mapGetClosestIconUuid(float testLat, float testLon){
+        String returnUuid = "";
+        float closestLat = 1000000f, closestLon = 1000000f;// larger than any GDC
+        float distanceSquared = Float.POSITIVE_INFINITY; 
+        for (IconUuidCoords iconCoords : mapIcons) {
+            float deltaLat = iconCoords.iconLat - testLat;
+            float deltaLon = iconCoords.iconLon - testLon;
+            float testDistance = deltaLat*deltaLat + deltaLon*deltaLon;
+            if(distanceSquared > testDistance) {
+                distanceSquared = testDistance;
+                closestLat = testLat;
+                closestLon = testLon;
+                returnUuid = iconCoords.iconUuid;
+            }
+        }
+        return returnUuid;
+    }
+    
+    /**
+     * clear lists
+     */
+    void iconUuidListClearAllText() {mapIcons.removeAllElements();}
+    void iconUuidListClearReports()
+            {for (int i=0; i<mapIcons.size(); ++i)
+        if(mapIcons.elementAt(i).iconType==IconType.REPORT)
+            mapIcons.removeElementAt(i);
+    }// end     void iconUuidListClearReports()
+
+    void iconUuidListClearOrders()
+            {for (int i=0; i<mapIcons.size(); ++i)
+        if(mapIcons.elementAt(i).iconType==IconType.ORDER)
+            mapIcons.removeElementAt(i);
+    }//end iconUuidListClearOrders()
+    void iconUuidListClearInit() 
+    {for (int i=0; i<mapIcons.size(); ++i)
+        if(mapIcons.elementAt(i).iconType==IconType.INITIALIZE)
+            mapIcons.removeElementAt(i);
+    }// end iconUuidListClearInit()
+    void listRemoveIconUuid(String unitID)    
+    {for (int i=0; i<mapIcons.size(); ++i)
+        if(mapIcons.elementAt(i).iconUuid.equals(unitID))
+            mapIcons.removeElementAt(i);
+    }// end listRemoveIconUuid()
     
     /**
      * holds an instance of report XML and its (lat, lon)
@@ -1336,6 +1414,9 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
      * imports value of coordinates after mouse click in RouteLayer
      */
     void setCoordinates(float lat, float lon){
+        if(debugMode)printDebug("mouseclick setCoordinates:"+lat+"/"+lon);
+        clickLatitude = lat;
+        clickLongitude = lon;
         getLatitude.setText("LAT:" + floatTo3SD(lat));
         getLongitude.setText("LON:" + floatTo3SD(lon));
         getCoordsButton.setText("GET COORDS FROM MAP");
@@ -1408,6 +1489,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             initRemoveButton.setVisible(false);
             initIconsOnScreen = false;
             removeLayersWithIconType(IconType.INITIALIZE);
+            iconUuidListClearInit();
             lastUnitID = "";
             lastLatitude = "";
             lastLongitude = "";
@@ -1418,6 +1500,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             orderRemoveButton.setVisible(false);
             orderIconsOnScreen = false;
             removeLayersWithIconType(IconType.ORDER);
+            iconUuidListClearOrders();
             lastUnitID = "";
             lastLatitude = "";
             lastLongitude = "";
@@ -1428,6 +1511,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             reportRemoveButton.setVisible(false);
             reportIconsOnScreen = false;
             removeLayersWithIconType(IconType.REPORT);
+            iconUuidListClearReports();
             lastUnitID = "";
             lastLatitude = "";
             lastLongitude = "";
@@ -1598,6 +1682,10 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     JMenu pushMenu  = new JMenu("Push");
     JMenu openPushMenu = new JMenu("Open+Push");
     JMenu controlMenu = new JMenu("Server Control");
+    JMenu magicMoveMenu = new JMenu("Magic Move");
+    JMenu timeMultMenu = new JMenu("Sim & Play Time Multiple");
+    JMenu serverRecordMenu = new JMenu("Server Recording");
+    JMenu serverPlaybackMenu = new JMenu("Server Playback");
     JMenu saveJaxMenu  = new JMenu("Save JAXFront");
     JMenu pushJaxMenu = new JMenu("Push JAXFront");
     
@@ -1761,6 +1849,29 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         final JMenuItem pushResetC2SIM = new JMenuItem("Push server control RESET");
         final JMenuItem pushStopResetInitC2SIM = new JMenuItem("Push server control STOP + RESET + INITIALIZE");
         
+        // Magic Move
+        final JMenuItem getMagicMove = new JMenuItem("Get Magic Move input");
+        
+        // Simulation & Playback Realtime Multiple
+        final JMenuItem getSimTimeMult = new JMenuItem("Get simulation realtime multiple");
+        final JMenuItem setSimTimeMult = new JMenuItem("Set simulation realtime multiple");
+        final JMenuItem getPlayTimeMult = new JMenuItem("Get server playback realtime multiple");
+        final JMenuItem setPlayTimeMult = new JMenuItem("Set server playback realtime multiple");
+
+        // Server Recording Control
+        final JMenuItem pushServerRecStart = new JMenuItem("Push server recording start");
+        final JMenuItem pushServerRecPause = new JMenuItem("Push server recording pause");
+        final JMenuItem pushServerRecRestart = new JMenuItem("Push server recording restart");
+        final JMenuItem pushServerRecStop = new JMenuItem("Push server recording stop");
+        final JMenuItem pushServerRecGetStat = new JMenuItem("Push server recording get status");
+        
+        // Server playback control
+        final JMenuItem pushServerPlayStart = new JMenuItem("Push server playback start");
+        final JMenuItem pushServerPlayPause = new JMenuItem("Push server playback pause");
+        final JMenuItem pushServerPlayRestart = new JMenuItem("Push server playback restart");
+        final JMenuItem pushServerPlayStop = new JMenuItem("Push server playback stop");
+        final JMenuItem pushServerPlayGetStat = new JMenuItem("Push server playback get status");
+        
         JMenuItem openReport = new JMenuItem("Open CBML Light Report");
         //JMenuItem openReportWSById  = new JMenuItem("By Report ID");
         //JMenuItem openReportWSList  = new JMenuItem("From ID List");
@@ -1782,7 +1893,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         mainMenu.add(openMenu);
         mainMenu.add(pushMenu);
         mainMenu.add(openPushMenu);
-         mainMenu.add(saveJaxMenu);
+        mainMenu.add(saveJaxMenu);
         mainMenu.add(pushJaxMenu);
         //mainMenu.addSeparator();
 
@@ -1854,6 +1965,29 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         pushJaxMenu.add(pushJaxFrontC2SIMOrder);
         pushJaxMenu.add(pushJaxFrontC2SIMReport);
         
+        // Magic Move Menu
+        magicMoveMenu.add(getMagicMove);
+        
+        // Time menu
+        timeMultMenu.add(getSimTimeMult);
+        timeMultMenu.add(setSimTimeMult);
+        timeMultMenu.add(getPlayTimeMult);
+        timeMultMenu.add(setPlayTimeMult);
+        
+        // Server record menu
+        serverRecordMenu.add(pushServerRecStart);
+        serverRecordMenu.add(pushServerRecPause);
+        serverRecordMenu.add(pushServerRecRestart);
+        serverRecordMenu.add(pushServerRecStop);
+        serverRecordMenu.add(pushServerRecGetStat);
+        
+        // Server playback menu
+        serverPlaybackMenu.add(pushServerPlayStart);
+        serverPlaybackMenu.add(pushServerPlayPause);
+        serverPlaybackMenu.add(pushServerPlayRestart);
+        serverPlaybackMenu.add(pushServerPlayStop);
+        serverPlaybackMenu.add(pushServerPlayGetStat);
+        
         // server controls
         mainMenu.addSeparator();
         controlMenu.add(pushShareStartC2SIM);
@@ -1864,10 +1998,21 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         controlMenu.add(pushStopC2SIM);
         controlMenu.add(pushResetC2SIM);
         controlMenu.add(pushStopResetInitC2SIM);
+        
+        // Simulation time multiple
 
         // use separators to distinguish control functions
+        mainMenu.addSeparator(); 
         mainMenu.addSeparator();
         mainMenu.add(controlMenu);
+        mainMenu.addSeparator();
+        mainMenu.add(magicMoveMenu);
+        mainMenu.addSeparator();
+        mainMenu.add(timeMultMenu);
+        mainMenu.addSeparator();
+        mainMenu.add(serverRecordMenu);
+        mainMenu.addSeparator();
+        mainMenu.add(serverPlaybackMenu);
         mainMenu.addSeparator();
 
         //newMenu.add(newDocument);   needs work
@@ -1962,6 +2107,121 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                     if(serverSuccess(initC2SIM.pushResetC2SIM()))
                         initC2SIM.pushInitializeC2SIM();;
             } 
+        });
+        
+        // Sim time multiple & magic move controls
+        //*******************************TODO
+        getMagicMove.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Input Magic Move data..................");
+                (new Thread(new magicMoveInput())).start();
+            }
+        });
+        getSimTimeMult.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server input GETSIMMULT..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.getSimTimeMult();
+            }
+        });
+        setSimTimeMult.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server input SETSIMMULT..................");
+                String parm = inputTimeMultPopup("Enter integer realtime multiple");             
+                if(!parm.equals("0")){
+                    InitC2SIM initC2SIM = new InitC2SIM();
+                    initC2SIM.pushC2simServerInput("SETSIMMULT",parm,"","");
+                }
+            }
+        });
+        getPlayTimeMult.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server input GETSIMMULT.................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.getPlayTimeMult();
+            }
+        });
+        setPlayTimeMult.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server input SETPLAYMULT..................");
+                String parm = inputTimeMultPopup("Enter integer realtime multiple");
+                if(!parm.equals("0")){
+                    InitC2SIM initC2SIM = new InitC2SIM();
+                    initC2SIM.pushC2simServerInput("SETPLAYMULT",parm,"","");
+                }
+            }
+        });
+        pushServerRecStart.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server recording START..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerRecStart();
+            }
+        });
+        pushServerRecPause.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server recording PAUSE..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerRecPause();
+            }
+        });
+        pushServerRecRestart.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server recording RESTART..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerRecRestart();
+            }
+        });
+        pushServerRecStop.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server recording STOP..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerRecStop();
+            }
+        });   
+        pushServerRecGetStat.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server recording GET STATUS..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerRecStop();
+            }
+        }); 
+        
+        // Server playback controls
+        pushServerPlayStart.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server playback START..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerPlayStart();
+            }
+        });
+        pushServerPlayPause.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server playback PAUSE..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerPlayPause();
+            }
+        });
+        pushServerPlayRestart.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server playback RESTART..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerPlayRestart();
+            }
+        });
+        pushServerPlayStop.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server playback STOP..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerPlayStop();
+            }
+        });
+        pushServerPlayGetStat.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push server playback GET STATUS..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushServerPlayGetStatus();
+            }
         });
 
         // MSDL Menu actions
@@ -3506,7 +3766,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 int breakPoint2 = backPart.substring(breakPoint1).indexOf("Longitude>");
                 breakPoint2 += tagLength;
                 
-                // move procced part to frrontPart then strip it off of backPart
+                // move beginning part to frontPart then strip it off of backPart
                 int breakPoint = breakPoint1 + breakPoint2;
                 frontPart += backPart.substring(0,breakPoint);
                 backPart = backPart.substring(breakPoint);
@@ -3717,7 +3977,21 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         return (answer == JOptionPane.OK_OPTION);
         
     }// end oKCancelPopup
-            
+    
+    /**
+     * creates input dialog popup
+     * returns new value of time mult
+     * returns zero if user selects cancel
+     */
+    String inputTimeMultPopup(String popupText){
+        
+        if(runningServerTest)return "0";
+        String answer = JOptionPane.showInputDialog(  
+                    popupText, 
+                    "0");
+        return answer;
+        
+    }// end inputTimeMultPopup   
 	
     /**
      * draws graphics from an OPORD
@@ -4314,7 +4588,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         
         // advise user to restart
         showInfoPopup( 
-            "restart C2SImGUI to use changed configuration values", 
+            "restart C2SIMGUI to use changed configuration values", 
             "Updated COnfiguration Data");
     }
 	
@@ -4400,57 +4674,61 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 w3cReportInfoDoc);
             askAboutCheckingID = askAboutCheckDuplicateID.equalsIgnoreCase("1");
 
-            if(debugMode)printDebug(" submitterID =" + submitterID);
-            if(debugMode)printDebug(" serverName =" + serverName);
-            if(debugMode)printDebug(" serverPassword =" + serverPassword);
-            if(debugMode)printDebug(" C2SIM protocol version =" + c2simProtocolVersion);
-            if(debugMode)printDebug(" Report BML Type =" + reportBMLType);
-            if(debugMode)printDebug(" Order BML Type =" + orderBMLType);
-            if(debugMode)printDebug(" MapScale =" + mapScale);
-            if(debugMode)printDebug(" StartSubscribed = " + startSubscribed);
-            if(debugMode)printDebug(" CBML namespace =" + cbmlns);
-            if(debugMode)printDebug(" IBML namespace =" + ibmlns);
-            if(debugMode)printDebug(" C2SIM namespace =" + c2simns);
-            if(debugMode)printDebug(" lateJoinerMode =" + lateJoinerMode);
-            if(debugMode)printDebug(" whereXPath =" + whereXPathTag);
-            if(debugMode)printDebug(" initMapLat =" + initMapLat);
-            if(debugMode)printDebug(" initMapLon =" + initMapLon);	
-            if(debugMode)printDebug(" reportOrderScale =" + reportOrderScale);
-            if(debugMode)printDebug(" autoDisplayInit =" + autoDisplayInit);
-            if(debugMode)printDebug(" autoDisplayReportsXX =" + autoDisplayReports);
-            if(debugMode)printDebug(" autoDisplayOrders =" + autoDisplayOrders);
-            if(debugMode)printDebug(" displayBluePosition =" + displayBluePosition);
-            if(debugMode)printDebug(" displayBlueObservation =" + displayBlueObservation);
-            if(debugMode)printDebug(" displayRedPosition =" + displayRedPosition);
-            if(debugMode)printDebug(" displayRedObservation =" + displayRedObservation);
-            if(debugMode)printDebug(" displayOtherPosition =" + displayOtherPosition);
-            if(debugMode)printDebug(" displayOtherObservation =" + displayOtherObservation);
-            if(debugMode)printDebug(" startWithListeningOn =" + startWithListeningOn);
-            if(debugMode)printDebug(" recordingProtocol =" + recordingProtocol);
-            if(debugMode)printDebug(" playbackProtocol =" + playbackProtocol);
-            if(debugMode)printDebug(" playbackSubmitter =" + playbackSubmitter);
-            if(debugMode)printDebug(" playbackTimescale =" + playbackTimescale);
-            if(debugMode)printDebug(" playbackTimelimit =" +  playbackTimelimit);
-            if(debugMode)printDebug(" SchemaLocation =" + schemaFolderLocation);
-            if(debugMode)printDebug(" cbmlOrderSchemaLocation =" + cbmlOrderSchemaLocation);
-            if(debugMode)printDebug(" cbmlReportSchemaLocation =" + cbmlReportSchemaLocation);
-            if(debugMode)printDebug(" ibml09OrderSchemaLocation =" + ibml09OrderSchemaLocation);
-            if(debugMode)printDebug(" ibml09ReportSchemaLocation =" + ibml09ReportSchemaLocation);
-            if(debugMode)printDebug(" Order ID path =" + orderIDXPath);
-            if(debugMode)printDebug(" Locationpath =" + whereXPathTag);
-            if(debugMode)printDebug(" LocationRouteWhereXPATH ="+routeXPathTag);
-            if(debugMode)printDebug(" xuiFolderLocation ="+xuiFolderLocation);
-            if(debugMode)printDebug(" warnOnReportSeq ="+warnOnReportSeq);
-            if(debugMode)printDebug(" latlonParentTag =" + latlonParentTag);
-            if(debugMode)printDebug(" latTag =" + latTag); 
-            if(debugMode)printDebug(" lonTag =" + lonTag);
-            if(debugMode)printDebug(" whereIdLabelTag =" + whereIdLabelTag);
-            if(debugMode)printDebug(" whereShapeTypeTag =" + whereShapeTypeTag);
-            if(debugMode)printDebug(" routeIdLabelTag ="+ routeIdLabelTag);
-            if(debugMode)printDebug(" routeFromViaToTag =" + routeFromViaToTag);
-            if(debugMode)printDebug(" blueSideName =" + blueSideName);
-            if(debugMode)printDebug(" checkForDuplicateID =" + checkForDuplicateID);
-            if(debugMode)printDebug(" askAboutCheckDuplicateID =" + askAboutCheckDuplicateID);
+            // if debugging, print the parameters
+            if(debugMode){
+                printDebug(" submitterID =" + submitterID);
+                printDebug(" serverName =" + serverName);
+                printDebug(" serverPassword =" + serverPassword);
+                printDebug(" C2SIM protocol version =" + c2simProtocolVersion);
+                printDebug(" Report BML Type =" + reportBMLType);
+                printDebug(" Order BML Type =" + orderBMLType);
+                printDebug(" MapScale =" + mapScale);
+                printDebug(" StartSubscribed = " + startSubscribed);
+                printDebug(" CBML namespace =" + cbmlns);
+                printDebug(" IBML namespace =" + ibmlns);
+                printDebug(" C2SIM namespace =" + c2simns);
+                printDebug(" lateJoinerMode =" + lateJoinerMode);
+                printDebug(" whereXPath =" + whereXPathTag);
+                printDebug(" initMapLat =" + initMapLat);
+                printDebug(" initMapLon =" + initMapLon);
+                printDebug(" reportOrderScale =" + reportOrderScale);
+                printDebug(" autoDisplayInit =" + autoDisplayInit);
+                printDebug(" autoDisplayReportsXX =" + autoDisplayReports);
+                printDebug(" autoDisplayOrders =" + autoDisplayOrders);
+                printDebug(" displayBluePosition =" + displayBluePosition);
+                printDebug(" displayBlueObservation =" + displayBlueObservation);
+                printDebug(" displayRedPosition =" + displayRedPosition);
+                printDebug(" displayRedObservation =" + displayRedObservation);
+                printDebug(" displayOtherPosition =" + displayOtherPosition);
+                printDebug(" displayOtherObservation =" + displayOtherObservation);
+                printDebug(" startWithListeningOn =" + startWithListeningOn);
+                printDebug(" recordingProtocol =" + recordingProtocol);
+                printDebug(" playbackProtocol =" + playbackProtocol);
+                printDebug(" playbackSubmitter =" + playbackSubmitter);
+                printDebug(" playbackTimescale =" + playbackTimescale);
+                printDebug(" playbackTimelimit =" +  playbackTimelimit);
+                printDebug(" SchemaLocation =" + schemaFolderLocation);
+                printDebug(" cbmlOrderSchemaLocation =" + cbmlOrderSchemaLocation);
+                printDebug(" cbmlReportSchemaLocation =" + cbmlReportSchemaLocation);
+                printDebug(" ibml09OrderSchemaLocation =" + ibml09OrderSchemaLocation);
+                printDebug(" ibml09ReportSchemaLocation =" + ibml09ReportSchemaLocation);
+                printDebug(" Order ID path =" + orderIDXPath);
+                printDebug(" Locationpath =" + whereXPathTag);
+                printDebug(" LocationRouteWhereXPATH ="+routeXPathTag);
+                printDebug(" xuiFolderLocation ="+xuiFolderLocation);
+                printDebug(" warnOnReportSeq ="+warnOnReportSeq);
+                printDebug(" latlonParentTag =" + latlonParentTag);
+                printDebug(" latTag =" + latTag);
+                printDebug(" lonTag =" + lonTag);
+                printDebug(" whereIdLabelTag =" + whereIdLabelTag);
+                printDebug(" whereShapeTypeTag =" + whereShapeTypeTag);
+                printDebug(" routeIdLabelTag ="+ routeIdLabelTag);
+                printDebug(" routeFromViaToTag =" + routeFromViaToTag);
+                printDebug(" blueSideName =" + blueSideName);
+                printDebug(" checkForDuplicateID =" + checkForDuplicateID);
+                printDebug(" askAboutCheckDuplicateID =" + askAboutCheckDuplicateID);
+            }// end if(debugMode)
+           
         } catch (XPathExpressionException e1) {
             e1.printStackTrace();
         }	
@@ -4569,7 +4847,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     }// end getXMlLesJaxFront()
     
     /**
-     * performs one of the three language variant comparisons
+     * within one of the three language variant comparisons
      * (with or without a namespace prefix)
      * returns true if parms are equal under the variant
      */
@@ -4629,6 +4907,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         String lastIdFound = "";
         int arrayEnd = currentXmlDataArray.length;
         for(int xmlIndex=0; xmlIndex < arrayEnd; ++xmlIndex){
+            if(debugMode)printDebug("xmlIndex:"+xmlIndex+
+                " "+currentXmlDataArray[xmlIndex]);
             if(foundAnItem){    
                 // we have found the Item tag we seek, or
                 // and the end of the currentXmlDataArray
@@ -4661,8 +4941,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                         // check that the last ID is not already in HashMap
                         IdPosted layerIdPosted = layerGetItemId(lastIdFound);
                         if(debugMode){
-                            printDebug("itemIdNotUnique lastIdFound:" + lastIdFound);
                             if(layerIdPosted != null)printDebug(
+                            "itemIdNotUnique lastIdFound:" + lastIdFound +      
                             " layerIdPosted.id:" + layerIdPosted.id +
                             " layerIdPosted.sentFrom:" + layerIdPosted.sentFromThisGui +
                             " from this Gui:" + fromThisGui);
@@ -4764,7 +5044,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         //if(debugMode)printDebug("drawFroMXML protocolVersion:"+protocolVersion);
         //if(debugMode)printDebug("drawFroMXML isFromThisGui:"+isFromThisGui);
         
-        // XML input parsed according yo document type
+        // XML input parsed according to document type
         String[] currentXmlDataArray = null;
         
         // if the xmlString is empty read the file into it
@@ -4781,7 +5061,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
           xmlString = readAnXmlFile(filename);
         if(debugMode)printDebug("FILENAME:" + filename);
         if(debugMode)printDebug("NS PREFIX:" + nsPrefix);
-        if(debugMode)printDebug("XML:" + xmlString);
+       // if(debugMode)printDebug("XML:" + xmlString);
         
         // if there is no initialization data, ask 
         // user if they want to load initialization
@@ -5178,6 +5458,58 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 JOptionPane.ERROR_MESSAGE);
         
     }// end showErrorPopup()
+    
+    /**
+    *   collects on Magic Move input, in thread so processing continues
+    */
+    private class magicMoveInput extends Thread{
+        public void run() {
+            // get UUID of  object
+            String uuid = inputTimeMultPopup(
+                "Enter UUID to move (or 0 to get UUID by clicking icon");
+            if(uuid.equals("0")){
+                // wait for icon lat/lon from map click
+                gettingCoords = true;
+                try{
+                    while(gettingCoords)
+                        Thread.sleep(100);
+                }catch(InterruptedException ie){
+                    clickLatitude = 1000;
+                    clickLongitude = 1000;
+                    gettingCoords = false;
+                }
+            }
+            if(clickLatitude < 999 && clickLongitude < 999){
+                uuid = mapGetClosestIconUuid(clickLatitude,clickLongitude);
+                if(uuid.equals("0")){
+                    showInfoPopup("no UUID found - try again", "Magic Move");
+                } else {
+                    // tell user to click on coords
+                    showInfoPopup("click at new coords", "Magic Move");
+
+                    // wait for lat/lon from map click
+                    gettingCoords = true;
+                    try{
+                        while(gettingCoords)
+                        Thread.sleep(100);
+                    }catch(InterruptedException ie){
+                        clickLatitude = 1000;
+                        clickLongitude = 1000;
+                        gettingCoords = false;
+                    }
+                }                         
+                // setCoordinates(float lat, float lon)
+                if(clickLatitude < 999 && clickLongitude < 999){
+                    String lat = floatTo3SD(clickLatitude);
+                    String lon = floatTo3SD(clickLongitude);
+
+                    // send input to server
+                    InitC2SIM initC2SIM = new InitC2SIM();
+                    initC2SIM.pushC2simServerInput("MAGIC",uuid,lat,lon);
+                }
+            }
+        }// end run()
+    } // end class magicMoveInput
     
     /**
      * displays popup and prints info message 

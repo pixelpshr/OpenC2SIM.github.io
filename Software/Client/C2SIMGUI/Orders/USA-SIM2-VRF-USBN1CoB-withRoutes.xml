@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <c2s:MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 file:../Schema/C2SIM/C2SIM_SMX_LOX_ASX_v1.0.1.xsd"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIM_SMX_LOX_ASX_v1.0.1_Order_flat.xsd"
  xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
  xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
 <!-- NPS-VRForces order template for FMN demo -->

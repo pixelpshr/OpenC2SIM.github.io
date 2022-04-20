@@ -172,12 +172,12 @@ public class InitC2SIM {
     }//end pushInitC2SIM()
         
     /**
-     * send C2SIM SHARE (do at end of Initialize)
+     * send C2SIM command e.g. SHARE (do at end of Initialize)
      */
     String pushC2simServerControl(String command)
     {
         // open connection to REST server
-        if(bml.debugMode)bml.printDebug("server control command:" + command);
+        if(bml.debugMode)bml.printDebug("server control command:");
         if(bml.submitterID.length() == 0) {
             bml.showInfoPopup( 
                 "cannot push C2SIM server control - submitter ID required", 
@@ -208,7 +208,7 @@ public class InitC2SIM {
         String pushShareResponseString = "";
         try{
             pushShareResponseString = 
-                c2simClient.c2simCommand(command,bml.serverPassword,"");
+                c2simClient.c2simCommand(command,bml.serverPassword,"","");
         } catch (C2SIMClientException bce) {
             bml.showErrorPopup(
                 "exception pushing C2SIMserver control:" +
@@ -222,8 +222,8 @@ public class InitC2SIM {
          
         // display and return result
         if(bml.debugMode)bml.printDebug("The C2SIM server control push result length : " +
-                pushShareResponseString.length() + " XML:" +
-                pushShareResponseString + "|");
+                pushShareResponseString.length());
+                //+ "XML:"+  pushShareResponseString + "|");
         if(!command.equals("STATUS") && !command.equals("QUERYINIT")) {
             if(!bml.runningServerTest)
                 bml.showInfoPopup( 
@@ -284,6 +284,68 @@ public class InitC2SIM {
         
     }// end pushC2simServerControl()
     
+    /**
+     * send C2SIM command e.g. SHARE (do at end of Initialize)
+     */
+    String pushC2simServerInput(String command) {
+        return pushC2simServerInput(command,"","",""); 
+    }
+    String pushC2simServerInput(String command,String parm) {
+        return pushC2simServerInput(command,parm,"","");
+    }
+    String pushC2simServerInput(
+        String command, String parm1, String parm2, String parm3)
+    {
+        // open connection to REST server
+        if(bml.debugMode)bml.printDebug("server input:" +
+            command + " " + parm1 + " " + parm2 + " " + parm3);
+        if(bml.submitterID.length() == 0) {
+            bml.showInfoPopup( 
+                "cannot push C2SIM server input - submitter ID required", 
+                "C2SIM Server Control Push Message");
+            return "cannot push C2SIM server control - submitter ID required";
+        }
+        
+        // start REST connection using performative for Initialize
+        C2SIMClientREST_Lib c2simClient = bml.ws.newRESTLib("INFORM");
+        c2simClient.setHost(bml.serverName);
+        if(bml.debugMode)bml.printDebug("C2SIM Order/Init Host:"+bml.serverName);
+        c2simClient.setSubmitter(bml.submitterID);
+        if(bml.debugMode)bml.printDebug("C2SIM Order/Init Submitter:"+bml.submitterID);
+        c2simClient.setPath("C2SIMServer/c2sim");
+
+        // send the command
+        bml.pushingInitialize = true;
+        String pushShareResponseString = "";
+        try{
+            pushShareResponseString = 
+                c2simClient.c2simCommand(command,parm1,parm2,parm3);
+        } catch (C2SIMClientException bce) {
+            bml.showErrorPopup(
+                "exception pushing C2SIMserver input:" +
+                    bce.getMessage()+" cause:" + bce.getCauseMessage(), 
+                "C2SIM Server Input Push Message");
+            bml.printError("RESPONSE:" + pushShareResponseString);
+            bce.printStackTrace();
+            bml.pushingInitialize = false;
+            return pushShareResponseString;
+        }
+         
+        // display and return result
+        if(bml.debugMode)bml.printDebug("The C2SIM server input push result length : " +
+                pushShareResponseString.length() + " XML:" +
+                pushShareResponseString + "|");
+
+        if(!bml.runningServerTest)
+            bml.showInfoPopup( 
+                pushShareResponseString, 
+                "C2SIM Input Push Message");
+        
+        bml.pushingInitialize = false;
+        return pushShareResponseString;
+        
+    }// end pushC2simServerInput()
+    
     
     /**
      * server control functions
@@ -295,6 +357,23 @@ public class InitC2SIM {
     String pushPauseC2SIM(){return pushC2simServerControl("PAUSE");}
     String pushStopC2SIM(){return pushC2simServerControl("STOP");}
     String pushEditC2SIM(){return pushC2simServerControl("EDIT");}
+    
+    /**
+     * server record and playback controls
+     * @return 
+     */
+    String pushServerRecStart(){return pushC2simServerInput("STARTREC");}
+    String pushServerRecPause(){return pushC2simServerInput("PAUSEREC");}
+    String pushServerRecRestart(){return pushC2simServerInput("RESTARTREC");}
+    String pushServerRecStop(){return pushC2simServerInput("STOPREC");}
+    String pushServerRecGetStatus() {return pushC2simServerInput("GETRECSTAT");}
+    String pushServerPlayStart(){return pushC2simServerInput("STARTPLAY");}
+    String pushServerPlayPause(){return pushC2simServerInput("PAUSEPLAY");}
+    String pushServerPlayRestart(){return pushC2simServerInput("RESTARTPLAY");}
+    String pushServerPlayStop(){return pushC2simServerInput("STOPPLAY");}
+    String pushServerPlayGetStatus() {return pushC2simServerInput("GETPLAYSTAT");}
+    String getSimTimeMult() {return pushC2simServerInput("GETSIMMULT");}
+    String getPlayTimeMult() {return pushC2simServerInput("GETPLAYMULT");}
     
     // status check; can initiate a late joiner initialization
     String pushStatusC2SIM(){

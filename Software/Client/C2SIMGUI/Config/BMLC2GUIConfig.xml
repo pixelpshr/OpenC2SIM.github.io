@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?jaxfront version=3.25;time=2021-10-07 14:00:57.248;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
+<?jaxfront version=3.25;time=2022-04-19 22:56:05.483;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
 <SBMLServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BMLC2GUIConfig.xsd">
       <MapScale>500000</MapScale>
       <StartSubscribed>yes</StartSubscribed>
@@ -7,7 +7,7 @@
       <SubmitterID>C2SIMGUI</SubmitterID>
       <ServerName>10.2.10.70</ServerName>
       <ServerPassword>v0lgenau</ServerPassword>
-      <C2SIMprotocolVersion>1.0.1</C2SIMprotocolVersion>
+      <C2SIMprotocolVersion>1.0.2</C2SIMprotocolVersion>
       <C2SIMns>c2s:</C2SIMns>
       <CBMLns>cbml:</CBMLns>
       <IBMLns>ibml:</IBMLns>
