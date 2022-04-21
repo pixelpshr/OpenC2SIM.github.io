@@ -93,7 +93,15 @@ As such, it should be compatible with Windows, macOs and Linux platforms, provid
         - PushOrderMessage() 
         - PushReportMessage()
     1. Access to raw Library functionality
-		- PushCommand() -  C2SIM server commands: STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT (see [C2SIM Server Message Flow](https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Software/Server/C2SIM%20Server%20Message%20Flow_20200325.pdf) for details)
+		- PushCommand()
+            C2SIM server commands: STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT (see [C2SIM Server Message Flow](https://github.com/hyssostech/OpenC2SIM.github.io/blob/master/Software/Server/C2SIM%20Server%20Message%20Flow_20200325.pdf) for details)
+            Also supports commands added in v1.0.2 of the schema: 
+                RESTART, 
+                GETSIMMULT, SETSIMMULT <multiple>, 
+                STARTPLAY, STOPPLAY, PAUSEPLAY, GETPLAYSTAT, 
+                GETPLAYMULT, SETPLAYMULT <multiple>, 
+                STARTREC, STOPREC, PAUSEREC, RESTARTREC, GETRECSTAT,
+                MAGIC <entityUUIDreference> <latitude> <longitude> 
         - PushMessage() - client configured XML messages
 
 ## C2SIM XSD object serialization
@@ -107,7 +115,7 @@ xsd schemas\C2SIM_SMX_LOX_V1.0.0.xsd /c /l:CS /n:C2SIM.Schema100
 ```
 
 A separate augmented `C2SIM_SMX_LOX_v1.0.x_Command.xsd` is also provided. It includes some elements that are present in the 
-messages sent by the current C2SIM Reference Server (v4.8.0.11), that are not present in the published schemas 
+messages sent by the current C2SIM Reference Server (v4.8.1.1), that are not present in the published schemas 
 (either in v1.0.0 or v1.0.1):
 * `SystemCommandBodyType` includes an additional element - `SessionStateCode`
 * `SystemCommandTypeCodeType` includes an additional `ResetScenario` enumeration 

@@ -14,16 +14,21 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish",
+            "label": "run",
             "command": "dotnet",
             "type": "process",
             "args": [
-                "publish",
+                "run",
                 "${workspaceFolder}/C2SIMSDKSampleApp/C2SIMSDKSampleApp.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet pack ${workspaceFolder}/C2SIMSDK/C2SIMSDK.csproj -c Release;nuget add ${workspaceFolder}/C2SIMSDK/bin/Release/HyssosTech.Sdk.C2SIM.*.nupkg -source C:/Users/Public/Source/Repos/Nugets",
+            "type": "shell",
         },
         {
             "label": "watch",

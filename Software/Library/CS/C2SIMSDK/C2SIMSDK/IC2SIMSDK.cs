@@ -72,8 +72,20 @@ public interface IC2SIMSDK
     /// Issue a command
     /// </summary>
     /// <param name="command"></param>
+    /// <param name="tokens">Parameter array</param>
     /// <returns>Server response - formats vary depending on the command</returns>
-    Task<string> PushCommand(C2SIMSDK.C2SIMCommands command);
+    /// <exception cref="C2SIMClientException"></exception>
+    Task<string> PushCommand(C2SIMSDK.C2SIMCommands command, string[] tokens);
+    /// <summary>
+    /// Issue a command
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="parm1">Optional parameter - varies depending on command</param>
+    /// <param name="parm2">Optional parameter - varies depending on command</param>
+    /// <param name="parm3">Optional parameter - varies depending on command</param>
+    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <exception cref="C2SIMClientException"></exception>
+    Task<string> PushCommand(C2SIMSDK.C2SIMCommands command, string parm1 = null, string parm2 = null, string parm3 = null);
     /// <summary>
     /// Send an Initialization message to the server
     /// </summary>

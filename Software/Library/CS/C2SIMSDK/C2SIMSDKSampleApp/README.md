@@ -3,6 +3,12 @@
 This app illustrates the use of the [C2SIM SDK](..). It provides a simple command line interface for interacting with C2SIM servers:
 
 - Issue commands - send `stop`, `reset`, `initialize`, `share`, `start`, `queryinit`, `status` 
+- Issue v1.0.2 commands
+    `restart`, 
+    `getsimmult`, `setsimmult <multiple>`,
+    `startplay`, `stopplay`, `pauseplay`, `getplaystat`, `getplaymult`, `setplaymult <multiple>`,
+    `startrec`, `stoprec`, `pauserec`, `restartrec`, `getrecstat`,
+    `magic <entityUUIDreference> <latitude> <longitude>` (the C2SIM GUI Editor v2.11.1+ implementation is currently the best source of information ont he required parameters for each of these commands)
 - Push messages - `push <type> <path to xml>` - where type is "init", "order", or "report"; the XML must be properly formatted according to the 
 [C2SIM standard](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Standard)
 - Observe server notifications - the STOMP message stream is displayed
@@ -41,4 +47,4 @@ Or using command line parameters to override the default `appsettings.json` sett
 dotnet run C2SIM:RestUrl="http://10.2.10.70:8080/C2SIMServer"
 ```
 
-Notice that the name of the `appsettings.json` section containing the application parameters - `C2SIM` - needs to be used as a prefix
+Notice that the name of the `appsettings.json` section containing the application parameters - `C2SIM` - needs to be used as a prefix, as shown in the example above

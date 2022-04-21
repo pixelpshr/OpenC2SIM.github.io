@@ -211,7 +211,9 @@ public class C2SIMClientRESTLib
     /// Execute a 2SIM Server command
     /// </summary>
     /// <remarks>
-    /// Current commands are NEW, LOAD, SAVE, SAVEAS, DELETE, SHARE, QUERYUNIT, QUERYINIT
+    /// Current commands are NEW, LOAD, SAVE, SAVEAS, DELETE, SHARE, QUERYUNIT, QUERYINIT,
+    /// MAGIC, RESTART, GETSIMMULT, SETSIMMULT, GETPLAYSTAT, PAUSEPLAY, STARTPLAY, STOPPLAY, 
+    /// GETPLAYMULT, SETPLAYMULT, STARTREC, STOPREC, GETRECSTAT, PAUSEREC, RESTARTREC
     /// See the  <see href="https://github.com/OpenC2SIM/OpenC2SIM.github.io/blob/master/C2SIM%20Server%20Reference%20Implementation%20Documentation%204.8.0.X%20.pdf">C2SIM Server Reference Implementation</see> 
     /// for details.
     /// Result is an XML document which may contain a 'status' xml element
@@ -219,9 +221,10 @@ public class C2SIMClientRESTLib
     /// <param name="cmd">Command to be processed.  </param>
     /// <param name="parm1">Optional first parameter</param>
     /// <param name="parm2">Optional second parameter</param>
+    /// <param name="parm3">Optional third parameter</param>
     /// <returns>string result - XML Document giving results of command and server status similar to serverStatus method.</returns>
     /// <exception cref="C2SIMClientException">Primary and secondary causes are transmitted within the C2SIMClientException object</exception>
-    public async Task<string> C2SimCommand(string cmd, string parm1, string parm2)
+    public async Task<string> C2SimCommand(string cmd, string parm1, string parm2, string parm3=null)
     {
         _logger?.LogTrace("Entering method");
         string xml = "<C2SIM_Statistics xmlns=\"http://www.sisostds.org/schemas/c2sim/1.0\"/>";
@@ -245,6 +248,8 @@ public class C2SIMClientRESTLib
             parm1 = string.Empty;
         if (parm2 == null)
             parm2 = string.Empty;
+        if (parm3 == null)
+            parm3 = string.Empty;
         if (_submitter == null)
             _submitter = string.Empty;
         // Build the parameter string to include
@@ -253,6 +258,7 @@ public class C2SIMClientRESTLib
             + $"&command={cmd}"
             + $"&parm1={parm1}"
             + $"&parm2={parm2}"
+            + $"&parm3={parm3}"
             + $"&version={_clientVersion}");
         string result = await SendTrans(u, xml);
         return result;

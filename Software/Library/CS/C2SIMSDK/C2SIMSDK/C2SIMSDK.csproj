@@ -38,7 +38,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.5</Version>
+    <Version>1.2.6</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -46,13 +46,16 @@
     Command and Control (C2) and Simulation systems, used for Planning
     Wargaming and in coalition settings
     </Description>
-    <Copyright>Copyright (c) Hyssos Tech 2021</Copyright>
+    <Copyright>Copyright (c) Hyssos Tech 2022</Copyright>
     <Licensing>MIT</Licensing> 
     <LicenseFile>LICENSE.md</LicenseFile>
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
     <PackageReleaseNotes>
-    ## Version 1.2.5
+    ## Version 1.2.6
+    * Extended list of commands to comply with the schema version 1.0.2
+
+     ## Version 1.2.5
     * Injecting ILoggerFactory to simplify logger propagation when nested libraries are used
     * Documented Status changed events that signal that the server is waiting for Initialization, or for Orders / Reports
 

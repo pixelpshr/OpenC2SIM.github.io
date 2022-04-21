@@ -13,6 +13,9 @@ using C2SIM;
 /// Accepts:
 /// - Server commands:
 ///     STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT
+///     MAGIC, RESTART, GETSIMMULT, SETSIMMULT, GETPLAYSTAT, PAUSEPLAY, 
+///     STARTPLAY, STOPPLAY, GETPLAYMULT, SETPLAYMULT, STARTREC, STOPREC, 
+///     GETRECSTAT, PAUSEREC, RESTARTREC
 /// - Message push commands:
 ///     PUSH path to xml file containing a C2SIM formatted Initialization, Order or Report message
 ///     The state of the C2SIM server is automatically transitioned to Initializing and Running
@@ -117,15 +120,20 @@ class C2SIMConsole : BackgroundService
                         }
                     }
                 }
-                else if (Enum.TryParse<C2SIMSDK.C2SIMCommands>(cmd.ToUpperInvariant(), out C2SIMSDK.C2SIMCommands c2SimCmd))
-                {
-                    var resp = await _c2SimSDK.PushCommand(c2SimCmd);
-                    Console.WriteLine(resp);
-                }
                 else
                 {
-                    DisplayCommands();
-                    continue;
+                    // Break line into tokens - some commands may have parameters
+                    string[] tokens = cmd.Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
+                    if (tokens.Length > 0 &&  Enum.TryParse<C2SIMSDK.C2SIMCommands>(tokens[0].ToUpperInvariant(), out C2SIMSDK.C2SIMCommands c2SimCmd))
+                    {
+                        var resp = await _c2SimSDK.PushCommand(c2SimCmd, tokens);
+                        Console.WriteLine(resp);
+                    }
+                    else
+                    {
+                        DisplayCommands();
+                        continue;
+                    }
                 }
             }
             catch (OperationCanceledException)

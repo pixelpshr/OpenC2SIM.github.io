@@ -18,7 +18,15 @@ public class C2SIMSDK : IC2SIMSDK
     /// Commands accepted by the C2SIM server
     /// </summary>
 #pragma warning disable 1591
-    public enum C2SIMCommands { STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT };
+    public enum C2SIMCommands
+    {
+        STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT,
+        RESTART, 
+        GETSIMMULT, SETSIMMULT, 
+        STARTPLAY, STOPPLAY, PAUSEPLAY, GETPLAYSTAT, GETPLAYMULT, SETPLAYMULT,
+        STARTREC, STOPREC, PAUSEREC, RESTARTREC, GETRECSTAT, 
+        MAGIC 
+    };
 #pragma warning restore 1591
     /// <summary>
     /// Server status
@@ -435,16 +443,41 @@ public class C2SIMSDK : IC2SIMSDK
     /// Issue a command
     /// </summary>
     /// <param name="command"></param>
+    /// <param name="tokens">Parameter array</param>
     /// <returns>Server response - formats vary depending on the command</returns>
     /// <exception cref="C2SIMClientException"></exception>
-    public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command)
+    public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command, string[] tokens)
+    {
+        return await PushCommand(
+            command,
+            tokens.Length > 1 ? tokens[1] : null,
+            tokens.Length > 2 ? tokens[2] : null,
+            tokens.Length > 3 ? tokens[3] : null
+        );
+    }
+
+    /// <summary>
+    /// Issue a command
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="parm1">Optional parameter - varies depending on command</param>
+    /// <param name="parm2">Optional parameter - varies depending on command</param>
+    /// <param name="parm3">Optional parameter - varies depending on command</param>
+    /// <returns>Server response - formats vary depending on the command</returns>
+    /// <exception cref="C2SIMClientException"></exception>
+    public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command, string parm1=null, string parm2=null, string parm3=null)
     {
         _logger?.LogTrace($"Entering method {command.ToString()}");
         var c2SimRestClient = CreateClientRestService("INFORM");
+        // Most (pre v1.0.2) commands take a password and empty parameters
+        if (parm1 == null)
+            parm1 = _password;
+        if (parm2 == null)
+            parm2 = string.Empty;
         string resp = null;
         try
         {
-            resp = await c2SimRestClient.C2SimCommand(command.ToString(), _password, "");
+            resp = await c2SimRestClient.C2SimCommand(command.ToString(), parm1, parm2, parm3);
         }
         catch (C2SIMClientException e)
         {

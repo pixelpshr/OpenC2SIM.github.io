@@ -9,7 +9,7 @@ using C2SIM;
 // behind the scenes, see for example:
 // https://docs.microsoft.com/en-us/dotnet/core/extensions/generic-host 
 // https://snede.net/get-started-with-net-generic-host/ is a simple intro
-// but the mechanics it implements are implemented more directly by
+// but the mechanics it implements are supported more directly by
 // BackgroundService - see https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice
 // A few different usage patterns are shown here: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-3.1&tabs=netcore-cli
 await CreateHostBuilder(args).RunConsoleAsync();// .Build.RunAsync();
