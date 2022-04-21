@@ -39,5 +39,14 @@ Main published XML schema (xsd):
 * [C2SIM_SMX_LOX_v1.0.1.xsd](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=53123) -  XML Schema Document generated from the merged C2SIM core, SMX, and LOX ontologies (merged using Protégé) - [local unzipped copy](https://github.com/hyssostech/OpenC2SIM.github.io/blob/4ad6ccd41d12b0003a78f6c03ef7cbc157e699c1/Standard/C2SIM/Schemas/C2SIM_SMX_LOX_V1.0.1.xsd)
 * [C2SIMOntologyToC2SIMSchemaV1.0.1.xslt](https://www.sisostds.org/DigitalLibrary.aspx?Command=Core_Download&EntryId=53123)- extensible stylesheet language transformations (XSLT) file used to render the ontology into the xsd - [local unzipped copy](https://github.com/hyssostech/OpenC2SIM.github.io/blob/4ad6ccd41d12b0003a78f6c03ef7cbc157e699c1/Standard/C2SIM/Schemas/C2SIMOntologyToC2SIMSchemaV1.0.1.xslt)
 
-Older schema versions - many of the current tools only support version v1.0.0:
+Older schema versions - for backward compatibility with tools that support the deprecated version v1.0.0:
 * [C2SIM_SMX_LOX_v1.0.0.xsd](Schemas/C2SIM_SMX_LOX_v1.0.0.xsd)
+
+**Note on version 1.0.2**: this not yet published (as of this writing) update adds capabilities for controlling simulations via an extended set of commands:
+
+    * RESTART - restart the server 
+    * GETSIMMULT, SETSIMMULT <multiple> - get/set the current simulator speed-up/multiple - up to 10
+    * GETPLAYSTAT, STARTPLAY, STOPPLAY, PAUSEPLAY - get/set the state of simulator playback
+    * GETPLAYMULT, SETPLAYMULT <multiple>  get/set the current playback speed-up/multiple - up to 10
+    * GETRECSTAT, STARTREC, STOPREC, PAUSEREC, RESTARTREC - get/set simulator recording
+    * MAGIC <entityUUIDreference> <latitude> <longitude> - move an entity to a given location 
