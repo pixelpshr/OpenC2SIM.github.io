@@ -39,8 +39,8 @@ public class C2SIM_InitDB {
     Vector<InitElement> plan;
     Vector<InitElement> systemEntityList;
     Vector<InitElement> scenario;
-    Vector<InitElement> unit;//debugx
-    Vector<InitElement> route;//debugx
+    Vector<InitElement> unit;
+    Vector<InitElement> route;
 
     C2SIM_InitDB() {
         

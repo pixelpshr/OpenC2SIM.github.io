@@ -16,7 +16,9 @@
  *-----------------------------------------------------------------*/
 package edu.gmu.c4i.c2simserver4.c2simserver;
 
+import edu.gmu.c4i.c2simclientlib2.C2SIMClientException;
 import edu.gmu.c4i.c2simclientlib2.*;
+//import edu.gmu.c4i.c2sim_wsclient2.*;
 
 import edu.gmu.c4i.c2simserver4.schema.C2SIMMessageDefinition;
 import static edu.gmu.c4i.c2simserver4.c2simserver.C2SIM_Server.msgNumber;
@@ -32,6 +34,7 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 
 
@@ -105,8 +108,10 @@ public class C2SIM_Server_STOMP {
         debugLogger.info("Connecting to STOMP Server: " + stompHost + " port: " + stompPort + " topic: " + topicName);
         try {
             resp = c.connect();
-        }   // try
+        }
         catch (C2SIMClientException e) {
+            java.util.logging.Logger.getLogger(C2SIM_Server_STOMP.class.getName()).log(Level.SEVERE, null, e);
+
             // Error during connect print message and return
             debugLogger.error("Unable to connect to STOMP server " + e.getMessage());
             throw new C2SIMException("Unable to connect to STOMP server " + e.getMessage());
@@ -150,7 +155,6 @@ public class C2SIM_Server_STOMP {
 
         String msgType = "";
         Vector<String> headers = new Vector<>();
-
         if (t.messageDef == null)
             msgType = "Miscellaneous";
         else
@@ -182,13 +186,17 @@ public class C2SIM_Server_STOMP {
             headers.add("sender:" + t.getSender() + "\n");
             headers.add("receiver:" + t.getReceiver() + "\n");
             headers.add("communicativeActTypeCode:" + t.communicativeActTypeCode + "\n");
-
         }   // if C2SIM
 
 
-        // Log message being published
+        // Log message being published to debug log and 
         // Log to replay log file, removing all NL's
-        C2SIM_Server.replayLogger.info(t.getSource() + "  " + t.getMsgnumber() + "  " + t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
+        if(C2SIM_Server.getRecordingState())
+        C2SIM_Server.replayLogger.info(t.getSource() + "  " + t.getMsgnumber() + "  " + 
+            t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
+        else C2SIM_Server.debugLogger.info("STOMP:" + topicName + " "+ topicName2 + " " + publishToBoth + " " +
+            t.getSource() + "  " + t.getMsgnumber() + "  " + 
+            t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
 
         try {
             // Publish the message 
@@ -201,8 +209,8 @@ public class C2SIM_Server_STOMP {
         }   // try
 
         catch (C2SIMClientException e) {
-            debugLogger.error("Error while publishing " + e.getMessage());
-            throw new C2SIMException("Error while publishing " + e.getMessage());
+            debugLogger.error("Error while publishing: " + e.getMessage());
+            throw new C2SIMException("Error while publishing: " + e.getMessage());
         }
 
     }   // publishMessage()
@@ -230,6 +238,7 @@ public class C2SIM_Server_STOMP {
         headers.add("message-number:" + t.getMsgnumber() + "\n");
 
         // Log to replay log file, removing all NL's
+        if(C2SIM_Server.getRecordingState())
         C2SIM_Server.replayLogger.info("Document  " + t.getMsgnumber() + "  " + t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
 
         try {

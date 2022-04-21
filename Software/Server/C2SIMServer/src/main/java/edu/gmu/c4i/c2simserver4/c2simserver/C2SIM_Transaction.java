@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|    Copyright 2001-2018 Networking and Simulation Laboratory     |
+|    Copyright 2001-2022 Networking and Simulation Laboratory     |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -55,15 +55,15 @@ public class C2SIM_Transaction implements Cloneable {
     /**
     * C2SIM_Transaction - Data only class contains single C2SIM Message and associated data
     @param bml  - XML Message
-    @param submitterID - Idendification of submitter
+    @param submitterID - Identification of submitter
     @param protocol - Protocol submitted by client
     @param sender - C2SIM ID of sender
     @param receiver - C2IM ID of receiver
     @param communicativeActTypeCode - C2SIM CommunicativeActCode
     @param forwarders - String containing list of IP addresses of servers that have handled this message
     */
-    C2SIM_Transaction(String bml, String submitterID, String protocol, String sender, String receiver, String communicativeActTypeCode, String forwarders) {
-
+    C2SIM_Transaction(String bml, String submitterID, String protocol, String sender, 
+        String receiver, String communicativeActTypeCode, String forwarders) {
 
         // Add parameters to object
         this.submitterID = submitterID;
@@ -98,7 +98,7 @@ public class C2SIM_Transaction implements Cloneable {
     /* clone() for making a copy of a C2SIM_Transaction    */
     /****************************************************/
     /**
-    * clone - Create clone of C2SIM_Transactin object
+    * clone - Create clone of C2SIM_Transaction object
     @return - Complete copy of current object
     */
     public C2SIM_Transaction clone() {

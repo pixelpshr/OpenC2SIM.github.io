@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|    Copyright 2001-2018 Networking and Simulation Laboratory     |
+|    Copyright 2001-2022 Networking and Simulation Laboratory     |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -16,7 +16,8 @@
  *-----------------------------------------------------------------*/
 package edu.gmu.c4i.c2simserver4.c2simserver;
 
-import edu.gmu.c4i.c2simclientlib2.*;
+import edu.gmu.c4i.c2simclientlib2.C2SIMHeader;
+import edu.gmu.c4i.c2simclientlib2.C2SIMClientException;
 
 import edu.gmu.c4i.c2simserver4.schema.C2SIMDB;
 import edu.gmu.c4i.c2simserver4.schema.*;
@@ -203,7 +204,10 @@ public class C2SIM_ServerProcess {
         // We have identified the message.  Log to debug log
         C2SIM_Server.debugLogger.info("Message Number; " + trans.getMsgnumber()
                 + " from submitter: " + trans.getSubmitterID()
-                + " Identified as: " + trans.messageDef.messageDescriptor);
+                + " Identified as: " + trans.messageDef.messageDescriptor
+                + " dialect:" + trans.messageDef.dialect
+                + " protocol:" + trans.getProtocol()
+                + " version:" + trans.c2SIM_Version);
 
         // Is this message type inactive?
         if (trans.messageDef.inactive)

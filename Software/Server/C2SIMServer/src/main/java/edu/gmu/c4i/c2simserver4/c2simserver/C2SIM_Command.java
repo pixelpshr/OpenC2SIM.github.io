@@ -26,7 +26,7 @@ import org.jdom2.Document;
 import java.io.File;
 
 import static edu.gmu.c4i.c2simserver4.c2simserver.C2SIM_Cyber.c2sim_NS;
-import edu.gmu.c4i.c2simclientlib2.*;
+//import edu.gmu.c4i.c2simclientlib2.*;
 //import edu.gmu.c4i.c2simclientlib2.CWIXHeader;
 //import edu.gmu.c4i.c2simclientlib2.C2SIMHeader;
 import java.text.ParseException;
@@ -50,7 +50,7 @@ import edu.gmu.c4i.c2simserver4.schema.C2SIMMessageDefinition;
 
 /**
  * <h1>C2SIM_Command</h1> <p>
- * Performs server command of IBML09 messages
+ * Performs server command of IBML09 & C2SIM messages
 
  * @author Douglas Corner - George Mason University C4I and  Center
  */
@@ -60,17 +60,25 @@ public class C2SIM_Command {
     /*******************/
     /* commandProcess  */
     /*******************/
+    
+    // SystemCommand states
+    static String playbackStatus = "playback is not running";
+    static String recordingStatus = "recordingis not running";
 
     /**
     * commandProcess - Process commands sent from client 
     @param cmd - String the command to be processed
     @param parm1 - First parameter Depends on specific command
     @param parm2 - Second parameter Depends on specific command
+    @param parm3 - Third parameter Depends on specific command
     @param t - C2SIM_Transaction
     @return - String - Message to submitter on success or failure
     @throws C2SIMException 
     */
-    static String commandProcess(String cmd, String parm1, String parm2, C2SIM_Transaction t) throws C2SIMException {
+    static String commandProcess(
+        String cmd, String parm1, String parm2, String parm3, 
+        C2SIM_Transaction t) 
+        throws C2SIMException {
 
         Namespace n;
         Collection<Document> vals = new Vector<>();
@@ -87,12 +95,13 @@ public class C2SIM_Command {
                 verifyPassword(parm1);
                 checkCommandState(cmd, parm1, parm2, t);
                 C2SIM_Server.sessionState = SessionState_Enum.RUNNING;
+                C2SIM_Server.setRunningState(true);
+                C2SIM_Server.setScenarioPausedState(false);
                 publishStateUpdate("StartScenario",C2SIM_Server.SessionState_Enum.RUNNING.toString(), t);
                 return "START Command processed.  State set to " + C2SIM_Server.sessionState;
 
-            case "INITIALIZE":
-                
-                verifyPassword(parm1);
+            case "INITIALIZE":             
+                verifyPassword(parm1);        
                 checkCommandState(cmd, parm1, parm2, t);
                 C2SIM_Server.sessionState = SessionState_Enum.INITIALIZING;
                 publishStateUpdate("SubmitInitialization",SessionState_Enum.INITIALIZING.toString(), t);
@@ -103,6 +112,8 @@ public class C2SIM_Command {
                 verifyPassword(parm1);
                 checkCommandState(cmd, parm1, parm2, t);
                 C2SIM_Server.sessionState = SessionState_Enum.INITIALIZED;
+                C2SIM_Server.setRunningState(false);
+                C2SIM_Server.setScenarioPausedState(false);
                 publishStateUpdate("StopScenario", C2SIM_Server.SessionState_Enum.INITIALIZED.toString(), t);
                 return "STOP Command processed.  State set to " + C2SIM_Server.sessionState;
 
@@ -134,6 +145,8 @@ public class C2SIM_Command {
                 checkCommandState(cmd, parm1, parm2, t);
                 
                 C2SIM_Server.sessionState = SessionState_Enum.PAUSED;
+                C2SIM_Server.setRunningState(false);
+                C2SIM_Server.setScenarioPausedState(true);
                 publishStateUpdate("PauseScenario", C2SIM_Server.SessionState_Enum.PAUSED.toString(), t);
                 return "PAUSE Command processed.  State set to " + C2SIM_Server.sessionState;
 
@@ -154,12 +167,15 @@ public class C2SIM_Command {
 
             case "STATUS":
                 // Server Status
-                return C2SIM_Server.createResultMsgOK("OK", "Server is up", 0, 0.0);
+                String serverStat = "Server is stopped";
+                if(C2SIM_Server.getScenarioPausedState())serverStat = "Server is paused";
+                if(C2SIM_Server.getRunningState())serverStat = "Server is running";
+                return C2SIM_Server.createResultMsgOK("OK", serverStat, 0, 0.0);
 
             case "LOAD":
                 // Load initialization data from File instead of from a WebServices submission
                 try {
-//                // File name supplied?
+                // File name supplied?
                 if (parm1.equals(""))
                     return "LOAD command submitted with no file name";
                 
@@ -167,13 +183,13 @@ public class C2SIM_Command {
                 verifyPassword(parm2);  
                 checkCommandState(cmd, parm1, parm2, t);
                  
-//                // Build file path and check that it exists
+                // Build file path and check that it exists
                 C2SIM_Util.initDB_Name = C2SIM_Server.props.getProperty("server.bmlFiles") + C2SIM_Server.props.getProperty("server.initDB") + parm1;
                 File initDBFile = new File(C2SIM_Util.initDB_Name);
                 if (!initDBFile.exists())
                     return "LOAD commamd submitted for file: " + parm1 + ".  File does not exist";
 
-//                // Load the file
+                // Load the file
                 String initXML = C2SIM_Util.readInputFile(C2SIM_Util.initDB_Name);
                 C2SIM_Util.initDB_Name = parm1;
                 C2SIM_Server.debugLogger.debug("LOAD executed for file: " + parm1);
@@ -194,7 +210,7 @@ public class C2SIM_Command {
                         + C2SIM_Util.forceSideMap.size() + " ForceSides and " + C2SIM_Util.unitMap.size() + " Entities (Units)) configured";
                 }
                 catch (Exception e) {
-                    throw new C2SIMException("Error while loadig and processing Initialization Data (ObjectInitialization) file" + e);
+                    throw new C2SIMException("Error while loading and processing Initialization Data (ObjectInitialization) file" + e);
                 }
 
             case "NEW":
@@ -284,7 +300,247 @@ public class C2SIM_Command {
                 C2SIM_Server.debugLogger.debug("Returning (Late) Initialization for " + C2SIM_Util.initDB.entity.size() + " Units to submitter " + t.getSubmitterID());
                 return xmlResp;
                 
+            //**********************************************************************
+            // from here down added new for C2SIM 1.0.2 from here down JMP 14Apr2022
+                
+            // MagicMove object location
+            case "MAGIC":
+                 // Direct instant movement of an object to a location
+                try {
+                    // Parameters supplied?
+                    if (parm1.equals("") || parm2.equals("") || parm3.equals(""))
+                        return "MagicMode command submitted missing object and/or location";
 
+                    // build SystenCommand message for MagicMove
+                    Document d = new Document();
+                    Element root = new Element("MessageBody", c2sim_NS);
+
+                   // SystemCommandBody and SystemCommandTypeCode
+                    Element systemCommandBody = new Element("SystemCommandBody", c2sim_NS);
+                    root.addContent(systemCommandBody);
+                    Element magicMove = new Element("MagicMove", c2sim_NS);
+                    systemCommandBody.addContent(magicMove);
+                    Element systemCommandTypeCode = (new Element("SystemCommandTypeCode", c2sim_NS).setText("MagicMove"));
+                    magicMove.addContent(systemCommandTypeCode);
+                    
+                    // MagicMove parameters: EntityReference, Location/GeodeticCoordinate/Latitude and Longitude
+                    magicMove.addContent(new Element("EntityReference", c2sim_NS).setText(parm1));
+                    
+                    Element locationLat = new Element("Location", c2sim_NS);
+                    magicMove.addContent(locationLat);
+                    Element geoLat = new Element("GeodeticCoordinate", c2sim_NS);
+                    locationLat.addContent(geoLat);
+                    Element latitude = (new Element("Latitude", c2sim_NS)).setText(parm2);
+                    geoLat.addContent(latitude);
+                    
+                    Element locationLon = new Element("Location", c2sim_NS);
+                    magicMove.addContent(locationLon);
+                    Element geoLon = new Element("GeodeticCoordinate", c2sim_NS);
+                    locationLon.addContent(geoLon);
+                    Element longitude = (new Element("Longitude", c2sim_NS)).setText(parm3);
+                    geoLon.addContent(longitude);
+                
+                    // add it all to the doc
+                    d.addContent(root);
+
+                    // Create a transaction for the Magic Move message
+                    C2SIM_Transaction trans = new C2SIM_Transaction();
+                    trans.msTemp = "C2SIM_Simulation_Control";
+                    trans.setSender("SERVER");
+                    trans.setReceiver("ALL");
+                    trans.setSubmitterID(t.getSubmitterID());
+                    String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+                    trans.setc2SIM_Version(c2simVer);
+                    trans.setMsgnumber(C2SIM_Server.msgNumber);
+                    trans.setMsgTime(LocalDateTime.now().format(C2SIM_Server.dtf));
+                    trans.setSource("Generated");
+                    trans.setForwarders("");
+                    trans.setDocument(d);
+                    trans.setProtocol(SISOSTD);
+                    trans.setSubmitterID(t.getSubmitterID());
+                    trans.setMessageDef(C2SIM_Util.mdIndex.get("C2SIM_Order"));
+                    trans.messageDef.messageDescriptor = "C2SIM_SystemCommand";
+                    trans.setMsTemp("");       
+                    
+                    String xml = C2SIM_Util.xmlToStringD(d, t);
+                    trans.setXmlText(xml);
+
+                    C2SIM_Server_STOMP.publishMessage(trans);
+                    
+                    return "MagicMove directed for object:" + parm1 + " to lat/lon:" + parm2 + "/" + parm3;  
+                }
+                catch (Exception e) {
+                    throw new C2SIMException("Error while loading and processing Magic Move command" + e);
+                }
+                
+            // Send to Coalition: RestartScenario
+            case "RESTART":
+                if(C2SIM_Server.getPlaybackState())
+                    return "RestartServer response: cannot restart acenario - pause or stop playback first";
+                publishSystemCommand("RestartScenario", "", "", t) ;
+                return "Published RestartScenario commaand";
+
+            // RequestSimulationRealtimeMultiple
+            case "GETSIMMULT":
+                String timeMultiple = Integer.toString(C2SIM_Server.getScenarioTimeMultiple());
+                publishSystemCommand(
+                    "RequestSimulationRealtimeMultiple",
+                    "SimulationRealtimeMultipleReport", 
+                    timeMultiple,
+                    t);
+                return "RequestSimulationRealtimeMultiple response: SimulationRealtimeMultipleReport:" + timeMultiple;
+                
+            // GetSimulationRealtimeMultiple
+           case "SETSIMMULT":
+               C2SIM_Server.setScenarioTimeMultiple(Integer.parseInt(parm1));
+               publishSystemCommand(
+                    "SetSimulationRealtimeMultiple",
+                    "SimulationRealtimeMultipleReport",
+                    parm1,
+                    t);
+                return "SetSimulationRealtimeMultiple response: SimulationRealtimeMultipleReport:" + parm1;
+ 
+            // RequestPlaybackStatus
+            case "GETPLAYSTAT":
+                publishSystemCommand(
+                    "RequestPlaybackStatus",
+                    "PlaybackStatusReport",
+                    playbackStatus,
+                    t);
+                return "RequestPlaybackStatus response: PlaybackStatusReport:" + playbackStatus;
+                
+            // PausePlayback
+            case "PAUSEPLAY":
+                if(!C2SIM_Server.getPlaybackState())
+                    return "PausePlayback not posssible - Player is not running";
+                playbackStatus = "playback is paused";
+                C2SIM_Server.setPlaybackPaused(true);
+                publishSystemCommand(
+                    "PausePlayback",
+                    "PlaybackStatusReport",
+                    playbackStatus,
+                    t); 
+                return "PausePlayback response: PlaybackStatusReport:" + playbackStatus;
+                
+            // ResumePlayback
+            case "RESTARTPLAY":
+                playbackStatus = "playback is running";
+                 if(C2SIM_Server.getRunningState())
+                    return "RestartPlayback response: cannot restart playback - pause or stop scenario first";
+                C2SIM_Server.setPlaybackPaused(false);
+                publishSystemCommand(
+                    "ResumePlayback",
+                    "PlaybackStatusReport",
+                    playbackStatus,
+                    t);
+                return "ResumePlayback response: PlaybackStatusReport:" + playbackStatus;
+                
+            // StartPlayback
+            case "STARTPLAY":
+                if(C2SIM_Server.getRunningState())
+                    return "StartPlayback response: cannot start playback - pause or stop scenario first";
+                playbackStatus = "playback is running";
+                C2SIM_Server.setPlaybackPaused(false);
+                C2SIM_Server.setPlaybackState(true);
+                publishSystemCommand(
+                    "StartPlayback",
+                    "PlayabackStatusReport",
+                    playbackStatus,
+                    t);
+                new Player(t.getSubmitterID());
+                return "StartPlayback response: PlaybackStatusreport:" + playbackStatus;
+                 
+            // StopPlayback
+            case "STOPPLAY":
+                playbackStatus = "playback is stopped";
+                C2SIM_Server.setPlaybackState(false);
+                publishSystemCommand(
+                    "StopPlayback",
+                    "PlaybackStatusReport",
+                    playbackStatus,
+                    t);
+                return "StopPlayback response: PlaybackSatatusReport:" + playbackStatus;
+
+            // RequestPlaybackRealtimeMultiple multiple
+            case "GETPLAYMULT":
+                String playMultiple = Integer.toString(C2SIM_Server.getPlaybackTimeMultiple());
+                publishSystemCommand(
+                    "RequestPlaybackRealtimeMultiple",
+                    "PlaybackRealtimeMultipleReport",
+                    playMultiple,
+                    t);
+                return "RequestPlaybackRealtimeMultiple response: PlaybackRealtimeMultipleReport:" + playMultiple;
+                
+            // SetPlaybackRealtimeMultiple multiple
+            case "SETPLAYMULT":
+                C2SIM_Server.setPlaybackTimeMultiple(Integer.parseInt(parm1));
+;               publishSystemCommand(
+                    "SetPlaybackRealtimeMultiple",
+                    "PlaybackRealtimeMultipleReport",
+                    parm1,
+                    t);
+                return "SetPlaybackRealtimeMultiple response: PlaybackRealtimeMultipleReport:" + parm1;
+
+            // RequestRecordingStatus
+            case "GETRECSTAT":
+                publishSystemCommand(
+                    "RequestRecordingStatus",
+                    "RecordingStatusReport",
+                    recordingStatus,
+                    t);
+                return "RequestRecordingStatus response: RecordingStatusReport:" + recordingStatus;
+                
+            // PauseRecording
+            case "PAUSEREC":
+                if(!C2SIM_Server.getPlaybackState())
+                    return "PausePlayback not posssible - Recorder is not running";
+                recordingStatus = "recording is paused";
+                C2SIM_Server.setRecordingState(false);
+                C2SIM_Server.setRecordingPaused(true);
+                publishSystemCommand(
+                    "PauseRecording",
+                    "RecordingStatusReport",
+                    recordingStatus,
+                    t); 
+                return "PauseRecording response: RecordingStatusReport:" + recordingStatus;   
+                
+            // ResumeRecording
+            case "RESTARTREC":
+                recordingStatus = "recording is running";
+                C2SIM_Server.setRecordingPaused(false);
+                C2SIM_Server.setRecordingState(true);
+                publishSystemCommand(
+                    "ResumeRecording",
+                    "RecordingStatusReport",
+                    recordingStatus,
+                    t);
+                return "ResumeRecording response: RecordingStatusReport:" + recordingStatus;
+                
+            // StartRecording
+            case "STARTREC":
+                recordingStatus = "recording started";
+                if(C2SIM_Server.getRecordingState())
+                    recordingStatus = "recording is already running";
+                C2SIM_Server.setRecordingPaused(false);
+                C2SIM_Server.setRecordingState(true);
+                publishSystemCommand(
+                    "StartRecording",
+                    "RecordingStatusReport",
+                    recordingStatus,
+                    t);
+                 return "StartRecording response: RecordingStatusReport:" + recordingStatus; 
+                
+            // StopRecording
+            case "STOPREC":
+                recordingStatus = "recording is stopped";
+                C2SIM_Server.setRecordingState(false);
+                publishSystemCommand(
+                    "StopRecording",
+                    "RecordingStatusReport",
+                    recordingStatus,
+                    t);
+                return "StopRecording response: RecordingSatatusReport:" + recordingStatus;
+                
             /*
                 Command not recognized
              */
@@ -329,6 +585,65 @@ public class C2SIM_Command {
         systemCommandBody.addContent(new Element("SessionStateCode", c2sim_NS).setText(newState));
 
         doc.addContent(root);
+        C2SIM_Transaction t = new C2SIM_Transaction();
+
+        // Set parameters in the C2SIM_Transaction object
+        t.msTemp = "C2SIM_Simulation_Control";
+        t.setProtocol(SISOSTD);
+        t.setSender("SERVER");
+        t.setReceiver("ALL");
+        t.setSubmitterID(trans.getSubmitterID());
+        String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+        t.setc2SIM_Version(c2simVer);
+        t.setMsgnumber(C2SIM_Server.msgNumber);
+        t.setMsgTime(LocalDateTime.now().format(C2SIM_Server.dtf));
+        t.setSource("Generated");
+        t.setForwarders("");
+        String xml = C2SIM_Util.xmlToStringD(doc, t);
+
+        t.setXmlText(xml);
+
+        // Publish the message
+        C2SIM_Server_STOMP.publishMessage(t);
+    }// publishStateUpdate
+    
+    /****************************/
+    /*  publishSystemCommand    */
+    /****************************/
+    /**
+    * publishSystemCommand - Format and publish a message directing action to C2SIM Coalition
+    @param systemCommand - String new C3SIM State command
+    @param parmName - name of single parameter or ""
+    @param parmValue - value of the parameter
+    @param trans - C2SIM_Transaction
+    @throws C2SIMException 
+    */
+    public static void publishSystemCommand(
+        String systemCommand, 
+        String parmName,
+        String parmValue,    
+        C2SIM_Transaction trans) throws C2SIMException {
+
+        // Create document
+        Document tempDoc;
+        Element tempEl;
+
+        // Create output document and add root element
+        Document doc = new Document();
+        Element root = new Element("MessageBody", c2sim_NS);
+
+        // SystemCommandBody
+        Element systemCommandBody = new Element("SystemCommandBody", c2sim_NS);
+        root.addContent(systemCommandBody);
+
+        // SystemCommand
+        systemCommandBody.addContent(new Element("SystemCommandTypeCode", c2sim_NS).setText(systemCommand));
+        
+        // Parameter
+        if(!parmName.equals(""))
+            systemCommandBody.addContent(new Element(parmName, c2sim_NS).setText(parmValue));
+
+        doc.addContent(root);
 
         C2SIM_Transaction t = new C2SIM_Transaction();
 
@@ -353,7 +668,8 @@ public class C2SIM_Command {
 
         // Publish the message
         C2SIM_Server_STOMP.publishMessage(t);
-    }
+        
+    }// ublishSystemCommand
 
 
     /********************/
@@ -375,7 +691,40 @@ public class C2SIM_Command {
             throw new C2SIMException("Password is invalid");
 
     }   // verifyPassword()
-
+    
+        /***************************/
+    /* allowCommandWhenRunning */
+    /***************************/
+    /**
+    * allowCommandWhenRunning - filter for commands allowed in RUNNING state
+    */
+    public static HashMap<String, Boolean> allowedCommands = new HashMap<>();
+    public static boolean allowCommandWhenRunning(String testCommand) {
+        
+        // on first invocation build a HashMap of allow commands
+        // to speed checking in future invocations
+        if(allowedCommands.isEmpty()){
+            allowedCommands.put("PAUSE",true);
+            allowedCommands.put("STOP",true);
+            allowedCommands.put("MAGIC",true);
+            allowedCommands.put("GETSIMMULT",true);
+            allowedCommands.put("SETSIMMULT",true);
+            allowedCommands.put("GETPLAYSTAT",true);
+            allowedCommands.put("PAUSEPLAY",true);
+            allowedCommands.put("RESTARTPLAY",true);
+            allowedCommands.put("STARTPLAY",true);
+            allowedCommands.put("STOPPLAY",true);
+            allowedCommands.put("GETPLAYMULT",true);
+            allowedCommands.put("SETPLAYMULT",true);
+            allowedCommands.put("GETRECSTAT",true);
+            allowedCommands.put("PAUSEREC",true);
+            allowedCommands.put("RESTARTREC",true);
+            allowedCommands.put("STARTREC",true);
+            allowedCommands.put("STOPREC",true);
+        }
+        // use the HashMap to check the provided Command
+        return allowedCommands.containsKey(testCommand);
+    }// allowCommandWhenRunning 
 
     /************************/
     /* checkCommandState    */
@@ -410,7 +759,8 @@ public class C2SIM_Command {
 
         // RUNNING permits PAUSE or STOP
         if (state.equalsIgnoreCase("RUNNING"))
-            if ((!cmd.equalsIgnoreCase("PAUSE")) && (!cmd.equalsIgnoreCase("STOP")))
+            //if ((!cmd.equalsIgnoreCase("PAUSE")) && (!cmd.equalsIgnoreCase("STOP")))
+            if(!allowCommandWhenRunning(cmd.toUpperCase()))
                 commandStateError(cmd, state);
 
         // PAUSED permits START

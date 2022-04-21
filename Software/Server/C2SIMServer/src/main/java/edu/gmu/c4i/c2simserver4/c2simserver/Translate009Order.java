@@ -40,10 +40,10 @@ public class Translate009Order {
      * returns inputXML translated from C2SIM 0.0.9 to C2SIM 1.0.0
      */
     String translate(String xml){
- System.out.println("XML:"+xml);//debugx
+        
         // pack out whitespace so our edits work
         inputXml = removeWhitespace(xml);
- System.out.println("INPUTTXML:"+inputXml);//debugx       
+     
         // insert the header
         outputXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<MessageBody xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
@@ -53,7 +53,7 @@ public class Translate009Order {
         
         // select the internal header and copy to output (same in both formats)
         outputXml +=  removeChunk("<OrderBody","</ToReceiver>");
- System.out.println("OUT:"+outputXml);//debugx        
+        
         // OrderID block has time issued and DrderID - move to outputXml
         String orderIdBlock = removeChunk("<IssuedTime>","</OrderID>");
         String issuedTime = extractValue(orderIdBlock,"<IsoDateTime>");

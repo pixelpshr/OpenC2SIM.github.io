@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|    Copyright 2001-2019 Networking and Simulation Laboratory     |
+|    Copyright 2001-2022 Networking and Simulation Laboratory     |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -80,6 +80,7 @@ public class C2SIM_Util {
     public static Integer numC2SIM_Routes = 0;
     public static Integer numC2SIM_ForceSides = 0;
     public static Integer numInitMsgs = 0;
+    
 
     /****************/
     /* simplePath   */
@@ -409,20 +410,22 @@ public class C2SIM_Util {
         Format fmt = Format.getCompactFormat();
         fmt.setLineSeparator(LineSeparator.NL);
         XMLOutputter xmlOut = new XMLOutputter(fmt);
-        
-        // If not otherwise specified set C2SIM Version to 1.0.0
-        if (t.getc2SIM_Version() == null)
-            t.setc2SIM_Version("1.0.0");
-        
+      
+        // If not otherwise specified set C2SIM Version to default
+        if (t.getc2SIM_Version() == null){
+            String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+            t.setc2SIM_Version(c2simVer);
+        }
         String newXML = xmlOut.outputString(doc);
 
         // If t is null the call is probably for debugging.  Just return the xml without dealing with headers.
         if (t == null)
             return newXML;
-
+  
         // If this is a C2SIM
         if (t.getProtocol().equals(SISOSTD)) 
             newXML = C2SIMHeader.insertC2SIM(newXML, t.getSender(), t.getReceiver(), "Inform", t.getc2SIM_Version());
+        
         return newXML;
     } // xmlToStringD()
 

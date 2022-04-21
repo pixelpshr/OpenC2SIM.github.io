@@ -87,6 +87,35 @@ public class C2SIM_Server {
     
     // States are UNINITIALIZED, INITIALIZED, RUNNING, PAUSED
     public static C2SIM_Server.SessionState_Enum sessionState = SessionState_Enum.UNINITIALIZED;
+    
+    // global controls for recording, playback and time multiples
+    static String playbackFileName = "/home/bmluser/c2simFiles/c2simReplay/replay.log";
+    static String recordingFilename = "";
+    static int scenarioTimeMultiple = 1;
+    static int playbackTimeMultiple = 1;
+    static boolean runRecorder = false;
+    static boolean runPlayer = false;
+    static boolean runScenario = false;
+    static boolean pausedRecorder = false;
+    static boolean pausedPlayer = false;
+    static boolean pausedScenario = false;
+    public static String getPlaybackFileName(){return playbackFileName;}
+    public static boolean getRecordingState() {return runRecorder;}
+    public static void setRecordingState(boolean newState){runRecorder=newState;}
+    public static boolean getPlaybackState() {return runPlayer;}
+    public static void setPlaybackState(boolean newState){runPlayer=newState;}
+    public static boolean getRunningState() {return runScenario;}
+    public static void setRunningState(boolean newState){runScenario=newState;}
+    public static boolean getScenarioPausedState() {return pausedScenario;}
+    public static void setScenarioPausedState(boolean newState){pausedPlayer=newState;}
+    public static boolean getRecordingPaused(){return pausedRecorder;}
+    public static void setRecordingPaused(boolean newState){pausedRecorder=newState;}
+    public static boolean getPlaybackPaused(){return pausedPlayer;}
+    public static void setPlaybackPaused(boolean newState){pausedPlayer=newState;} 
+    public static int getScenarioTimeMultiple(){return scenarioTimeMultiple;}
+    public static void setScenarioTimeMultiple(int multiple){scenarioTimeMultiple=multiple;}
+    public static int getPlaybackTimeMultiple(){return playbackTimeMultiple;}
+    public static void setPlaybackTimeMultiple(int multiple){playbackTimeMultiple=multiple;}
 
     
     /****************************/
@@ -111,7 +140,7 @@ public class C2SIM_Server {
      * @param - receiver - C2SIM Receiver ID
      * @param - conversationid - C2SIM Conversation ID
      * @param - domain - Domain not used.  Kept for compatability with older versions
-     * @param - clientVersion - Version of the ClientLib that originiated the message
+     * @param - clientVersion - Version of the ClientLib that originated the message
     v* @param forwarders - List of servers that have already handled this transaction
      * @param xmlText - The xml Text including a C2SIM Header
      * @return XML - Indication of success or failure
@@ -201,6 +230,7 @@ public class C2SIM_Server {
             
             
             // Log to replay log file, removing all NL's
+            if(C2SIM_Server.getRecordingState())
             replayLogger.info("Receive  " + msgNumber + "  " + submitterID + "  " + xmlText.replaceAll("[\n\r]", "").replaceAll(">\\s*<", "><"));
 
             // Process the message
@@ -248,6 +278,7 @@ public class C2SIM_Server {
     @param cmd - The command being submitted
     @param parm1 - The first parameter, Varies by specific command.
     @param parm2 - The second parameter.  Varies by specific command
+    @param parm3 - The third parameter.  Varies by specific command
     @return String = Contains indication of success or failure
      */
     @Path("/command")
@@ -259,6 +290,7 @@ public class C2SIM_Server {
             @QueryParam("command") String cmd,
             @QueryParam("parm1") String parm1,
             @QueryParam("parm2") String parm2,
+            @QueryParam("parm3") String parm3,
             @QueryParam("submitterID") String submitter,
             @QueryParam("version") String clientVersion)
             throws C2SIMException {
@@ -271,24 +303,26 @@ public class C2SIM_Server {
         try {
 
             // Set up dummy C2SIM_Transaction = More will be filled in in commandProcess
-            C2SIM_Transaction t = new C2SIM_Transaction("", submitter, SISOSTD, "SERVER", "ALL", "00000000-0000-0000-0000-000000000000", "");
+            C2SIM_Transaction t = new C2SIM_Transaction("", submitter, SISOSTD, "SERVER", "ALL", 
+                "00000000-0000-0000-0000-000000000000", "");
 
             // Count messages
             ++msgNumber;
             t.setMsgnumber(msgNumber);
 
             // Log the command
-            replayLogger.info("Command " + msgNumber + "  " + submitter + "  " + cmd + " " + parm1 + " " + parm2);
+            if(C2SIM_Server.getRecordingState())
+            replayLogger.info("Command " + msgNumber + "  " + submitter + "  " + cmd + " " + parm1 + " " + parm2 + " " + parm3);
 
             debugLogger.info("Command Received - MSG_Number: : " + t.getMsgnumber()
                     + " from submitter: " + t.getSubmitterID()
-                    + " Command " + cmd + " Parms: " + parm1 + ", " + parm2);
+                    + " Command " + cmd + " Parms: " + parm1 + ", " + parm2 + ", " + parm3);
 
             // Check if server and client versions agree
             checkVersion(clientVersion);
 
 
-            result = C2SIM_Command.commandProcess(cmd, parm1, parm2, t);
+            result = C2SIM_Command.commandProcess(cmd, parm1, parm2, parm3,t);
         }   // try
         catch (C2SIMException e) {
             debugLogger.error("Exception processing Unit Command " + e.getCause());
@@ -446,6 +480,7 @@ public class C2SIM_Server {
         ++msgNumber;
 
         // Log the command
+        if(C2SIM_Server.getRecordingState())
         replayLogger.info("Cyber  " + msgNumber + "  " + submitterID + "  " + xmlText.replaceAll("\n", "").replaceAll(">\\s*<", "><"));
         debugLogger.info("Cyber Message Received - MSG_Number: " + msgNumber
                 + " from submitter: " + submitterID
@@ -610,6 +645,7 @@ public class C2SIM_Server {
 
         serverVersion = ver;
 
+        if(C2SIM_Server.getRecordingState())
         replayLogger.debug("Reset  " + msgNumber + " " + "BML" + "************************************************* ");
 
         if (cyberAttack)

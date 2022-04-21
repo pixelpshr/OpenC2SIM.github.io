@@ -16,6 +16,7 @@
  *-----------------------------------------------------------------*/
 package edu.gmu.c4i.c2simserver4.c2simserver;
 
+//import edu.gmu.c4i.c2simclientlib2.C2SIMHeader;
 import edu.gmu.c4i.c2simclientlib2.C2SIMHeader;
 import edu.gmu.c4i.c2simserver4.schema.C2SIMMessageDefinition;
 import edu.gmu.c4i.c2simserver4.c2simserver.C2SIM_Transaction;
@@ -55,7 +56,7 @@ public class C2SIM_C2SIM {
     /************/
     /*
         Perform initial processing on C2SIM Message
-            Determine messaage type and call appropriate method
+        Determine messaage type and call appropriate method
      */
     /**
      * process - Start processing C2SIM Message
@@ -78,8 +79,10 @@ public class C2SIM_C2SIM {
                 Don't publish V9 Initialization,
              */
             if ((trans.messageDef.messageDescriptor.equals("C2SIM_Order")) || (trans.messageDef.messageDescriptor.equals("C2SIM_Report"))) {
+                C2SIM_Server.debugLogger.info("publishing version:" + trans.getc2SIM_Version() + " xml:"+trans.getXmlMsg());
                 C2SIM_Server_STOMP.publishMessage(trans);
                 trans = c2SIM_Translate_9To100(trans);
+                C2SIM_Server.debugLogger.info("also publishing version:" + trans.getc2SIM_Version() + " xml:"+trans.getXmlMsg());
                 C2SIM_Server_STOMP.publishMessage(trans);
             }
             // If not a report or order then this must be a Initialization message.  Translate V9 to V100.  
@@ -92,7 +95,7 @@ public class C2SIM_C2SIM {
 
         else {
 
-            // If this is a V1.0.0 Order or  Report then translate to V9 and publish  Don't publish or process translated V9 Initialization message
+            // If this is a V1.0.x Order or  Report then translate to V9 and publish  Don't publish or process translated V9 Initialization message
             if ((trans.messageDef.messageDescriptor.equals("C2SIM_Order")) || (trans.messageDef.messageDescriptor.equals("C2SIM_Report"))
                     || (trans.messageDef.messageDescriptor.equals("C2SIM_ASX_Report"))) {
                 C2SIM_Server_STOMP.publishMessage(trans);
@@ -239,7 +242,7 @@ public class C2SIM_C2SIM {
             if (c2simVersion == "")
                 c2simVersion = t.getc2SIM_Version();
             else
-                c2simVersion = "1.0.1";
+                c2simVersion = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
             
             // Find all initialization elements in this message and save them pending a SHARE command 
             Element root;       // Root element (MessageBody)
@@ -319,7 +322,7 @@ public class C2SIM_C2SIM {
                     if (route != null) {
                         String uuid = route.getChildText("UUID", ns);
                         if(uuid != null)C2SIM_Util.numC2SIM_Routes++;
-                        // Add to the InitDB debugx
+                        // Add to the InitDB
                         continue;
                     }
 
@@ -971,7 +974,8 @@ public class C2SIM_C2SIM {
         trans.setMsTemp("C2SIM_PositionReport");
         trans.setXmlText(xml);
         trans.setSource("Translated");
-        trans.setc2SIM_Version("1.0.0");
+        String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+        trans.setc2SIM_Version(c2simVer);
         trans.setXmlMsg(C2SIMHeader.removeC2SIM(xml));
 
         // Publish
@@ -1045,7 +1049,8 @@ public class C2SIM_C2SIM {
         t.setMessageDef(C2SIM_Util.mdIndex.get("C2SIM_Order"));
         t.setXmlText(xml);
         t.setSource("Translated");
-        t.setc2SIM_Version("1.0.0");
+        String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+        t.setc2SIM_Version(c2simVer);
 
         // Publish the C2SIM OrderNN
         C2SIM_Server_STOMP.publishMessage(t);
@@ -1453,7 +1458,8 @@ public class C2SIM_C2SIM {
         try {
             // make a copy of the original transaction
             C2SIM_Transaction t100 = t9.clone();
-            t100.setc2SIM_Version("1.0.0");
+            String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+            t100.setc2SIM_Version(c2simVer);
             t100.setSource("Translated");
 
             if (t9.messageDef.messageDescriptor.equals("C2SIM_Order")) {
@@ -1489,7 +1495,8 @@ public class C2SIM_C2SIM {
                 t100.setXmlText(newXml);
                 t100.setXmlMsg(newXml);
                 t100.setDocument(C2SIM_Mapping.parseMessage(newXml));
-                t100.setc2SIM_Version("1.0.0");
+                c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
+                t100.setc2SIM_Version(c2simVer);
             }
 
             else
