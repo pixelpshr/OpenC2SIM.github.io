@@ -35,7 +35,7 @@ import java.util.Vector;
   Creates and returns C2SIMSTOMPMessage objects <p>
  * @see edu.gmu.c4i.c2simclientlib2.C2SIMSTOMPMessage
  * @author Douglas Corner - George Mason University C4I and Cyber Center
- *  code version 4.8.0.4
+ *  code version 4.8.0.5
  */
 public class C2SIMClientSTOMP_Lib extends Thread {
     
