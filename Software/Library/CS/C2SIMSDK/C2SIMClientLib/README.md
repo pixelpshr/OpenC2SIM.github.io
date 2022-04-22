@@ -3,7 +3,7 @@
 Library providing means for client applications to interact with C2SIM environments, ported from the
 [Java OpenC2SIM Client Library v4.8.0.2](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib)
 
-It provides methods for performing REST endpoint calls and interact with the STOMP notification service. See the [C2SIM Server Reference Implementation Documentation 4.8.0.X](https://bit.ly/30y40RI) for details
+It provides methods for performing REST endpoint calls and interact with the STOMP notification service. See the [C2SIM Server Reference Implementation Documentation 4.8.1.X](https://bit.ly/36E8Sb5) for details
 
 Below the differences between the Java version and .NET's are described.
 
