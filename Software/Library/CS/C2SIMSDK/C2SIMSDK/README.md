@@ -151,11 +151,24 @@ For convenience, the following utility methods are provided to handle de/seriali
 These methods can be used to to handle the desired version of the C2SIM schema by picking the appropriate namespace:
 
 ```CS
+// Serialize a .NET order object into the corresponding C2SIM xml
 // If using v1.0.0
 string xmlOrder = C2SIMSDK.FromC2SIMObject<C2SIM.Schema100.OrderBodyType>(orderObject);
 ...
 // If using v1.0.1
 string xmlOrder = C2SIMSDK.FromC2SIMObject<C2SIM.Schema101.OrderBodyType>(orderObject);
+...
+// If using either version, SystemCommand requires the use of the CustomSchema
+var xmlCommand = C2SIMSDK.FromC2SIMObject<C2SIM.CustomSchema.SystemCommandBodyType>(commandObject);
+```
+
+```CS
+// Convert received (C2SIM xml) notification body into a .NET object
+// If using v1.0.0
+var orderObject  = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.OrderBodyType>(e.Body);
+...
+// If using v1.0.1
+var orderObject = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.OrderBodyType>(e.Body);
 ...
 // If using either version, SystemCommand requires the use of the CustomSchema
 var command = C2SIMSDK.ToC2SIMObject<C2SIM.CustomSchema.SystemCommandBodyType>(e.Body);
