@@ -138,6 +138,8 @@ public class C2SIMClientSTOMPLib : IDisposable
 
         _adv_subscriptions = new List<string>();
         _subscriptionId = DateTime.Now.ToFileTime().ToString();
+
+        IsConnected = false;
     }
 
     /// <summary>
@@ -198,6 +200,13 @@ public class C2SIMClientSTOMPLib : IDisposable
     }
     #endregion
 
+    #region Public properties
+    /// <summary>
+    /// State of the connection to STOMP
+    /// </summary>
+    public bool IsConnected { get; private set; }
+    #endregion
+
     #region Public methods
     /// <summary>
     /// Connect to Stomp host, checking for a CONNECTED response
@@ -207,6 +216,12 @@ public class C2SIMClientSTOMPLib : IDisposable
     public async Task<C2SIMSTOMPMessage> Connect()
     {
         _logger?.LogTrace("Entering method");
+        // Clip previous connection if reconnecting
+        if (IsConnected)
+        {
+            await Disconnect();
+        }
+
         try
         {
             if (!IPAddress.TryParse(_host, out IPAddress ipAddress))
@@ -278,6 +293,7 @@ public class C2SIMClientSTOMPLib : IDisposable
             if (resp.MessageType.Equals("CONNECTED"))
             {
                 _logger?.LogTrace("Connected");
+                IsConnected = true;
                 return resp;
             }
             else
@@ -528,8 +544,15 @@ public class C2SIMClientSTOMPLib : IDisposable
             _logger?.LogError(e, emsg);
             throw new C2SIMClientException(emsg, e);
         }
+        // Terminate the message pump
+        if (_cancellationSource != null)
+        {
+            // Trigger cancellation via the common token
+            _cancellationSource.Cancel();
+        }
         // Disconnect was successful return OK
         _logger?.LogTrace("Disconnected");
+        IsConnected = true;
         return "OK";
     }
     #endregion

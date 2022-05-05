@@ -11,7 +11,7 @@ namespace C2SIM;
 /// <summary>
 /// Methods and events for interacting with a C2SIM environment, issuing commands and messages, and receiving notifications
 /// </summary>
-public class C2SIMSDK : IC2SIMSDK
+public class C2SIMSDK : IC2SIMSDK, IDisposable
 {
     #region Public constants
     /// <summary>
@@ -48,6 +48,7 @@ public class C2SIMSDK : IC2SIMSDK
     private CancellationTokenSource _cancellationSource;
 
     internal static ILogger _logger;
+    private bool disposedValue;
     #endregion
 
     #region Construction / teardown
@@ -94,6 +95,46 @@ public class C2SIMSDK : IC2SIMSDK
         _protocol = settings.Protocol;
         _protocolVersion = settings.ProtocolVersion;
     }
+
+    /// <summary>
+    /// Dispose
+    /// </summary>
+    /// <param name="disposing"></param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                // TODO: dispose managed state (managed objects)
+                if (_c2SimStompClient != null)
+                {
+                    _c2SimStompClient.Dispose();
+                }
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            // TODO: set large fields to null
+            disposedValue = true;
+        }
+    }
+
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    // ~C2SIMSDK()
+    // {
+    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+    //     Dispose(disposing: false);
+    // }
+
+    /// <summary>
+    /// Dispose
+    /// </summary>
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
     #endregion
 
     #region Public properties
@@ -116,6 +157,12 @@ public class C2SIMSDK : IC2SIMSDK
     /// Version of the protocol (1.0.0, 0.0.9, ...)
     /// </summary>
     public string ProtocolVersion => _protocolVersion;
+    
+    /// <summary>
+    /// Connection to C2SIM notification service
+    /// </summary>
+    /// <returns></returns>
+    public bool IsConnected() => _c2SimStompClient.IsConnected;
     #endregion
 
     #region Public events
