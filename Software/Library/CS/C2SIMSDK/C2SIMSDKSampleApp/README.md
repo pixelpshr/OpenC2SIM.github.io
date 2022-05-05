@@ -21,14 +21,14 @@ For a description of commands and messages, see the [C2SIM Server Reference Impl
 
 ## Configuration settings
 
-Default parameters are set in [appsettings.json](./appsettings.json), within an `Application` section:
+Default parameters are set in [appsettings.json](./appsettings.json), within an `C2SIM` section:
 
-* C2SIM:SubmitterId - Id string of the submitter
-* C2SIM:RestUrl - Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer
-* C2SIM:RestPassword - C2SIM server password
-* C2SIM:StompUrl - Full notification service (STOMP) endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
-* C2SIM:Protocol - "SISO-STD-C2SIM" (or "BML")
-* C2SIM:ProtocolVersion - "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
+* SubmitterId - Id string of the submitter
+* RestUrl - Full C2SIM server endpoint, including host:port/path, e.g. "http://10.2.10.30:8080/C2SIMServer
+* RestPassword - C2SIM server password
+* StompUrl - Full notification service (STOMP) endpoint, including host:port/destination, e.g. "http://10.2.10.30:61613/topic/C2SIM"
+* Protocol - "SISO-STD-C2SIM" (or "BML")
+* ProtocolVersion - "1.0.0" for published standard, or legacy version (e.g. v9="0.0.9")
 
 These settings can be overridden via command line parameters (described further down)
 
