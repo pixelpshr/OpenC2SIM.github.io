@@ -88,7 +88,8 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
             new C2SIMClientSTOMPSettings(
                 stompHost,
                 _stompUri.Port.ToString(),
-                _stompUri.PathAndQuery
+                _stompUri.PathAndQuery,
+                settings.StompHeartBeat
             )
         );
 
@@ -472,6 +473,7 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     public async Task<C2SIMServerResponse> PushMessage(string xmlMessage, string performative)
     {
         _logger?.LogTrace("Entering method");
+        _logger?.LogDebug($"Pushing {performative}: '{xmlMessage}'");
         var c2SimRestClient = CreateClientRestService(performative);
         try
         {
@@ -515,6 +517,7 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command, string parm1=null, string parm2=null, string parm3=null)
     {
         _logger?.LogTrace($"Entering method {command.ToString()}");
+        _logger?.LogDebug($"Pushing command {command}({parm1},{parm2},{parm3})");
         var c2SimRestClient = CreateClientRestService("INFORM");
         // Most (pre v1.0.2) commands take a password and empty parameters
         if (parm1 == null)
