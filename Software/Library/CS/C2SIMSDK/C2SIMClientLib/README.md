@@ -22,7 +22,13 @@ is no strong reason for using `GetNext_NoBlock()` in most cases.
 ## Constructors
 
 Java's `C2SIMClientREST_Lib()` and `C2SIMClientSTOMP_Lib` constructors now take parameters compatible with [Dependency Injection](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) and the [Options](https://docs.microsoft.com/en-us/dotnet/core/extensions/options)
-patterns, taking an ILogger parameter, and a structured record packaging the different settings (`C2SIMClientRESTSettings` and `C2SIMClientSTOMPSettings` respectively)
+patterns, taking an ILogger parameter, and a structured record packaging the different settings ([C2SIMClientRESTSettings](C2SIMClientRESTSettings.cs) and [C2SIMClientSTOMPSettings](C2SIMClientSTOMPSettings.cs) respectively)
+
+## STOMP heart-beat
+
+STOMP connection adds a "heart-beat" element that configures the STOMP Server to send (empty) heart-beat messages at a certain frequency. This reduces the opportunities for connection timeouts.
+
+The default setting is `10000` (a message every 10 seconds), but can be changed via a [C2SIMClientSTOMPSettings](C2SIMClientSTOMPSettings.cs) parameter if desired. Setting that to zero prevents the STOMP Server from sending any heart-beat messages.
 
 ## Exceptions
 
@@ -31,7 +37,7 @@ The Java code used a property for that.
 
 ## Parsing of STOMP messages' C2SIM header and C2SIM body
 
-Java's `getNext_Block/NoBlock()` return a `C2SIMSTOMPMessage` where the `C2SIMHeader` property is always null. The `MessageBody` property
+Java's `getNext_Block/NoBlock()` return a [C2SIMSTOMPMessage](C2SIMSTOMPMessage.cs) where the `C2SIMHeader` property is always null. The `MessageBody` property
 contains the XML for both the messages' C2SIM header a well as the C2SIM body. 
 
 Code in `getNext_Block()` that would parse things out, populating the C2SIMHeader and removing the corresponding XML from MessageBody exists, 

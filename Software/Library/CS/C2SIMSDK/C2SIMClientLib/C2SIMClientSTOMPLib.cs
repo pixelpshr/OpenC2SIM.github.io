@@ -10,39 +10,6 @@ using Microsoft.Extensions.Options;
 namespace C2SimClientLib;
 
 /// <summary>
-/// STOMP service settings
-/// </summary>
-public class C2SIMClientSTOMPSettings
-{
-    /// <summary>
-    /// STOMP service host
-    /// </summary>
-    public string Host { get; set; }
-    /// <summary>
-    /// STOMP service port
-    /// </summary>
-    public string Port { get; set; }
-    /// <summary>
-    /// STOMP service topic/destination
-    /// </summary>
-    public string Destination { get; set; }
-    
-    
-    /// <summary>
-    /// COnstruct Settings object
-    /// </summary>
-    /// <param name="host"></param>
-    /// <param name="port"></param>
-    /// <param name="destination"></param>
-    public C2SIMClientSTOMPSettings(string host, string port, string destination)
-    {
-        Host = host;
-        Port = port;
-        Destination = destination;
-    }
-}
-
-/// <summary>
 ///  STOMP server messaging
 /// </summary>
 public class C2SIMClientSTOMPLib : IDisposable
@@ -52,7 +19,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// Type of message
     /// </summary>
 #pragma warning disable 1591
-    public enum MessageType { MESSAGE, CONNECTED, ERROR };
+    public enum MessageType { EMPTY, MESSAGE, CONNECTED, ERROR };
 #pragma warning restore 1591
     #endregion
 
@@ -100,6 +67,10 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// </summary>
     private C2SIMSTOMPMessage _currentMsg;
     /// <summary>
+    /// Server heart beat message frequency in milliseconds
+    /// </summary>
+    private int _serverHeartBeat;
+    /// <summary>
     /// Commands the cancellation of async operations
     /// </summary>
     private CancellationTokenSource _cancellationSource;
@@ -138,6 +109,8 @@ public class C2SIMClientSTOMPLib : IDisposable
 
         _adv_subscriptions = new List<string>();
         _subscriptionId = DateTime.Now.ToFileTime().ToString();
+
+        _serverHeartBeat = settings.ServerHeartBeat;
 
         IsConnected = false;
     }
@@ -259,6 +232,7 @@ public class C2SIMClientSTOMPLib : IDisposable
             // Send connection message
             _logger.LogTrace("Sending CONNECT");
             string connectFrame = "CONNECT\n"
+                    + "heart-beat: 0," + _serverHeartBeat.ToString() + "\n"
                     + "accept-version: 1.2\n"
                     + "login:\n"
                     + "passcode:\n"
@@ -626,7 +600,7 @@ public class C2SIMClientSTOMPLib : IDisposable
                 try
                 {
                     // Read command - there may be an extra '\0' preceding it
-                    MessageType msgType = MessageType.ERROR;
+                    MessageType msgType = MessageType.EMPTY;
                     while (!clientReader.EndOfStream)
                     {
                         string cmd = await clientReader.ReadLineAsync();
@@ -638,6 +612,10 @@ public class C2SIMClientSTOMPLib : IDisposable
                         if (Enum.TryParse<MessageType>(cmd, ignoreCase: true, out msgType))
                         {
                             msg._messageType = cmd.ToUpperInvariant();
+                        }
+                        else if (string.IsNullOrWhiteSpace(cmd))
+                        {
+                            msg._messageType = "EMPTY";
                         }
                         else
                         {
@@ -667,6 +645,12 @@ public class C2SIMClientSTOMPLib : IDisposable
                             contentLength = long.Parse(cL);
                         }
                     }
+                    // Skip empty heart-beat messages
+                    if (msgType == MessageType.EMPTY && contentLength == 0)
+                    {
+                        continue;
+                    }
+
                     // Use the value from content-length header (or default value if we didn't find one)
                     msg._contentLength = contentLength;
                     msg._messageLength = contentLength;          // This may be modified later if this is a C2SIM message
