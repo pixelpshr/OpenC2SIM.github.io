@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
-    <Version>1.2.7</Version>
+    <Version>1.2.8</Version>
     <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -38,7 +38,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.7</Version>
+    <Version>1.2.8</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -52,6 +52,11 @@
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
     <PackageReleaseNotes>
+    ## Version 1.2.8
+    * Added a heart-beat option to STOMP connections to enhance the longevity of the subscriptions - defaults to server messages every 10 seconds
+    * Refactored the Library settings classes - C2SIMClientRESTSettings and C2SIMClientSTOMPSettings - into separate files
+    * Added debug logging listing content of messages and commands
+
     ## Version 1.2.7
     * Fixed issue with switching connections to another server midrun (connection confirmation got swallowed by previous message pump)
     * Making C2SIMSDK disposable
