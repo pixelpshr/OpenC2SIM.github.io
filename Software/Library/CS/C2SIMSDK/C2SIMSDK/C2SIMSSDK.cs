@@ -103,6 +103,7 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
+        _logger?.LogTrace("Entering method");
         if (!disposedValue)
         {
             if (disposing)
@@ -110,6 +111,7 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
                 // TODO: dispose managed state (managed objects)
                 if (_c2SimStompClient != null)
                 {
+                    _cancellationSource.Cancel();
                     _c2SimStompClient.Dispose();
                 }
             }
