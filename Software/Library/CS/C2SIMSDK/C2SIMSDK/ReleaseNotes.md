@@ -1,5 +1,17 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.9
+* Safer termination when client code fails to call Disconnect() before disposing
+
+## Version 1.2.8
+    * Added a heart-beat option to STOMP connections to enhance the longevity of the subscriptions - defaults to server messages every 10 seconds
+    * Refactored the Library settings classes - C2SIMClientRESTSettings and C2SIMClientSTOMPSettings - into separate files
+    * Added debug logging listing content of messages and commands
+
+## Version 1.2.7
+    * Fixed issue with switching connections to another server midrun (connection confirmation got swallowed by previous message pump)
+    * Making C2SIMSDK disposable
+
 ## Version 1.2.6
 * Extended list of commands to comply with the schema version 1.0.2
 
