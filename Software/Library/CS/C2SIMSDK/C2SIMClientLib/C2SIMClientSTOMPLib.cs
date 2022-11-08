@@ -131,6 +131,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
+        _logger?.LogTrace("Entering method");
         if (!_disposedValue)
         {
             if (disposing)
@@ -264,7 +265,7 @@ public class C2SIMClientSTOMPLib : IDisposable
             // Get the response to connection request
             C2SIMSTOMPMessage resp = await GetNext_Block();
             // Are we connected?  If so return the message.  If not throw an exception
-            if (resp.MessageType.Equals("CONNECTED"))
+            if (resp is not null && resp.MessageType.Equals("CONNECTED"))
             {
                 _logger?.LogTrace("Connected");
                 IsConnected = true;
@@ -272,7 +273,7 @@ public class C2SIMClientSTOMPLib : IDisposable
             }
             else
             {
-                string emsg = "Expected 'CONNECTED' but received " + resp.MessageType;
+                string emsg = "Expected 'CONNECTED' but received " + resp?.MessageType ?? "null";
                 _logger?.LogError(emsg);
                 throw new C2SIMClientException(emsg);
             }
@@ -370,9 +371,9 @@ public class C2SIMClientSTOMPLib : IDisposable
         }
         catch (OperationCanceledException ie)
         {
-            string emsg = "Interrupted exception in queue.take";
+            string emsg = "STOMP block reading cancelled";
             _logger?.LogError(emsg, ie);
-            throw new C2SIMClientException(emsg, ie);
+            return null;
         }
         return ProcessSTOMPMessage(_currentMsg);
     }
