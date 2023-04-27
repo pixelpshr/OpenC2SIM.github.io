@@ -229,7 +229,7 @@ public class C2SIM_Util {
     * createElementStack = Create a set of elements started from a given point.
     @param elements - String of elements names separated by slashes
     @param attachmentPoint - Element to attach new elements to
-    @param ns - Namespace used for all eloements
+    @param ns - Namespace used for all elements
     @return - Final element in list
     */
     public static Element createElementStack(String elements, Element attachmentPoint, Namespace ns) {
@@ -305,65 +305,6 @@ public class C2SIM_Util {
         }
         return toDate;
     } // convertDate()
-
-
-
-    /****************************/
-    /*  publishNotification     */
-    /****************************/
-    /**
-    * Format and publish C2SIM Notification
-    @param type - String type of notification
-    @param t - C2SIM_Transaction
-    @throws C2SIMException 
-    */
-    public static void publishNotification(String type, C2SIM_Transaction t) throws C2SIMException {
-
-            // Create document
-            Document tempDoc;
-            Element tempEl;
-            // Create output document and add root element
-            Document doc = new Document();
-            Element root = new Element("MessageBody", c2sim_NS);
-            
-            // Simulation Notification
-            Element simulationNotification = new Element("C2SIM_Simulation_Notification", c2sim_NS);
-            root.addContent(simulationNotification);
-            
-            // Notification_Type
-            Element notification = new Element("Notification_Type", c2sim_NS);
-            notification.addContent(type);
-            simulationNotification.addContent(notification);
-
-            // Number_InitializationMessages
-            Element numMO = new Element("Number_InitializationMessages", c2sim_NS);
-            numMO.addContent(numInitMsgs.toString());
-            simulationNotification.addContent(numMO);
-
-            // Number_Units
-            Integer numUnitsInt = C2SIM_Util.unitMap.size();
-            Element numUnits = new Element("Number_Units", c2sim_NS).setText(numUnitsInt.toString());;
-            simulationNotification.addContent(numUnits);
-
-            // Number_ForceSides
-            Element numForceSides = new Element("Number_ForceSides", c2sim_NS).setText(numC2SIM_ForceSides.toString());
-            simulationNotification.addContent(numForceSides);
-
-            // Add root to document
-            doc.addContent(root);
-
-            // Set parameters in the C2SIM_Transaction object
-            t.msTemp = "C2SIM_Notification";
-            t.setSource("Generated");
-            t.setSender("Server");
-            t.setReceiver("ALL");
-            String xml = xmlToStringD(doc, t);
-            t.setXmlText(xml);
-
-            // Publish the message
-            C2SIM_Server_STOMP.publishMessage(t);
-        //}
-    }   // publishNotification()
 
 
     /********************/

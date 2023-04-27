@@ -5,7 +5,7 @@
 
     <groupId>edu.gmu.c4i.c2simserver4</groupId>
     <artifactId>C2SIMServer</artifactId>
-    <version>4.8.0.13</version>
+    <version>4.8.3.3</version>
     <packaging>war</packaging>
 
     <name>C2SIMServer</name>

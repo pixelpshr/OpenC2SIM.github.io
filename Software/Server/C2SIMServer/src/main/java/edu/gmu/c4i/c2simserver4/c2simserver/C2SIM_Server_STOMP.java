@@ -18,6 +18,7 @@ package edu.gmu.c4i.c2simserver4.c2simserver;
 
 import edu.gmu.c4i.c2simclientlib2.C2SIMClientException;
 import edu.gmu.c4i.c2simclientlib2.*;
+import static edu.gmu.c4i.c2simserver4.c2simserver.C2SIM_Server.debugLogger;
 //import edu.gmu.c4i.c2sim_wsclient2.*;
 
 import edu.gmu.c4i.c2simserver4.schema.C2SIMMessageDefinition;
@@ -55,7 +56,6 @@ public class C2SIM_Server_STOMP {
     static Boolean publishToBoth;
     static String publishToBothS;
     private static C2SIMClientSTOMP_Lib c = null;
-    //private static C2SIMClientSTOMP_Lib c2 = null;
     BufferedReader input;
     public static String SISOSTD = "SISO-STD-C2SIM";
 
@@ -71,9 +71,11 @@ public class C2SIM_Server_STOMP {
     public static void initialize(Properties props, Logger debugLoggerP) throws C2SIMException {
 
         /*
-            Earlier BML/C2SIM implementations expected the topic to be /topic/BML.  In order to support these implementations
-                the server will publish to both topics.
-                This function may be turned off with the publishToBoth property
+            The topic is expected to be /topic/BML.
+        
+            Filtering by STOMP server within thsi topic is accomplised by clietn-side
+            e.g.  addAdvSubscription("message-selector = 'C2SIM_Report') or
+            any other MessageDescriptor from C2SIM_C2SIM.identoty()
          */
         String response;
         debugLogger = debugLoggerP;
@@ -83,28 +85,22 @@ public class C2SIM_Server_STOMP {
         topicName2 = props.getProperty("stomp.topicName2", "");
         publishToBothS = props.getProperty("stomp.publishToBoth", "F");
 
-
         publishToBoth = C2SIM_Util.toBoolean(publishToBothS);
 
         // Create the Client Object
         c = new C2SIMClientSTOMP_Lib();
-        //c2 = new C2SIMClientSTOMP_Lib();
 
         // Set the host
         c.setHost(stompHost);                
-        //c2.setHost(stompHost);
 
         // Set the STOMP port port
         c.setPort(stompPort);
-        //c2.setPort(stompPort);
 
         // Set the topic
         c.setDestination(topicName);
-        //c2.setDestination(topicName2);
 
         // Connect to the host
         C2SIMSTOMPMessage resp;
-
         debugLogger.info("Connecting to STOMP Server: " + stompHost + " port: " + stompPort + " topic: " + topicName);
         try {
             resp = c.connect();
@@ -122,21 +118,6 @@ public class C2SIM_Server_STOMP {
 
         //Are we publishing to two topics?
 
-//        if (publishToBoth) {
-//            debugLogger.info("Connecting to STOMP Server - Second Topic: " + stompHost + " port: " + stompPort + " topic: " + topicName2);
-//            try {
-//                resp = c2.connect();
-//            }   // try
-//            catch (C2SIMClientException e) {
-//                // Error during connect print message and return
-//                debugLogger.error("Unable to connect to STOMP server on second topic" + e.getMessage());
-//                throw new C2SIMException("Unable to connect to STOMP server on second topic" + e.getMessage());
-//
-//            }   // BMLCLientException   // BMLCLientException
-//
-//            debugLogger.info("Response from STOMP Server - Second topic: " + resp.getMessageType());
-//        }   // publishToBoth
-
         // OK, return
         return;
 
@@ -152,13 +133,16 @@ public class C2SIM_Server_STOMP {
     @throws C2SIMException 
     */
     public static void publishMessage(C2SIM_Transaction t) throws C2SIMException {
+        
+        C2SIM_Server.debugLogger.info("START PUBLISH MsgNumber:" + t.msgnumber +
+            " MD:" + t.messageDef.messageDescriptor);
 
         String msgType = "";
         Vector<String> headers = new Vector<>();
-        if (t.messageDef == null)
+        if (t.messageDef == null) {
             msgType = "Miscellaneous";
-        else
-            msgType = t.getMessageDef().messageDescriptor;
+        }
+        else msgType = t.getMessageDef().messageDescriptor;
 
         // Build vector of headers
         headers.add("destination:" + topicName + "\n");
@@ -168,10 +152,14 @@ public class C2SIM_Server_STOMP {
         headers.add("source:" + t.getSource() + "\n");
         headers.add("message-time:" + t.getMsgTime() + "\n");
         headers.add("forwarders:" + t.getForwarders() + "\n");
-        if (t.getMsTemp().equals(""))
+        if (t.getMsTemp() == null)
             headers.add("message-selector:" + t.messageDef.messageDescriptor + "\n");
-        else
-            headers.add("message-selector:" + t.getMsTemp() + "\n");
+        else {
+            if (t.getMsTemp().equals(""))
+                headers.add("message-selector:" + t.messageDef.messageDescriptor + "\n");
+            else
+                headers.add("message-selector:" + t.getMsTemp() + "\n");
+        }
         headers.add("message-type:" + msgType + "\n");
         if (t.getProtocol().equalsIgnoreCase(SISOSTD)) {
             headers.add("message-dialect:" + SISOSTD + "\n");
@@ -187,29 +175,38 @@ public class C2SIM_Server_STOMP {
             headers.add("receiver:" + t.getReceiver() + "\n");
             headers.add("communicativeActTypeCode:" + t.communicativeActTypeCode + "\n");
         }   // if C2SIM
-
-
-        // Log message being published to debug log and 
+     
+        // Log message being published to debug log and if not in playback
         // Log to replay log file, removing all NL's
-        if(C2SIM_Server.getRecordingState())
-        C2SIM_Server.replayLogger.info(t.getSource() + "  " + t.getMsgnumber() + "  " + 
-            t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
-        else C2SIM_Server.debugLogger.info("STOMP:" + topicName + " "+ topicName2 + " " + publishToBoth + " " +
+        if(C2SIM_Command.getRecordingStatus().equals("RECORDING_IN_PROGRESS")) {
+            // do not publish server replay to replayLogger
+            if(!C2SIM_Server.playbackStatus.equals("PLAYBACK_RUNNING"))
+                C2SIM_Server.replayLogger.info(t.getSource() + "  " + t.getMsgnumber() + "  " + 
+                    t.getSubmitterID() + "  " + 
+                    t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
+        }
+        // if not replayLogging sends, log to debugLog instead
+        // but do not log playback to debugLogger
+        else if(!C2SIM_Server.playbackStatus.equals("PLAYBACK_RUNNING")){ 
+            C2SIM_Server.debugLogger.info("STOMP:" + topicName + " "+
             t.getSource() + "  " + t.getMsgnumber() + "  " + 
             t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
-
+        }
         try {
             // Publish the message 
             c.setDestination(topicName);
             c.publish("SEND", headers, t.getXmlText());
-            if (publishToBoth) {
-                c.setDestination(topicName2);
-                c.publish("SEND", headers, t.getXmlText());
-            }
+            
+            // for debug:
+            int i,s=headers.size();
+            String hdr="";
+            for(i=0;i<s;++i)hdr+=(headers.get(i)+"|");
+            C2SIM_Server.debugLogger.info("SENDHEADER " + hdr);
+            
         }   // try
 
         catch (C2SIMClientException e) {
-            debugLogger.error("Error while publishing: " + e.getMessage());
+            C2SIM_Server.debugLogger.error("Error while publishing: " + e.getMessage());
             throw new C2SIMException("Error while publishing: " + e.getMessage());
         }
 
@@ -238,14 +235,14 @@ public class C2SIM_Server_STOMP {
         headers.add("message-number:" + t.getMsgnumber() + "\n");
 
         // Log to replay log file, removing all NL's
-        if(C2SIM_Server.getRecordingState())
-        C2SIM_Server.replayLogger.info("Document  " + t.getMsgnumber() + "  " + t.getSubmitterID() + "  " + t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
+        if(C2SIM_Command.getRecordingStatus().equals("RECORDING_IN_PROGRESS"))
+        C2SIM_Server.replayLogger.info(
+            "Document  " + t.getMsgnumber() + "  " + t.getSubmitterID() + "  " + 
+            t.getXmlText().replaceAll("\n", "").replaceAll(">\\s*<", "><"));
 
         try {
             // Publish the message    
             c.publish("SEND", headers, t.getXmlText());
-//            if (publishToBoth)
-//                c2.publish("SEND", headers, t.getXmlText());
         }
 
         catch (C2SIMClientException e) {

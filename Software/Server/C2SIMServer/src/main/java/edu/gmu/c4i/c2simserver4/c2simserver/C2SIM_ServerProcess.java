@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|    Copyright 2001-2022 Networking and Simulation Laboratory     |
+|    Copyright 2001-2023 Networking and Simulation Laboratory     |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -14,6 +14,10 @@
 | without express or implied warranties.  All risk associated     |
 | with use of this software is expressly assumed by the user.     |
  *-----------------------------------------------------------------*/
+
+// C2SIMServerv4.8.3.2
+// implements schema C2SIM_SMX_LOX_CWIX2023v2.zsd
+
 package edu.gmu.c4i.c2simserver4.c2simserver;
 
 import edu.gmu.c4i.c2simclientlib2.C2SIMHeader;
@@ -116,7 +120,6 @@ public class C2SIM_ServerProcess {
 
         String rootElement;
 
-
         if ((trans.getProtocol().equalsIgnoreCase(SISOSTD)) && !(trans.getXmlText().contains("<Message"))) {
             C2SIM_Server.debugLogger.error("Protocol = C2SIM but XML root element is not <Message>");
             throw new C2SIMException("Protocol is C2SIM but XML root element is not <Message>");
@@ -197,14 +200,15 @@ public class C2SIM_ServerProcess {
 
         // If we can't identify the message we don't know how to process it.
         if (trans.messageDef == null) {
-            C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + " from submitter: " + trans.getSubmitterID() + " Can't identify message type");
+            C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + 
+                " from submitter: " + trans.getSubmitterID() + " Can't identify message type");
             throw new C2SIMException("Unable to identify message");
         }   // can't identify message
 
         // We have identified the message.  Log to debug log
-        C2SIM_Server.debugLogger.info("Message Number; " + trans.getMsgnumber()
+        C2SIM_Server.debugLogger.info("Message Number: " + trans.getMsgnumber()
                 + " from submitter: " + trans.getSubmitterID()
-                + " Identified as: " + trans.messageDef.messageDescriptor
+                + " identified as: " + trans.messageDef.messageDescriptor
                 + " dialect:" + trans.messageDef.dialect
                 + " protocol:" + trans.getProtocol()
                 + " version:" + trans.c2SIM_Version);
@@ -228,6 +232,13 @@ public class C2SIM_ServerProcess {
         /*
         // Examine the dialect or messageDescriptor field and pass to the proper class.process() 
          */
+        
+        // C2SIM
+        if (trans.messageDef.dialect.equalsIgnoreCase("C2SIM")) {
+            C2SIM_C2SIM.process(trans);
+            return;
+        }   // C2SIM
+        
         // MSDL
         if (trans.messageDef.dialect.equalsIgnoreCase("MSDL")) {
             C2SIM_MSDL.process(trans);
@@ -245,12 +256,6 @@ public class C2SIM_ServerProcess {
             C2SIM_CBML.process(trans);
             return;
         }   // IBML09     
-
-        // C2SIM
-        if (trans.messageDef.dialect.equalsIgnoreCase("C2SIM")) {
-            C2SIM_C2SIM.process(trans);
-            return;
-        }   // C2SIM
 
         // Log information about received message in debug Log
         C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + " from submitter: "
@@ -336,11 +341,14 @@ public class C2SIM_ServerProcess {
 
         // If we can't identify write a log message
         if (thisMessage == null) {
-            C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + " from submitter: " + trans.getSubmitterID() + " Can't identify message type");
+            C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + 
+                " from submitter: " + trans.getSubmitterID() + " Can't identify message type");
             return null;
         }
 
-        C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + " from submitter: " + trans.getSubmitterID() + " MessageSelector: " + trans.getMessageDef().messageDescriptor);
+        C2SIM_Server.debugLogger.info("Message number; " + trans.getMsgnumber() + 
+                " from submitter: " + trans.getSubmitterID() + " MessageSelector: " + 
+                trans.getMessageDef().messageDescriptor);
 
         // Should this message be published?;
         if (thisMessage.inactive || thisMessage.processManually)
@@ -371,19 +379,19 @@ public class C2SIM_ServerProcess {
         String msgType = t.getMessageDef().messageType;
 
         if ((state == C2SIM_Server.SessionState_Enum.UNINITIALIZED)
-                || (state == C2SIM_Server.SessionState_Enum.INITIALIZED)
-                || (state == C2SIM_Server.SessionState_Enum.PAUSED)) {
-            C2SIM_Server.debugLogger.error("Messages not permitted in server state: " + state.toString());
-            throw new C2SIMException("Messages not permitted in server state: " + state.toString());
+                || (state == C2SIM_Server.SessionState_Enum.INITIALIZED)) {
+            C2SIM_Server.debugLogger.error("Input messages not permitted in server state: " + state.toString());
+            throw new C2SIMException("Input messages not permitted in server state: " + state.toString());
         }
 
         if ((state == C2SIM_Server.SessionState_Enum.INITIALIZING) && (!msgType.equalsIgnoreCase("INITIALIZATION"))) {
             C2SIM_Server.debugLogger.error("Only INITIALIZATION messages are permitted in server state " + state.toString());
             throw new C2SIMException("Only INITIALIZATION messages are preermitted in server state " + state.toString());
         }
-        if ((state == C2SIM_Server.SessionState_Enum.RUNNING) && (msgType.equalsIgnoreCase("INITIALIZATION"))) {
-            C2SIM_Server.debugLogger.error("INITIALIZATION messages are not permitted in server state " + state.toString());
-            throw new C2SIMException("INITIALIZATION messages are not permitted in server state " + state.toString());
+        if ((state == C2SIM_Server.SessionState_Enum.RUNNING) && (msgType.equalsIgnoreCase("INITIALIZATION") && 
+                (!C2SIM_Server.playbackStatus.equals("PLAYBACK_RUNNING"))) && !t.getSubmitterID().equals("REPLAY")) {
+            C2SIM_Server.debugLogger.error("INITIALIZATION messages except REPLAY are not permitted in server state " + state.toString());
+            throw new C2SIMException("INITIALIZATION messages except REPLAY are not permitted in server state " + state.toString());
         }
         // Everything seems OK, Return
     }   // checkMessageState()

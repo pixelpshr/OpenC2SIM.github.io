@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|    Copyright 2001-2022 Networking and Simulation Laboratory     |
+|    Copyright 2001-2023 Networking and Simulation Laboratory     |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -13,7 +13,11 @@
 | of this software for any purposes.  It is provided "AS IS"      |
 | without express or implied warranties.  All risk associated     |
 | with use of this software is expressly assumed by the user.     |
- *-----------------------------------------------------------------*/
+ *---------------------------------------------------------------*/
+
+// C2SIMServerv4.8.3.2
+// implements schema C2SIM_SMX_LOX_CWIX2023v2.zsd
+
 package edu.gmu.c4i.c2simserver4.c2simserver;
 
 import edu.gmu.c4i.c2simserver4.schema.C2SIMDB;
@@ -89,35 +93,35 @@ public class C2SIM_Server {
     public static C2SIM_Server.SessionState_Enum sessionState = SessionState_Enum.UNINITIALIZED;
     
     // global controls for recording, playback and time multiples
-    static String playbackFileName = "/home/bmluser/c2simFiles/c2simReplay/replay.log";
+    
+    // SystemMessage states
+    static String playbackStatus = "NO_PLAYBACK_IN_PROGRESS";
+    static String recordingStatus = "RECORDING_IN_PROGRESS";
+    static String recordingName = "replay.log";
+    static String playbackPath = "";
+    static String playbackFileName = "replay.log";
+    static String playbackFilePathName = "";
+    static String playbackStartTime = "0";
+    static String playbackMultipleString = "1";
     static String recordingFilename = "";
-    static int scenarioTimeMultiple = 1;
-    static int playbackTimeMultiple = 1;
-    static boolean runRecorder = false;
-    static boolean runPlayer = false;
+    static String scenarioTimeMultiple = "1";
+    static String playbackTimeMultiple = "1";
     static boolean runScenario = false;
     static boolean pausedRecorder = false;
     static boolean pausedPlayer = false;
     static boolean pausedScenario = false;
-    public static String getPlaybackFileName(){return playbackFileName;}
-    public static boolean getRecordingState() {return runRecorder;}
-    public static void setRecordingState(boolean newState){runRecorder=newState;}
-    public static boolean getPlaybackState() {return runPlayer;}
-    public static void setPlaybackState(boolean newState){runPlayer=newState;}
     public static boolean getRunningState() {return runScenario;}
     public static void setRunningState(boolean newState){runScenario=newState;}
     public static boolean getScenarioPausedState() {return pausedScenario;}
-    public static void setScenarioPausedState(boolean newState){pausedPlayer=newState;}
+    public static void setScenarioPausedState(boolean newState){pausedScenario=newState;}
     public static boolean getRecordingPaused(){return pausedRecorder;}
     public static void setRecordingPaused(boolean newState){pausedRecorder=newState;}
     public static boolean getPlaybackPaused(){return pausedPlayer;}
     public static void setPlaybackPaused(boolean newState){pausedPlayer=newState;} 
-    public static int getScenarioTimeMultiple(){return scenarioTimeMultiple;}
-    public static void setScenarioTimeMultiple(int multiple){scenarioTimeMultiple=multiple;}
-    public static int getPlaybackTimeMultiple(){return playbackTimeMultiple;}
-    public static void setPlaybackTimeMultiple(int multiple){playbackTimeMultiple=multiple;}
-
+    public static String getScenarioTimeMultiple(){return scenarioTimeMultiple;}
+    public static void setScenarioTimeMultiple(String multiple){scenarioTimeMultiple=multiple;}
     
+
     /****************************/
     /* postC2SIM                  */
     /***************************/
@@ -177,8 +181,9 @@ public class C2SIM_Server {
         try {
 
             // Create object to hold parameters (forwarders is set later)
-            trans = new C2SIM_Transaction(xmlText, submitterID, protocol, sender, receiver, communicativeActTypeCode, "");
-            trans.setMsgTime(LocalDateTime.now().format(C2SIM_Server.dtf));
+            trans = new C2SIM_Transaction(xmlText, submitterID, protocol, sender, 
+                receiver, communicativeActTypeCode, "");
+            trans.setMsgTime(LocalDateTime.now().format(dtf));
             trans.setSource("Client");  
             if (sender == null)
                 trans.setSender("");
@@ -230,8 +235,9 @@ public class C2SIM_Server {
             
             
             // Log to replay log file, removing all NL's
-            if(C2SIM_Server.getRecordingState())
-            replayLogger.info("Receive  " + msgNumber + "  " + submitterID + "  " + xmlText.replaceAll("[\n\r]", "").replaceAll(">\\s*<", "><"));
+            if(recordingStatus.equals("RECORDING_IN_PROGRESS"))
+            replayLogger.info("Receive  " + msgNumber + "  " + submitterID + "  " + 
+                xmlText.replaceAll("[\n\r]", "").replaceAll(">\\s*<", "><"));
 
             // Process the message
             C2SIM_ServerProcess.processMessage(trans);
@@ -263,7 +269,8 @@ public class C2SIM_Server {
         elapsedTime = timeInSecs.toString();
 
         // Log response to debug logter
-        debugLogger.info("Response: " + elapsedTime + "  " + "Message Number: " + msgNumber + "  " + " Submitter: " + submitterID);
+        debugLogger.info("Response: " + elapsedTime + "  " + "Message Number: " + 
+            msgNumber + "  " + " Submitter: " + submitterID);
 
         return createResultMsgOK("OK", "Message processed successfully", msgNumber, timeInSecs);
 
@@ -297,7 +304,6 @@ public class C2SIM_Server {
 
         // Call initialization methed.  If already initialized it will just return
         initialize();
-
         String result = "";
 
         try {
@@ -311,7 +317,7 @@ public class C2SIM_Server {
             t.setMsgnumber(msgNumber);
 
             // Log the command
-            if(C2SIM_Server.getRecordingState())
+            if(recordingStatus.equals("RECORDING_IN_PROGRESS"))
             replayLogger.info("Command " + msgNumber + "  " + submitter + "  " + cmd + " " + parm1 + " " + parm2 + " " + parm3);
 
             debugLogger.info("Command Received - MSG_Number: : " + t.getMsgnumber()
@@ -321,8 +327,8 @@ public class C2SIM_Server {
             // Check if server and client versions agree
             checkVersion(clientVersion);
 
-
             result = C2SIM_Command.commandProcess(cmd, parm1, parm2, parm3,t);
+
         }   // try
         catch (C2SIMException e) {
             debugLogger.error("Exception processing Unit Command " + e.getCause());
@@ -480,7 +486,7 @@ public class C2SIM_Server {
         ++msgNumber;
 
         // Log the command
-        if(C2SIM_Server.getRecordingState())
+        if(C2SIM_Command.getRecordingStatus().equals("RECORDING_IN_PROGRESS"))
         replayLogger.info("Cyber  " + msgNumber + "  " + submitterID + "  " + xmlText.replaceAll("\n", "").replaceAll(">\\s*<", "><"));
         debugLogger.info("Cyber Message Received - MSG_Number: " + msgNumber
                 + " from submitter: " + submitterID
@@ -520,9 +526,9 @@ public class C2SIM_Server {
 
         // Call initialization methed.  If already initialized it will just return
         initialize();
-
+        
+        // log and return server stat: number of last message processed
         debugLogger.debug("Stats  " + ++msgNumber + " " + submitterID + " " + xmlStats);
-
         return createResultMsgOK("OK", "Statistics Recorded", msgNumber, 0.0);
 
     }   // postStats()   
@@ -530,8 +536,8 @@ public class C2SIM_Server {
 
     /************************************************/
     /* HTTP Get received                            */
- /*      Has no funciton at this time            */
- /*      Might in future be used for queries     */
+    /*      Has no function at this time            */
+    /*      Might in future be used for queries     */
     /************************************************/
     /**
     * getC2SIM - Method called when a GET HTTP command is sent to server
@@ -561,11 +567,12 @@ public class C2SIM_Server {
     */
     static void initialize() throws C2SIMException {
 
-        // The first transaction my cause this method to run.
+        // The first transaction will cause this method to run.
         // If already initialized then return
         if (serverInitialized)
             return;
 
+        // setup logging
         try {
             debugLogger = LogManager.getLogger("edu.gmu.c4i.c2simserver4.debug");
             replayLogger = LogManager.getLogger("edu.gmu.c4i.c2simserver4.replay");
@@ -587,6 +594,7 @@ public class C2SIM_Server {
                 throw new C2SIMException("c2simServer.properties not found ");
             //props.load(new FileInputStream(PROPERTIES_FILE_NAME));
             props.load(in);
+            playbackPath = props.getProperty("server.bmlFiles") + "/c2simReplay/";
         }   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try   // try
 
         catch (Exception e) {
@@ -622,6 +630,9 @@ public class C2SIM_Server {
 
         // Get the server version from pom.properties
         Properties pomPoperties = new Properties();
+        
+        // initialized commands table
+        C2SIM_C2SIM.initCommand();
 
         String ver = "";
         InputStream in = C2SIM_Server.class.getResourceAsStream("/../../META-INF/maven/edu.gmu.c4i.c2simserver4/C2SIMServer/pom.properties");
@@ -645,8 +656,9 @@ public class C2SIM_Server {
 
         serverVersion = ver;
 
-        if(C2SIM_Server.getRecordingState())
-        replayLogger.debug("Reset  " + msgNumber + " " + "BML" + "************************************************* ");
+        if(C2SIM_Command.getRecordingStatus().equals("RECORDING_IN_PROGRESS"))
+        replayLogger.debug("Reset  " + msgNumber + " " + "BML" + 
+            "************************************************* ");
 
         if (cyberAttack)
             cyberLogger.debug("Starting execution");
@@ -658,16 +670,15 @@ public class C2SIM_Server {
         try {
             InetAddress addr = InetAddress.getLocalHost();
             hostName = addr.getHostName();
-            ipAddress = addr.getHostAddress();
+            ipAddress = addr.getHostAddress();// TODO: figure out why this gets wrong value
         }
         catch (Exception e) {
             throw new C2SIMException("Error while determining hostname and address", e);
         }
-
-
-        debugLogger.info("BMLServer running on " + hostName + " IP Address = " + ipAddress);
+        debugLogger.info("C2SIMServer running on " + hostName + " IP Address = " + ipAddress);
         debugLogger.info("Server Version =  " + serverVersion);
-        debugLogger.info("Client Version Enforcement = " + enforceVersion + "  Minimum Client Version = " + minimumClientVersion);
+        debugLogger.info("Client Version Enforcement = " + enforceVersion + 
+            "  Minimum Client Version = " + minimumClientVersion);
 
         // See if we are to collect response time statistics
         collectStatistics = C2SIM_Util.toBoolean(props.getProperty("server.collectResponseTime"));
@@ -690,7 +701,7 @@ public class C2SIM_Server {
         commandPassword = props.getProperty("server.c2sim_password");
 
         // Instantiate STOMP interface object - Read from properties file        
-        C2SIM_Server_STOMP.initialize(C2SIM_Server.props, C2SIM_Server.debugLogger);
+        C2SIM_Server_STOMP.initialize(C2SIM_Server.props, debugLogger);
 
         // Initialize unitDB (C2SIM) and initDB
         C2SIM_Util.initDB = new C2SIM_InitDB();
@@ -727,7 +738,7 @@ public class C2SIM_Server {
             msg += "\n\t<unitDatabaseSize>" + C2SIM_Util.unitMap.size() + "</unitDatabaseSize>";
         else
             msg += "\n\t<unitDatabaseSize>" + "0" + "</unitDatabaseSize>";
-        msg += "\n\t<msgNumber>" + C2SIM_Server.msgNumber + "</msgNumber>";
+        msg += "\n\t<msgNumber>" + msgNumber + "</msgNumber>";
         msg += "\n\t<time>" + String.format("%1$6.3f", time) + "</time>";
 
         // Do we want to the client to return statistics?
@@ -768,7 +779,7 @@ public class C2SIM_Server {
             msg += "\n\t<unitDatabaseSize>" + C2SIM_Util.initDB.entity.size() + "</unitDatabaseSize>";
         else
             msg += "\n\t<unitDatabaseSize>" + "0" + "</unitDatabaseSize>";
-        msg += "\n\t<msgNumber>" + C2SIM_Server.msgNumber + "</msgNumber>";
+        msg += "\n\t<msgNumber>" + msgNumber + "</msgNumber>";
         msg += "\n\t<time>" + "0.0" + "</time>";
         msg += "\n\t<error>" + ex.getMessage() + "</error>";
         msg += "\n\t<cause>" + ex.getCauseMessage() + "</cause>";
@@ -779,9 +790,9 @@ public class C2SIM_Server {
     }   // createResultMsgError()
 
     /**
-    * SessionState - Enumeration of possiblt state of C2SIM Server
+    * SessionState - Enumeration of possible state of C2SIM Server
     */
-    public enum SessionState_Enum {
+    static enum SessionState_Enum {
         /*InitializationComplete, ShareScenario, StartScenario, SubmitInitialization*/
         UNINITIALIZED, INITIALIZING, INITIALIZED, RUNNING, PAUSED
     }

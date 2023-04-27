@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|    Copyright 2001-2019 Networking and Simulation Laboratory     |
+|    Copyright 2001-2023 Networking and Simulation Laboratory     |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -13,7 +13,11 @@
 | of this software for any purposes.  It is provided "AS IS"      |
 | without express or implied warranties.  All risk associated     |
 | with use of this software is expressly assumed by the user.     |
- *-----------------------------------------------------------------*/
+ *---------------------------------------------------------------*/
+
+// C2SIMServerv4.8.3.2
+// implements schema C2SIM_SMX_LOX_CWIX2023v2.zsd
+
 package edu.gmu.c4i.c2simserver4.c2simserver;
 
 //import edu.gmu.c4i.c2simclientlib2.C2SIMHeader;
@@ -26,6 +30,7 @@ import java.util.Vector;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import java.util.HashMap;
 import edu.gmu.c4i.c2simserver4.c2simserver.C2SIM_InitDB.*;
 
 
@@ -95,8 +100,10 @@ public class C2SIM_C2SIM {
 
         else {
 
-            // If this is a V1.0.x Order or  Report then translate to V9 and publish  Don't publish or process translated V9 Initialization message
-            if ((trans.messageDef.messageDescriptor.equals("C2SIM_Order")) || (trans.messageDef.messageDescriptor.equals("C2SIM_Report"))
+            // If this is a V1.0.x Order or  Report then translate to V9 and publish  
+            // Don't publish or process translated V9 Initialization message
+            if ((trans.messageDef.messageDescriptor.equals("C2SIM_Order")) 
+                    || (trans.messageDef.messageDescriptor.equals("C2SIM_Report"))
                     || (trans.messageDef.messageDescriptor.equals("C2SIM_ASX_Report"))) {
                 C2SIM_Server_STOMP.publishMessage(trans);
                 if (translate9To1) {
@@ -107,7 +114,9 @@ public class C2SIM_C2SIM {
         }   // Version 11
 
         // Continue to process V11 message.
-
+       
+        C2SIM_Server.debugLogger.info("C2SIM_ServerProcess MsgNumber:" + trans.msgnumber +
+            " message-descriptor:" + trans.messageDef.messageDescriptor);
         if (trans.messageDef.messageDescriptor.equalsIgnoreCase("C2SIM_Initialization"))
             process_C2SIM_Initialization(trans);
 
@@ -119,6 +128,8 @@ public class C2SIM_C2SIM {
 
         else if (trans.messageDef.messageDescriptor.equalsIgnoreCase("C2SIM_ASX_Report"))
             process_C2SIM_Report(trans);
+        else if (trans.messageDef.messageDescriptor.equalsIgnoreCase("C2SIM_Command"))
+            process_C2SIM_Command(trans);
 
         else
             // Publish the original message
@@ -131,12 +142,50 @@ public class C2SIM_C2SIM {
     /* identify()   */
     /****************/
     // Identify the type of C2SIM message and return the appropriaate BMLMessaageDefinition object
+    // NOTE: Server accepts two types of orders: uppercase string in html parameters; 
+    // or upper/lowercase string in XML as defined by C2SIM_CWIX2022v1.2.xsd schema
+    // in identify() we convert second type to first
     /**
-     * identify - ID the specifc C2SMIM message typt
+     * identify - ID the specific C2SMIM message typt
     @param d - Document containing message
     @return C2SIMMessageDefinition
     @throws C2SIMException 
      */
+    static HashMap<String,String>commandMap;
+    static void initCommand(){
+        commandMap = new HashMap<String, String>();
+        commandMap.put("CheckpointRestore","CPRESTORE");
+        commandMap.put("CheckpointSave","CPSAVE");
+        commandMap.put("InitializationComplete","INITCOMP");
+	commandMap.put("MagicMove","MAGIC");
+	commandMap.put("PausePlayback","PAUSEPLAY");
+	commandMap.put("PauseRecording","PAUSEREC");
+        commandMap.put("PauseScenario","PAUSE");
+        commandMap.put("PlaybackRealtimeMultipleReport","GETPLAYMULT");
+	commandMap.put("PlaybackStatusReport","GETPLAYSTAT");
+	commandMap.put("RecordingStatusReport","GETRECSTAT");
+	commandMap.put("RefreshInit","QUERYINIT");
+	commandMap.put("RequestPlaybackRealtimeMultiple","GETPLAYMULT");
+	commandMap.put("RequestPlaybackStatus", "GETPLAYSTAT");
+	commandMap.put("RequestRecordingStatus","GETRECSTAT");
+	commandMap.put("RequestSimulationRealtimeMultiple","GETSIMMULT");
+	commandMap.put("ResetScenario","RESET");
+	commandMap.put("ResumePlayback","RESTARTPLAY");
+	commandMap.put("ResumeRecording","RESTARTREC");
+	commandMap.put("ResumeScenario","RESUME");
+	commandMap.put("SetPlaybackRealtimeMultiple","SETPLAYMULT");
+	commandMap.put("SetSimulationRealtimeMultiple","SETSIMMULT");
+        commandMap.put("ShareScenario","SHARE");
+	commandMap.put("SimulationRealtimeMultipleReport","GETSIMMULT");
+	commandMap.put("StartPlayback","STARTPLAY");
+	commandMap.put("StartRecording","STARTREC");
+	commandMap.put("StartScenario","START");
+	commandMap.put("StopPlayback","STOPPLAY");
+	commandMap.put("StopRecording","STOPREC");
+	commandMap.put("StopScenario","STOP");
+	commandMap.put("SubmitInitialization","INITIALIZE");
+    }
+    
     static C2SIMMessageDefinition identify(Document d) throws C2SIMException {
 
         Element root = d.getRootElement();
@@ -218,6 +267,34 @@ public class C2SIM_C2SIM {
             // Regular C2SIM Position Repor
             return md;
         }   // C2SIM Report
+        
+        // Is this a C2SIM SystemMessage?
+        md = C2SIM_Util.mdIndex.get("C2SIM_Command");
+
+        // pull out the command from XML (only element at this depth)
+        String mapCommand = "";
+        List<Element> sl = C2SIM_Util.findElementSimple("SystemMessageBody", root, C2SIM_Util.c2sim_NS);
+        Element sc = sl.get(0);// the is the SystemCommandBody element(now SystemMessageBody)
+        
+        // try all key values in commandMap as possible child of SystemMessageBody
+        Element sc2;
+        for (String key : commandMap.keySet()) {
+            mapCommand = key;
+            
+            // kludgy way to check whether mapCommand is child of SystemMessageBody
+            sc2 = C2SIM_Util.findSingleElementSimple(mapCommand, sc, C2SIM_Util.c2sim_NS);
+            if(sc2 == null) {
+                mapCommand = ""; 
+                continue;
+            }
+            break;
+        }
+        if(!mapCommand.equals("")){
+            // found mapCommand - return in messageDescriptor
+            md = C2SIM_Util.mdIndex.get("C2SIM_Command");
+            md.messageType = mapCommand;
+            return md;
+        }
 
         // Nothing matched.  Set MD to C2SIM_Other
         md = C2SIM_Util.mdIndex.get("C2SIM_Other");
@@ -235,9 +312,16 @@ public class C2SIM_C2SIM {
     @throws C2SIMException 
      */
     static void process_C2SIM_Initialization(C2SIM_Transaction t) throws C2SIMException {
+        
+        // if this is an initialization from REPLAY, 
+        // the Initialization information is already stored; just
+        // publish it for clients to use
+        if(t.submitterID.equals("REPLAY")){
+            C2SIM_Server_STOMP.publishMessage(t);
+            return;
+        }
 
         try {
-
             // If this is the first Initialization transaction, save the C2SIM Version
             if (c2simVersion == "")
                 c2simVersion = t.getc2SIM_Version();
@@ -262,13 +346,13 @@ public class C2SIM_C2SIM {
                 objectInitialization = C2SIM_Util.findSingleElementSimple("C2SIMInitializationBody", root, ns);
 
             /*
-        Work through each type of initialization element in ObjectOnitialization
-            InitializationDataFile
-            AbstractObject
-            Action
-            Entity
-            PlanPhaseReference
-            ScenarioSetting
+              Work through each type of initialization element in ObjectOnitialization
+                InitializationDataFile
+                AbstractObject
+                Action
+                Entity
+                PlanPhaseReference
+                ScenarioSetting
              */
             // InitializationDataFile
             List<Element> initDataFiles = C2SIM_Util.findElementSimple("InitializationDataFile", objectInitialization, ns);
@@ -318,7 +402,8 @@ public class C2SIM_C2SIM {
                     C2SIM_Util.initDB.entity.add(ie);
                     
                     // If this is a Route increment route count
-                    Element route = C2SIM_Util.findSingleElementSimple("PhysicalEntity/MapGraphic/TacticalGraphic/Line/Route", ie.element, ns);
+                    Element route = C2SIM_Util.findSingleElementSimple(
+                        "PhysicalEntity/MapGraphic/TacticalGraphic/Line/Route", ie.element, ns);
                     if (route != null) {
                         String uuid = route.getChildText("UUID", ns);
                         if(uuid != null)C2SIM_Util.numC2SIM_Routes++;
@@ -327,7 +412,8 @@ public class C2SIM_C2SIM {
                     }
 
                     // If this is a MilitaryOrganization index it by its UUID
-                    Element mo = C2SIM_Util.findSingleElementSimple("ActorEntity/CollectiveEntity/MilitaryOrganization", ie.element, ns);
+                    Element mo = C2SIM_Util.findSingleElementSimple(
+                        "ActorEntity/CollectiveEntity/MilitaryOrganization/Unit", ie.element, ns);
                     if (mo != null) {
                         String uuid = mo.getChildText("UUID", ns);
                         // Add to the unitMap
@@ -378,14 +464,19 @@ public class C2SIM_C2SIM {
 
             C2SIM_Util.numC2SIM_ForceSides = C2SIM_Util.forceSideMap.size();
             ++C2SIM_Util.numInitMsgs;
+            
+            // log progress
+            C2SIM_Server.debugLogger.info("DONE PROCESS C2SIM_Init MD:" +
+                 t.messageDef.messageDescriptor + " MST:" + t.msTemp);
+            t.msTemp = "C2SIM_Initialization";
+            t.messageDef.messageDescriptor = "C2SIM_Initialization";
 
-            C2SIM_Util.publishNotification("New_C2SIM_ObjectInitialization", t);
         }   // try
         catch (Exception e) {
             StackTraceElement[] st = e.getStackTrace();
             throw new C2SIMException("Error processing C2SIM Initialization " + e);
         }   // catch   // catch
-    }   // processC2SIM_Initialization())
+    }   // process_C2SIM_Initialization())
 
 
     /************************/
@@ -414,7 +505,8 @@ public class C2SIM_C2SIM {
 
 
         // Find the order body
-        Element order = C2SIM_Util.findSingleElementSimple("DomainMessageBody/OrderBody", t.getDocument().getRootElement(), C2SIM_Util.c2sim_NS);
+        Element order = C2SIM_Util.findSingleElementSimple(
+            "DomainMessageBody/OrderBody", t.getDocument().getRootElement(), C2SIM_Util.c2sim_NS);
 
         // Put order rooted at OrderBody into a document
         d = new Document();
@@ -439,6 +531,83 @@ public class C2SIM_C2SIM {
         C2SIM_CBML.translateCoreToCBML_Order(t);
 
     }   // process_C2SIM_Order()
+    
+    /**************************/
+    /* process_C2SIM_Command  */
+    /**************************/
+    /**
+    process_C2SIM_Command - Process Command XML (no translation to other protocols)
+    @param t - C2SIM_Transaction
+    @throws C2SIMException 
+     */
+    public static void process_C2SIM_Command(C2SIM_Transaction t) throws C2SIMException {
+     
+        // all commands reaching this point are valid and uppercase
+        // some of them have parameters - parse the XML to get parameters
+        String commandType = t.messageDef.messageType;
+        String parm1 = "", parm2 = "", parm3 = "";
+        Document toParse = t.doc;
+        Element root = toParse.getRootElement();
+        List<Element> commandList = 
+            C2SIM_Util.findElementSimple("SystemMessageBody/"+commandType, root, C2SIM_Util.c2sim_NS);
+        Element commandLevel = commandList.get(0);
+        Element parmLevel = null;
+
+        // server controls require authentication
+        if(commandType.equals("StartScenario") || commandType.equals("ResetScenario") ||
+           commandType.equals("StopScenario") || commandType.equals("PauseScenario") ||
+           commandType.equals("ResumeScenario") || commandType.equals("SubmitInitialization")) {
+            
+            // parse password from SystemCommmandBody
+            parmLevel = C2SIM_Util.findSingleElementSimple("ServerPassword", commandLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm1 = parmLevel.getText();
+        }
+        else if(commandType.equals("MagicMove")){
+            
+            // parse MagicMove from SystemMessageBody
+            parmLevel = C2SIM_Util.findSingleElementSimple("EntityReference", commandLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm1 = parmLevel.getText();
+            List<Element> locationList = C2SIM_Util.findElementSimple(
+                "SystemMessageBody/"+commandType+"/Location/GeodeticCoordinate", root, C2SIM_Util.c2sim_NS);
+            Element locationLevel = locationList.get(0);
+            parmLevel = C2SIM_Util.findSingleElementSimple("Latitude", locationLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm2 = parmLevel.getText();
+            parmLevel = C2SIM_Util.findSingleElementSimple("Longitude", locationLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm3 = parmLevel.getText();
+
+        }
+        else if (commandType.equals("SetPlaybackRealtimeMultiple")){
+            
+            // parse SetPlaybackRealtimeMultiple from SystemMessageBody
+            parmLevel = C2SIM_Util.findSingleElementSimple("PlaybackRealtimeMultiple", commandLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm1 = parmLevel.getText();
+        }
+        else if(commandType.equals("SetSimulationRealtimeMultiple")){
+            
+            // parse SetSimulationRealtimeMultiple from SystemMessageBody
+            parmLevel = C2SIM_Util.findSingleElementSimple("SimulationRealtimeMultiple", commandLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm1 = parmLevel.getText();   
+        }
+        else if(commandType.equals("StartPlayback")){
+            
+            // parse StartPlayback from SystemMessageBody
+            parmLevel = C2SIM_Util.findSingleElementSimple("Name", commandLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm1 = parmLevel.getText();
+            List<Element> timeList = C2SIM_Util.findElementSimple(
+                "SystemMessageBody/"+commandType+"/StartTime/DateTime", root, C2SIM_Util.c2sim_NS);
+            Element timeLevel = timeList.get(0);
+            parmLevel = C2SIM_Util.findSingleElementSimple("IsoDateTime", timeLevel, C2SIM_Util.c2sim_NS);
+            if(parmLevel != null)parm2 = parmLevel.getText();  
+
+        }    
+        
+        // convert new C2SIM schema command to old style
+        String shortCommand = commandMap.get(commandType);
+        C2SIM_Server.debugLogger.debug("C2SIM-C2SIM "+commandType+
+            " "+shortCommand+"|"+parm1+"|"+parm2+"|"+parm3+"|");//debuxg
+        C2SIM_Command.commandProcess(shortCommand, parm1, parm2, parm3, t);
+    
+    }// process_C2SIM_Command()
 
 
     /************************************/
@@ -971,7 +1140,7 @@ public class C2SIM_C2SIM {
 
         // Set parameters in the Transaction object for this message
         trans.setMessageDef(C2SIM_Util.mdIndex.get("C2SIM_Report"));
-        trans.setMsTemp("C2SIM_PositionReport");
+        trans.setMsTemp("C2SIM_Report");//previously "C2SIM_PositionReport"
         trans.setXmlText(xml);
         trans.setSource("Translated");
         String c2simVer = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
@@ -1068,7 +1237,7 @@ public class C2SIM_C2SIM {
     /****************/
     // 
     /**
-     * shareC2SIM - Assemble all unitialization in initDB into a single message and publish it
+     * shareC2SIM - Assemble all initialization in initDB into a single message and publish it
     @param t
     @throws C2SIMException 
      */
@@ -1085,6 +1254,7 @@ public class C2SIM_C2SIM {
             t.setMsgnumber(C2SIM_Server.msgNumber);
             t.setMsgTime(LocalDateTime.now().format(C2SIM_Server.dtf));
             t.setSource("Generated");
+
             // c2simVersion was saved from the first Initialization transaction
             String c2simVerProp = C2SIM_Server.props.getProperty("server.defaultC2SIM_Version");
             if(c2simVerProp != null){
@@ -1147,8 +1317,9 @@ public class C2SIM_C2SIM {
             // Set sessionState to initialized
             C2SIM_Server.sessionInitialized = true;
             C2SIM_Server.sessionState = C2SIM_Server.SessionState_Enum.INITIALIZED;
-            C2SIM_Command.publishStateUpdate("InitializationComplete", C2SIM_Server.SessionState_Enum.INITIALIZED.toString(), t);
-
+            C2SIM_Command.publishStateUpdate(
+                "InitializationComplete", 
+                C2SIM_Server.SessionState_Enum.INITIALIZED.toString(),t);
             C2SIM_Server.debugLogger.debug("SHARE published " + C2SIM_Util.initDB.entity.size() + " Units ");
 
         }   // try
@@ -1165,7 +1336,7 @@ public class C2SIM_C2SIM {
     /* formatInit   */
     /****************/
     /**
-     * formatInit - Format data in initDB into a C2SIMInitializartionBody message
+     * formatInit - Format data in initDB into a C2SIMInitializationBody message
     @param t - C2SIM_Transaction
     @return - String/XML
     @throws C2SIMException 
@@ -1372,53 +1543,6 @@ public class C2SIM_C2SIM {
             }
         }
     }   // updatePosition()
-
-
-    /****************************/
-    /*  publishNotification     */
-    /****************************/
-    /**
-     * publishNotification - Publish notification of server state change
-    @param type
-    @param t
-    @throws C2SIMException 
-     */
-    public static void publishNotification(String type, C2SIM_Transaction t) throws C2SIMException {
-
-        // Create document
-        Document tempDoc;
-        Element tempEl;
-
-        // Create output document and add root element
-        Document doc = new Document();
-        Element root = new Element("MessageBody", C2SIM_Util.c2sim_NS);
-
-        // C2SIMSimulationNotification
-        Element simulationNotification = new Element("C2SIMSimulationNotification", C2SIM_Util.c2sim_NS);
-        root.addContent(simulationNotification);
-
-        // Notification_Type
-        simulationNotification.addContent(new Element("Notification_Type", C2SIM_Util.c2sim_NS).setText(type));
-
-        // Number of Object Initialization files or messages
-        simulationNotification.addContent(new Element("NumberObjectInitialization", C2SIM_Util.c2sim_NS)
-                .setText(C2SIM_Util.numInitMsgs.toString()));
-
-        // Number of Units
-        simulationNotification.addContent(new Element("NumberOfUnits", C2SIM_Util.c2sim_NS).setText(C2SIM_Util.numC2SIM_Units.toString()));
-
-        doc.addContent(root);
-
-        // Set parameters in the C2SIM_Transaction object
-        t.msTemp = "C2SIM_Notification";
-        t.setSource("Generated");
-
-        String xml = C2SIM_Util.xmlToStringD(doc, t);
-        t.setXmlText(xml);
-
-        // Publish the message
-        C2SIM_Server_STOMP.publishMessage(t);
-    }
 
 
     /********************************/

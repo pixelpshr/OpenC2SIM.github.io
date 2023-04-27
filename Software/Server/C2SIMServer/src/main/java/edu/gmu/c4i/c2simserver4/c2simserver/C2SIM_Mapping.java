@@ -47,7 +47,7 @@ public class C2SIM_Mapping {
     /*  parseMessage        */
     /************************/
     /**
-    * parseMessage - Parse an XML string creating a JDOM Dopcument
+    * parseMessage - Parse an XML string creating a JDOM Document
     @param xml - String input xml
     @return - JDOM Document
     @throws C2SIMException 

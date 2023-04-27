@@ -242,7 +242,7 @@ public class C2SIM_Transaction implements Cloneable {
     }
 
     /**
-    * gertXmlText
+    * getXmlText
     @return xmlText
     */
     public String getXmlText() {
