@@ -45,6 +45,7 @@ public class InitC2SIM {
     
     /**
      * make a new C2SIM Initialize document
+     * to be edited in JAXFront panel
      */
     void newInitC2SIM()
     {
@@ -120,6 +121,14 @@ public class InitC2SIM {
                 "Init Push Message");
             return "cannot push - no document has been loaded";
         }
+        
+        // check whether initialization is appropriate
+        if(!bml.serverStatusLabel.getText().equals("UNINITIALIZED") &&
+           !bml.serverStatusLabel.getText().equals("INITIALIZING")) {
+            bml.printError("Push Initialization not valid in this system state");
+            bml.showInfoPopup("not valid in this system state", "Push Initialization");
+            return "";
+        }
     
         // open connection to REST server
         if(bml.submitterID.length() == 0) {
@@ -128,26 +137,17 @@ public class InitC2SIM {
                 "C2SIM Init Push Message");
             return "cannot push C2SIM Init - submitterID required";
         }
-	
-        // should push C2SIM from memory but for now use a file
-        FileReader xmlFile;
-        String pushInitInputString = "";
-        try{
-          xmlFile=new FileReader(new File(bml.xmlUrl.getFile()));
-          int charBuf; 
-          while((charBuf = xmlFile.read())>0) {
-            pushInitInputString += (char)charBuf;
-          }
-        }
-        catch(Exception e) {
-          bml.printError("Exception in reading XML file:"+e);
-          e.printStackTrace();
-          return "";
-        }
+
+        // XML is not yet in JaxFront - read it from file
+        String pushInitInputString = bml.readAnXmlFile(bml.xmlUrl);
         
         // display and send the input
-        if(bml.debugMode)bml.printDebug(
-            "PUSH C2SIM INITIALIZE XML:"+pushInitInputString);
+        if(bml.debugMode){
+            int pushC2Len = pushInitInputString.length();
+            if(pushC2Len > 1200)pushC2Len = 1200;
+            bml.printDebug("PUSH C2SIM INITIALIZE XML:" +
+                pushInitInputString.substring(0,pushC2Len));
+        }
         String pushInitResponseString = "";
         bml.pushingInitialize = true;
         pushInitResponseString = 
@@ -219,7 +219,7 @@ public class InitC2SIM {
             bml.pushingInitialize = false;
             return pushShareResponseString;
         }
-         
+
         // display and return result
         if(bml.debugMode)bml.printDebug("The C2SIM server control push result length : " +
                 pushShareResponseString.length());
@@ -231,7 +231,8 @@ public class InitC2SIM {
                     "C2SIM Init Push Message");
             int startStatus = pushShareResponseString.indexOf("State set to ") + 13;
             serverStatus = pushShareResponseString.substring(startStatus);
-            
+            bml.setServerStateLabel(serverStatus);
+ 
             // special case for SHARE: extract unit count
             if(command.equals("SHARE")) {
                 int unitsPosition = pushShareResponseString.indexOf("Units")-1;
@@ -355,6 +356,7 @@ public class InitC2SIM {
     String pushResetC2SIM(){return pushC2simServerControl("RESET");}
     String pushStartC2SIM(){return pushC2simServerControl("START");}
     String pushPauseC2SIM(){return pushC2simServerControl("PAUSE");}
+    String pushResumeC2SIM(){return pushC2simServerControl("RESUME");}
     String pushStopC2SIM(){return pushC2simServerControl("STOP");}
     String pushEditC2SIM(){return pushC2simServerControl("EDIT");}
     
@@ -367,7 +369,6 @@ public class InitC2SIM {
     String pushServerRecRestart(){return pushC2simServerInput("RESTARTREC");}
     String pushServerRecStop(){return pushC2simServerInput("STOPREC");}
     String pushServerRecGetStatus() {return pushC2simServerInput("GETRECSTAT");}
-    String pushServerPlayStart(){return pushC2simServerInput("STARTPLAY");}
     String pushServerPlayPause(){return pushC2simServerInput("PAUSEPLAY");}
     String pushServerPlayRestart(){return pushC2simServerInput("RESTARTPLAY");}
     String pushServerPlayStop(){return pushC2simServerInput("STOPPLAY");}
@@ -393,6 +394,52 @@ public class InitC2SIM {
         return response;
         
     }// end pushStatusC2SIM()
+     
+    // status check to initialize server recording/playback button
+    String pushStatusRecordPlayback(){
+                
+        // server recording status
+        String response = pushServerRecPlyStatus("GETRECSTAT");
+        if(response.contains("RECORDING_IN_PROGRESS")){
+            bml.recordPlayStatus.setText("RECORDING");
+            bml.recordPlayStatus.setVisible(true);
+            return response;
+        }
+        else bml.recordPlayStatus.setVisible(false);
+        
+        // server playback status
+        response = pushServerRecPlyStatus("GETPLAYSTAT");
+        if(response.contains("PLAYBACK_RUNNING")){
+            bml.recordPlayStatus.setText("PLAYING");
+            bml.recordPlayStatus.setVisible(true);
+        }      
+        return response;
+        
+    }// end pushStatusRecordPlayback()
+    
+    String pushServerRecPlyStatus(String command) {
+        // start REST connection using performative for Initialize
+        C2SIMClientREST_Lib c2simClient = bml.ws.newRESTLib("INFORM");
+        c2simClient.setHost(bml.serverName);
+        c2simClient.setSubmitter(bml.submitterID);
+        c2simClient.setPath("C2SIMServer/c2sim");
+
+        // send the command
+        bml.pushingInitialize = true;
+        String pushRecPlayResponseString = "";
+        try{
+            pushRecPlayResponseString = 
+                c2simClient.c2simCommand(command,"","","");
+        } catch (C2SIMClientException bce) {
+            bml.printError(
+                "exception pushing C2SIMserver input:" +
+                    bce.getMessage()+" cause:" + bce.getCauseMessage()); 
+            bml.printError("RESPONSE:" + pushRecPlayResponseString);
+            bml.pushingInitialize = false;
+        }
+        bml.pushingInitialize = false;
+        return pushRecPlayResponseString;
+    }// end pushServerRecPlyStatus()
     
     // command returns C2SIMInitialize structure
     String pushLateJoinerC2SIM(){

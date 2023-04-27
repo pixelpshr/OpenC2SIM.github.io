@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|   Copyright 2009-2021 Networking and Simulation Laboratory      |
+|   Copyright 2009-2022 Networking and Simulation Laboratory      |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -25,7 +25,8 @@ import java.util.HashMap;
 import edu.gmu.netlab.C2SIMGUI.IconType;
 
 /**
- * parses C2SIMInitializationBody and saves results in this class
+ * parses C2SIMInitializationBody and saves results
+ * data in this class represents one unit
  * @author mpullen
  */
 public class MilOrg {
@@ -145,7 +146,6 @@ public class MilOrg {
     // returns entityCount in the message
     // we presume the XML does not use prefixes
     int parseC2SIMInit(String messageBody) {
-
         // read the C2SIMInitializationBody and save it
         // for use in mapping the unit
         int entityCount = 0;
@@ -391,7 +391,10 @@ public class MilOrg {
                 String hostility = hostilityMap.get((Object)side);
                 if(hostility == null)hostility = "UNK";
                 milOrg.setHostility(hostility);
-
+                if(bml.debugMode)
+                    bml.printDebug(
+                        "UUID:"+uuid+" side:"+side+" hostility:"+hostility);
+                
                 // Symbol Identifier
                 String symbolIdentifier = 
                     bml.extractC2simData(parseMessage,"SIDCString",false);
@@ -410,7 +413,9 @@ public class MilOrg {
                     if(hostilityChar.equals("H"))hostility = "HO";
                     milOrg.setHostility(hostility);
                 }
-
+                if(bml.debugMode)
+                    bml.printDebug("NEW UNIT:"+uuid+"|"+name+"|"+hostility+"|");
+                
                 // add it to the hashmap and graphic map
                 bml.addUnit(milOrg.uuid, milOrg);
                 if(uuid.length() > 0 && name.length() > 0 && hostility.length() > 0 &&
@@ -427,6 +432,8 @@ public class MilOrg {
         }// end while(startName > 0) 
               
         bml.initStatusLabel.setText(Integer.toString(entityCount));
+        bml.initializationDone = true;
+        if(bml.debugMode)bml.printDebug("******MILORG INIT COMPLETED");
         return entityCount;
         
     }// end parseC2SIMInit()

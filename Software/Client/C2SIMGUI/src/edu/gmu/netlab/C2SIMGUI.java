@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|   Copyright 2009-2022 Networking and Simulation Laboratory      |
+|   Copyright 2009-2023 Networking and Simulation Laboratory      |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -35,6 +35,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.Date;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -78,13 +79,14 @@ import javax.xml.parsers.*;
 import javax.xml.namespace.NamespaceContext;
 import edu.gmu.c4i.c2simclientlib2.*;
 import static edu.gmu.netlab.MilOrg.bml;
+import static edu.gmu.netlab.Subscriber.bml;
 import org.w3c.dom.*;
 
 public class C2SIMGUI extends JFrame implements WindowListener, HelpListener, 
     ItemListener, ActionListener {
     
-    // Version
-    public static String version = "2.11.1";
+    // Version (comatible C2SIM_SMX_LOX_CWIX2023v2.xsd)
+    public static String version = "2.13.2";
 
 /**
  * BMLC2 GUI (Initially BMLGUI) now C2SIMGUI
@@ -184,10 +186,11 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     public JButton recordButton;
     public JButton playButton;
     public JButton pauseButton;
+    public JLabel recordPlayStatus = new JLabel("RECORDING");
 
     // message types
     String c2simProtocol = "SISO-STD-C2SIM";
-    String c2simProtocolVersion = "1.0.1";
+    String c2simProtocolVersion = "1.0.2";
     String c2simPath = "C2SIMServer/c2sim";
     String conversationID = "";
     String bmlPath = "BMLServer/bml";
@@ -195,6 +198,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     String c2simOrderReportDomain = "DomainMessageBody";
     String c2simSystemCommandDomain = "SystemCommandBody";
     String c2simInitializationDomain = "C2SIMInitializationBody";
+    String objectInitializationDomain = "ObjectInitializationBody";
     String c2simOrderMessageType = "OrderBody";
     String c2simReportMessageType = "ReportBody";
     String c2simUnitCountTag = "<unitDatabaseSize>";
@@ -207,6 +211,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     String c2simReporteeWhoTag = "SubjectEntity";
     String c2simReporterWhoTag = "ReportingEntity";
     String c2simObserveeTag = "ActorReference";
+    String playbackReportingEntity = "";
+    String playbackReportID = "";
     
     // state variables
     JLabel documentTypeLabel;
@@ -249,6 +255,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     public boolean runRecorder = false;
     public boolean runPlayer = false;
     public boolean pausePlayer = false;
+    public boolean runServerPlayer = false;
     public boolean listeningWhenPlayStarted = false;
     public Player player = null;
     public File logFile = null;
@@ -267,8 +274,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     public String lastHostility = "";
     public String lastLatitude = "";
     public String lastLongitude = "";
-    static boolean ignoreXmlWithDupID;
-    static boolean askAboutCheckingID;
+    static boolean ignoreXmlWithDupID = false;
+    static boolean askAboutCheckingID = false;
     static boolean reportsDupIdAsked = false;
     
     // possible things represented by icons on the map
@@ -285,6 +292,11 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         CBML,   // from SISO C-BML
         C2SIM   // from SISO C2SIM v1.0.1
     }
+    
+    public boolean c2simProtocolOK(String testProtocol){
+        return (testProtocol.compareTo(C2SIMProtocolVsnMax) <= 0) &&
+               (testProtocol.compareTo(C2SIMProtocolVsnMin) >= 0);
+    }// end c2simProtocolOK()
 	
     public static C2SIMGUI bml;                         // bml variable for main GUI frame
   
@@ -360,6 +372,9 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
 
     public Subscriber subscriber = null; // used when online
     public volatile Thread threadSub;
+    public RepeatReportC2SIM repeatC2SIM = null;// for repeatReport
+    public volatile Thread threadRepeat;
+    public boolean sendingRepeat = false;
     public java.util.concurrent.LinkedBlockingQueue<String> localQueue =
         new java.util.concurrent.LinkedBlockingQueue<>();;// used when not online
   
@@ -373,7 +388,9 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     static String submitterID;               // Client SubmitterID variable
     static String serverName;                // Server DNS name
     static String serverPassword;            // InitC2SIM ServerPassword variable
-    static String C2SIMprotocolVersion;      // 0.0.9 or 1.0.1
+    static String C2SIMProtocolVsnMin;       // 0.0.9 to 1.0.2
+    static String C2SIMProtocolVsnMax;       // 0.0.9 to 1.0.2
+    static String C2SIMProtocolVersionSend;  // version to send
     static String restPort = "8080";         // assigned port for RESTful transaction
     static String stompPort = "61613";       // assigned port for STOMP connection
     static String generalBMLFunction;        // Order or Report
@@ -437,6 +454,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                                              // duplicate checking
     static String askAboutCheckDuplicateID;  // if "1" and duplicate found, popup 
                                              // request to continue checking
+    static String reportRepeatms;            // ms between report repeat 0 if no repeat
 
     NamespaceContext nsContext= new NamespaceContext() {
         public Iterator getPrefixes(String namespaceURI) {
@@ -662,6 +680,27 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
      */
     HashMap<String,MilOrg> unitMap = new HashMap<String,MilOrg>();
     HashMap<String,MilOrg> nameMap = new HashMap<String,MilOrg>();
+    HashMap<String,MilOrg> previousUnitMap;
+    HashMap<String,MilOrg> previousNameMap;
+    
+    /**
+     * when playing a replayLog recording it is possible to 
+     * use a C2SIMInitialization recorded in the log
+     */
+    void restartORBAT(){
+        previousUnitMap = unitMap;
+        unitMap = new HashMap<String,MilOrg>();
+        previousNameMap = nameMap;
+        nameMap = new HashMap<String,MilOrg>();
+        removeInitIcons();
+    }
+    void revertORBAT(){
+        removeInitIcons();
+        unitMap = previousUnitMap;
+        previousUnitMap = null;
+        nameMap = previousNameMap;
+        previousNameMap = null;
+    }
     int getUnitMapSize(){
         return unitMap.size();
     }
@@ -1273,7 +1312,6 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         return readAnXmlFile(xmlUrl.toString().substring(6));
     }
     public String readAnXmlFile(String xmlFilename) {
-    
         // correct pathological path bug
         if(xmlFilename.charAt(0) != '.')
             if(xmlFilename.charAt(0) != '/')
@@ -1323,12 +1361,53 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         threadSub = new Thread(subscriber);
 
         // Run the Subscriber in a separate thread
-        if(debugMode)printDebug("Thread state "  + threadSub.getState().toString());
+        if(debugMode)
+            printDebug("Thread state "  + threadSub.getState().toString());
         threadSub.start();
         return true;
         
     }// end startServerSubscribeThread()
     
+    /**
+     * starts the Report Repeat thread
+     * returns true if successful
+     */
+    public boolean startReportRepeatThread(){
+        
+        if(debugMode)printDebug("Start Subscriber Thread");
+        
+        if(repeatC2SIM != null){
+            printError("only one Repeat Report is supported at a time");
+            showInfoPopup("only one at a time allowed","Repeat Report");
+            return false;
+        }
+        
+        // start the repeat thread
+        try {
+            repeatC2SIM = new RepeatReportC2SIM();
+        } catch (Exception e) {
+            printError("Exception starting report repeat thread:"+e);
+            e.printStackTrace();
+            return false;
+        }
+        threadRepeat = new Thread(repeatC2SIM);
+
+        // Run the Subscriber in a separate thread
+        if(debugMode)
+            printDebug("Thread state "  + threadRepeat.getState().toString());
+        threadRepeat.start();
+        return true;
+        
+    }// end startReportRepeatThread()
+    
+        
+    /**
+     * stops sending of repeated report
+     */
+    void stopReportRepeatThread(){
+        sendingRepeat = false;
+        bml.repeatC2SIM = null;
+    }// end stopRepeatReportThread()
         
     /**
      * Load an XML string from file into JAXFront
@@ -1403,7 +1482,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     }
     
     /**
-     * makes a text String with 3 significANT digITS from float
+     * makes a text String with 3 significant digitsfFILENAME: from float
      */
     String floatTo3SD(float input){
         return String.format("%.3f", input);
@@ -1487,12 +1566,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         // clear initialization from map
         if(buttonAction.getSource() == initRemoveButton){
             initRemoveButton.setVisible(false);
-            initIconsOnScreen = false;
-            removeLayersWithIconType(IconType.INITIALIZE);
-            iconUuidListClearInit();
-            lastUnitID = "";
-            lastLatitude = "";
-            lastLongitude = "";
+            removeInitIcons();
         }
         
         // clear orders from map
@@ -1627,6 +1701,14 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             runPlayer = !runPlayer;
             if(runPlayer){
                 pauseButton.setVisible(true);
+                
+                // check whether playback will display any icons  
+                if(autoDisplayReports.trim().equals("")){
+                    showInfoPopup(
+                        "Config autoDisplayReports does not designate a format to play",
+                        "Playback cancelled");
+                    return;
+                }
                         
                 // inform user whether play will send to server
                 if(getConnected())
@@ -1734,24 +1816,34 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         if(debugMode)printDebug("Push C2SIM server control STOP then RESET .......");
         InitC2SIM initC2SIM = new InitC2SIM();
         if(serverSuccess(initC2SIM.pushStopC2SIM()))
-            if(serverSuccess(initC2SIM.pushResetC2SIM()))
-                initC2SIM.pushInitializeC2SIM();
+            if(serverSuccess(initC2SIM.pushResetC2SIM()))   
+                serverShareButton.setVisible(true);
     }
     
     /**
      * actions of shortcut button to initialize and share server
      */
     private void commandShareServer(){
+        InitC2SIM initC2SIM = new InitC2SIM();
+        
+        // might get here uninitialized...
+        if(serverStatusLabel.getText().equals("UNINITIALIZED"))
+            if(!serverSuccess(initC2SIM.pushInitializeC2SIM()));
+        
+        // if not, try pusing a C2SIMInitialization 
         serverShareButton.setVisible(false);
         if(debugMode)printDebug("Open+Push C2SIM Initialize ......................");
-        configHasBeenLoaded = false;
-        InitC2SIM initC2SIM = new InitC2SIM();
+        configHasBeenLoaded = false;     
         if(initC2SIM.openInitFSC2SIM("Initialize")){
-            if(serverSuccess(initC2SIM.pushInitC2SIM()))
+            
+            // init worked, also push SHARE and START
+            if(serverSuccess(initC2SIM.pushInitC2SIM())){
                 if(debugMode)printDebug("Push C2SIM server control SHARE then START...........");
-                if(serverSuccess(initC2SIM.pushShareC2SIM()))
-                    initC2SIM.pushStartC2SIM();
+                    if(serverSuccess(initC2SIM.pushShareC2SIM()))
+                        initC2SIM.pushStartC2SIM();
+            }
         }
+
         // didn't load file - show button to try again
         else serverShareButton.setVisible(
             stompIsConnected && !serverPassword.equals(""));
@@ -1845,6 +1937,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         final JMenuItem pushInitializeC2SIM = new JMenuItem("Push server control INITIALIZE");
         final JMenuItem pushStartC2SIM = new JMenuItem("Push server control START");
         final JMenuItem pushPauseC2SIM = new JMenuItem("Push server control PAUSE");
+        final JMenuItem pushResumeC2SIM = new JMenuItem("Push server control RESUME");
         final JMenuItem pushStopC2SIM = new JMenuItem("Push server control STOP");
         final JMenuItem pushResetC2SIM = new JMenuItem("Push server control RESET");
         final JMenuItem pushStopResetInitC2SIM = new JMenuItem("Push server control STOP + RESET + INITIALIZE");
@@ -1885,8 +1978,13 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         //JMenuItem saveDocument = new JMenuItem("Save");
         JMenuItem closeDocument = new JMenuItem("Close Document");
         JMenuItem runServerTest = new JMenuItem("Run Server Validation");
+        JMenu repeatReportMenu = new JMenu("Send Repeated C2SIM Report");
         //JMenuItem printDocument = new JMenuItem("Print");
         JMenuItem exitOrder = new JMenuItem("Exit");
+        
+        // Repeated Report
+        JMenuItem startRepeatReport = new JMenuItem("Start Repeated Report");
+        JMenuItem stopRepeatReport = new JMenuItem("Stop Repeated Report");
 
         // Overall File  Menu
         mainMenu.add(newMenu);
@@ -1995,11 +2093,16 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         controlMenu.add(pushInitializeC2SIM);
         controlMenu.add(pushStartC2SIM);
         controlMenu.add(pushPauseC2SIM);
+        controlMenu.add(pushResumeC2SIM);
         controlMenu.add(pushStopC2SIM);
         controlMenu.add(pushResetC2SIM);
         controlMenu.add(pushStopResetInitC2SIM);
         
         // Simulation time multiple
+        
+        // Repeated Report
+        repeatReportMenu.add(startRepeatReport);
+        repeatReportMenu.add(stopRepeatReport);
 
         // use separators to distinguish control functions
         mainMenu.addSeparator(); 
@@ -2024,6 +2127,10 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         mainMenu.addSeparator();
         
         mainMenu.add(runServerTest);
+        mainMenu.addSeparator();
+        mainMenu.addSeparator();
+        
+        mainMenu.add(repeatReportMenu);
 
         //mainMenu.add(printDocument);
         mainMenu.addSeparator();
@@ -2076,6 +2183,10 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push C2SIM server control START..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushStartC2SIM();
+                if(recordPlayStatus.getText().equals("RECORDING"))
+                    recordPlayStatus.setVisible(true);
+                if(recordPlayStatus.getText().equals("PLAYING"))
+                    recordPlayStatus.setVisible(false);                
             }
         });
         pushPauseC2SIM.addActionListener( new ActionListener(){
@@ -2083,6 +2194,19 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push C2SIM server control PAUSE..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushPauseC2SIM();
+                if(recordPlayStatus.getText().equals("RECORDING"))
+                    recordPlayStatus.setVisible(false);
+            }
+        });
+        pushResumeC2SIM.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Push C2SIM server control RESUME..................");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushResumeC2SIM();
+                if(recordPlayStatus.getText().equals("RECORDING"))
+                    recordPlayStatus.setVisible(true);
+                if(recordPlayStatus.getText().equals("PLAYING"))
+                    recordPlayStatus.setVisible(false);
             }
         });
         pushStopC2SIM.addActionListener( new ActionListener(){
@@ -2090,6 +2214,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push C2SIM server control STOP...................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushStopC2SIM();
+                if(recordPlayStatus.getText().equals("RECORDING"))
+                    recordPlayStatus.setVisible(false);
             }
         });
         pushResetC2SIM.addActionListener( new ActionListener(){
@@ -2110,7 +2236,6 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         });
         
         // Sim time multiple & magic move controls
-        //*******************************TODO
         getMagicMove.addActionListener( new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Input Magic Move data..................");
@@ -2127,7 +2252,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         setSimTimeMult.addActionListener( new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Push server input SETSIMMULT..................");
-                String parm = inputTimeMultPopup("Enter integer realtime multiple");             
+                String parm = inputTimeMultPopup("Enter  realtime multiple");             
                 if(!parm.equals("0")){
                     InitC2SIM initC2SIM = new InitC2SIM();
                     initC2SIM.pushC2simServerInput("SETSIMMULT",parm,"","");
@@ -2144,11 +2269,9 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         setPlayTimeMult.addActionListener( new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Push server input SETPLAYMULT..................");
-                String parm = inputTimeMultPopup("Enter integer realtime multiple");
-                if(!parm.equals("0")){
-                    InitC2SIM initC2SIM = new InitC2SIM();
-                    initC2SIM.pushC2simServerInput("SETPLAYMULT",parm,"","");
-                }
+                String parm = inputTimeMultPopup("Enter realtime multiple (0 for continuous play)");
+                InitC2SIM initC2SIM = new InitC2SIM();
+                initC2SIM.pushC2simServerInput("SETPLAYMULT",parm,"","");
             }
         });
         pushServerRecStart.addActionListener( new ActionListener(){
@@ -2156,6 +2279,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push server recording START..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushServerRecStart();
+                recordPlayStatus.setText("RECORDING");
+                recordPlayStatus.setVisible(true);
             }
         });
         pushServerRecPause.addActionListener( new ActionListener(){
@@ -2163,6 +2288,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push server recording PAUSE..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushServerRecPause();
+                if(recordPlayStatus.getText().equals("RECORDING"))
+                    recordPlayStatus.setVisible(false);
             }
         });
         pushServerRecRestart.addActionListener( new ActionListener(){
@@ -2177,13 +2304,15 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push server recording STOP..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushServerRecStop();
+                recordPlayStatus.setText("         ");
+                recordPlayStatus.setVisible(false);
             }
         });   
         pushServerRecGetStat.addActionListener( new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Push server recording GET STATUS..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
-                initC2SIM.pushServerRecStop();
+                initC2SIM.pushServerRecGetStatus();
             }
         }); 
         
@@ -2192,12 +2321,37 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Push server playback START..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
-                initC2SIM.pushServerPlayStart();
+                String parm1 = inputTimeMultPopup(
+                    "Enter playback file name from server (zero for current replay.log)");
+                if(parm1 == null)return;
+                String parm2 = inputTimeMultPopup(
+                    "Enter playback start time in format 'HH:MM:SS' or 'YYYY-MM-DD HH:MM:SS' (0 to play all)");
+                if(parm2 == null)return;
+                if(debugMode)printDebug("PLAYBACK START PARMS|"+parm1+"|"+parm2+"|");
+                
+                // verify we have an input of acceptable length
+                if(parm1 == null || parm2 == null)return;
+                boolean lengthOK = false;
+                if(parm2.equals("0"))lengthOK = true;
+                if(parm2.length() == 8) {
+                    parm2 = thisDate()+"T"+parm2+",000";
+                    lengthOK = true;
+                }
+                else if(parm2.length() == 19) {
+                    parm2 = parm2.substring(0,10)+"T"+parm2.substring(11,19)+",000";
+                    lengthOK = true;
+                }
+                if(!lengthOK)showInfoPopup("must be 'HH:MM:SS' or 'YYYY-MM-DD HH:MM:SS'",
+                        "DATE FORMAT LENGTH ERROR");
+                
+                // signal server to start playback
+                else initC2SIM.pushC2simServerInput("STARTPLAY",parm1,parm2,"");
+                recordPlayStatus.setText("PLAYING");
             }
         });
         pushServerPlayPause.addActionListener( new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                if(debugMode)printDebug("Push server playback PAUSE..................");
+                if(debugMode)printDebug("Push server playback playback PAUSE...........");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushServerPlayPause();
             }
@@ -2214,6 +2368,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 if(debugMode)printDebug("Push server playback STOP..................");
                 InitC2SIM initC2SIM = new InitC2SIM();
                 initC2SIM.pushServerPlayStop();
+                recordPlayStatus.setText("       ");
+                recordPlayStatus.setVisible(false);
             }
         });
         pushServerPlayGetStat.addActionListener( new ActionListener(){
@@ -2292,6 +2448,10 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Open+Push C2SIM Order ...........................");
                 configHasBeenLoaded = false;
+                if(!serverStatusLabel.getText().equals("RUNNING")){
+                    showInfoPopup("Open Push C2SIM Order", "imitialization required");
+                    return;
+                }
                 OrderC2SIM orderC2SIM = new OrderC2SIM();
                 if(orderC2SIM.openOrderFSC2SIM(
                     "Orders",
@@ -2384,8 +2544,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Open C2SIM Report from File System...............");
                 configHasBeenLoaded = false;
-                ReportC2SIM reportC2SIM = new ReportC2SIM();
                 try {
+                    ReportC2SIM reportC2SIM = new ReportC2SIM();
                     reportC2SIM.openReportFSC2SIM("Reports"); 
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -2403,8 +2563,12 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Open+Push C2SIM Report ..........................");
                 configHasBeenLoaded = false;
-                ReportC2SIM reportC2SIM = new ReportC2SIM();
+                if(!serverStatusLabel.getText().equals("RUNNING")){
+                    showInfoPopup("Open Push C2SIM Report", "imitialization required");
+                    return;
+                }
                 try {
+                    ReportC2SIM reportC2SIM = new ReportC2SIM();
                     if(reportC2SIM.openReportFSC2SIM("Reports"))
                         reportC2SIM.pushReportC2SIM();
                 } catch (IOException e1) {
@@ -2580,7 +2744,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             }
         });
 
-        // Reports
+        // IBML Reports
         newReport.addActionListener( new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("New Report ......................................");
@@ -2799,6 +2963,20 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Close Config File .............................");
                 closeConfig();
+            }
+        });
+
+        // Repeated Reports
+        startRepeatReport.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Start Repeated Report.......................");
+                startReportRepeatThread();
+            }
+        });
+        stopRepeatReport.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(debugMode)printDebug("Stop Repeated Report.......................");
+                stopReportRepeatThread();
             }
         });
 
@@ -3105,6 +3283,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             public void actionPerformed(ActionEvent e){
                 if(debugMode)printDebug("Server Stop button selected");
                 commandStopServer();
+                recordPlayStatus.setVisible(false);
             }
         });
         serverShareButton.setVisible(false);
@@ -3116,6 +3295,10 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 commandShareServer();
             }
         });
+        mapToolBar.add(recordPlayStatus);
+        recordPlayStatus.setForeground(Color.red);
+        recordPlayStatus.setBorder(lineBorder);
+        recordPlayStatus.setVisible(false);
         splitPane.setRightComponent((Component) mapPanel);
 
         // Add popup menu to capture coordinates and send them to the editor		
@@ -3333,7 +3516,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 mapHandler.remove(routeLayers[moveFromLayer]);
             }
             
-            // or move the Routelayer in routeLayers[]
+            // or move the Routelayer within routeLayers[]
             else routeLayers[moveToLayer] = routeLayers[moveFromLayer];
             showButtons(true);
             return;
@@ -3929,7 +4112,6 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         
         try{Thread.sleep(5000);}catch(InterruptedException ie){}
         stopPlayback();
-     
     }// end playFileDone()
     
     /**
@@ -3980,7 +4162,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
     
     /**
      * creates input dialog popup
-     * returns new value of time mult
+     * returns new value 
      * returns zero if user selects cancel
      */
     String inputTimeMultPopup(String popupText){
@@ -4115,10 +4297,47 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
      * @param serverState 
      */
     public void setServerStateLabel(String serverState) {
-                        
+
+        // defend against serverState that accidentally includes whitepace or newline
+        serverState.trim();
+        if(serverState.endsWith("\n"))
+            serverState = serverState.substring(0,serverState.length()-1);    
+        
+        // translate C2SIM standard SystemComandType to resulting server states
+        if(serverState.equals("InitializationComplete"))serverState = "INITIALIZING";
+        if(serverState.equals("PauseScenario"))serverState = "PAUSED";
+        if(serverState.equals("ResetScenario"))serverState = "UNINITIALIZED";
+        if(serverState.equals("ResumeScenario"))serverState = "RUNNING";
+        if(serverState.equals("ShareScenario"))serverState = "INITIALIZED";
+        if(serverState.equals("StartScenario"))serverState = "RUNNING";
+        if(serverState.equals("StopScenario"))serverState = "INITIALIZED";
+        if(serverState.equals("SubmitInititalization"))serverState = "INITIALIZING";
+        
+        // ignore SystemCommandss that do not affect server state
+        if(serverState.equals("MagicMove"))return;
+        if(serverState.equals("PausePlayback"))return;
+        if(serverState.equals("PauseRecording"))return;
+        if(serverState.equals("PlaybackRealtimeMultipleReport"))return;
+        if(serverState.equals("PlaybackStatusReport"))return;
+        if(serverState.equals("RecordingStatusReport"))return;
+        if(serverState.equals("RefreshInit"))return;
+        if(serverState.equals("RequestPlaybackRealtimeMultiple"))return;
+        if(serverState.equals("RequestPlaybackStatus"))return;
+        if(serverState.equals("RequestRecordingStatus"))return;
+        if(serverState.equals("RequestSimulationRealtimeMultiple"))return;
+        if(serverState.equals("ResumePlayback"))return;
+        if(serverState.equals("ResumeRecording"))return;
+        if(serverState.equals("SetPlaybackRealtimeMultiple"))return;
+        if(serverState.equals("SetSimulationRealtimeMultiple"))return;
+        if(serverState.equals("SimulationRealtimeMultipleReport"))return;
+        if(serverState.equals("StartPlayback"))return;
+        if(serverState.equals("StartRecording"))return;
+        if(serverState.equals("StopPlayback"))return;
+        if(serverState.equals("StopRecording"))return;
+
         // use the state value to set top frame indicator
         if(serverState.equals("STOPPED")|| 
-            serverState.substring(0,4).equals("Stop")) {
+            serverState.substring(0,5).equals("StopS")) {
             serverStatusLabel.setText("STOPPED");
             serverStatusLabel.setForeground(Color.RED);
         }
@@ -4129,6 +4348,8 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             serverStopButton.setVisible(
                 stompIsConnected && !serverPassword.equals(""));
             serverShareButton.setVisible(false);
+            if(recordPlayStatus.getText().equals("RECORDING"))
+                recordPlayStatus.setVisible(true);
         }
         else if(serverState.equals("PAUSED")|| 
             serverState.substring(0,5).equals("Pause")) {
@@ -4589,7 +4810,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         // advise user to restart
         showInfoPopup( 
             "restart C2SIMGUI to use changed configuration values", 
-            "Updated COnfiguration Data");
+            "Updated Configuration Data");
     }
 	
     private void loadConfig() { 	
@@ -4618,7 +4839,9 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             submitterID = xpath.evaluate("//SubmitterID", w3cReportInfoDoc);
             serverName = xpath.evaluate("//ServerName", w3cReportInfoDoc);
             serverPassword = xpath.evaluate("//ServerPassword", w3cReportInfoDoc);
-            c2simProtocolVersion = xpath.evaluate("//C2SIMprotocolVersion", w3cReportInfoDoc);
+            C2SIMProtocolVsnMin = xpath.evaluate("//C2SIMProtocolVsnMin", w3cReportInfoDoc);
+            C2SIMProtocolVsnMax = xpath.evaluate("//C2SIMProtocolVsnMax", w3cReportInfoDoc);
+            C2SIMProtocolVersionSend = xpath.evaluate("//C2SIMProtocolVsnSend", w3cReportInfoDoc);
             if(c2simProtocolVersion.equals(""))c2simProtocolVersion = defaultC2simProtocolVersion;
             mapScale = xpath.evaluate("//MapScale",w3cReportInfoDoc);
             startSubscribed = xpath.evaluate("//StartSubscribed",w3cReportInfoDoc);
@@ -4673,13 +4896,16 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             askAboutCheckDuplicateID  = xpath.evaluate("//askAboutCheckDuplicateID", 
                 w3cReportInfoDoc);
             askAboutCheckingID = askAboutCheckDuplicateID.equalsIgnoreCase("1");
+            reportRepeatms=xpath.evaluate("//ReportRepeatms", w3cReportInfoDoc);
 
             // if debugging, print the parameters
             if(debugMode){
                 printDebug(" submitterID =" + submitterID);
                 printDebug(" serverName =" + serverName);
                 printDebug(" serverPassword =" + serverPassword);
-                printDebug(" C2SIM protocol version =" + c2simProtocolVersion);
+                printDebug(" C2SIM protocol min version =" + C2SIMProtocolVsnMin);
+                printDebug(" C2SIM protocol max version =" + C2SIMProtocolVsnMax);
+                printDebug(" C2SIM protocol send version =" + C2SIMProtocolVersionSend);
                 printDebug(" Report BML Type =" + reportBMLType);
                 printDebug(" Order BML Type =" + orderBMLType);
                 printDebug(" MapScale =" + mapScale);
@@ -4712,6 +4938,9 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                 printDebug(" cbmlReportSchemaLocation =" + cbmlReportSchemaLocation);
                 printDebug(" ibml09OrderSchemaLocation =" + ibml09OrderSchemaLocation);
                 printDebug(" ibml09ReportSchemaLocation =" + ibml09ReportSchemaLocation);
+                printDebug(" c2simOrderSchemaLocation =" + c2simReportSchemaLocation);
+                printDebug(" c2simReportSchemaLocation =" + c2simReportSchemaLocation);
+                printDebug(" c2simInitSchemaLocation =" + c2simReportSchemaLocation);
                 printDebug(" Order ID path =" + orderIDXPath);
                 printDebug(" Locationpath =" + whereXPathTag);
                 printDebug(" LocationRouteWhereXPATH ="+routeXPathTag);
@@ -4889,6 +5118,12 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         String idTag,   // tag for data that must be unique
         boolean fromThisGui)// checking from this GUI or server
     {
+        if(currentXmlDataArray == null) {
+            printError("XML DATA ARRAY NULL IN itemIdNotUnique");
+            Thread.dumpStack();
+            return false;
+        }
+        
         // don't do this if not configured
         if(debugMode){
             printDebug("ItemIdNotUnique ignoreXmlWithDupID:" +
@@ -4951,7 +5186,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                             //found a duplicate
                             // ask the user whether to suppress duplicates
                             boolean okCancelFromThis = false;
-                            if(askAboutCheckingID || fromThisGui){
+                            if((askAboutCheckingID || fromThisGui) && previousUnitMap == null){
                                 // sent here - check every time if configured to check
                                 if(layerIdPosted.sentFromThisGui && fromThisGui){
                                     okCancelFromThis = okCancelPopup(
@@ -5016,6 +5251,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
      * push duplicate Order or Report ID and user clicks cancel;
      * otherwise returns true
      */
+    boolean initializationHasBeenAsked = false;
     public boolean drawFromXML(
         String context, 
         URL url1, 
@@ -5066,13 +5302,18 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         // if there is no initialization data, ask 
         // user if they want to load initialization
         if(getUnitMapSize() == 0){
-            if(okCancelPopup("No initialization loaded", "Load initialization?")){
+            
+            if(!initializationHasBeenAsked){
                 
-                // load initialization file and parse it
-                InitC2SIM initC2SIM = new InitC2SIM();
-                if(initC2SIM.openInitFSC2SIM("Initialize")){
-                    MilOrg milOrg = new MilOrg();
-                    milOrg.parseC2SIMInit(loadedXml);
+                initializationHasBeenAsked = true;
+                if(okCancelPopup("No initialization loaded", "Load initialization?")){
+                
+                    // load initialization file and parse it
+                    InitC2SIM initC2SIM = new InitC2SIM();
+                    if(initC2SIM.openInitFSC2SIM("Initialize")){
+                        MilOrg milOrg = new MilOrg();
+                        milOrg.parseC2SIMInit(loadedXml);
+                    }
                 }
             }
         }
@@ -5246,14 +5487,15 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
                         nsPrefixRef);
 
             // check for ReportID uniqueness (exempt older C2SIM)
-            if(protocolVersion.equals(c2simProtocolVersion))
+            if(bml.c2simProtocolOK(protocolVersion)){
                 if(debugMode)printDebug("drawFromXML/C2SIM Report whereNodetag:" +
-                    whereNodeTag);
-            if(itemIdNotUnique(
-                currentXmlDataArray, 
-                Variant.C2SIM, "MessageBody", "ReportID",
-                isFromThisGui)
-            ) return false;
+                    whereNodeTag + " itemTag:MessageBody idTag:ReportID");
+                if(itemIdNotUnique(
+                    currentXmlDataArray, 
+                    Variant.C2SIM, "MessageBody", "ReportID",
+                    isFromThisGui)
+                ) return false;
+            }
         } // end else if (reportBMLType.equals("C2SIM") &&
         
         else {
@@ -5271,7 +5513,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             return false;
         }
 
-        // verify first XML tag matches xmlDocumentType
+        // verify first XML tag matches a xmlDocumentType
         elementZero = new String(currentXmlDataArray[0]);
         if(xmlDocumentType.equals("C2SIM Report") && 
             !cbmlTagCompare(elementZero,"MessageBody"))
@@ -5526,6 +5768,42 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
             infoMessage,
             JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    /**
+     * clears layers of map with Initialize icons
+     */
+    void removeInitIcons(){
+        initIconsOnScreen = false;
+        removeLayersWithIconType(IconType.INITIALIZE);
+        iconUuidListClearInit();
+        lastUnitID = "";
+        lastLatitude = "";
+        lastLongitude = "";
+    }
+    
+    /**
+     * extract data from an XML string by tag fragment
+     * that start immediately after < or .
+     * this obtains only the first data with that tag
+     * and assumes the XML data does not otherwise contain
+     * the tag up to the point where the data is found
+     * @param xml - string to be extracted fom
+     * @param tag - the tag fragment to be matched
+     * @returns the data, or "" if tag is not matched
+     */
+    String extractDataFromXml(String xml, String tag){
+        int startID = xml.indexOf(tag + ">");
+        if(startID < 0) return "";
+        startID += tag.length();
+        int endID = xml.indexOf("</",startID);
+        if(endID < 0)return "";
+        return xml.substring(startID,endID);
+    }
+    
+   /**
+    *  start action, to be completed in RouteLayer, to draw
+    *  the Map Graphics corresponding to an OPORD on the OpenMap
+    */
 	
     public void drawOPORD_FS(URL url1, URL url2, URL url3, String root){
         initDom(null, url1, url2, url3, root);
@@ -5633,7 +5911,7 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
 	}// end drawOPORD_FS
 	
     /*
-    ** enters array of points into 
+    ** enters array of points into catalogArray
     */
     public void catalogPoints(String[] catalogArray){
 
@@ -6079,5 +6357,120 @@ public class C2SIMGUI extends JFrame implements WindowListener, HelpListener,
         return result;
     
     }// end extractC2simData()
+    
+    /*
+    * obtains Java Date() and recorganizes to YYYY-MM-DD
+    */
+    HashMap<String,String> monthNum = null;
+    String thisDate() {
+        
+        // make a HashMap to turn month code to a number
+        // build it only once
+        if(monthNum == null){
+            monthNum = new HashMap<String,String>();
+            monthNum.put("Jan","01");
+            monthNum.put("Feb","02");
+            monthNum.put("Mar","03");
+            monthNum.put("Apr","04");
+            monthNum.put("May","05");
+            monthNum.put("Jun","06");
+            monthNum.put("Jul","07");
+            monthNum.put("Aug","08");
+            monthNum.put("Sep","09");
+            monthNum.put("Oct","10");
+            monthNum.put("Nov","11");
+            monthNum.put("Dec","12");
+        }
+        String date = (new Date()).toString();
+        String month = monthNum.get(date.substring(4,7));
+        return date.substring(24,28)+"-"+month+"-"+date.substring(8,10);
+        
+    }// end thisDate()
+    
+    /**
+     * returns the part of C2SIM Report message up to ReportContent
+     * in his and other functions below we presume if there is namespace 
+     * indicator in a tag it will be in all tags 
+     * @param report: message to be extracted from 
+     */
+    String extractReportFirstPart(String report){
+        int endReportHeading = report.indexOf("<ReportContent>");
+
+        if(endReportHeading < 0){
+            String tagWithNs = "<" + c2simns + ":ReportContent>";
+            endReportHeading = report.indexOf(tagWithNs);
+        }
+        if(endReportHeading < 0){
+            printError("missing ReportContent tag in messageBody:" + report);
+                return null;
+        }
+        return report.substring(0,endReportHeading);
+    }// end extractReportFirstPart()
+    
+    /**
+     * returns first ReportContent from C2SIM Report message after startIndex
+     * NOTE: because of findEndingIndex test before this is invoked, 
+     * we know the endTag exists
+     * @param1 report: message to be extracted from
+     * @param2 startIndex: starting point in report for extracting
+     */
+    String extractReportContent(String report, int startReportContent){
+        String fromReportContent = report.substring(startReportContent);
+        int endReportContent = fromReportContent.indexOf("</ReportContent>");
+        if(endReportContent >= 0)endReportContent += 16;//("</ReportContent>").length()
+        else {
+            String tagWithNs = "</" + c2simns + ":ReportContent>";
+            endReportContent = fromReportContent.indexOf(tagWithNs);
+            if(endReportContent >= 0)endReportContent += tagWithNs.length();
+            else return null;
+        }
+        return fromReportContent.substring(0, endReportContent);
+    }// end extractReportContent()
+    
+    /**
+     * finds index of the ending part of C2SIM report
+     */
+    int findEndingIndex(String report){
+        int startEnding = report.lastIndexOf("</ReportContent>");
+        if(startEnding >= 0)startEnding += 16;//("</ReportContent>").length()
+        else {
+            String tagWithNs = "</" + c2simns + ":ReportContent>";
+            startEnding = report.lastIndexOf(tagWithNs);
+            if(startEnding < 0){
+                printError(
+                    "missing ReportContent endtag in messageBody:" + report);
+                return -1;
+            }
+            startEnding += tagWithNs.length();
+        }
+        return startEnding; // ("ReportContent>").length()
+    }// end extractReportEndingPart()
+    
+    /**
+     * modifies endPart of a C2SIM report with a unique reportID
+     */
+    String uniqueEndingPart(String report, String endingPart){
+        
+        // find the start and ending of ReportID data
+        int startReportID = endingPart.indexOf("ReportID>");
+        if(startReportID < 0) {
+            printError(
+                "missing ReportID tag in messageBody:" + report);
+            return null;
+        }
+        startReportID += 9; // ("ReportID>").length() 
+        int endReportID = endingPart.indexOf("</",startReportID);
+        if(endReportID < 0) {
+            printError(
+                "missing ReportID endtag in messageBody:" + report);
+            return null;
+        }
+        
+        // subtitute a random UUID for ReportID data and return
+        String beforeReportID = endingPart.substring(0,startReportID);
+        String afterReportID = endingPart.substring(endReportID);
+        UUID newReportID = UUID.randomUUID();
+        return beforeReportID + newReportID + afterReportID;
+  }// end uniqueEndingPart() 
 
 } // end of C2SIMGUI Class

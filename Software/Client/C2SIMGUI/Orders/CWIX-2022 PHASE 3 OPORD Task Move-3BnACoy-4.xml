@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIM_SMX_LOX_V1.0.2.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<DomainMessageBody>
+<!-- Operations Order Phase 3 for MSG-201 CWIX 2022 -->
+<OrderBody>
+    <FromSender>00000000-0000-0001-0001-000000000000</FromSender>
+    <ToReceiver>00000000-0007-0001-0000-000000000000</ToReceiver>
+    <IssuedTime>
+        <IsoDateTime>0000-00-00T00:00:00Z</IsoDateTime>
+    </IssuedTime>
+    <OrderID>00000000-0001-0001-1000-200200000000</OrderID>
+
+    <Task><ManeuverWarfareTask> 
+        <!-- Row65 Prepare to receive 3Bn. Then prepare to execute Phase IV. -->
+        <Location><GeodeticCoordinate>
+            <Latitude>58.43207</Latitude>
+            <Longitude>16.676511</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-3BnACoy-4</Name>
+        <UUID>00000000-0001-0001-1000-200800000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1310-000000000000</AffectedEntity>   
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1310-000000000000</PerformingEntity>
+        <StartTime>
+            <SimulationTime><DelayTimeAmount>
+                <IsoTimeDuration>P00Y00M00DT00H03M00S</IsoTimeDuration>
+            </DelayTimeAmount></SimulationTime>
+        </StartTime>
+        <TaskActionCode>DEFEND</TaskActionCode>
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+
+</OrderBody>
+</DomainMessageBody>
+</MessageBody>
+

@@ -99,6 +99,7 @@ public class Webservices {
             restClient.setSubmitter(bml.submitterID);
             restClient.setDomain(bml.orderDomainName);
             restClient.getC2SIMHeader().setProtocolVersion(protocolVersion);
+            restClient.getC2SIMHeader().setFromSendingSystem(bml.submitterID);
         } catch (Exception e1) {
             e1.printStackTrace();
         }

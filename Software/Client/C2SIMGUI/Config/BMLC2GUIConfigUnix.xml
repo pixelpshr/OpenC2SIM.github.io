@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?jaxfront version=3.25;time=2020-10-22 00:20:38.321;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
+<?jaxfront version=3.25;time=2023-03-10 15:14:01.889;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
 <SBMLServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BMLC2GUIConfig.xsd">
       <MapScale>500000</MapScale>
       <StartSubscribed>yes</StartSubscribed>
       <CenterUnit/>
       <SubmitterID>C2SIMGUI</SubmitterID>
-      <ServerName>10.2.10.70</ServerName>
+      <ServerName>192.168.0.23</ServerName>
       <ServerPassword>v0lgenau</ServerPassword>
-      <C2SIMprotocolVersion>1.0.1</C2SIMprotocolVersion>
+      <C2SIMProtocolVsnMin>CWIX2023v1.0.3</C2SIMProtocolVsnMin>
+      <C2SIMProtocolVsnMax>CWIX2023v1.0.3</C2SIMProtocolVsnMax>
+      <C2SIMProtocolVsnSend>CWIX2023v1.0.3</C2SIMProtocolVsnSend>
       <C2SIMns>c2s:</C2SIMns>
       <CBMLns>cbml:</CBMLns>
       <IBMLns>ibml:</IBMLns>
@@ -16,7 +18,7 @@
       <InitMapLon>16.28</InitMapLon>
       <ReportOrderScale>0</ReportOrderScale>
       <AutoDisplayInit>0</AutoDisplayInit>
-      <AutoDisplayReports>ALL</AutoDisplayReports>
+      <AutoDisplayReports>C2SIM</AutoDisplayReports>
       <AutoDisplayOrders>C2SIM</AutoDisplayOrders>
       <DisplayBluePosition>1</DisplayBluePosition>
       <DisplayBlueObservation>1</DisplayBlueObservation>
@@ -45,4 +47,5 @@
       <blueSideName/>
       <checkForDuplicateID>1</checkForDuplicateID>
       <askAboutCheckDuplicateID>1</askAboutCheckDuplicateID>
+      <ReportRepeatms>0</ReportRepeatms>
 </SBMLServer>

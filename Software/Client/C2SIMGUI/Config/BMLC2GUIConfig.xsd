@@ -13,7 +13,9 @@
         <xs:element ref="SubmitterID"/>
 	<xs:element ref="ServerName"/>
 	<xs:element ref="ServerPassword"/>
-        <xs:element ref="C2SIMprotocolVersion"/>
+        <xs:element ref="C2SIMProtocolVsnMin"/>
+        <xs:element ref="C2SIMProtocolVsnMax"/>
+        <xs:element ref="C2SIMProtocolVsnSend"/>
 	<xs:element ref="C2SIMns"/>
         <xs:element ref="CBMLns"/>
         <xs:element ref="IBMLns"/>
@@ -51,16 +53,19 @@
         <xs:element ref="blueSideName"/>
         <xs:element ref="checkForDuplicateID"/>
         <xs:element ref="askAboutCheckDuplicateID"/>
+        <xs:element ref="ReportRepeatms"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="MapScale" type="xs:string"/>
   <xs:element name="StartSubscribed" type="xs:string"/>
   <xs:element name="CenterUnit" type="xs:string"/>
-  <xs:element name="ServerName" type="xs:string"/>
   <xs:element name="SubmitterID" type="xs:string"/>
+  <xs:element name="ServerName" type="xs:string"/>
   <xs:element name="ServerPassword" type="xs:string"/>
-  <xs:element name="C2SIMprotocolVersion" type="xs:string"/>
+  <xs:element name="C2SIMProtocolVsnMin" type="xs:string"/>
+  <xs:element name="C2SIMProtocolVsnMax" type="xs:string"/>
+  <xs:element name="C2SIMProtocolVsnSend" type="xs:string"/>
   <xs:element name="C2SIMns" type="xs:string"/>
   <xs:element name="CBMLns" type="xs:string"/>
   <xs:element name="IBMLns" type="xs:string"/>
@@ -105,4 +110,5 @@
   <xs:element name="blueSideName" type="xs:string"/>
   <xs:element name="checkForDuplicateID" type="xs:string"/>
   <xs:element name="askAboutCheckDuplicateID" type="xs:string"/>
+  <xs:element name="ReportRepeatms" type="xs:string"/>
 </xs:schema>

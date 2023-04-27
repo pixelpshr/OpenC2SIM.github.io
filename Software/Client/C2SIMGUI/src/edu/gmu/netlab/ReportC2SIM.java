@@ -20,6 +20,9 @@ import java.io.*;
 import javax.swing.JFileChooser;
 import com.jaxfront.core.util.URLHelper;
 import edu.gmu.c4i.c2simclientlib2.*;
+import static edu.gmu.netlab.C2SIMGUI.debugMode;
+import static edu.gmu.netlab.C2SIMGUI.printDebug;
+import static edu.gmu.netlab.C2SIMGUI.printError;
 
 /**
  * Report Support Methods
@@ -30,8 +33,8 @@ import edu.gmu.c4i.c2simclientlib2.*;
  *              mpullen 09/28/2021
  * @since	12/1/2011
  */ 
-public class ReportC2SIM {
-	
+public class ReportC2SIM
+{ 	
     String root="";
     C2SIMGUI bml = C2SIMGUI.bml;
     String documentType = "C2SIM Report";
@@ -45,6 +48,7 @@ public class ReportC2SIM {
 	
     /**
      * Create a new C2SIM Report (XML Document)
+     * text to be filled in by JAXFront panel
      * 
      * @mpullen
      * @since 5Apr18
@@ -112,38 +116,72 @@ public class ReportC2SIM {
         bml.xsdUrl = URLHelper.getUserURL(schemaFileLocation);
                     
         // load the report into JAXFront panel
+        File loadFile = null;
         try{
-            File loadFile = xmlFc.getSelectedFile();
+            loadFile = xmlFc.getSelectedFile();
             bml.loadJaxFront(
                 loadFile,
                 "C2SIM Report:" + loadFile.getName(),
                 schemaFileLocation,
                 "MessageBody");
         } catch(Exception e) {
-            bml.printError("Exception in loading report XML file:"+e);
+            bml.printError("Exception in JaxFront loading report XML file:"+e);
             e.printStackTrace();
             return false;
         }
+        // the C2SIM standard report can consist of multiple
+        // <ReportContent> segments. Here we convert that format 
+        // to single-segment so we can use the existing drawFomXML
+        // to place its icon on the map
 
-        //Generate the swing GUI
-        return bml.drawFromXML(
-            "default-context", 
-            bml.xsdUrl, 
-            bml.xmlUrl, 
-            bml.xuiUrl, 
-            bml.root, 
-            documentType,
-            "MessageBody",
-            (new String[]{"SubjectEntity","ReportingEntity","UUID","SideHostilityCode",
-                "PositionReportContent","ObservationReportContent","ActorReference",
-                "ReportID","ReportBody"}),
-            (new String[]{"Latitude","Longitude"}),
-            bml.c2simns,
-            null,
-            bml.c2simProtocolVersion,
-            true
-        );     
-    }// end openReportFS_GeneralC2SIM()
+        // extract the parts that apply to all pieces
+        String messageBody = bml.currentXmlString;
+        String firstPart = bml.extractReportFirstPart(messageBody);
+        if(firstPart == null)return false;
+        int endingIndex = bml.findEndingIndex(messageBody);
+        if(endingIndex < 0)return false;
+        String endingPart = messageBody.substring(endingIndex);
+
+        // extract the ReportContent parts in order
+        // parse them and draw to map
+        int startReportContent = firstPart.length();
+        String reportContent = 
+            bml.extractReportContent(messageBody,startReportContent); 
+        while(reportContent != null){
+
+            // make a new single-ReportContent report with uniqe ReportID
+            String newReport = firstPart + reportContent +
+                bml.uniqueEndingPart(messageBody,endingPart);
+
+            // draw the map icon, using a generated reportId
+            // Generate the swing GUI 
+            if(!bml.drawFromXML(
+                "default-context", 
+                bml.xsdUrl, 
+                null, 
+                bml.xuiUrl, 
+                bml.root, 
+                "C2SIM Report",
+                "MessageBody",
+                (new String[]{"SubjectEntity","ReportingEntity","UUID",
+                    "SideHostilityCode","PositionReportContent",
+                    "ObservationReportContent","ReportID","Name",
+                    "Latitude","Longitude","OperationalStatusCode"}),
+                (new String[]{}),
+                bml.c2simns,
+                newReport,
+                bml.c2simProtocolVersion,
+                false
+            ))return false;// stop here if error or duplicate ID
+
+
+            // go on to the next ReportContent part
+            startReportContent += reportContent.length();
+            reportContent = 
+                bml.extractReportContent(messageBody,startReportContent);
+        }
+        return true;
+    }// end openReportFSC2SIM()
 
     /**
      * Send an Edited (optionally validated) C2SIM Report 
@@ -167,7 +205,8 @@ public class ReportC2SIM {
                 bml.currentXmlString,
                 "REPORT",
                 bml.c2simProtocolVersion);
-        if(bml.debugMode)bml.printDebug("The C2SIM report push result is : " + pushResultString);
+        if(bml.debugMode)
+            bml.printDebug("The C2SIM report push result is : " + pushResultString);
         String popupString = pushResultString;
         if(popupString.length() > 38)popupString = popupString.substring(30);
         bml.showInfoPopup( 

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|   Copyright 2009-2021 Networking and Simulation Laboratory      |
+|   Copyright 2009-2022 Networking and Simulation Laboratory      |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |

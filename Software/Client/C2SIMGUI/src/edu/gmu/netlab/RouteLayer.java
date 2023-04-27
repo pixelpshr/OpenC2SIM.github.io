@@ -431,7 +431,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
 
         // find the lat/lon reported
         for(int i=0; i < stringArray.length-1; ++i) {
-            
+           
             if(stringArray[i].equals("PositionReportContent"))
                 isPositionReport = true;
             if(stringArray[i].equals("ObservationReportContent"))
@@ -720,6 +720,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
         // arrays to save TaskID so as to display unit icon
         // after ControlMeasures have been ingested
         String[] taskUnitID = new String[numberOfTasks];
+        taskUnitID[0] = "";
         String[] taskNames = new String[numberOfTasks];
         taskUuid = new String[numberOfTasks];
         taskUuid[0] = "";
@@ -861,7 +862,6 @@ public class RouteLayer extends Layer implements MapMouseListener {
             if(stringArrayIndex > tasksStartInStringArray){
                 if(bml.c2simTagCompare(stringArray[stringArrayIndex],"MapGraphicID"))
                     taskMapGraphicID[taskIndex] = stringArray[stringArrayIndex +1];
-                else taskMapGraphicID[taskIndex] = "";
             }
            
             // look for the Task Name (there is more than one Name in Task; this is the last)
@@ -889,7 +889,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
                 (stringArrayIndex > 0 &&
                     bml.c2simTagCompare(
                         stringArray[stringArrayIndex],bml.c2simTaskTag)))){
- 
+
                 // did we scan at least one coordinate pair
                 int mapGraphicCount = 0;
                 if(taskMapGraphicID[taskIndex] != "") {
@@ -911,8 +911,10 @@ public class RouteLayer extends Layer implements MapMouseListener {
                     if(mapGraphicCount > 0)noOfPointGDC = mapGraphicCount + 1;
                     else noOfPointGDC = lengthGDC/4;
                     if(bml.debugMode)bml.printDebug(
-                        "  It ends at : " + endGDC + " its GDC Length is: " + 
-                        lengthGDC + " No of Points is : " + noOfPointGDC);
+                        "Task " + taskIndex + " coordinates start at:" + startGDC +
+                        "  end at : " + endGDC + " its GDC Length is: " + 
+                        lengthGDC + " No of Points is : " + noOfPointGDC + 
+                        " it has MapGraphicID:" + taskMapGraphicID[taskIndex]);
 
                     // verify there was some data
                     if(!foundUnitID){
@@ -950,6 +952,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
                         prevTaskUuid[taskIndex] = "";
                         taskUuid[taskIndex] = "";
                         taskMapGraphicID[taskIndex] = "";
+                        taskUnitID[taskIndex] = "";
                     }
                 }//end if(startGDC
             }// end if(((stringArrayIndex
@@ -1000,8 +1003,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
                     }
                 }
             }// start with points from predecessor task
-            System.out.println("&&&&&&&&EXTEND "+prevTaskIndex+""+numberOfTasks+" "+
- prevTaskUuid[taskIndex]+" "+ taskUuid[taskIndex]+" "+tempArraySize);//debugx
+            
             if(prevTaskIndex >= 0){
                 // add starting point (two array locations)
                 // if the predecessor task has no MapGraphic route
@@ -1185,8 +1187,7 @@ public class RouteLayer extends Layer implements MapMouseListener {
             String unitID = taskUnitID[taskIndex];
             if (!unitID.equals("")){
                 String icon = null;
-                String hostility = bml.getMilOrgHostility(unitID);
-                
+                String hostility = bml.getMilOrgHostility(unitID);             
                 if(hostility == null)icon = icon2525b(unitID, "UNK");
                 else {
                     if(hostility.equals("HO:") || hostility.equals("AHO"))
@@ -2264,6 +2265,9 @@ String icon2525b(String sbmlUnitID, String unitHostility){
             ii = srl.getIcon("SUGPUCAA--*****", di); 
         }
         else { 	
+            // remove HQ code if present
+            if(symbolCode.substring(10,11).equals("A"))
+                symbolCode = symbolCode.substring(0,10) + "-" + symbolCode.substring(11);
             ii = srl.getIcon(symbolCode, di);
 
             // fallback if result is bad
@@ -2272,26 +2276,31 @@ String icon2525b(String sbmlUnitID, String unitHostility){
                 // try dropping echelon code
                 if(bml.debugMode)
                 bml.printDebug("createPoint can't produce icon for unit:" + 
-                    errorUnitID + " symbol:" + symbolCode); 
+                    errorUnitID + " symbol:" + symbolCode);
                 String substitute = symbolCode.substring(0,11) + "****";
                 if(bml.debugMode)
-                bml.printDebug("substituting symbol " + substitute);
+                    bml.printDebug("substituting symbol " + substitute);
                 ii = srl.getIcon(substitute, di);
                 
                 // final recourse - unknown symbol
                 if(ii == null) {
                     if(bml.debugMode)
-                    bml.printDebug("can't produce icon for unit:" + errorUnitID + 
-                    " symbol:" + symbolCode); 
+                        bml.printDebug("can't produce icon for unit:" + errorUnitID + 
+                            " symbol:" + symbolCode); 
                     char hostilityChar = symbolCode.charAt(1);
-                    if(hostilityChar != 'H') {
+                    if(hostilityChar == 'F'){
                         if(bml.debugMode)
-                        bml.printDebug("substituting symbol SUGPUC----*****");
+                            bml.printDebug("substituting symbol SUGPUC----*****");
+                        ii = srl.getIcon("SFGPU-----*****", di);
+                    }
+                    else if(hostilityChar != 'H') {
+                        if(bml.debugMode)
+                            bml.printDebug("substituting symbol SUGPUC----*****");
                         ii = srl.getIcon("SUGPU-----*****", di);
                     }
                     else {
                         if(bml.debugMode)
-                        bml.printDebug("substituting symbol SHGPUC----*****");
+                            bml.printDebug("substituting symbol SHGPUC----*****");
                         ii = srl.getIcon("SHGPUC----*****", di);
                     }
                 }

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|   Copyright 2009-2021 Networking and Simulation Laboratory      |
+|   Copyright 2009-2022 Networking and Simulation Laboratory      |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -129,7 +129,7 @@ public class Subscriber implements Runnable {
     /**
      *  Thread run() method to receive STOMP
      */
-    C2SIMClientSTOMP_Lib stomp;
+    C2SIMClientSTOMP_Lib stomp = null;
     public void run() {
       
         // setup for subscription
@@ -151,19 +151,44 @@ public class Subscriber implements Runnable {
         stomp.setHost(hostSource);
         stomp.setDestination("/topic/C2SIM");
         
-        // set subscription (NOTE: default to no subscription)
-        if(bml.autoDisplayReports == "C2SIM")
-            stomp.addAdvSubscription("protocol = 'C2SIM'");
-        else if(bml.autoDisplayReports == "BML"
-                || bml.autoDisplayReports == "IBML"
-                || bml.autoDisplayReports == "IBML09")
-            stomp.addAdvSubscription("protocol = 'BML'");
-
+        // set STOMP filters
+        // C2SIM subscriptions
+        String as = null;
+        if(bml.autoDisplayReports.equals("C2SIM") || 
+            bml.autoDisplayReports.equals("ALL")){
+            if(bml.autoDisplayOrders.equals("C2SIM") || 
+                bml.autoDisplayOrders.equals("ALL")){ 
+                as = "(message-selector = 'C2SIM_Command')" +
+                    " or (message-selector = 'C2SIM_Initialization')" +
+                    " or (message-selector = 'C2SIM_Order')" +
+                    " or (message-selector = 'C2SIM_Report')";
+            } else as ="(message-selector = 'C2SIM_Command')" +
+                " or (message-selector = 'C2SIM_Initialization')" +
+                " or (message-selector = 'C2SIM_Report')";
+        } else {
+            if(bml.autoDisplayOrders.equals("C2SIM") || 
+                bml.autoDisplayOrders.equals("ALL")){
+                as = "(message-selector = 'C2SIM_Command')" +
+                " or (message-selector = 'C2SIM_Initialization')" +
+                " or (message-selector = 'C2SIM_Order')";
+            } else as = "(message-selector = 'C2SIM_Command')" +
+                " or (message-selector = 'C2SIM_Initialization')";
+        } 
+        
+        // BML subscriptions
+        if(bml.autoDisplayReports == "BML"
+            || bml.autoDisplayReports == "IBML"
+            || bml.autoDisplayReports == "IBML09")
+            as = "protocol = 'BML'";
+        
+        // submit advanced subscription
+        stomp.addAdvSubscription(as);
+        
         // echo parameters to log
         if(bml.debugMode)bml.printDebug("STOMP client parameters:");
         if(bml.debugMode)bml.printDebug("Domain:" + domain);
         if(bml.debugMode)bml.printDebug("STOMP host:" + hostSource);
-        if(bml.debugMode)bml.printDebug("AdvSubscription:" + bml.autoDisplayReports);
+        if(bml.debugMode)bml.printDebug("STOMP advSubscription" + as);
 
         // Connect to the host
         C2SIMSTOMPMessage response = null;
@@ -182,13 +207,12 @@ public class Subscriber implements Runnable {
                 }
             }
             catch (C2SIMClientException bce) {
-                bml.printError("exception connect to STOMP:" + bce.getCauseMessage());
+                bml.printError("exception in connect to STOMP:" + bce.getCauseMessage());
                 bml.showErrorPopup(
                     "connect timed out - restart C2SIMGUI to try again",
                     "Server connection failed");
             }
         } 
-        System.out.println("STOMP connect response:" + response.getMessageBody());
         if(response == null){
             
             // turn off label in top panel
@@ -197,6 +221,7 @@ public class Subscriber implements Runnable {
             bml.subscriberStatusLabel.setForeground(Color.RED);
             return;
         }
+        System.out.println("STOMP connect response received");
         bml.setConnected(true);
         subscriberIsOn = true;
  
@@ -209,9 +234,10 @@ public class Subscriber implements Runnable {
         bml.playButton.setEnabled(true);
         bml.recordButton.setEnabled(true);
         
-        // send server status request
+        // send server and recordPlay status requests
         InitC2SIM initC2SIM = new InitC2SIM();
         initC2SIM.pushStatusC2SIM();
+        initC2SIM.pushStatusRecordPlayback();
 
         // Start listening
         C2SIMSTOMPMessage message = null;
@@ -219,7 +245,16 @@ public class Subscriber implements Runnable {
             while (subscriberIsOn)
             {
                 // read message with STOMP blocking until next
-                message = stomp.getNext_Block();
+                try {
+                    message = stomp.getNext_Block();
+                } catch(NullPointerException npe) {
+                    if(bml.debugMode)bml.printDebug("STOMP GETNEXTBLOCK NULLPOINTER");
+                    npe.printStackTrace();
+                    subscriberIsOn = false;
+                    bml.setConnected(false);
+                    bml.subscribeButton.setText("SUBSCRIBE STOMP");
+                    return;
+                }
 
                 // network read error - display popup and stop reading
                 if(message == null){
@@ -232,20 +267,33 @@ public class Subscriber implements Runnable {
                     bml.recorder.recordStomp(message);
 
                 // extract parameters from header
-                String selectorDomain = message.getHeader("selectorDomain");
-                String protocol = message.getHeader("protocol");
-                String protocolVersion = message.getHeader("c2sim-version");
-                String submitter = message.getHeader("submitter");
-                String firstforwarder = message.getHeader("firstforwarder");
-                if(bml.debugMode)bml.printDebug(
-                    "received STOMP selectorDomain:" + selectorDomain +
-                    " protocol:" + protocol + " submitter:" + submitter +
-                    " protocolVersion:" + protocolVersion +
-                    " firstforwarder:" + firstforwarder);       
-                bml.threadSub.yield();
-                String messageBody = message.getMessageBody().trim();
-                if(messageBody.length() == 0)continue;      
-                interpretMessage(messageBody, protocolVersion);
+                try {
+                    String selectorDomain = message.getHeader("selectorDomain");
+                    String protocol = message.getHeader("protocol");
+                    String protocolVersion = message.getHeader("c2sim-version");
+                    String submitter = message.getHeader("submitter");
+                    String firstforwarder = message.getHeader("first-forwarder");
+                    String messageSelector = message.getHeader("message-selector");
+                    String messageBody = message.getMessageBody().trim();
+                    if(bml.debugMode)
+                        bml.printDebug(
+                        "received STOMP protocol:" + protocol + 
+                        " submitter:" + submitter +
+                        " c2sim-version:" + protocolVersion +
+                        " first-forwarder:" + firstforwarder +
+                        " message-selector:" + messageSelector +
+                        " messageBodyLength:" + messageBody.length());       
+                    bml.threadSub.yield();
+                    if(messageBody.length() == 0)continue;      
+                    interpretMessage(
+                        messageBody, protocolVersion,messageSelector, submitter);
+                } catch(NullPointerException npe) {
+                    if(bml.debugMode)bml.printDebug("STOMP PARAMETERS NULLPOINTER");
+                    npe.printStackTrace();
+                    subscriberIsOn = false;
+                    bml.setConnected(false);
+                    bml.subscribeButton.setText("SUBSCRIBE STOMP");
+                }
                 
                 // reset message and go back to wait loop
                 message = null;
@@ -301,19 +349,46 @@ public class Subscriber implements Runnable {
     /**
      * interprets MessageBody, saves data, and adds to map
      */
-    public void interpretMessage(String messageBody, String protocolVersion) {
+    public void interpretMessage(
+        String messageBody, 
+        String protocolVersion,
+        String messageSelector,
+        String submitter) {
         
         messageCount++;  
 
         // message could be server control, initialization, order or report
-        int index400 = messageBody.length();
-        if(index400 > 400)index400 = 400;
-        String first400 = messageBody.substring(0,index400);
-        // for debug, print the message
-        //System.out.println("MESSAGEBODY:"+first400);
+        int index500 = messageBody.length();
+        if(index500 > 500)index500 = 500;
+        String first500 = messageBody.substring(0,index500);
+        // for debugging, print the message
+        //System.out.println("MESSAGEBODY PROTOCOL:" + protocolVersion + " SUBMITTER:" +
+        //submitter + " SELECTOR:" + messageSelector + " FIRST500:\n" + messageBody);
        
         // server control messages
-        if(first400.contains(bml.c2simSystemCommandDomain)) {
+        if(first500.contains(bml.c2simSystemCommandDomain)) {
+            System.out.println("***CONTROL:"+first500);//debugx
+            
+            // check for status of Playback and Record
+            if(first500.contains("StopPlayback")){
+                bml.recordPlayStatus.setVisible(false);
+                bml.runServerPlayer = false;
+                if(bml.previousUnitMap != null)
+                if(bml.okCancelPopup("Initialization replaced for Playback",
+                    "Revert to previous Initialization?"))
+                        bml.revertORBAT(); 
+            }
+            if(first500.contains("StartPlayback")){
+                bml.recordPlayStatus.setText("PLAYING");
+                bml.recordPlayStatus.setVisible(true);
+                bml.runServerPlayer = true;
+            }
+            if(first500.contains("StopRecording"))
+                bml.recordPlayStatus.setVisible(false);
+            if(first500.contains("StartRecording")){
+                bml.recordPlayStatus.setText("RECORDING");
+                bml.recordPlayStatus.setVisible(true);
+            }
 
            // get the state element value and post it
            int stateStartIndex = messageBody.indexOf("<SystemCommandTypeCode>") + 23;
@@ -324,17 +399,19 @@ public class Subscriber implements Runnable {
             }
             bml.setServerStateLabel(
                 messageBody.substring(stateStartIndex, stateEndIndex));
+            
             return;
         }
 
         // C2SIMInitializationBody - MSDL case (only for ServerValidation)
         if(bml.runningServerTest && protocolVersion.equals("") && 
-            first400.contains("MilitaryScenario")){
+            first500.contains("MilitaryScenario")){
             bml.serverTest.writeOutputXml(messageBody,"MSDLINIT");
             return;
         }
-        if(first400.contains(bml.c2simInitializationDomain)) {
- 
+        if(first500.contains(bml.c2simInitializationDomain) ||
+            first500.contains(bml.objectInitializationDomain)){
+
             // process server validation
             if(bml.runningServerTest){
                 if(protocolVersion.equals("0.0.9"))
@@ -342,13 +419,27 @@ public class Subscriber implements Runnable {
                 else 
                     bml.serverTest.writeOutputXml(messageBody,"100INIT");
             }
-
-            // don't process the initialize until REST response popup done
-            // and then only once
-            if(bml.initializationDone)return;
             
+            // new initialization when running Playback:
+            // ask user whether to replace initialization
+            if(bml.initializationDone) {
+                if(bml.runPlayer || bml.runServerPlayer){
+                    if(!bml.okCancelPopup("Playback has new Initialization",
+                        "Replace Initialization?"))
+                        return ;
+                    bml.restartORBAT();
+                }
+                // unlesss in Playback, don't process the initialize 
+                // until REST response OK popup done and then only once
+                else {
+                    System.out.println("IGNORING INITIALIZATION INPUT BECAUSE ALREADY INITIALIZED");
+                    System.out.println("message begins:" + first500);
+                    return;
+                }
+            }
+          
             // confirm server has the protocol version we use
-            if(!protocolVersion.equals(bml.c2simProtocolVersion)){
+            if(!bml.c2simProtocolOK(protocolVersion)){
                 bml.printError("received wrong initialization protocol version:" + 
                     protocolVersion);
                 return;
@@ -373,7 +464,6 @@ public class Subscriber implements Runnable {
                 bml.orderRemoveButton.setVisible(true);
             if(bml.reportIconsOnScreen)
                 bml.reportRemoveButton.setVisible(true);
-            bml.initializationDone = true;
             
             // push to JaxFront if so configured
             if(bml.autoDisplayInit.equals("1")) {
@@ -403,14 +493,14 @@ public class Subscriber implements Runnable {
                 }
             }
             return;
-        }// end first400.contains(bml.c2simInitializationDomain))
+        }// end first500.contains(bml.c2simInitializationDomain)..
 
         // is it a C2SIM Order?
         if(bml.autoDisplayOrders.equals("C2SIM") ||
            bml.autoDisplayOrders.equals("ALL") ||
            bml.runningServerTest)
         if(messageBody.contains(bml.c2simOrderMessageType))
-        if(protocolVersion.equals(bml.c2simProtocolVersion) ||
+        if(bml.c2simProtocolOK(protocolVersion) &&
             bml.runningServerTest){
               
             // process server validation
@@ -634,18 +724,18 @@ public class Subscriber implements Runnable {
             // we will need to make a DOM Document out of it
 
             // look in report header to see what the protocol is
-            if(first400.contains(bml.c2simReportMessageType)){
+            if(first500.contains(bml.c2simReportMessageType)){
                 bml.reportBMLType = "C2SIM";
                 bml.xmlReport = messageBody;
                 bml.loadReportButton.setEnabled(true);        
             }
             else
-            if(first400.contains("CBMLReport"))
+            if(first500.contains("CBMLReport"))
             {
                 bml.reportBMLType = "CBML";
             }
             else
-            if(first400.contains("BMLReport"))
+            if(first500.contains("BMLReport"))
             {
                 bml.reportBMLType = "IBML";
             }
@@ -706,12 +796,27 @@ public class Subscriber implements Runnable {
                     bml.runningServerTest)) {           
 
                 // process server validation
-                if(!protocolVersion.equals(bml.c2simProtocolVersion) &&
+                if(!bml.c2simProtocolOK(protocolVersion) &&
                     !bml.runningServerTest)return;
                 if(bml.runningServerTest)
                     if(protocolVersion.equals("0.0.9"))
                         bml.serverTest.writeOutputXml(messageBody,"009REPORT");
                     else bml.serverTest.writeOutputXml(messageBody,"100REPORT");
+                
+                // check whether this is final report of just-ended playback
+                // as determined by matching ReportingEntiuty amd ReportID
+                if(bml.previousUnitMap != null){
+                    if(bml.playbackReportingEntity.equals(
+                        bml.extractDataFromXml(messageBody,"ReportingEntity")))
+                    if(bml.playbackReportID.equals(
+                        bml.extractDataFromXml(messageBody,"ReportID"))){
+                        if(bml.previousUnitMap != null)
+                        if(!bml.okCancelPopup("Initialization replaced for Playback",
+                            "Revert to previous Initialization?"))
+                            return ;
+                        bml.revertORBAT(); 
+                    }
+                }
 
                 // set parameters for C2SIM report
                 bml.orderDomainName = "C2SIM";
@@ -737,29 +842,60 @@ public class Subscriber implements Runnable {
                      schemaFileLocation = bml.asxReportSchemaLocation;// ASX report schema XSD
                 bml.xsdUrl = URLHelper.getUserURL(schemaFileLocation);
       
-                // Generate the swing GUI
-                if(!bml.drawFromXML(
-                    "default-context", 
-                    bml.xsdUrl, 
-                    bml.xmlUrl, 
-                    bml.xuiUrl, 
-                    bml.root, 
-                    rcvDocumentType,
-                    "MessageBody",
-                    (new String[]{"SubjectEntity","ReportingEntity","UUID",
-                        "SideHostilityCode","PositionReportContent","ActorReference",
-                        "ObservationReportContent","ReportID","ReportBody",
-                        "HostilityStatusCode", "Name"}),
-                    (new String[]{"Latitude","Longitude","OperationalStatusCode"}),
-                    bml.c2simns,
-                    messageBody,
-                    protocolVersion,
-                    false
-                ))return;// stop here if error or duplicate ID
-                
+                // the C2SIM standard report can consist of multiple
+                // <ReportContent> segments. Here we convert that format 
+                // to single-segment so we can use the existing drawFomXML
+                // to place its icon on the map
+                   
+                // extract the parts that apply to all pieces
+                String firstPart = bml.extractReportFirstPart(messageBody);
+                if(firstPart == null)return;
+                int endingIndex = bml.findEndingIndex(messageBody);
+                if(endingIndex < 0)return;
+                String endingPart = messageBody.substring(endingIndex);
+ 
+                // extract the ReportContent parts in order
+                // parse them and draw to map
+                int startReportContent = firstPart.length();
+                String reportContent = 
+                    bml.extractReportContent(messageBody,startReportContent);    
+                while(reportContent != null){
+ 
+                    // make a new single-ReportContent report with uniqe ReportID
+                    String newReport = firstPart + reportContent +
+                        bml.uniqueEndingPart(messageBody,endingPart);
+             
+                    // draw the map icon, using a generated reportId
+                    // Generate the swing GUI 
+                    if(!bml.drawFromXML(
+                        "default-context", 
+                        bml.xsdUrl, 
+                        null, 
+                        bml.xuiUrl, 
+                        bml.root, 
+                        rcvDocumentType,
+                        "MessageBody",
+                        (new String[]{"SubjectEntity","ReportingEntity","UUID",
+                            "SideHostilityCode","PositionReportContent",
+                            "ObservationReportContent","ReportID","Name",
+                            "Latitude","Longitude","OperationalStatusCode"}),
+                        (new String[]{}),
+                        bml.c2simns,
+                        newReport,
+                        protocolVersion,
+                        false
+                    ))return;// stop here if error or duplicate ID
+                    
+                    
+                    // go on to the next ReportContent part
+                    startReportContent += reportContent.length();
+                    reportContent = 
+                        bml.extractReportContent(messageBody,startReportContent);
+                }
+              
                 // load the JaxFront form
                 if(bml.runningServerTest)return;
-                bml.xmlReport = messageBody;
+                bml.xmlUrl = URLHelper.getUserURL(messageBody);                bml.xmlReport = messageBody;
                 //bml.loadJaxFrontPanel(); don't load when received; let user select
             }// end if (bml.reportBMLType.equals("C2SIM"))  
 
@@ -816,10 +952,10 @@ public class Subscriber implements Runnable {
                 bml.xmlReport = messageBody;
                 //bml.loadJaxFrontPanel(); don't load when received; let user select
             }// end if (bml.reportBMLType.equals("CBML"))
-            // end else if chain (first400.contains(bml.reportMessageType)){
+            // end else if chain (first500.contains(bml.reportMessageType)){
 
             // listening for C2SIM order
-            if(first400.contains(bml.c2simOrderMessageType)){
+            if(first500.contains(bml.c2simOrderMessageType)){
                 bml.orderBMLType = "C2SIM";
                 bml.xmlOrder = messageBody;
                 bml.loadReportButton.setEnabled(true);
@@ -846,4 +982,5 @@ public class Subscriber implements Runnable {
                 i);
         return dttm;
     }
+    
 } // End of Subscriber Class

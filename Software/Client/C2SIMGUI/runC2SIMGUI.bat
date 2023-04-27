@@ -1,1 +1,1 @@
-java -jar dist/C2SIMGUI.jar ./ true
+java -jar dist/C2SIMGUI.jar ./

@@ -156,23 +156,12 @@ public class CyberC2SIM {
             return null;
         }
 
-        // TODO: should push C2SIM from memory but for now use a file
-        FileReader xmlFile;
-        String pushCyberInputString = "";
-        try {
-            xmlFile = new FileReader(new File(bml.xmlUrl.getFile()));
-            int charBuf;
-            while ((charBuf = xmlFile.read()) > 0) {
-                pushCyberInputString += (char) charBuf;
-            }
-        } catch (Exception e) {
-            bml.printError("Exception in reading XML file:" + e);
-            e.printStackTrace();
-            return "";
-        }
-
+        // XML is not yet in JaxFront - read it from file
+        String pushCyberInputString = bml.readAnXmlFile(bml.xmlUrl);
+        
         // display and send the input
-        if(bml.debugMode)bml.printDebug("PUSH C2SIM CYBER XML:" + pushCyberInputString);
+        if(bml.debugMode)
+            bml.printDebug("PUSH C2SIM CYBER XML:" + pushCyberInputString);
         conversationID = c2simClient.getC2SIMHeader().getConversationID();
         String pushCyberResponseString = "";
         try {

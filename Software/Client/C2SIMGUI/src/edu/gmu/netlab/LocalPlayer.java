@@ -57,7 +57,9 @@ public class LocalPlayer extends Thread
                     yield();
                     subscriber.interpretMessage(
                         bml.localQueue.take(),
-                        bml.c2simProtocolVersion);
+                        bml.c2simProtocolVersion,
+                        null,
+                        "REPLAY");
                 }
             }
         } catch(InterruptedException ie) {

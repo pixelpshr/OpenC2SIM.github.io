@@ -69,7 +69,7 @@ public class OrderC2SIM {
                     bml.xuiUrl, 
                     bml.root);           
                
-        // load the order into JAXFront panel
+        // load the order into JaxFront panel
         try{
             bml.loadJaxFront(
                 null,
@@ -170,27 +170,19 @@ public class OrderC2SIM {
      * mpullen 4/1//2018
      */
     void pushOrderC2SIM() {
-        
-        if(bml.checkOrderNotPushable())return;
-     
         // open connection to REST server
+        if(bml.checkOrderNotPushable())return;
         if(bml.submitterID.length() == 0) {
             bml.showInfoPopup( 
                 "cannot push C2SIM Order - submitterID required", 
                 "C2SIM Order Push Message");
             return;
         }
-	
-        // should push C2SIM from memory but for now use a file
-        if(bml.debugMode)bml.printDebug("In C2SIM Order XML file:"+bml.xmlUrl);
-        String pushOrderInputString = bml.readAnXmlFile(bml.xmlUrl);
-        if(bml.debugMode)bml.printDebug("PUSH C2SIM XML:" + pushOrderInputString);
-        if(pushOrderInputString.equals(""))return;
 
         // set parameters and send C2SIM message
         String pushResultString =
             bml.ws.sendC2simREST(
-                pushOrderInputString,
+                bml.currentXmlString,
                 "ORDER",
                 bml.c2simProtocolVersion);
         bml.showInfoPopup( 

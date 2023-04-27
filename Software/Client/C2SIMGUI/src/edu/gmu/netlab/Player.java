@@ -59,6 +59,9 @@ public class Player extends Thread
     String source;
     String protocol;
     String submitter;
+    
+    String reporterID = "";
+    String reportID = "";
 
     public Player() {
   
@@ -76,6 +79,7 @@ public class Player extends Thread
                 "no file selected - cannot playback", 
                 "Playback File Select");
             bml.playFailed = true;
+            bml.player = null;
             return;
         }
         
@@ -115,12 +119,16 @@ public class Player extends Thread
     
     public void run()
     {
+        // enable drawFromXML asking whether to load initialization
+        bml.initializationHasBeenAsked = false;
+        
         // Get the replay log entries read into a list
         List<String> replayLog = readReplayLog(bml.logFile);
         if(replayLog == null) {
             bml.showErrorPopup(
                 "error playing selected file", 
                 "Playback File Select");
+            bml.playFailed = true;
             bml.player = null;
             return;
         }
@@ -234,12 +242,12 @@ public class Player extends Thread
                 // C2SIM/BML XML
                 String xml = line.substring(startXml);
                 
-                if(bml.getConnected()) {
-                    // correct C2SIMInitializationBody to ObjecctInitializationBody
+                if(bml.getConnected()){
+                    // change ObjectInitializationBody to C2SIMInitializationBody 
                     // this asumes the XML does not contain data matching swapFrom tags
-                    String swapFrom = "<C2SIMInitializationBody>";
-                    String swapTo = "<ObjectInitializationBody>";
-                    if(xml.contains("<C2SIMInitializationBody>")){
+                    if(xml.contains("<ObjectInitializationBody>")){
+                        String swapFrom = "<ObjectInitializationBody>";
+                        String swapTo = "<C2SIMInitializationBody>";
                         int startReplace = xml.indexOf(swapFrom);
                         int endReplace = startReplace + swapFrom.length();
                         String replaceXml =
@@ -248,8 +256,8 @@ public class Player extends Thread
                             xml.substring(endReplace);
 
                         // end tag
-                        swapFrom = "</C2SIMInitializationBody>";
-                        swapTo = "</ObjectInitializationBody>";
+                        swapFrom = "</ObjectInitializationBody>";
+                        swapTo = "</C2SIMInitializationBody>";
                         startReplace = replaceXml.indexOf(swapFrom);
                         endReplace = startReplace + swapFrom.length();
                         xml = 
@@ -270,14 +278,15 @@ public class Player extends Thread
 
                 // Check the protocol and instantiate BMLClientREST object
                 C2SIMClientREST_Lib bmlRest = null;
-                String sendProtocol = "SISO-STD-C2SIM";
-                if (xml.contains("<MessageBody")){
+                String sendProtocol = bml.c2simProtocol;
+                if (xml.contains("MessageBody ")){
                     // It is a C2SIM Message
                     if ((protocol.equalsIgnoreCase("C2SIM")) || 
                         protocol.equalsIgnoreCase("ALL")) {
                         if(xml.contains("<C2SIMHeader"))
-                            xml = C2SIMHeader.removeC2SIM(xml);                 
-                        bmlRest = new C2SIMClientREST_Lib("REPLAY", "ALL", "INFORM",
+                            xml = C2SIMHeader.removeC2SIM(xml);
+                        //debug bmlRest = new C2SIMClientREST_Lib("REPLAY", "ALL", "INFORM",
+                        bmlRest = new C2SIMClientREST_Lib("REPLAY", bml.serverName, "INFORM",
                             bml.c2simProtocolVersion);
                         bmlRest.getC2SIMHeader().setProtocolVersion(bml.c2simProtocolVersion);
                     }
@@ -285,8 +294,8 @@ public class Player extends Thread
                             !bml.autoDisplayReports.equals("ALL")) {
                         bml.printError(
                             "Player reading logfile with C2SIM which does not match AutoDisplay setting");
-                        bml.player = null;
-                        return;
+                        bml.playFailed = true;
+                        break;
                     }
                 }
                 else {  
@@ -299,8 +308,8 @@ public class Player extends Thread
                             !bml.autoDisplayReports.equals("ALL")) {
                         bml.printError(
                             "Player reading logfile with BML which does not match AutoDisplay setting");
-                        bml.player = null;
-                        return;
+                        bml.playFailed = true;
+                        break;
                     }
                 }
                 
@@ -308,11 +317,33 @@ public class Player extends Thread
                 // If so we really have instantiated the REST client
                 if (bmlRest == null)continue;
                 
-                
                 // display the message number and delay time
-                if(bml.debugMode)bml.printDebug("\nPlayer send MessageNumber:" + messageNumber + 
+                if(bml.debugMode){
+                    bml.printDebug("\nPLAYERSEND MessageNumber:" + messageNumber + 
                     " Submitter:" + submitterId + " Protocol:" + sendProtocol +
                     " DelayTime:" + delayTime.longValue());
+                    int length = xml.length();
+                    if(length > 1000)length = 1000;
+                    if(xml.contains("DomainMessageBody"))
+                        bml.printDebug("DOMAIN:"+xml.substring(0,length));
+                    else
+                        bml.printDebug("NONDOMAIN:"+xml.substring(0,length));
+                }
+                
+                // for C2SIM, capture the reporterID and reportID;
+                // final value is used in player shutdown
+                // NOTE we assume the sought tag fragments are not
+                // present in the C2SIM data
+                if(sendProtocol.equals(bml.c2simProtocol))
+                if(xml.contains("ReportContent>")){
+                    bml.playbackReportingEntity = 
+                        bml.extractDataFromXml(xml,"ReportingEntity");
+                    bml.playbackReportID = 
+                        bml.extractDataFromXml(xml,"ReportID");
+                    if(bml.debugMode)bml.printDebug(
+                        "PLAYBACK ReportingEntity:" + bml.playbackReportingEntity +
+                        " ReportID:" + bml.playbackReportID);
+                }
 
                 // sleep for the computed time (milliseconds)
                 if (delayTime > 0) {
@@ -322,7 +353,7 @@ public class Player extends Thread
 
                 // Set parameters for this transaction
                 bmlRest.setHost(host);
-                bmlRest.setSubmitter(submitterId);
+                bmlRest.setSubmitter("REPLAY");
                 String response;
 
                 // Submit the transaction to the server
@@ -338,10 +369,14 @@ public class Player extends Thread
                     }
                     
                     // Check and display the response
-                    if (response.contains("OK"))
+                    if (response.contains("OK")){
                         if(bml.debugMode)bml.printDebug(date + "  OK");
-                    else
+                    } else {
                         bml.printError(date + " ERROR: " + response);
+                        bml.showInfoPopup(response,"ERROR");
+                        bml.playFailed = true;
+                        break;
+                    }
                 }
                 // if not online, queue the message locally
                 else
@@ -355,8 +390,8 @@ public class Player extends Thread
                 bml.showErrorPopup( 
                     "error in file - cannot playback:" + e, 
                     "Playback Error");
-                bml.player = null;
-                return;
+                bml.playFailed = true;
+                break;
             } // end catch
             
         } // end while(lineIterator.hasNext()
