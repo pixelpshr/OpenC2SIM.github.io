@@ -35,7 +35,7 @@
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <MissingTags>Summary, Parameter, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <HelpTitle>C2SIM .NET SDK</HelpTitle>
-    <HelpFileVersion>1.0.1.0</HelpFileVersion>
+    <HelpFileVersion>1.2.10</HelpFileVersion>
     <NamingMethod>Guid</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <RootNamespaceContainer>False</RootNamespaceContainer>
