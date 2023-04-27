@@ -25,7 +25,7 @@
 #include "boost/asio.hpp"
 
 //  version for all of C2SIMClientLib
-const std::string version = "4.8.0.5";
+const std::string version = "4.8.3.1";
 
 using namespace std;
 
@@ -376,7 +376,7 @@ std::string httpRestTransaction(
 		}
 
 		// return the result
-		delete httpResponse;
+		delete[] httpResponse;
 		restStream.clear();
 		restStream.close();
 		return responseString;
@@ -580,6 +580,7 @@ std::string C2SIMClientREST_Lib::bmlRequest(std::string xml)
 			throw C2SIMClientException(
 				std::string("error in C2SIMClientREST_Lib::bmlRequest - ToReceivingSystem not specified"));
 		}
+
 		// check for missing 'SendingTime'
 		if (c2s->getSendingTime() == "") {
 			throw C2SIMClientException(

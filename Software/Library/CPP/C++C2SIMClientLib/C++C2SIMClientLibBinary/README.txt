@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|      Copyright 2021 Networking and Simulation Laboratory        |
+|      Copyright 2022 Networking and Simulation Laboratory        |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -26,5 +26,8 @@ file C2SIMClientLib2.h.
 boost files in lib64 have been upgraded to vc140 (MVC15 compiled)
 
 version 4.8.0.3 makes C2SIMClientREST_Lib thread-safe
+
+version 4.8.0.6 correct order of C2SIMHeader parameters to match
+C2SIM_SMX_LOX_v1.0.1 schema
 
 

@@ -6,4 +6,4 @@
 boost/uuid/seed_rng.hpp(143): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
   StompClient.cpp
   Generating Code...
-  ClientLib.vcxproj -> C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\lib64\C2SIMClientLib.lib
+  ClientLib.vcxproj -> C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\lib64\C2SIMClientLib.lib

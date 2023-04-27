@@ -338,6 +338,10 @@ C2SIMHeader* C2SIMHeader::populateC2SIM(std::string xmlString){// throw (C2SIMCl
 	if (temp != "")
 		c2s->setReplyToSystem(temp);
 
+	temp = extractDataForTag(xmlString, "SecurityClassificationCode ");
+	if (temp != "")
+		c2s->setSecurityClassificationCode(temp);
+
 	temp = extractDataForTag(xmlString, "SendingTime");
 	if (temp != "")
 		c2s->setSendingTime(temp);
@@ -414,15 +418,23 @@ std::string C2SIMHeader::toXMLString(){
 		xmlString += 
 			"<CommunicativeActTypeCode>" + communicativeActTypeCode + "</CommunicativeActTypeCode>";
 
-	// conversationID
+	// ConversationID
 	if (conversationID != "")
 		xmlString += "<ConversationID>" + conversationID + "</ConversationID>";
 
-	// messageID
+	// FromSendingSystem
+	if (fromSendingSystem != "")
+		xmlString += "<FromSendingSystem>" + fromSendingSystem + "</FromSendingSystem>";
+
+	// InReplyToMessageID
+	if (inReplyTo != "")
+		xmlString += "<InReplyToMessageID>" + inReplyTo + "</InReplyToMessageID>";
+
+	// MessageID
 	if (messageID != "")
 		xmlString += "<MessageID>" + messageID + "</MessageID>";
 
-	// protocol
+	// Protocol
 	if (schemaProtocol != "")
 		xmlString += "<Protocol>" + schemaProtocol + "</Protocol>";
 
@@ -434,21 +446,17 @@ std::string C2SIMHeader::toXMLString(){
 	if (replyToSystem != "")
 		xmlString += "<ReplyToSystem>" + replyToSystem + "</ReplyToSystem>";
 
+	// SecurityClassificationCode
+	if (securityClassificationCode != "")
+		xmlString += "<SecurityClassificationCode>" + securityClassificationCode + "</SecurityClassificationCode>";
+
 	// SendingTime
 	if (sendingTime != "")
 		xmlString += "<SendingTime>" + sendingTime + "</SendingTime>";
 
-	// FromSendingSystem
-	if (fromSendingSystem != "")
-		xmlString += "<FromSendingSystem>" + fromSendingSystem + "</FromSendingSystem>";
-
 	// ToReceivingSystem
 	if (toReceivingSystem != "")
 		xmlString += "<ToReceivingSystem>" + toReceivingSystem + "</ToReceivingSystem>";
-
-	// InReplyToMessageID
-	if (inReplyTo != "")
-		xmlString += "<InReplyToMessageID>" + inReplyTo + "</InReplyToMessageID>";
 
 	xmlString += "</C2SIMHeader>";
 

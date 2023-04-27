@@ -26,7 +26,7 @@
 #define SISOSTD "SISO-STD-C2SIM"
 
 /**
-*  version 4.8.0.5 converted from Doug Corner's Java
+*  version 4.8.0.6 converted from Doug Corner's Java
 */
 
 class C2SIMClientException : public std::exception {

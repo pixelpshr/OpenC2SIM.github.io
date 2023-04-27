@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------*
-|      Copyright 2021 Networking and Simulation Laboratory        |
+|      Copyright 2022 Networking and Simulation Laboratory        |
 |         George Mason University, Fairfax, Virginia              |
 |                                                                 |
 | Permission to use, copy, modify, and distribute this            |
@@ -24,4 +24,7 @@ To use the library copy the .lib files from build64 and use header
 file C2SIMClientLib2.h.
 
 To build you will need to provide subdirectory boost.
+
+version 4.8.0.6 correct order of C2SIMHeader parameters to match
+C2SIM_SMX_LOX_v1.0.1 schema
 

@@ -1,33 +1,33 @@
 ﻿  C2SIMClientREST_Lib.cpp
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(447,5): warning C4834: discarding return value of function with 'nodiscard' attribute
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(446): message : while compiling class template member function 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)'
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(447,5): warning C4834: discarding return value of function with 'nodiscard' attribute
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(446): message : while compiling class template member function 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)'
           with
           [
               _Elem=char
           ]
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\function\function_template.hpp(153): message : see reference to function template instantiation 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)' being compiled
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\function\function_template.hpp(153): message : see reference to function template instantiation 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)' being compiled
           with
           [
               _Elem=char
           ]
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(1009): message : see reference to class template instantiation 'boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>' being compiled
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(1009): message : see reference to class template instantiation 'boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>' being compiled
           with
           [
               _Elem=char
           ]
   C2SIMClientSTOMP_Lib.cpp
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(447,5): warning C4834: discarding return value of function with 'nodiscard' attribute
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(446): message : while compiling class template member function 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)'
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(447,5): warning C4834: discarding return value of function with 'nodiscard' attribute
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(446): message : while compiling class template member function 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)'
           with
           [
               _Elem=char
           ]
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\function\function_template.hpp(153): message : see reference to function template instantiation 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)' being compiled
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\function\function_template.hpp(153): message : see reference to function template instantiation 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)' being compiled
           with
           [
               _Elem=char
           ]
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(1009): message : see reference to class template instantiation 'boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>' being compiled
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(1009): message : see reference to class template instantiation 'boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>' being compiled
           with
           [
               _Elem=char
@@ -35,25 +35,25 @@ C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(1009): me
   C2SIMSTOMPMessage.cpp
   C2SIMClientException.cpp
   C2SIMHeader.cpp
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\uuid\seed_rng.hpp(143,44): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\uuid\seed_rng.hpp(143,57): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\uuid\seed_rng.hpp(143,70): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\uuid\seed_rng.hpp(143,44): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\uuid\seed_rng.hpp(143,57): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\uuid\seed_rng.hpp(143,70): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
   StompClient.cpp
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(447,5): warning C4834: discarding return value of function with 'nodiscard' attribute
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(446): message : while compiling class template member function 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)'
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(447,5): warning C4834: discarding return value of function with 'nodiscard' attribute
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(446): message : while compiling class template member function 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)'
           with
           [
               _Elem=char
           ]
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\function\function_template.hpp(153): message : see reference to function template instantiation 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)' being compiled
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\function\function_template.hpp(153): message : see reference to function template instantiation 'void boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>::operator ()(void)' being compiled
           with
           [
               _Elem=char
           ]
-C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\boost\asio\buffer.hpp(1009): message : see reference to class template instantiation 'boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>' being compiled
+C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\boost\asio\buffer.hpp(1009): message : see reference to class template instantiation 'boost::asio::detail::buffer_debug_check<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>>' being compiled
           with
           [
               _Elem=char
           ]
   Generating Code...
-  ClientLib.vcxproj -> C:\Users\c2sim\Desktop\C++C2SIMClientLibv4.8.0.5\lib64\C2SIMClientLibd.lib
+  ClientLib.vcxproj -> C:\Users\c2sim\Desktop\C2SIM archive\C++C2SIMClientLibv4.8.3.1\lib64\C2SIMClientLibd.lib

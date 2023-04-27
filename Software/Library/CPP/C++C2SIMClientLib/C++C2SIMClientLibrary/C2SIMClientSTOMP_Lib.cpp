@@ -59,7 +59,9 @@ using std::vector;
 mee::stomp::StompClient stompClient(1);
 
 // constructor
-C2SIMClientSTOMP_Lib::C2SIMClientSTOMP_Lib() {}
+C2SIMClientSTOMP_Lib::C2SIMClientSTOMP_Lib() {
+
+}
 
 // destructor
 C2SIMClientSTOMP_Lib::~C2SIMClientSTOMP_Lib() { 
