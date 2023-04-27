@@ -28,4 +28,4 @@ Adds
     * [Tools](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Tools) - Miscellaneous tools
 * [Samples](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Samples) - C2SIM examples from various sources 
 * [Reference](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Reference) - Papers and presentations
-* [Releases](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Releases) - Zipped C2SIM release files (main OpenC2SIM project content)
+* [Releases](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Releases) - Pointer to main OpenC2SIM project archival content
