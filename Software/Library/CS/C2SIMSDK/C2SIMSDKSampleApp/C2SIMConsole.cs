@@ -190,9 +190,10 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_InitializationReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        // To serialize use the ToC2SIMObject<T> methods with either the 1.0.0 or 1.0.1 version of the schema
-        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.SystemCommandBodyType>(e.Body);
-        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.SystemCommandBodyType>(e.Body);
+        // To serialize use the ToC2SIMObject<T> methods with the desired version of the schema (1.0.0, 1.0.1)
+        // Notice that in v1.0.2 the element was renamed to SystemMessageBodyType
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema10X.SystemCommandBodyType>(e.Body);
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema102.SystemMessageBodyType>(e.Body);
 
         // Here we just display the xml from string
         Console.WriteLine();
@@ -207,9 +208,8 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_OderReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        // To serialize use the ToC2SIMObject<T> methods with either the 1.0.0 or 1.0.1 version of the schema
-        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.OrderBodyType>(e.Body);
-        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.OrderBodyType>(e.Body);
+        // To serialize use the ToC2SIMObject<T> methods with the desired version of the schema (1.0.0, 1.0.1, 1.0.2)
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema10X.OrderBodyType>(e.Body);
 
         // Here we just display the xml from string
         Console.WriteLine();
@@ -224,9 +224,8 @@ class C2SIMConsole : BackgroundService
     /// <param name="e"></param>
     static void C2SimSDK_ReportReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
-        // To serialize use the ToC2SIMObject<T> methods with either the 1.0.0 or 1.0.1 version of the schema
-        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.ReportBodyType>(e.Body);
-        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.ReportBodyType>(e.Body);
+        // To serialize use the ToC2SIMObject<T> methods with the desired version of the schema (1.0.0, 1.0.1, 1.0.2)
+        // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema10X.ReportBodyType>(e.Body);
 
         // Here we just display the xml from string
         Console.WriteLine();

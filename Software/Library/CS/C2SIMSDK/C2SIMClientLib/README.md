@@ -21,7 +21,7 @@ is no strong reason for using `GetNext_NoBlock()` in most cases.
 
 ## Constructors
 
-Java's `C2SIMClientREST_Lib()` and `C2SIMClientSTOMP_Lib` constructors now take parameters compatible with [Dependency Injection](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) and the [Options](https://docs.microsoft.com/en-us/dotnet/core/extensions/options)
+`C2SIMClientREST_Lib()` and `C2SIMClientSTOMP_Lib` constructors now take parameters compatible with [Dependency Injection](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) and the [Options](https://docs.microsoft.com/en-us/dotnet/core/extensions/options)
 patterns, taking an ILogger parameter, and a structured record packaging the different settings ([C2SIMClientRESTSettings](C2SIMClientRESTSettings.cs) and [C2SIMClientSTOMPSettings](C2SIMClientSTOMPSettings.cs) respectively)
 
 ## STOMP heart-beat
