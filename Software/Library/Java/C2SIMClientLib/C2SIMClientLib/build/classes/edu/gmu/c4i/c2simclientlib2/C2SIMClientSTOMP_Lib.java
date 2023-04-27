@@ -35,7 +35,7 @@ import java.util.Vector;
   Creates and returns C2SIMSTOMPMessage objects <p>
  * @see edu.gmu.c4i.c2simclientlib2.C2SIMSTOMPMessage
  * @author Douglas Corner - George Mason University C4I and Cyber Center
- *  code version 4.8.0.4
+ *  code version 4.8.3.1
  */
 public class C2SIMClientSTOMP_Lib extends Thread {
     
@@ -70,7 +70,7 @@ public class C2SIMClientSTOMP_Lib extends Thread {
      * subscriptions - Vector of message types (e.g. BML_Report).<BR> 
      *   These will be submitted at connection time so that only 
      *   messages with message matching one of the 
-     *   @deprecated - adv subsciptions and addAdvSubscription 
+     *   @deprecated - adv subscriptions and addAdvSubscription 
      *   should be used instead
      */
     private Vector<String> subscriptions;
@@ -113,7 +113,6 @@ public class C2SIMClientSTOMP_Lib extends Thread {
 
         subscriptions = new Vector<>();
         adv_subscriptions = new Vector<>();
-
 
         // Default value for port
         this.port = 61613;
@@ -169,7 +168,6 @@ public class C2SIMClientSTOMP_Lib extends Thread {
                     subscribeFrame += " OR message-selector = '" + 
                         subscriptions.elementAt(i) + "'";
                 }   // for subscriptions 1 through n
-
                 subscribeFrame += "\n";
             }   // if there are subscriptions
 
@@ -532,7 +530,8 @@ public class C2SIMClientSTOMP_Lib extends Thread {
     /**
      * addSubscription - Add a Message Selector to list of selectors submitted with SUBSCRIBE
      *   Host will only publish messages matching one of the selectors.
-     *   If no addSubscriptions are submitted then all messages will be received.
+     *   If no addSubscriptions are submitted then SystemCommand and Initialization
+     *   message will be received.
      * @param msgSelector String - Name of a BML Message Type to be added to subscription list.  If the list contains at least one Message Selector then the only messages 
      *   that will be received on the current connection will be those on the list.  If no subscriptions are submitted then this system will receive all messages published to the topicn
      */
@@ -544,7 +543,8 @@ public class C2SIMClientSTOMP_Lib extends Thread {
     /**
      * addAdvSubscription - Add a general selector expression to be used with SUBSCRIBE
      *   Host will only publish messages matching one of the selectors.
-     *   If no addSubscriptions are submitted then all messages will be received.
+     *   If no addSubscriptions are submitted then only Initialization and
+     *   SystemCommand messages will be received.
      * @param subString String - Expression to be added to subscription list.  Expression will provide a header value to be used as a filter.  If specified  the only messages <BR>
      *   that will be received on the current connection will be those Satisfying the expression or those msgSelectors specified in addSubscription. <BR>
      *   If no subscriptions are submitted then this system will receive all messages published to the topic
@@ -552,7 +552,6 @@ public class C2SIMClientSTOMP_Lib extends Thread {
     public void addAdvSubscription(String subString) {
         adv_subscriptions.add(subString);
     }   // addadvSubscription()  
-
 
     // End of Getters/Setters
     /*******************************************/
@@ -572,7 +571,7 @@ public class C2SIMClientSTOMP_Lib extends Thread {
             Message headers (Vector)
             Message content as single string
         
-        Add STOMPMessage to quque for background processing
+        Add STOMPMessage to queue for background processing
      */
     /*******************/
     /* run()           */

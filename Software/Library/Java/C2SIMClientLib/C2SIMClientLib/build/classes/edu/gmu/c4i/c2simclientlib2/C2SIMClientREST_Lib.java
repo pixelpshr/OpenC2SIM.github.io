@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  *      Disconnect from the server<p>
  *      Return the result received from the server to the caller<p>
  * *author Douglas Corner - George Mason University C4I Cyber Center
- *  code version 4.8.0.4
+ *  code version 4.8.3.1
  */
 public class C2SIMClientREST_Lib {
 
@@ -210,10 +210,16 @@ public class C2SIMClientREST_Lib {
     @param cmd      Command to be processed.  
     @param parm1    Optional first parameter
     @param parm2    Optional second parameter
+    @param parm3    Optional third parameter
     @return String result - XML Document giving results of command and server status similar to serverStatus method.
     @throws C2SIMClientException = Primary and secondary causes are transmitted within the C2SIMClientException object.
      */
-    public String c2simCommand(String cmd, String parm1, String parm2) throws C2SIMClientException {
+    public String c2simCommand(
+            String cmd, 
+            String parm1, 
+            String parm2,
+            String parm3) 
+            throws C2SIMClientException {
 
         URL url;
         HttpURLConnection conn;
@@ -242,6 +248,9 @@ public class C2SIMClientREST_Lib {
 
         if (parm2 == null)
             parm2 = "";
+        
+        if (parm3 == null)
+            parm3 = "";
 
         if (submitter == null)
             submitter = "";
@@ -255,6 +264,7 @@ public class C2SIMClientREST_Lib {
                 + "&command=" + cmd
                 + "&parm1=" + parm1
                 + "&parm2=" + parm2
+                + "&parm3=" + parm3
                 + "&version=" + clientVersion;
 
         result = sendTrans(u, xml);
@@ -468,7 +478,7 @@ public class C2SIMClientREST_Lib {
             }
             ver = (String) props.get("version");
         }
-        return ver;
+        return "4.8.3.1";// ver;
     }   // getVersion()
 
 

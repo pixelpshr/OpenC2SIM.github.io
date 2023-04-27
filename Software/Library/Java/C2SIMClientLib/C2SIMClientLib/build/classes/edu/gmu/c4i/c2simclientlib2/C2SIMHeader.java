@@ -296,7 +296,6 @@ public class C2SIMHeader {
      */
     public String toXMLString() {
 
-
         String xmlString = "<C2SIMHeader>";
 
         // CommunicativeActTypeCode
@@ -304,21 +303,25 @@ public class C2SIMHeader {
             xmlString += "<CommunicativeActTypeCode>" + 
                 communicativeActTypeCode + "</CommunicativeActTypeCode>";
 
-
-        // SecurityClassificationCode
-        if (!securityClassificationCode.equals(""))
-            xmlString += "<SecurityClassificationCode>" + 
-                securityClassificationCode + "</securityClassificationCode>";
-
         // ConversationID
         if (!conversationID.equals(""))
             xmlString += "<ConversationID>" + conversationID + "</ConversationID>";
+                
+        // FromSendingSystem
+        if (!fromSendingSystem.equals(""))
+            xmlString += "<FromSendingSystem>" + 
+                fromSendingSystem + "</FromSendingSystem>";
+                
+        // InReplyTo - Message ID
+        if (!inReplyToMessageID.equals(""))
+            xmlString += "<InReplyToMessageID>" + 
+                inReplyToMessageID + "</InReplyToMessageID>";
 
-        // messageID
+        // MessageID
         if (!messageID.equals(""))
             xmlString += "<MessageID>" + messageID + "</MessageID>";
 
-        // protocol
+        // Protocol
         if (!protocol.equals(""))
             xmlString += "<Protocol>" + protocol + "</Protocol>";
 
@@ -329,25 +332,20 @@ public class C2SIMHeader {
         // ReplyToSystem
         if (!replyToSystem.equals(""))
             xmlString += "<ReplyToSystem>" + replyToSystem + "</ReplyToSystem>";
+        
+        // SecurityClassificationCode
+        if (!securityClassificationCode.equals(""))
+            xmlString += "<SecurityClassificationCode>" + 
+                securityClassificationCode + "</securityClassificationCode>";
 
         // SendingTime
         if (!sendingTime.equals(""))
             xmlString += "<SendingTime>" + sendingTime + "</SendingTime>";
-        
-        // FromSendingSystem
-        if (!fromSendingSystem.equals(""))
-            xmlString += "<FromSendingSystem>" + 
-                fromSendingSystem + "</FromSendingSystem>";
 
         // ToReceivingSystem
         if (!toReceivingSystem.equals(""))
             xmlString += "<ToReceivingSystem>" + 
                 toReceivingSystem + "</ToReceivingSystem>";
-        
-        // InReplyTo - Message ID
-        if (!inReplyToMessageID.equals(""))
-            xmlString += "<InReplyToMessageID>" + 
-                inReplyToMessageID + "</InReplyToMessageID>";
 
         xmlString += "</C2SIMHeader>";
 

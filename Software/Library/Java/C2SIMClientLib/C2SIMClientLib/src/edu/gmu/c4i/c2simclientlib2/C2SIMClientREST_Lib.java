@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  *      Disconnect from the server<p>
  *      Return the result received from the server to the caller<p>
  * *author Douglas Corner - George Mason University C4I Cyber Center
- *  code version 4.8.0.5
+ *  code version 4.8.3.1
  */
 public class C2SIMClientREST_Lib {
 
@@ -478,7 +478,7 @@ public class C2SIMClientREST_Lib {
             }
             ver = (String) props.get("version");
         }
-        return ver;
+        return "4.8.3.1";// ver;
     }   // getVersion()
 
 
