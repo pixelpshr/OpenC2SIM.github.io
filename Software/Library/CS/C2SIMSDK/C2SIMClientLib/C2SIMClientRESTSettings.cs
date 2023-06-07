@@ -22,7 +22,9 @@ public class C2SIMClientRESTSettings
     /// </summary>
     public string Path { get; set; }
     /// <summary>
-    /// Type of message request (e.g. INFORM, ORDER, REPORT)
+    /// Type of message request (INFORM, ORDER, REPORT) 
+    /// NOTE: The schema has a different enumeration: Accept, Agree, Confirm, Inform, 
+    /// Propose, Refuse, Request
     /// </summary>
     public string Performative { get; set; }
     /// <summary>

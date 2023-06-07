@@ -61,7 +61,7 @@ public class C2SIMHeader : IC2SIMHeader
     /// <summary>
     /// Sending Time - ISO DateTime format yyyy-MM-ddTHH:mm:ssZ
     /// </summary>
-    internal string _sendingTime = DateTime.Now.ToString(C2SimDateFormat);
+    internal string _sendingTime = DateTime.UtcNow.ToString(C2SimDateFormat);
     /// <summary>
     /// ID of sending system (UUID)
     /// </summary>
@@ -244,40 +244,40 @@ public class C2SIMHeader : IC2SIMHeader
         if (!string.IsNullOrWhiteSpace(_communicativeActTypeCode))
             xmlString += "<CommunicativeActTypeCode>" +
                 _communicativeActTypeCode + "</CommunicativeActTypeCode>";
-        // SecurityClassificationCode
-        if (!string.IsNullOrWhiteSpace(_securityClassificationCode))
-            xmlString += "<SecurityClassificationCode>" +
-                _securityClassificationCode + "</securityClassificationCode>";
         // ConversationID
         if (!string.IsNullOrWhiteSpace(_conversationID))
             xmlString += "<ConversationID>" + _conversationID + "</ConversationID>";
+        // FromSendingSystem
+        if (!string.IsNullOrWhiteSpace(_fromSendingSystem))
+            xmlString += "<FromSendingSystem>" +
+                _fromSendingSystem + "</FromSendingSystem>";
+        // InReplyTo - Message ID
+        if (!string.IsNullOrWhiteSpace(_inReplyToMessageID))
+            xmlString += "<InReplyToMessageID>" +
+                _inReplyToMessageID + "</InReplyToMessageID>";
         // messageID
         if (!string.IsNullOrWhiteSpace(_messageID))
             xmlString += "<MessageID>" + _messageID + "</MessageID>";
         // protocol
         if (!string.IsNullOrWhiteSpace(_protocol))
             xmlString += "<Protocol>" + _protocol + "</Protocol>";
-        // ProtocolVerion
+        // ProtocolVersion
         if (!string.IsNullOrWhiteSpace(_protocolVersion))
             xmlString += "<ProtocolVersion>" + _protocolVersion + "</ProtocolVersion>";
         // ReplyToSystem
         if (!string.IsNullOrWhiteSpace(_replyToSystem))
             xmlString += "<ReplyToSystem>" + _replyToSystem + "</ReplyToSystem>";
+        // SecurityClassificationCode
+        if (!string.IsNullOrWhiteSpace(_securityClassificationCode))
+            xmlString += "<SecurityClassificationCode>" +
+                _securityClassificationCode + "</securityClassificationCode>";
         // SendingTime
         if (!string.IsNullOrWhiteSpace(_sendingTime))
             xmlString += "<SendingTime>" + _sendingTime + "</SendingTime>";
-        // FromSendingSystem
-        if (!string.IsNullOrWhiteSpace(_fromSendingSystem))
-            xmlString += "<FromSendingSystem>" +
-                _fromSendingSystem + "</FromSendingSystem>";
         // ToReceivingSystem
         if (!string.IsNullOrWhiteSpace(_toReceivingSystem))
             xmlString += "<ToReceivingSystem>" +
                 _toReceivingSystem + "</ToReceivingSystem>";
-        // InReplyTo - Message ID
-        if (!string.IsNullOrWhiteSpace(_inReplyToMessageID))
-            xmlString += "<InReplyToMessageID>" +
-                _inReplyToMessageID + "</InReplyToMessageID>";
         xmlString += "</C2SIMHeader>";
         return xmlString;
     }
