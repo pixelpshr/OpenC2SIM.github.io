@@ -1,5 +1,9 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.11
+* C2SIMHeader elements re-ordered to match changes seen on the Java Library code v4.8.3.1
+* Setting header SendingTIme to UTC to match the Zulu format of the string representation sent to the server (was local time, as used in the Java version)
+
 ## Version 1.2.10
 * Updated to C2SIM v1.0.2 schema (CWIX2023)
 
