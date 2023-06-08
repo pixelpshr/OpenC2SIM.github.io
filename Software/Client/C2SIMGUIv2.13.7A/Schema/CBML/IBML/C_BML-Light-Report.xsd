@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://netlab.gmu.edu/IBML"
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+	xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"
+	xmlns:cbml="http://www.sisostds.org/schemas/c-bml/1.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://netlab.gmu.edu/IBML"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+		schemaLocation="../jc3iedm-simple-types/3.0.2/jc3iedm-simple-types.xsd"/>
+	<xs:import namespace="http://www.sisostds.org/schemas/c-bml/1.0"
+		schemaLocation="../cbml-composites-light/1.0/cbml-composites-light.xsd"/>
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en"> 
+			GMU C4I Center Experimental C_BML-Light-Report Schema Version: 1.0	
+			Copyright 2011 By GMU C4I Center 
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:element name="BMLREPORTS" type="BMLReportType"/>
+
+	<xs:complexType name="BMLReportType">
+		<xs:sequence>
+			<xs:element name="Report" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CategoryOfReport" type="CategoryOfReportType"/>
+						<xs:element name="TypeOfReport" type="TypeOfReportType"/>
+						<xs:choice>
+							<xs:element name="StatusReport" type="StatusReportsType"/>
+							<xs:element name="SpotReport" type="SpotReportType"/>
+						</xs:choice>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SpotReportType">
+		<xs:sequence>
+			<xs:element name="ReportHeader" type="cbml:ReportHeaderLightType"/>
+			<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCode" minOccurs="0"/>
+			<xs:element name="Executer" type="jc3iedm:OIDType" minOccurs="0"/>
+			<xs:element name="AtWhere" type="cbml:PointLightType" minOccurs="0"/>
+			<xs:element name="Context" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+			<xs:element name="Parameters">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="size" type="xs:string" minOccurs="0"/>
+						<xs:element name="Activity" type="xs:string" minOccurs="0"/>
+						<xs:element name="Location" type="cbml:PointLightType" minOccurs="0"/>
+						<xs:element name="Unit" type="jc3iedm:OIDType" minOccurs="0"/>
+						<xs:element name="Equipment" type="jc3iedm:VehicleTypeCategoryCode"
+							minOccurs="0"/>
+						<xs:element name="SendersAssesment" type="xs:string" minOccurs="0"/>
+						<xs:element name="Narrative" type="xs:string" minOccurs="0"/>
+						<xs:element name="Authentication" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+
+
+
+	<xs:element name="BMLReportPull" type="BMLReportPullType"/>
+
+	<xs:complexType name="BMLReportPullType">
+		<xs:choice>
+			<xs:element name="OID" type="jc3iedm:OIDType"/>
+			<xs:element name="ReportID" type="xs:string"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="CategoryOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="StatusReport"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TypeOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AdvanceTaskReport"/>
+			<xs:enumeration value="AmbushTaskReport"/>
+			<xs:enumeration value="ArrestLegalTaskReport"/>
+			<xs:enumeration value="ArrestObstructTaskReport"/>
+			<xs:enumeration value="AssembleMaterielTaskReport"/>
+			<xs:enumeration value="AssemblePersonsTaskReport"/>
+			<xs:enumeration value="AssemblePersons"/>
+			<xs:enumeration value="AssignedToTaskReport"/>
+			<xs:enumeration value="AssistTaskReport"/>
+			<xs:enumeration value="AttachedToTaskReport"/>
+			<xs:enumeration value="AttackTaskReport"/>
+			<xs:enumeration value="AvoidTaskReport"/>
+			<xs:enumeration value="BlockTaskReport"/>
+			<xs:enumeration value="BreachTaskReport"/>
+			<xs:enumeration value="BuildUpTaskReport"/>
+			<xs:enumeration value="CanalizeTaskReport"/>
+			<xs:enumeration value="CancelTaskReport"/>
+			<xs:enumeration value="CaptureTaskReport"/>
+			<xs:enumeration value="ClearLandTaskReport"/>
+			<xs:enumeration value="ClearObstacleTaskReport"/>
+			<xs:enumeration value="ConcentrateTaskReport"/>
+			<xs:enumeration value="ConductTaskReport"/>
+			<xs:enumeration value="ConfiscateTaskReportType"/>
+			<xs:enumeration value="ConsolidateTaskReport"/>
+			<xs:enumeration value="ConstituteTaskReport"/>
+			<xs:enumeration value="ContainTaskReport"/>
+			<xs:enumeration value="CounterAttackTaskReport"/>
+			<xs:enumeration value="CoverTaskReport"/>
+			<xs:enumeration value="DefeatTaskReport"/>
+			<xs:enumeration value="DefendTaskReport"/>
+			<xs:enumeration value="DeflectTaskReport"/>
+			<xs:enumeration value="DemolishTaskReport"/>
+			<xs:enumeration value="DenyTaskReport"/>
+			<xs:enumeration value="DeployTaskReport"/>
+			<xs:enumeration value="DestroyTaskReport"/>
+			<xs:enumeration value="DisengageTaskReport"/>
+			<xs:enumeration value="DisruptTaskReport"/>
+			<xs:enumeration value="DistributeTaskReport"/>
+			<xs:enumeration value="EscortTaskReport"/>
+			<xs:enumeration value="EvacuateTaskReport"/>
+			<xs:enumeration value="ExploitTaskReport"/>
+			<xs:enumeration value="FixTaskReport"/>
+			<xs:enumeration value="GuardTaskReport"/>
+			<xs:enumeration value="HarassTaskReport"/>
+			<xs:enumeration value="HideTaskReport"/>
+			<xs:enumeration value="HoldDefensiveTaskReport"/>
+			<xs:enumeration value="HoldOffensiveTaskReport"/>
+			<xs:enumeration value="IdentifyTaskReport"/>
+			<xs:enumeration value="IlluminateTaskReport"/>
+			<xs:enumeration value="InfiltrateTaskReport"/>
+			<xs:enumeration value="IsolateTaskReport"/>
+			<xs:enumeration value="MarchTaskReport"/>
+			<xs:enumeration value="MopUpTaskReport"/>
+			<xs:enumeration value="MoveTaskReport"/>
+			<xs:enumeration value="ObserveTaskReport"/>
+			<xs:enumeration value="OccupyTaskReport"/>
+			<xs:enumeration value="PatrolTaskReport"/>
+			<xs:enumeration value="PenetrateTaskReport"/>
+			<xs:enumeration value="PlanTaskReport"/>
+			<xs:enumeration value="ProcureTaskReport"/>
+			<xs:enumeration value="PursueTaskReport"/>
+			<xs:enumeration value="ReconnaissanceTaskReport"/>
+			<xs:enumeration value="RecoverTaskReport"/>
+			<xs:enumeration value="ReinforceTaskReport"/>
+			<xs:enumeration value="ReliefInPlaceTaskReport"/>
+			<xs:enumeration value="RelieveTaskReport"/>
+			<xs:enumeration value="RestTaskReport"/>
+			<xs:enumeration value="ScreenTaskReport"/>
+			<xs:enumeration value="SecureTaskReport"/>
+			<xs:enumeration value="SeizeTaskReport"/>
+			<xs:enumeration value="SetUpTaskReport"/>
+			<xs:enumeration value="SupportTaskReport"/>
+			<xs:enumeration value="WithdrawTaskReport"/>
+			<xs:enumeration value="ProcureTaskReport"/>
+			<xs:enumeration value="AccidentTrafficEventReport"/>
+			<xs:enumeration value="PositionStatusReport"/>
+			<xs:enumeration value="GeneralStatusReport"/>
+			<xs:enumeration value="TaskStatusReport"/>
+			<xs:enumeration value="PersonnelStatusReport"/>
+			<xs:enumeration value="MaterielStatusReport"/>
+			<xs:enumeration value="FacilityStatusReport"/>
+			<xs:enumeration value="MINOBREP"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="StatusReportsType">
+
+		<!-- NOTE: this a sample of possible status reports; more can be added as needed -->
+
+		<xs:annotation>
+			<xs:documentation> The ReportID must be unique for every instance of report from a given
+				ReporterWho.. </xs:documentation>
+		</xs:annotation>
+
+		<xs:choice>
+
+			<xs:element name="PositionStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ReportHeader" type="cbml:ReportHeaderLightType"/>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCode"/>
+						<xs:element name="Executer" type="jc3iedm:OIDType"/>
+						<xs:element name="AtWhere" type="cbml:PointLightType"/>
+						<xs:element name="Context" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+
+					</xs:sequence>
+				</xs:complexType>
+
+			</xs:element>
+
+			<xs:element name="GeneralStatusReport">
+				<xs:annotation>
+					<xs:documentation> GeneralStatusReport is for reporting the operational status
+						of an organization. . </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Per MSG048 need to add ReporterWho -->
+						<xs:element name="ReportHeader" type="cbml:ReportHeaderLightType"/>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCode"/>
+						<xs:element name="Executer" type="jc3iedm:OIDType"/>
+						<xs:element name="AtWhere" type="cbml:PointLightType"/>
+						<xs:element name="OpStatus"
+							type="jc3iedm:OrganisationStatusOperationalStatusCode"/>
+						<xs:element name="Context" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<!--  Following elements from IBML Reports are no implemented in interim IBML over C_BML 
+	
+			<xs:element name="TaskStatusReport">
+				<xs:annotation>
+					<xs:documentation>
+						TaskStatusReport is about the status of the progress of a task.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="TaskStatus" type="jc3iedm:ActionTaskStatusProgressCodeXmlType"/>
+						<xs:element name="TaskID" type="bml:LabelType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="PersonnelStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:integer"/>
+						<xs:element name="PersonnelType" type="jc3iedm:PersonTypeRankCodeXmlType"/>
+						<xs:element name="Status" type="jc3iedm:PersonStatusDutyStatusCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="MaterielStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:string"/>
+						<xs:element name="MaterielType" type="jc3iedm:VehicleTypeCategoryCodeXmlType"/>
+						<xs:element name="OpStatus" type="jc3iedm:MaterielStatusOperationalStatusQualifierCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="FacilityStatusReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Facility">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Name"/>
+									<xs:element name="FacilityType"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="FacilityStatus" type="jc3iedm:FacilityStatusOperationalStatusCodeXmlType"/>
+						<xs:element name="AtWhere" type="bml:AtWhereType"/>
+						<xs:element name="When" type="bml:WhenType"/>
+						<xs:element name="ReportID" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+-->
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="ReportHeader" type="cbml:ReportHeaderLightType"/>
+</xs:schema>

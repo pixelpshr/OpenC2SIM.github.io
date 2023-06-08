@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+	targetNamespace="http://netlab.gmu.edu/IBML" 	
+	xmlns:bml="http://netlab.gmu.edu/IBML"
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	
+
+	<xs:annotation>
+		<xs:documentation xml:lang="en"> File Version: 0.10 Source: US Army FM 6-99.2 April 2007 by
+			GMU C4I Center 8-21-09 </xs:documentation>
+	</xs:annotation>
+
+	<xs:import namespace = "urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:include schemaLocation="FiveWTypes.xsd"/>
+
+
+	<xs:element name="BRIDGEREP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReporterWho" type="bml:WhoType"/>
+				<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType" minOccurs="0"/>
+				<xs:element name="Executer" type="bml:ExecuterType" minOccurs="0"/>
+				<!-- Per MSG048, Per Dr.Pullen recommendation: made ReportID optional, service is supposed to generate it -->
+				<xs:element name="ReportID" type="xs:string" minOccurs="0"/>
+				<xs:element name="Credibility" type="bml:CredibilityType"/>
+				<xs:element name="DateTime" type="jc3iedm:Datetime18XmlType" minOccurs="0"/>
+				<xs:element name="WhereLocation" type="bml:AtWhereType" minOccurs="0"/>
+				<xs:element name="Context" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+				<xs:element name="Parameters">
+					<xs:complexType>
+						<xs:sequence>
+							<!-- The print-out says "Unit making Request". We think its actually
+								Unit making Report which is ReporterWho-->
+							<!--<xs:element name="Unit" type="bml:WhoType" minOccurs="0"/>-->
+							<xs:element name="TypeOfBridge" minOccurs="0"/>
+							<xs:element name="LocationOfBridge" minOccurs="0"/>
+							<xs:element name="Width" type="xs:float" minOccurs="0"/>
+							<xs:element name="Restrictions" type="xs:float" minOccurs="0"/>
+							<xs:element name="Length" minOccurs="0"/>
+							<xs:element name="Spans" minOccurs="0"/>
+							<xs:element name="Class" type="xs:string" minOccurs="0"/>
+							<xs:element name="ByPassLocation" type="bml:AtWhereType" minOccurs="0"/>
+							<xs:element name="Narrative" minOccurs="0"/>
+							<xs:element name="Authentication" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MINOBREP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReporterWho" type="bml:WhoType"/>
+				<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType" minOccurs="0"/>
+				<xs:element name="Executer" type="bml:ExecuterType" minOccurs="0"/>
+				<xs:element name="CornerLocation" type="bml:AtWhereType" minOccurs="0"/>
+				<xs:element name="When" type="jc3iedm:Datetime18XmlType"/>
+				<!-- Per MSG048, Per Dr.Pullen recommendation: made ReportID optional, service is supposed to generate it -->
+				<xs:element name="ReportID" type="xs:string" minOccurs="0"/>
+				<xs:element name="Credibility" type="bml:CredibilityType"/>
+				<xs:element name="Context" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+				<xs:element name="Parameters">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="EmplacingUnit" type="bml:ExecuterType" minOccurs="0"/>
+							<xs:element name="ApprovingAuthority" type="bml:WhoType" minOccurs="0"/>
+							<xs:element name="TargetObstacleNumber" minOccurs="0"/>
+							<xs:element name="TypeOfEmplacingSystem" minOccurs="0"/>
+							<xs:element name="TypeOfMinesObstacles" minOccurs="0"/>
+							<xs:element name="TypeOfMarkingSystem" minOccurs="0"/>
+							<xs:element name="LifeCycleDateTime" type="jc3iedm:Datetime18XmlType"
+								minOccurs="0"/>
+							<xs:element name="Reduction" type="bml:YesNoType" minOccurs="0"/>
+							<xs:element name="NumberOfLanes" type="xs:integer" minOccurs="0"/>
+							<xs:element name="ReductionAssetUsed" type="xs:string" minOccurs="0"/>
+							<xs:element name="WidthInCentimeters" type="xs:integer" minOccurs="0"/>
+							<xs:element name="DepthInCentimeters" type="xs:integer" minOccurs="0"/>
+							<xs:element name="GridToStartAndEndOfLane" type="bml:LocationType" minOccurs="0"/>
+							<xs:element name="LaneMarking" minOccurs="0"/>
+							<xs:element name="Bypass" type="bml:YesNoType" minOccurs="0"/>
+							<xs:element name="BypassGrid" type="bml:AtWhereType" minOccurs="0"/>
+							<xs:element name="Barriers" minOccurs="0"/>
+							<xs:element name="Narrative" minOccurs="0"/>
+							<xs:element name="Authentication" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="NATOSPOTREP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReporterWho" type="bml:WhoType"/>
+				<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType"/>
+				<xs:element name="Executer" type="bml:ExecuterType" minOccurs="0"/>
+				<xs:element name="Location" type="bml:AtWhereType"/>
+				<xs:element name="When" type="jc3iedm:Datetime18XmlType"/>
+				<!-- Per MSG048, Per Dr.Pullen recommendation: made ReportID optional, service is supposed to generate it -->
+				<xs:element name="ReportID" type="xs:string" minOccurs="0"/>
+				<xs:element name="Credibility" type="bml:CredibilityType"/>
+				<xs:element name="Conext" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+				<xs:element name="Parameters">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Unit" type="jc3iedm:UnitXmlType" minOccurs="0"/>
+							<xs:element name="Equipment" type="jc3iedm:AbstractEquipmentTypeXmlType"
+								minOccurs="0"/>
+							<xs:element name="SendersAssesment" type="jc3iedm:Text80XmlType"
+								minOccurs="0"/>
+							<xs:element name="Narrative" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+							<xs:element name="Authentication" type="jc3iedm:UnitXmlType"
+								minOccurs="0"/>
+							<xs:element name="Geodeticdatum"
+								type="jc3iedm:VerticalDistanceReferenceCodeXmlType" minOccurs="0"/>
+							<xs:element name="MapData" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="SPOTREP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReporterWho" type="bml:WhoType"/>
+				<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType" minOccurs="0"/>
+				<xs:element name="Executer" type="bml:ExecuterType" minOccurs="0"/>
+				<xs:element name="WhereLocation" type="bml:AtWhereType" minOccurs="0"/>
+				<xs:element name="When" type="jc3iedm:Datetime18XmlType"/>
+				<!-- Per MSG048, Per Dr.Pullen recommendation: made ReportID optional, service is supposed to generate it -->
+				<xs:element name="ReportID" type="xs:string" minOccurs="0"/>
+				<xs:element name="Credibility" type="bml:CredibilityType"/>
+				<xs:element name="Context" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+				<xs:element name="Parameters">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="size" type="xs:string" minOccurs="0"/>
+							<xs:element name="Activity" type="xs:string" minOccurs="0"/>
+							<xs:element name="Location" type="bml:AtWhereType" minOccurs="0"/>
+							<xs:element name="Unit" type="bml:WhoType" minOccurs="0"/>
+							<xs:element name="Time" type="jc3iedm:Datetime18XmlType" minOccurs="0"/>
+							<xs:element name="Equipment"
+								type="jc3iedm:VehicleTypeCategoryCodeXmlType" minOccurs="0"/>
+							<xs:element name="SendersAssesment" type="xs:string" minOccurs="0"/>
+							<xs:element name="Narrative" type="xs:string" minOccurs="0"/>
+							<xs:element name="Authentication" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="TRKREP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReporterWho" type="bml:WhoType"/>
+				<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCodeXmlType" minOccurs="0"/>
+				<xs:element name="Executer" type="bml:WhoType" minOccurs="0"/>
+				<xs:element name="AtWhere" type="bml:AtWhereType"/>
+				<xs:element name="When" type="jc3iedm:Datetime18XmlType"/>
+				<!-- Per MSG048, Per Dr.Pullen recommendation: made ReportID optional, service is supposed to generate it -->
+				<xs:element name="ReportID" type="xs:string" minOccurs="0"/>
+				<xs:element name="Context" type="jc3iedm:Text80XmlType" minOccurs="0"/>
+				<xs:element name="Credibility" type="bml:CredibilityType"/>
+				<xs:element name="Parameters">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DateTime" type="jc3iedm:Datetime18XmlType"
+								minOccurs="0"/>
+							<xs:element name="Position" type="bml:AtWhereType" minOccurs="0"/>
+							<xs:element name="Track" type="xs:string" minOccurs="0"/>
+							<xs:element name="Heading" type="xs:float" minOccurs="0"/>
+							<xs:element name="Speed" type="xs:float" minOccurs="0"/>
+							<xs:element name="Altitude" type="xs:long" minOccurs="0"/>
+							<xs:element name="Engaged" type="bml:YesNoType" minOccurs="0"/>
+							<xs:element name="NumAndTypeOfCraft" type="xs:string" minOccurs="0"/>
+							<xs:element name="Squawk"
+								type="jc3iedm:NetworkServiceSubcategoryCodeXmlType" minOccurs="0"/>
+							<xs:element name="ModeFour" type="xs:string" minOccurs="0"/>
+							<xs:element name="Category" type="xs:string" minOccurs="0"/>
+							<xs:element name="Narrative" type="xs:string" minOccurs="0"/>
+							<xs:element name="Authentication" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- this schema derived from FGAN C2LG schema v1.3.080521 by GMU C4I Center 6-11-08 -->
+<xs:schema 
+    targetNamespace="http://netlab.gmu.edu/IBML" 
+    xmlns="http://netlab.gmu.edu/IBML"
+    xmlns:bml="http://netlab.gmu.edu/IBML" 
+    xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:include schemaLocation="FiveWTypes.xsd"/>
+	<xs:complexType name="StatusReportsType">
+		<xs:annotation>
+			<xs:documentation>
+						The ReportID must be unique for every instance of
+						report from a given ReporterWho.	
+  					</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!-- <xs:element name="PositionStatusReport"> -->
+			<!-- <xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="ReporterWho" type="bml:WhoType"/>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/> -->
+			<!-- Not Implemented -->
+			<!--<xs:element name="WhereLocation" type="bml:WhereLocationType"/>-->
+			<!-- Not Implemented -->
+			<!-- <xs:element name="VelocityVector" type="bml:VelocityVectorType" minOccurs="0"/> -->
+			<!-- Not Implemented -->
+			<!--<xs:element name="When" type="mip:Datetime18XmlType"/>-->
+			<!-- <xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element> -->
+      <xs:element name="GeneralStatusReport">
+        <xs:annotation>
+          <xs:documentation>
+            GeneralStatusReport is for reporting the operational
+            status of an organization.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ReporterWho" type="bml:WhoType"/>
+            <xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+            <xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+            <xs:element name="Executer" type="bml:ObservedWhoType"/>
+            <xs:element name="OpStatus" type="mip:OrganisationStatusOperationalStatusCodeXmlType"/>
+            <xs:element name="WhereLocation" type="bml:WhereLocationType"/>
+            <xs:element name="VelocityVector" type="bml:VelocityVectorType" minOccurs="0"/>
+            <xs:element name="When" type="mip:Datetime18XmlType"/>
+            <xs:element name="ReportID" type="bml:LabelType"/>
+            <xs:element name="Credibility" type="bml:CredibilityType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ControlFeatureReport">
+        <xs:annotation>
+          <xs:documentation>
+            ControlFeatureReport is for reporting on a control feature (forward line of troops...) and its status (operational, not operational...).
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ReporterWho" type="bml:WhoType"/>
+            <xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+            <xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+            <xs:element name="ControlFeatureID" type="bml:LabelType"/>
+            <xs:element name="TypeCategoryCode" type="mip:ControlFeatureTypeCategoryCodeXmlType"/>
+            <xs:element name="OpStatus" type="mip:OrganisationStatusOperationalStatusCodeXmlType"/>
+            <xs:element name="WhereLocation" type="bml:AtWhereLocationType"/>
+            <xs:element name="WhoRef" type="bml:WhoType" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">References to units linked to this control feature.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="When" type="mip:Datetime18XmlType"/>
+            <xs:element name="ReportID" type="bml:LabelType"/>
+            <xs:element name="Credibility" type="bml:CredibilityType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="FacilityStatusReport">
+        <xs:annotation>
+          <xs:documentation>
+            FacilityReport is for reporting on a facility (hospitals, ammunition depots, radar site, etc.) and its status (marked, damaged, etc.)
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ReporterWho" type="bml:WhoType"/>
+            <xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+            <xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+            <xs:element name="FacilityID" type="bml:LabelType"/>
+            <xs:element name="TypeCategoryCode" type="mip:FacilityTypeCategoryCodeXmlType"/>
+            <xs:element name="OpStatus" type="mip:FacilityStatusOperationalStatusQualifierCodeXmlType"/>
+            <xs:element name="WhereLocation" type="bml:AtWhereLocationType">
+	            <xs:annotation>
+	                  <xs:documentation>
+	                    Facility location can be defined by a simple point (gravity center), a surface (with its outer line), or a line for 'lineic' facility (eg.: road, rail, fence)
+	                  </xs:documentation>
+	            </xs:annotation>
+            </xs:element>
+            <xs:element name="ResponsibleWho" type="bml:WhoType" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">References to units responsible of this facility.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="When" type="mip:Datetime18XmlType"/>
+            <xs:element name="ReportID" type="bml:LabelType"/>
+            <xs:element name="Credibility" type="bml:CredibilityType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="WhoHoldingStatusReport">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Specifies a report describing the holding of an entity.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ReporterWho" type="bml:WhoType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Who is reporting.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="When" type="mip:Datetime18XmlType"/>
+						<xs:element name="WhoRef" type="bml:WhoType">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">A reference on who is being reported on.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Holding" type="HoldingType"/>
+						<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="ReportID" type="bml:LabelType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TaskStatusReport">
+				<xs:annotation>
+					<xs:documentation>
+						TaskStatusReport is about the status of the progress of a task.
+  					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+                        <xs:element name="ReportID" type="bml:LabelType"/>
+                        <xs:element name="When" type="mip:Datetime18XmlType"/>
+                        <xs:element name="TaskID" type="bml:LabelType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="TaskStatus" type="mip:ActionTaskStatusProgressCodeXmlType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!-- <xs:element name="PersonnelStatusReport">-->
+			<!--<xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:integer" minOccurs="0"/>
+						<xs:element name="OpStatus" type="mip:OrganisationStatusOperationalStatusCodeXmlType" minOccurs="0"/>
+						<xs:element name="PersonnelType" type="mip:PersonTypeRankCodeXmlType"/>
+						<xs:element name="Status" type="mip:PersonStatusDutyStatusCodeXmlType"/>-->
+			<!-- Not Implemented -->
+			<!-- <xs:element name="WhereLocation" type="bml:WhereLocationType"/>-->
+			<!-- <xs:element name="When" type="mip:Datetime18XmlType"/>
+						<xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>-->
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!--<xs:element name="MaterielStatusReport">-->
+			<!--<xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Executer" type="bml:ExecuterType"/>
+						<xs:element name="Count" type="xs:integer"/>
+						<xs:element name="MaterielType" type="mip:VehicleTypeCategoryCodeXmlType"/>
+						<xs:element name="OpStatus" type="mip:MaterielStatusOperationalStatusCodeXmlType"/>
+						<xs:element name="WhereLocation" type="bml:WhereLocationType"/>-->
+			<!-- Not Implemented -->
+			<!--<xs:element name="When" type="mip:Datetime18XmlType"/>-->
+			<!-- Not Implemented -->
+			<!--<xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>-->
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!--<xs:element name="FacilityStatusReport">-->
+			<!--<xs:complexType>
+					<xs:sequence>-->
+						<!-- Not Implemented -->
+						<!--<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+						<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Facility">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Name"/>
+									<xs:element name="FacilityType"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="FacilityStatus" type="mip:FacilityStatusOperationalStatusCodeXmlType"/>-->
+			<!-- Not Implemented -->
+			<!--<xs:element name="WhereLocation" type="bml:WhereLocationType"/>
+						<xs:element name="When" type="mip:Datetime18XmlType"/>-->
+			<!-- <xs:element name="ReportID" type="bml:LabelType"/>
+						<xs:element name="Credibility" type="bml:CredibilityType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element> -->
+		</xs:choice>
+		<!-- NOTE: this a sample of possible status reports; more can be added as needed -->
+	</xs:complexType>
+	<xs:complexType name="HoldingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The quantity of each specific Equipment/Consumable defined by a Nato Stock Number that is held by, installed in, or included with a specific OBJECT-ITEM.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NSN_Code" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The 13 digits of NATO Stock Number of the equipment or consumable that the report deals with.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NSN_Name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The human readable name of the NSN code.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsEquipment" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optionnaly define the category of the item (equipment or consumbale). Maybe redundant with the first 4 digit of the NSN_Code, but this attribute is easier to interprate.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperationalCount" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The integer value representing the number of specific OBJECT-TYPEs a specific OBJECT-ITEM has available for operations. For simulation purpose, it's mapped to the quantity of available and operational Equipment/Consumable (without reserve) at the instant of the report in the unit.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the total quantity, to include reserves, of specific OBJECT-TYPEs physically held by a specific OBJECT-ITEM. The unit of measure is derived from the OBJECT-TYPE specification.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OnHandQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the quantity of specific OBJECT-TYPEs physically held on-hand, not including reserves, by a specific OBJECT-ITEM. For simulation purpose, it's mapped to the quantity of available and [operational + damaged] Equipment (without reserve) at the instant of the report in the unit. If simulation doesn't provide this attribute, it means that it doesn't manage damaged equipments. It’s not used for consumables.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredTotalQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the total quantity of specific OBJECT-TYPEs required to be held on-hand and in reserve by a specific OBJECT-ITEM to meet the NATO assigned task in accordance with Force Standards or established mission requirements.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredOnHandQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the quantity of specific OBJECT-TYPEs, not including reserves, required to be held on-hand by a specific OBJECT-ITEM in accordance with Force Standards or established mission requirements. For simulation purpose, it's mapped to the theorical quantity of Equipment/Consumable (without reserve) in the unit.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredCalculationMethodCode" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The specific value that represents the required stocks calculation method used for the count of OBJECT-TYPEs in a specific HOLDING.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

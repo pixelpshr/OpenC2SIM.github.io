@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="urn:sisostds:scenario:military:data:draft:msdl:1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1:oo:2.0"
+    xmlns:modelID="http://www.sisostds.org/schemas/modelID"
+    xmlns:msdl="urn:sisostds:scenario:military:data:draft:msdl:1" elementFormDefault="qualified"
+    attributeFormDefault="unqualified" version="1.0.0" id="MSDL">
+
+    <xs:include schemaLocation="MilitaryScenario_1.0.0.xsd"/>
+    <xs:import namespace="http://www.sisostds.org/schemas/modelID"
+        schemaLocation="extern\ModelID_v2006_FINAL.xsd"/>
+
+    <!-- 
+       These transactions are being used to perform initialization for a number of simulation systems and possibly C2 systems.  
+       Various versions of BML will be used to pass orders and reports between simulation systems and command and control systems.
+       
+       Douglas Corner   C4I Center, George Mason University            
+    -->
+
+    <!-- Element Definitions to be used by MSDL Initialization Participants-->
+
+    <!-- MSDL_Initialize performs the initial creation of a scenario and provides data for the ScenarioID, Options, and Environment elements -->
+    <xs:element name="MSDL_Initialize" type="msdl:MilitaryScenarioType"/>
+
+    <!-- MSDL_AddElements is used to add additional elements to a scenario initialized by MSDL_Initialize -->
+    <xs:element name="MSDL_AddElements" type="msdl:MSDL_AddElements_Type"/>
+
+
+    <!-- MSDL_Finalize is used to pass the MSDL initialization information the the participants in a particular scenario.  
+        It returns all data associated with a particular scenario
+        The data will be transmitted to the scenario participants via publish/subsribe. -->
+    <xs:element name="MSDL_Finalize" type="msdl:MSDL_Finalize_Type"/>
+
+
+    <!-- MSDL_Query is used by late joining participants.  The query will return the same information as in MSDL_Finalize
+        but the data won't be published -->
+    <xs:element name="MSDL_Query" type="msdl:MSDL_Finalize_Type"/>
+
+
+    <!-- MSDL_AddUnit is used to add Units discovered during the simulation.  The new Unit will be published. -->
+    <xs:element name="MSDL_AddUnit" type="msdl:MSDL_AddUnit_Type"/>
+
+
+    <!-- MSDL_AddEquipment is used to add EquipmentItems discovered during the simulation.  The new EquipmentItem will be published. -->
+    <xs:element name="MSDL_AddEquipment" type="msdl:MSDL_AddEquipment_Type"/>
+
+    <!-- MSDL_ListRequest -  List all Scenarios presently in the database -->
+    <xs:element name="MSDL_ListRequest"/>
+
+    <!-- MSDL_ListResponse -->
+    <xs:element name="MSDL_ListResponse" type="msdl:MSDL_ListResponse_Type"/>
+
+
+    <!-- Types to support above elements -->
+
+    <!--  MSDL_Finalize_Type -->
+    <xs:complexType name="MSDL_Finalize_Type">
+        <xs:sequence>
+            <xs:element name="scenarioName" type="modelID:IdentifierType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <!--  MSDL_AddUnit_Type -->
+    <xs:complexType name="MSDL_AddUnit_Type">
+        <xs:sequence>
+            <xs:element name="scenarioName" type="modelID:IdentifierType"/>
+            <xs:element name="Unit" type="msdl:UnitType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <!--  MSDL_Equipment_Type -->
+    <xs:complexType name="MSDL_AddEquipment_Type">
+        <xs:sequence>
+            <xs:element name="scenarioName" type="modelID:IdentifierType"/>
+            <xs:element name="EquipmentItem" type="msdl:EquipmentItemType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <!--  MSDL_AddElements_Type -->
+    <xs:complexType name="MSDL_AddElements_Type">
+        <xs:sequence>
+            <xs:element name="scenarioName" type="modelID:IdentifierType"/>
+            <xs:element name="ForceSides" type="msdl:ForceSidesType" minOccurs="0"/>
+            <xs:element name="Organisations" type="msdl:OrganizationsType" minOccurs="0"/>
+            <xs:element name="Overlays" type="msdl:OverlaysType" minOccurs="0"/>
+            <xs:element name="Installations" type="msdl:InstallationsType" minOccurs="0"/>
+            <xs:element name="TacticalGraphics" type="msdl:TacticalGraphicsType" minOccurs="0"/>
+            <xs:element name="MOOTWGraphics" type="msdl:MOOTWGraphicsType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <!-- ScenarioID_Type -->
+    <xs:complexType name="ScenarioID_Type">
+        <xs:sequence>
+            <xs:element name="name" type="modelID:IdentifierType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- MSDL_ListResponseType -->
+    <xs:complexType name="MSDL_ListResponse_Type">
+        <xs:sequence>
+            <xs:element name="scenarioName" type="modelID:IdentifierType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

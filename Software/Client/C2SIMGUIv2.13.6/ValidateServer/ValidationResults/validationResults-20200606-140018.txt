@@ -1,0 +1,196 @@
+------C2SIM SERVER VALIDATION (DATE-TIME 20200606-140018)------
+XML input comes from:SendXML
+XML output goes to:ReceiveXML
+Server response XML goes to:ResponseXML
+Correct XML for comparison comes from:CompareXML
+List of results goes in file:validationResults-20200606-140018.txt
+  which file goes in:ValidationResults
+Validation scripts come from:Scripts
+Copy of all received input goes in ./\ValidateServer\CopyXML
+-------------------
+
+Running script:initializationUpdate.txt
+   response will be monitored up to 10 seconds for each XML file pushed to server
+SCRIPT LINE:# perform a stop-reset-initialize-push file-share-start sequence
+SCRIPT LINE:STOP
+SCRIPT LINE:RESET
+SCRIPT LINE:INITIALIZE
+SCRIPT LINE:PUSH 009INIT Initialize-C2SIM-FMN-NPS-GMU-v0.0.9.xml
+SCRIPT LINE:SHARE 009INIT Initialize-C2SIM-FMN-NPS-GMU-v0.0.9.xml 100 MSDL
+  -received XML file (length 55257):Initialize-C2SIM-FMN-NPS-GMU-v0.0.9-100INIT.xml
+  -received XML file (length 43371):Initialize-C2SIM-FMN-NPS-GMU-v0.0.9-009INIT.xml
+  -received XML file (length 39017):Initialize-C2SIM-FMN-NPS-GMU-v0.0.9-MSDLINIT.xml
+  -009INIT received file matches reference
+  -100INIT received file matches reference
+  -MSDLINIT received file matches reference
+SCRIPT LINE:START
+SCRIPT LINE:STOP
+SCRIPT LINE:RESET
+SCRIPT LINE:INITIALIZE
+SCRIPT LINE:PUSH MSDLINIT Initialize-C2SIM-FMN-NPS-GMU-MSDL.xml
+SCRIPT LINE:SHARE MSDLINIT Initialize-C2SIM-FMN-NPS-GMU-MSDL.xml 100 009
+  -received XML file (length 24259):Initialize-C2SIM-FMN-NPS-GMU-MSDL-100INIT.xml
+  -received XML file (length 34262):Initialize-C2SIM-FMN-NPS-GMU-MSDL-009INIT.xml
+  -received XML file (length 19296):Initialize-C2SIM-FMN-NPS-GMU-MSDL-MSDLINIT.xml
+  -MSDLINIT received file matches reference
+  -100INIT received file matches reference
+  -009INIT received file matches reference
+SCRIPT LINE:START
+SCRIPT LINE:STOP
+SCRIPT LINE:RESET
+SCRIPT LINE:INITIALIZE
+SCRIPT LINE:PUSH 100INIT Initialize-C2SIM-FMN-NPS-GMU-v1.0.0.xml 
+SCRIPT LINE:SHARE 100INIT Initialize-C2SIM-FMN-NPS-GMU-v1.0.0.xml 009 MSDL
+  -received XML file (length 54995):Initialize-C2SIM-FMN-NPS-GMU-v1.0.0-100INIT.xml
+  -received XML file (length 43514):Initialize-C2SIM-FMN-NPS-GMU-v1.0.0-009INIT.xml
+  -received XML file (length 38871):Initialize-C2SIM-FMN-NPS-GMU-v1.0.0-MSDLINIT.xml
+  -100INIT received file matches reference
+  -009INIT received file matches reference
+  -MSDLINIT received file matches reference
+SCRIPT LINE:START
+
+Running script:pushC2SIM1.txt
+   response will be monitored up to 10 seconds for each XML file pushed to server
+SCRIPT LINE:# C2SIM Order and Report validation with no translation
+SCRIPT LINE:PUSH 100ORDER USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks.xml
+  -received XML file (length 4888):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-100ORDER.xml
+  -received XML file (length 4888):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-009ORDER.xml
+  -received XML file (length 2465):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-IBMLORDER.xml
+  -received XML file (length 1824):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-CBMLORDER.xml
+  -100ORDER received file matches reference
+SCRIPT LINE:PUSH 100REPORT C2sim-v1.0.0-PositionReport.xml
+  -received XML file (length 1834):C2sim-v1.0.0-PositionReport-100REPORT.xml
+  -received XML file (length 1834):C2sim-v1.0.0-PositionReport-009REPORT.xml
+  -received XML file (length 788):C2sim-v1.0.0-PositionReport-IBMLREPORT.xml
+  -received XML file (length 958):C2sim-v1.0.0-PositionReport-CBMLREPORT.xml
+  -100REPORT received file matches reference
+
+Running script:pushC2SIM2.txt
+   response will be monitored up to 10 seconds for each XML file pushed to server
+SCRIPT LINE:# orders & reports validation
+SCRIPT LINE:PUSH 009ORDER C2SIMv0.0.9testOrderRed.xml IBML CBML 100
+  -received XML file (length 3907):C2SIMv0.0.9testOrderRed-009ORDER.xml
+  -received XML file (length 2272):C2SIMv0.0.9testOrderRed-100ORDER.xml
+  -received XML file (length 2314):C2SIMv0.0.9testOrderRed-IBMLORDER.xml
+  -received XML file (length 2094):C2SIMv0.0.9testOrderRed-CBMLORDER.xml
+  -009ORDER received file matches reference
+  -IBMLORDER received file matches reference
+  -CBMLORDER received file matches reference
+  -100ORDER received file matches reference
+SCRIPT LINE:PUSH 100ORDER USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks.xml IBML CBML 009
+  -received XML file (length 4888):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-100ORDER.xml
+  -received XML file (length 4888):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-009ORDER.xml
+  -received XML file (length 2465):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-IBMLORDER.xml
+  -received XML file (length 1824):USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks-CBMLORDER.xml
+  -100ORDER received file matches reference
+  -IBMLORDER received file matches reference
+  -CBMLORDER received file matches reference
+  -009ORDER received file matches reference
+SCRIPT LINE:PUSH CBMLORDER CBMLtestOrder-rev29May20.xml 100 IBML 009
+  -received XML file (length 9731):CBMLtestOrder-rev29May20-CBMLORDER.xml
+  -received XML file (length 1144):CBMLtestOrder-rev29May20-100ORDER.xml
+  -received XML file (length 1144):CBMLtestOrder-rev29May20-009ORDER.xml
+  -received XML file (length 1229):CBMLtestOrder-rev29May20-IBMLORDER.xml
+  -CBMLORDER received file matches reference
+  -100ORDER received file matches reference
+  -IBMLORDER received file matches reference
+  -009ORDER received file matches reference
+SCRIPT LINE:PUSH IBMLORDER IBML09testShortOrder.xml 100 CBML 009
+  -received XML file (length 4143):IBML09testShortOrder-IBMLORDER.xml
+  -received XML file (length 997):IBML09testShortOrder-100ORDER.xml
+  -received XML file (length 997):IBML09testShortOrder-009ORDER.xml
+  -received XML file (length 1005):IBML09testShortOrder-CBMLORDER.xml
+  -IBMLORDER received file matches reference
+  -100ORDER received file matches reference
+  -CBMLORDER received file matches reference
+  -009ORDER received file matches reference
+SCRIPT LINE:PUSH 100REPORT C2sim-v1.0.0-PositionReport.xml CBML IBML 009
+  -received XML file (length 1834):C2sim-v1.0.0-PositionReport-100REPORT.xml
+  -received XML file (length 1834):C2sim-v1.0.0-PositionReport-009REPORT.xml
+  -received XML file (length 788):C2sim-v1.0.0-PositionReport-IBMLREPORT.xml
+  -received XML file (length 958):C2sim-v1.0.0-PositionReport-CBMLREPORT.xml
+  -100REPORT received file matches reference
+  -CBMLREPORT received file matches reference
+  -IBMLREPORT received file matches reference
+  -009REPORT received file matches reference
+SCRIPT LINE:PUSH 009REPORT C2sim-v0.0.9-PositionReport.xml CBML IBML 100
+  -received XML file (length 1452):C2sim-v0.0.9-PositionReport-009REPORT.xml
+  -received XML file (length 1188):C2sim-v0.0.9-PositionReport-100REPORT.xml
+  -received XML file (length 788):C2sim-v0.0.9-PositionReport-IBMLREPORT.xml
+  -received XML file (length 958):C2sim-v0.0.9-PositionReport-CBMLREPORT.xml
+  -009REPORT received file matches reference
+  -CBMLREPORT received file matches reference
+  -IBMLREPORT received file matches reference
+  -100REPORT received file matches reference
+SCRIPT LINE:PUSH 009REPORT C2SIMv9testObservationReport.xml CBML 100 IBML
+  -received XML file (length 1635):C2SIMv9testObservationReport-009REPORT.xml
+  -received XML file (length 987):C2SIMv9testObservationReport-100REPORT.xml
+  -received XML file (length 756):C2SIMv9testObservationReport-IBMLREPORT.xml
+  -received XML file (length 913):C2SIMv9testObservationReport-CBMLREPORT.xml
+  -009REPORT received file matches reference
+  -CBMLREPORT received file matches reference
+  -100REPORT received file matches reference
+  -IBMLREPORT received file matches reference
+SCRIPT LINE:PUSH 100REPORT C2SIMv1.0.0-ObservationReport.xml CBML 009 IBML
+  -received XML file (length 1520):C2SIMv1.0.0-ObservationReport-100REPORT.xml
+  -received XML file (length 1520):C2SIMv1.0.0-ObservationReport-009REPORT.xml
+  -received XML file (length 789):C2SIMv1.0.0-ObservationReport-IBMLREPORT.xml
+  -received XML file (length 946):C2SIMv1.0.0-ObservationReport-CBMLREPORT.xml
+  -100REPORT received file matches reference
+  -CBMLREPORT received file matches reference
+  -009REPORT received file matches reference
+  -IBMLREPORT received file matches reference
+SCRIPT LINE:PUSH CBMLREPORT CBMLtestGSRred-rev29May20.xml 100 IBML 009 100
+  -received XML file (length 1820):CBMLtestGSRred-rev29May20-CBMLREPORT.xml
+  -received XML file (length 1067):CBMLtestGSRred-rev29May20-100REPORT.xml
+  -received XML file (length 1067):CBMLtestGSRred-rev29May20-009REPORT.xml
+  -received XML file (length 835):CBMLtestGSRred-rev29May20-IBMLREPORT.xml
+  -CBMLREPORT received file matches reference
+  -100REPORT received file matches reference
+  -IBMLREPORT received file matches reference
+  -009REPORT received file matches reference
+SCRIPT LINE:PUSH IBMLREPORT IBML09testGSRred.xml 100 009 CBML
+  -received XML file (length 1539):IBML09testGSRred-IBMLREPORT.xml
+  -received XML file (length 1088):IBML09testGSRred-100REPORT.xml
+  -received XML file (length 1088):IBML09testGSRred-009REPORT.xml
+  -received XML file (length 1200):IBML09testGSRred-CBMLREPORT.xml
+  -IBMLREPORT received file matches reference
+  -100REPORT received file matches reference
+  -009REPORT received file matches reference
+  -CBMLREPORT received file matches reference
+-------------------
+RESULTS OF VALIDATION:
+ 
+Server Commands OK/Error
+STOP:       3/0
+RESET:      3/0
+INITIALIZE: 3/0
+SHARE 100:  1/0
+SHARE 009:  1/0
+SHARE MSDL: 1/0
+START:      3/0
+ 
+C2SIM Initialization OK/Error:
+vertical is send; horizontal is receive
+        100   009   MSDL
+ 100    1/0   1/0   1/0
+ 009    1/0   1/0   1/0
+MSDL    1/0   1/0   1/0
+ 
+Order distribution and translation OK/Error:
+vertical is send; horizontal is receive
+        100   009   CBML  IBML
+ 100    2/0   1/0   1/0   1/0
+ 009    1/0   1/0   1/0   1/0
+CBML    1/0   1/0   1/0   1/0
+IBML    1/0   1/0   1/0   1/0
+ 
+Report distribution and translation OK/Error:
+vertical is send; horizontal is receive
+        100   009   CBML  IBML
+ 100    3/0   2/0   2/0   2/0
+ 009    2/0   2/0   2/0   2/0
+CBML    1/0   1/0   1/0   1/0
+IBML    1/0   1/0   1/0   1/0
+ 
+-------------------

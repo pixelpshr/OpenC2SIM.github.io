@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+	<status>ERROR</status>
+	<message>Error processing message</message>
+	<serverInitialized>true</serverInitialized>
+	<serverVersion>4.8.0.5</serverVersion>
+	<sessionState>INITIALIZING</sessionState>
+	<unitDatabaseSize>0</unitDatabaseSize>
+	<msgNumber>23</msgNumber>
+	<time>0.0</time>
+	<error>Exception while parsing C2SIM Headert</error>
+	<cause>JDOM Exception while parsing input BML</cause>
+</result>

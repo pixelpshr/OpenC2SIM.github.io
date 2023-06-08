@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BMLReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://netlab.gmu.edu/IBML IBMLReports.xsd"
+ xmlns="http://netlab.gmu.edu/IBML" xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+ xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL">
+    <Report>
+        <CategoryOfReport>StatusReport</CategoryOfReport>
+        <TypeOfReport>GeneralStatusReport</TypeOfReport>
+        <StatusReport>
+            <GeneralStatusReport>
+                <ReporterWho>
+                    <UnitID>1/202 INF</UnitID>
+                </ReporterWho>
+                <Hostility>HO</Hostility>
+                <Executer>
+                        <UnitID>1/1_OPFOR-ARMOR</UnitID>
+                </Executer>
+                <OpStatus>MOPS</OpStatus>
+                <WhereLocation>
+                            <GDC>
+                                <Latitude>58.693</Latitude>
+                                <Longitude>14.992</Longitude>
+                                <ElevationAGL>2.054</ElevationAGL>
+                            </GDC>
+                </WhereLocation>
+                <When>20070101000000.000</When>
+                <ReportID>192</ReportID>
+                <Credibility>
+                    <Source>HUMINT</Source>
+                    <Reliability>A</Reliability>
+                    <Certainty>RPTFCT</Certainty>
+                </Credibility>
+            </GeneralStatusReport>
+        </StatusReport>
+    </Report>
+</BMLReport>

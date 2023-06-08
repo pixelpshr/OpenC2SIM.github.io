@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- this schema derived from FGAN C2LG schema v1.3.080521 by GMU C4I Center 6-11-08 -->
+<xs:schema xmlns:bml="http://netlab.gmu.edu/IBML"
+           xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified" 
+           attributeFormDefault="unqualified">
+           
+    <xs:import namespace="http://netlab.gmu.edu/IBML" 
+	       schemaLocation="FiveWTypes_IBMLv2.1.xsd"/>
+	
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+		schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+	    	Battle Management Language schema types definition.
+	     	Copyright 2010 George Mason University C4I Center.
+	  	</xs:documentation>
+	</xs:annotation>
+
+    <xs:include schemaLocation="IBMLReports.xsd"/>
+    
+    <xs:element name="IDPullStatusReport">
+     <xs:complexType>
+         <xs:sequence>
+             <xs:element name="ReportTime" type="ReportTimeType"></xs:element>
+             <xs:element name="TypeOfReport" type="TypeOfReportType"></xs:element>
+             <xs:element name="IDrange">
+                 <xs:complexType>
+             	     <xs:sequence>
+             	         <xs:element name="Min"/>
+             	         <xs:element name="Max"/>
+             	     </xs:sequence>
+             	 </xs:complexType>
+             </xs:element>
+         </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="ReportPull" type="ReportPullType"/>
+            
+    <xs:complexType name="ReportPullType">
+        <xs:sequence>
+            <xs:element name="ReportID" type="bml:LabelType" maxOccurs="unbounded"/>
+       </xs:sequence>
+    </xs:complexType>
+    
+    
+    <xs:complexType name="ReportTimeType">
+    	<xs:choice>
+    	    <xs:element name="SentAtTime" type="jc3iedm:Datetime18XmlType"/>
+    	    <xs:element name="AllAfterTime" type="jc3iedm:Datetime18XmlType"/>
+    	</xs:choice>
+    </xs:complexType>
+    
+</xs:schema>

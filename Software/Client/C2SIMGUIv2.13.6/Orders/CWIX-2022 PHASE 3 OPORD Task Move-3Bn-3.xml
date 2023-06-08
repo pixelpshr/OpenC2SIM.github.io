@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIM_SMX_LOX_V1.0.2.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<DomainMessageBody>
+<!-- Operations Order Phase 3 for MSG-201 CWIX 2022 -->
+<OrderBody>
+    <FromSender>00000000-0000-0001-0001-000000000000</FromSender>
+    <ToReceiver>00000000-0007-0001-0000-000000000000</ToReceiver>
+    <IssuedTime>
+        <IsoDateTime>0000-00-00T00:00:00Z</IsoDateTime>
+    </IssuedTime>
+    <OrderID>00000000-0001-0001-1000-201300000000</OrderID>
+
+    <Task><ManeuverWarfareTask>
+        <!-- Row85 Move from RP-ORANGE to FOB HAWK (10 KM)-->
+        <ActionTemporalRelationship>
+            <ActionTemporalAssociationCode>STREND</ActionTemporalAssociationCode>
+            <TemporalAssociationWithAction>00000000-0001-0001-1000-001800000000</TemporalAssociationWithAction>
+        </ActionTemporalRelationship>
+        <Location><GeodeticCoordinate>
+            <Latitude>58.745235</Latitude>
+            <Longitude>16.939855</Longitude>
+        </GeodeticCoordinate></Location>
+        <Name>Move-3Bn-3</Name>
+        <UUID>00000000-0001-0001-1000-201900000000</UUID>
+        <AffectedEntity>00000000-0001-0001-1300-000000000000</AffectedEntity>
+        <DesiredEffectCode>TaskSuccess</DesiredEffectCode>
+        <PerformingEntity>00000000-0001-0001-1300-000000000000</PerformingEntity>
+        <StartTime>
+            <RelativeTime>
+                <DelayTimeAmount>
+                    <IsoTimeDuration>P00Y00M00DT00H00M00S</IsoTimeDuration>
+                </DelayTimeAmount>
+                <EventReference>00000000-0001-0001-1000-001800000000</EventReference>
+                <TimeReferenceCode>IntervalStartTime</TimeReferenceCode>
+            </RelativeTime>
+        </StartTime>
+        <TaskActionCode>MOVE</TaskActionCode>     
+        <RuleOfEngagement><MipWeaponUseROE><WeaponROECode>
+            <WeaponRuleOfEngagementCode>ROEHold</WeaponRuleOfEngagementCode>
+        </WeaponROECode></MipWeaponUseROE></RuleOfEngagement>
+    </ManeuverWarfareTask></Task>
+ 
+</OrderBody>
+</DomainMessageBody>
+</MessageBody>
+

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 (http://www.altova.com) by Sidney Chartrand (CAE Inc.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	       xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2" 
+	       xmlns:cbml="http://www.sisostds.org/schemas/c-bml/1.0" 
+	       targetNamespace="http://www.sisostds.org/schemas/c-bml/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2" schemaLocation="../jc3iedm-simple-types/3.0.2/jc3iedm-simple-types.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 2.1
+			Source: IBML
+			IBML Status: IBML Baseline Version
+			IBML Schema Version: 2.1
+		</xs:documentation>
+	</xs:annotation>
+		
+    <!-- ssingapo: 
+    1. cbml does not have "type" in the ending of XML types. So, had to remove places where types were referenced using xmltype
+    2. Got the definitions of OrderIdentificationType, OrderCategoryCodeType from FiveWTypes and put them in this document
+    3. Changed DateTime18XmlType to DatetimeTypeFix18
+    4. LocationOfIssue changed from LocationXmlType to cbml:AtWhereType
+    5. No MeteroloigFeature in cbml so used cbml: Precipitation instead
+    6. No Control Feature defintion in cbml. Besides, ACS Mapping only has the mapping to OID(which assumes a CF in the DB)
+	   So created a new cbml CF that has a OID element    -->
+	
+    
+	<xs:include schemaLocation="../cbml-composites-light/1.0/cbml-composites-light.xsd"/>
+
+	<xs:include schemaLocation="../cbml-feature-types/1.0/cbml-feature-types.xsd"/>
+	
+	
+    <xs:element name="OperationsOrder" type="cbml:OperationsOrderType">
+		<xs:annotation>
+			<xs:documentation>An Army operations order</xs:documentation>
+		</xs:annotation>
+    </xs:element>
+	
+	<xs:element name="OperationsOrderPull" type="cbml:OperationsOrderPullType">
+		<xs:annotation>
+			<xs:documentation>An Army operations order</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+    
+	<xs:complexType name="OperationsOrderType">
+		<xs:complexContent>
+		    <xs:extension base="cbml:PlanOrderType">
+				<xs:sequence>
+					<xs:element name="OrderID" type="cbml:OrderIdentificationType"/>
+					<xs:element name="FRAGOID" type="cbml:OrderIdentificationType" minOccurs="0"/>
+					<xs:element name="CategoryCode" type="cbml:OrderCategoryCodeType"/>
+					<xs:element ref="cbml:Header"/>
+					<xs:element ref="cbml:TaskOrganization"/>
+					<xs:element ref="cbml:Situation"/>
+					<xs:element ref="cbml:Mission"/>
+					<xs:element ref="cbml:Execution"/>
+					<xs:element ref="cbml:AdministrationLogistics" minOccurs="0"/>
+					<xs:element ref="cbml:CommandAndSignal" minOccurs="0"/>
+					<xs:element ref="cbml:Overlay" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="PlanOrderType"/>
+	
+	<xs:complexType name="MapType">
+		<xs:annotation>
+			<xs:documentation>
+				Future versions will include Geographic Markup Language 
+				or other standard representations from Common Ground JCTD
+				for compatibility with GIS-based systems.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Series"/>
+			<xs:element name="Sheet"/>
+			<xs:element name="Scale"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="FriendlyForceSituationType">
+		<xs:sequence>
+			<xs:element ref="cbml:Mission"/>
+			<xs:element name="Intent" type="cbml:IntentType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="MissionType">
+		<xs:choice>
+			<xs:element name="Task" type="cbml:TaskLightType" maxOccurs="unbounded"/>
+			<xs:element name="TextMission" type="cbml:TextType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="TaskOrganizationType">
+		<xs:sequence>
+			<xs:element name="RootUnit" type="jc3iedm:OIDType"/>
+			<xs:element name="UnitAssociation" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="ParentUnit" type="jc3iedm:OIDType"/>
+						<xs:element name="ChildUnit" type="jc3iedm:OIDType"/>
+						<xs:element name="Relationship" 
+							type="jc3iedm:ObjectItemAssociationSubcategoryCode"/>
+					</xs:all>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="TaskListType">
+		<xs:sequence>
+			<xs:element name="Task" type="cbml:TaskLightType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ExecutionPhaseType">
+		<xs:sequence>
+			<xs:element name="OID" type="jc3iedm:OIDType"/>
+		    <!-- ssingapo: combined What and When -->
+		    <xs:element name="WhatWhen" type="cbml:WhatWhenAbsoluteType"/>
+			<!-- BMLReview: Mde minOccurs=0 for both  TasksToManeuverUnits and TasksToCombatSupportUnits-->
+			<xs:element ref="cbml:TasksToManeuverUnits" minOccurs="0"/>
+			<xs:element ref="cbml:TasksToCombatSupportUnits" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- ************** WhatWhen Types ********** -->
+	<xs:complexType name="WhatWhenAbsoluteType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Specifies an action along with its start and end times, as relevant.
+			</xs:documentation>
+			<xs:documentation>
+				<!--C-BML Mapping:
+					BOTransaction WhatWhenAbsoluteSpecifiedTimePush()(act_id) 
+					{                     
+					// Action;
+					PUT  ACT  
+					(act_id > act_id)
+					(cat_code = "ACTTA")
+					(name_txt= [TaskID]);
+					
+					PUT  ACT_TASK  
+					(act_task_id = act_id)
+					(actv_code = [C_BML:WhatWhenAbsolute/C_BML:WhatCode])
+					(cat_code = "ORD")
+					(timing_day_code=[C_BML:WhatWhenAbsolute/C_BML:TimingDayCode])
+					(plnd_start_dttm = [C_BML:WhatWhenAbsolute/C_BML:StartDatetime])
+					(start_qual_code = [C_BML:WhatWhenAbsolute/C_BML:StartQualifierCode])
+					(plnd_end_dttm = [C_BML:WhatWhenAbsolute/C_BML:EndDatetime])
+					(end_qual_code = [C_BML:WhatWhenAbsolute/C_BML:EndQualifierCode])
+					(timing_hour_code=[C_BML:WhatWhenAbsolute/C_BML:TimingHourCode]);
+					}// StartWhenAbsoluteSpecifiedTimePush-->
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OID" type="jc3iedm:OIDType"/>
+			<xs:element name="WhatCode" type="jc3iedm:ActionTaskActivityCode"/>						
+			<xs:element name="TimingDayCode" type="jc3iedm:ActionTaskTimingDayCode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The specific value that represents the notional
+						start of the task in terms of a day with defined operational
+						meaning.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TimingHourCode" type="jc3iedm:ActionTaskTimingHourCode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The specific value that represents the notional
+						start of the task in terms of an hour with defined operational
+						meaning.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:sequence>
+				<xs:element name="StartDatetime" type="jc3iedm:DatetimeTypeFix18">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The character string representing a point in
+							time that designates the occurrence of the planned beginning of the specific
+							task</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="StartQualifierCode" type="cbml:ActionTaskStartTimeQualifierCode">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The specific value that denotes the role of
+							starting date and time with respect to the period of effectiveness of a
+							specific task.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="EndDatetime" type="jc3iedm:DatetimeTypeFix18" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The character string representing a point in
+								time that designates the occurrence of the planned conclusion of the
+								specific task.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="EndQualifierCode" type="cbml:ActionTaskEndTimeQualifierCode" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The specific value that denotes the role of
+								ending date and time with respect to the period of effectiveness of a
+								specific task.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:element name="Mission" type="cbml:MissionType"/>
+	
+	<xs:element name="Execution">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cbml:CommandersIntent"/>
+				<xs:element name="ConceptOfOperations" type="cbml:ConceptType"/>
+				<xs:element name="ExecutionPhase" type="cbml:ExecutionPhaseType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="Situation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cbml:Weather" minOccurs="0"/>
+				<xs:element ref="cbml:EnemySituation"/>
+				<xs:element ref="cbml:FriendlyForces"/>
+				<xs:element name="AttachmentsAndDetachments" minOccurs="0"/>
+				<xs:element name="Assumptions" minOccurs="0"/>
+				<xs:element name="CommandersEvaluation" type="cbml:TextType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="TaskOrganization" type="cbml:TaskOrganizationType"/>
+	
+	<xs:element name="Header">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Classification" type="cbml:SecurityClassification"/>
+				<xs:element name="IssuingUnit" type="jc3iedm:OIDType"/>
+				<xs:element name="LocationOfIssue" type="jc3iedm:OIDType"/>
+			    <xs:element name="DateTimeOfIssue" type="jc3iedm:DatetimeTypeFix18"/>
+				<xs:element name="MessageReferenceNumber" type="jc3iedm:TextTypeVar15"/>
+				<xs:element name="References">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Map" type="cbml:MapType" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element name="Documents" type="cbml:PlanOrderType" minOccurs="0" 
+								maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TimeZone" type="jc3iedm:PlanOrderHeaderContentTimeZoneCode"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="AdministrationLogistics">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SupportConcept" type="cbml:TextType"/>
+				<xs:element name="MaterielAndServices" type="cbml:TextType"/>
+				<xs:element name="HealthServiceSupport" type="cbml:TextType"/>
+				<xs:element name="PersonnelServiceSupport" type="cbml:TextType"/>
+				<xs:element name="CivilMilitaryCooperation" type="cbml:TextType"/>
+				<xs:element name="Miscellaneous" type="cbml:TextType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+
+	<xs:complexType name="ConceptType">
+		<xs:simpleContent>
+			<xs:extension base="jc3iedm:TextTypeVar4000"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:element name="CommandersIntent" type="cbml:IntentType"/>
+	
+	<xs:element name="TasksToManeuverUnits" type="cbml:TaskListType"/>
+	
+	<xs:element name="TasksToCombatSupportUnits" type="cbml:TaskListType"/>
+	
+	<xs:element name="Weather" type="cbml:Precipitation">
+		<!-- ssingapoL: No MeterologicFeature in CBML so used cbml Precipitation instead -->
+		<!--<xs:complexType>
+			<xs:sequence>
+				<!-\- BMLReview: Need to expand the schema in the future to cover the area of operation -\->
+				<xs:element ref="cbml:MeteorologicFeature" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>-->
+	</xs:element>
+	
+	<xs:element name="EnemySituation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="EnemyOrderOfBattle" type="cbml:TaskOrganizationType" minOccurs="0"/>
+				<xs:element name="MostProbableCourseOfAction" type="cbml:TaskListType" minOccurs="0"/>
+				<xs:element name="MostDangerousCourseOfAction" type="cbml:TaskListType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="FriendlyForces">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="TwoLevelsUp" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="OneLevelUp" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="LeftFlankUnit" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="RightFlankUnit" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="ForwardUnit" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="RearUnit" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="DeepUnit" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="ReserveUnit" type="cbml:FriendlyForceSituationType" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="OverlayType">
+		<xs:sequence>
+			<xs:element name="Name"/>
+			<!-- ssingapo: Control Feature has been defined in this document since cbml does not seem to have a 
+				equivalent definition of Control Feature-->
+			<xs:element name="ControlFeature" type="cbml:ControlFeature"/>
+		    <xs:element name="Time" type="jc3iedm:DatetimeTypeFix18"/>
+			<!-- ssingapo: Don't understand the mapping for AnyUnit right now -->
+			<!--<xs:element ref="AnyUnit" />-->
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name="CommandAndSignal">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CommandControlAndCommunications" type="cbml:TextType"/>
+				<xs:element name="Command" type="cbml:TextType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="Acknowledge" type="cbml:TextType"/>
+	
+	<xs:element name="Overlay" type="cbml:OverlayType"/>
+	
+	<xs:complexType name="WhoWhatType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the list of What Actions a Who Unit type can be tasked to do
+				per doctrine as described in the Army BML Engineered Knowledge.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Unit" type="jc3iedm:OIDType"/>
+			<xs:element name="Action" type="jc3iedm:ActionTaskActivityCode" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>What is the tasked unit to do.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="WhatWhyType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the list of Why Effects with which a What can be associated
+				per doctrine as described in the Army BML Engineered Knowledge.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Action" type="jc3iedm:ActionTaskActivityCode"/>
+			<xs:element name="Effect" type="jc3iedm:ActionEffectDescriptionCode" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Effect the Action is intended to achieve.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+    
+    <!--************* Type Definition section *************-->
+    
+    <xs:complexType name="OrderIdentificationType">
+        <xs:annotation>
+            <xs:documentation>
+                Defines who issues the order, who is tasked, and uniquely identifies the order
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        	<xs:element name="OrderID" type="cbml:LabelType"/>
+        	<xs:element name="TaskerWho" type="jc3iedm:OIDType" minOccurs="0"/>
+            <xs:choice>
+            	<xs:element name="OrderIssuedWhen" type="jc3iedm:DatetimeTypeFix18" minOccurs="0"/>
+            	<xs:element name="FRAGOID" type="cbml:LabelType" minOccurs="0"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+	
+	
+    
+    <xs:simpleType name="OrderCategoryCodeType">
+        <xs:restriction base="jc3iedm:OrderCategoryCode"/>
+    </xs:simpleType>
+    
+    <xs:complexType name="IntentType">
+        <xs:simpleContent>
+            <xs:extension base="jc3iedm:TextTypeVar4000"/>
+        </xs:simpleContent>
+    </xs:complexType>
+	
+	<xs:complexType name="ControlFeature">
+		<xs:sequence>
+			<xs:element name="OID" type="jc3iedm:OIDType"/>
+		</xs:sequence>
+	</xs:complexType>
+    
+    <xs:simpleType name="TextType">
+        <xs:restriction base="jc3iedm:TextTypeVar4000"/>
+    </xs:simpleType>
+    
+    <xs:simpleType name="LabelType">
+        <xs:annotation>
+            <xs:documentation>Text to identify some object</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z0-9_. ]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+	
+	
+	<!-- OpORD Pull -->
+	<xs:complexType name="OperationsOrderPullType">
+		<xs:sequence>
+			<xs:element name="OrderID" type="cbml:LabelType"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+</xs:schema>

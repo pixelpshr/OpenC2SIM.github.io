@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by MICHELE PETRI (L-3 COMM (ILEX)) -->
+<xs:schema xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bml="http://netlab.gmu.edu/IBML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			File Version: 2.1
+			Source: IBML
+			IBML Status: IBML Baseline Version
+			IBML Schema Version: 2.1
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://netlab.gmu.edu/IBML" schemaLocation="FiveWTypes_IBMLv2.1.xsd"/>
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:element name="OperationsOrder" type="OperationsOrderType">
+		<xs:annotation>
+			<xs:documentation>A NATO operations order</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OperationsOrderType">
+		<xs:complexContent>
+			<xs:extension base="PlanOrderType">
+				<xs:sequence>
+					<xs:element name="OrderID" type="OrderIdentificationType"/>
+					<xs:element name="FRAGOID" type="OrderIdentificationType" minOccurs="0"/>
+					<xs:element name="CategoryCode" type="OrderCategoryCodeType"/>
+					<xs:element ref="Header"/>
+					<xs:element ref="TaskOrganization"/>
+					<xs:element ref="Situation"/>
+					<xs:element ref="Mission"/>
+					<xs:element ref="Execution"/>
+					<xs:element ref="AdministrationLogistics"/>
+					<xs:element ref="CommandAndSignal"/>
+					<xs:element ref="Acknowledge"/>
+					<xs:element ref="Overlay" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PlanOrderType"/>
+	<xs:complexType name="MapType">
+		<xs:annotation>
+			<xs:documentation>
+				Future versions will include Geographic Markup Language 
+				or other standard representations from Common Ground JCTD
+				for compatibility with GIS-based systems.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Series"/>
+			<xs:element name="Sheet"/>
+			<xs:element name="Scale"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FriendlyForceSituationType">
+		<xs:sequence>
+			<xs:element ref="Mission"/>
+			<xs:element name="Intent" type="IntentType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MissionType">
+		<xs:choice>
+			<xs:element name="Task" type="TaskListType" maxOccurs="unbounded"/>
+			<xs:element name="TextMission" type="TextType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="TaskOrganizationType">
+		<!--ssingapo: making all units bml:WhoType, because we have mappings only for bml:whotype -->
+		<xs:sequence>
+			<xs:element name="RootUnit" type="bml:WhoType"/>
+			<xs:element name="UnitAssociation" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="ParentUnit" type="bml:WhoType"/>
+						<xs:element name="ChildUnit" type="bml:WhoType"/>
+						<xs:element name="Relationship" type="jc3iedm:ObjectItemAssociationSubcategoryCodeXmlType"/>
+					</xs:all>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GroundTaskType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the contents of a Task in the Ground domain. Replaces
+				previous TaskType to incorporate grammar-based task elements.
+				This must be done in such as way as to maintain compatibility.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TaskeeWho" type="bml:WhoType">
+				<xs:annotation>
+					<xs:documentation>Specifies who is executing the Task.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="jc3iedm:OID">
+				<xs:annotation>
+					<xs:documentation>
+						OID must be a "SYSTEM NAME" that it is globally unique
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="What" type="bml:WhatType">
+				<xs:annotation>
+					<xs:documentation>Specifies what actions are to take place.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StartWhen" type="bml:WhenType">
+				<xs:annotation>
+					<xs:documentation>Start Time of the Mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndWhen" type="bml:WhenType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>End time of the mission</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Where" type="bml:WhereType">
+				<xs:annotation>
+					<xs:documentation>Establishes where the Task is to be executed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Affected" type="bml:AffectedType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Specifies a "who" affected by the Task (how affected is implicit to the What).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Why" type="bml:WhyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies reason for executing this Task.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Task" type="GroundTaskType" substitutionGroup="AnyTask">
+		<xs:annotation>
+			<xs:documentation>Task in Ground domain; allows existence of other domains</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="TaskListType">
+		<xs:sequence>
+			<xs:element ref="Task" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExecutionPhaseType">
+		<xs:sequence>
+			<xs:element name="Name"/>
+			<xs:element name="When" type="bml:WhenType"/>
+			<xs:element name="What" type="bml:WhatType"/>
+			<!-- BMLReview: Mde minOccurs=0 for both  TasksToManeuverUnits and TasksToCombatSupportUnits-->
+			<xs:element ref="TasksToManeuverUnits" minOccurs="0"/>
+			<xs:element ref="TasksToCombatSupportUnits" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Mission" type="MissionType"/>
+	<xs:element name="Execution">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CommandersIntent"/>
+				<xs:element name="ConceptOfOperations">
+					<xs:complexType>
+						<xs:sequence/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ExecutionPhase" type="ExecutionPhaseType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Situation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Weather" minOccurs="0"/>
+				<xs:element ref="EnemyForces"/>
+				<xs:element ref="FriendlyForces"/>
+				<xs:element name="AttachmentsAndDetachments"/>
+				<xs:element name="Assumptions" minOccurs="0"/>
+				<xs:element name="CommandersEvaluation" type="TextType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TaskOrganization" type="TaskOrganizationType"/>
+	<xs:element name="Header">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Classification" type="jc3iedm:SecurityClassificationXmlType"/>
+				<!--ssingapo; need to make this bml:whoType because we don't have mappings for unitXMLType  -->
+				<xs:element name="IssuingUnit" type="bml:WhoType"/>
+				<!--ssingapo:Don't have mappings for Location of issue so making it optional -->
+				<xs:element name="LocationOfIssue" type="jc3iedm:LocationXmlType" minOccurs="0"/>
+				<xs:element name="DateTimeOfIssue" type="jc3iedm:Datetime18XmlType"/>
+				<xs:element name="MessageReferenceNumber" type="jc3iedm:Text15XmlType"/>
+				<xs:element name="References">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Map" type="MapType" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element name="Documents" type="PlanOrderType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TimeZone" type="jc3iedm:PlanOrderHeaderContentTimeZoneCodeXmlType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AdministrationLogistics">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SupportConcept" type="TextType"/>
+				<xs:element name="MaterielAndServices" type="TextType"/>
+				<xs:element name="MedicalEvacuationAndHospitalization" type="TextType"/>
+				<xs:element name="Personnel" type="TextType"/>
+				<xs:element name="CivilMilitaryCooperation" type="TextType"/>
+				<xs:element name="Miscellaneous" type="TextType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CommandersIntent" type="IntentType"/>
+	<xs:element name="TasksToManeuverUnits" type="TaskListType"/>
+	<xs:element name="TasksToCombatSupportUnits" type="TaskListType"/>
+	<xs:element name="Weather">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- BMLReview: Need to expand the schema in the future to cover the area of operation -->
+				<xs:element ref="jc3iedm:MeteorologicFeature" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="EnemyForces">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="EnemyOrderOfBattle" type="TaskOrganizationType" minOccurs="0"/>
+				<xs:element name="MostProbableCourseOfAction" type="TaskListType" minOccurs="0"/>
+				<xs:element name="MostDangerousCourseOfAction" type="TaskListType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FriendlyForces">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="TwoLevelsUp" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="OneLevelUp" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="LeftFlankUnit" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="RightFlankUnit" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="ForwardUnit" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="RearUnit" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="DeepUnit" type="FriendlyForceSituationType" minOccurs="0"/>
+				<xs:element name="ReserveUnit" type="FriendlyForceSituationType" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="OverlayType">
+		<xs:sequence>
+			<xs:element name="Name"/>
+			<!-- No mappings for Control Feature, made Controlfeature minOccurs=0 -->
+			<xs:element ref="ControlFeature" maxOccurs="unbounded" minOccurs="0"/>
+			<xs:element name="Time" type="jc3iedm:Datetime18XmlType"/>
+			<!-- ssingapo;No mappings for AnyUnit, made it minOccurs=0 -->
+			<xs:element ref="AnyUnit" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CommandAndSignal">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CommandControlAndCommunications" type="TextType"/>
+				<xs:element name="Command" type="TextType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Acknowledge" type="TextType"/>
+	<xs:element name="Overlay" type="OverlayType"/>
+	<xs:complexType name="WhoWhatType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the list of What Actions a Who Unit type can be tasked to do
+				per doctrine as described in the Army BML Engineered Knowledge.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Unit" type="jc3iedm:UnitXmlType"/>
+			<xs:element name="Action" type="jc3iedm:ActionTaskActivityCodeXmlType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>What is the tasked unit to do.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WhatWhyType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the list of Why Effects with which a What can be associated
+				per doctrine as described in the Army BML Engineered Knowledge.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Action" type="jc3iedm:ActionTaskActivityCodeXmlType"/>
+			<xs:element name="Effect" type="jc3iedm:ActionEffectDescriptionCodeXmlType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Effect the Action is intended to achieve.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

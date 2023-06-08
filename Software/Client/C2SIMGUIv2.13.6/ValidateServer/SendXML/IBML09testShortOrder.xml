@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OrderPushIBML xmlns="http://netlab.gmu.edu/IBML" xmlns:ibml="http://netlab.gmu.edu/IBML">
+    <OrderPush>
+        <TaskersIntent>Move out</TaskersIntent>
+        <Task>
+            <GroundTask>
+                <TaskeeWho>
+                    <UnitID>1/22A INF</UnitID>
+                </TaskeeWho>
+                <What>
+                    <WhatCode>MOVE</WhatCode>
+                </What>
+                <Where>
+                    <WhereID>HOLDING POSITION</WhereID>
+                    <AtWhere>
+                        <JBMLAtWhere>
+                            <WhereLabel>ROUTE_ALONG_AXIS_CORVETTE</WhereLabel>
+                            <WhereCategory>ROUTE</WhereCategory>
+                            <WhereClass>LN</WhereClass>
+                            <WhereValue>
+                                <WhereLocation Sequence="0">
+                                    <GDC>
+                                        <Latitude>58.2</Latitude>
+                                        <Longitude>14.8</Longitude>
+                                        <ElevationAGL>0.0</ElevationAGL>
+                                    </GDC>
+                                </WhereLocation>
+                            </WhereValue>
+                            <WhereQualifier>ALONG</WhereQualifier>
+                        </JBMLAtWhere>
+                    </AtWhere>
+                </Where>
+                <StartWhen>
+                    <WhenTime>
+                        <StartTimeQualifier>AT</StartTimeQualifier>
+                        <DateTime>20091013131909.000</DateTime>
+                    </WhenTime>
+                </StartWhen>
+                <TaskID>00000000-0007-0001-2010-000000000000</TaskID>
+            </GroundTask>
+        </Task>
+        <OrderIssuedWhen>20091021120139.000</OrderIssuedWhen>
+        <OrderID>20903NOR_COA_001_PH1A</OrderID>
+        <TaskerWho>
+            <UnitID>A</UnitID>
+        </TaskerWho>
+        <ControlMeasures>
+            <ControlMeasure>
+                <WhereID>Assembly_Area</WhereID>
+                <AtWhere>
+                    <JBMLAtWhere>
+                        <WhereLabel>Assembly_Area1</WhereLabel>
+                        <WhereCategory>ASSEMBLYAREA</WhereCategory>
+                        <WhereClass>SURFAC</WhereClass>
+                        <WhereValue>
+                            <WhereLocation Sequence="0">
+                                <GDC>
+                                    <Latitude>58.46</Latitude>
+                                    <Longitude>15.05</Longitude>
+                                    <ElevationAGL>0.0</ElevationAGL>
+                                </GDC>
+                            </WhereLocation>
+                            <WhereLocation Sequence="1">
+                                <GDC>
+                                    <Latitude>58.46</Latitude>
+                                    <Longitude>15.2</Longitude>
+                                    <ElevationAGL>0.0</ElevationAGL>
+                                </GDC>
+                            </WhereLocation>
+                            <WhereLocation Sequence="2">
+                                <GDC>
+                                    <Latitude>58.55</Latitude>
+                                    <Longitude>15.2</Longitude>
+                                    <ElevationAGL>0.0</ElevationAGL>
+                                </GDC>
+                            </WhereLocation>
+                            <WhereLocation Sequence="3">
+                                <GDC>
+                                    <Latitude>58.55</Latitude>
+                                    <Longitude>15.05</Longitude>
+                                    <ElevationAGL>0.0</ElevationAGL>
+                                </GDC>
+                            </WhereLocation>
+                        </WhereValue>
+                        <WhereQualifier>IN</WhereQualifier>
+                    </JBMLAtWhere>
+                </AtWhere>
+            </ControlMeasure>
+        </ControlMeasures>
+    </OrderPush>
+</OrderPushIBML>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- this schema derived from FGAN C2LG schema v1.3.080521 by GMU C4I Center 6-12-08 -->
+<xs:schema targetNamespace="http://netlab.gmu.edu/IBML" 
+	xmlns:bml="http://netlab.gmu.edu/IBML" 
+	xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<!--xs:import namespace="http://netlab.gmu.edu/IBML/2.22c." schemaLocation="FiveWTypes.xsd"/-->
+	<!-- Not Supported -->
+	<!-- <xs:include schemaLocation="IBMLTaskReportsv0.14.xsd"/> -->
+	<!-- <xs:include schemaLocation="IBMLEventReportsv0.14.xsd"/> -->
+	<!-- <xs:include schemaLocation="IBMLUSArmyReportsv0.14.xsd"/> -->
+	<xs:include schemaLocation="IBMLStatusReports.xsd"/>
+	
+	<!-- Needed but not implemented: BML Server returns BMLREPORT instead of  BMLReport -->
+	<xs:element name="BMLReport" type="bml:BMLReportType"/>
+	<xs:complexType name="BMLReportType">
+		<xs:sequence>
+			<!-- Needed but Not Implemented: Actually this was implemented but is no longer needed. -->
+			<!--<xs:element name="Header">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MessageID" type="bml:LabelType"/>
+						<xs:element name="ReporterWho" type="bml:WhoType"/>
+						<xs:element name="AddresseeWho" type="bml:WhoType"/>
+						<xs:element name="Sendtime" type="mip:Datetime18XmlType" minOccurs="0"/>
+						<xs:element name="ReferenceOrderID" type="bml:LabelType"/>
+						<xs:element name="Precedence" type="bml:PrecedenceType" default="ROUTINE"/>
+						<xs:element name="Classification" type="mip:SecurityClassificationLevelCodeXmlType"/>
+						<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>-->
+			<xs:element name="Report" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CategoryOfReport" type="bml:CategoryOfReportType"/>
+						<xs:element name="TypeOfReport" type="bml:TypeOfReportType"/>
+						<xs:choice>
+							<!-- Not Supported -->
+							<!-- <xs:element name="TaskReport" type="TaskReportsType"/> -->
+							<!-- <xs:element name="EventReport" type="EventReportsType"/> -->
+							<xs:element name="StatusReport" type="bml:StatusReportsType"/>
+							<!-- Not Supported -->
+							<!-- <xs:element name="USArmyReport" type="USArmyReportsType"/> -->
+						</xs:choice>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="CategoryOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="StatusReport"/>
+			<!-- Not Supported -->
+			<!-- <xs:enumeration value="TaskReport"/> -->
+			<!-- <xs:enumeration value="EventReport"/> -->
+			<!-- <xs:enumeration value="USArmyReport"/> -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GeneralStatusReport"/>
+			<xs:enumeration value="TaskStatusReport"/>
+			<!-- Not Supported -->
+			<!-- <xs:enumeration value="AdvanceTaskReport"/> 
+			<xs:enumeration value="AmbushTaskReport"/>
+			<xs:enumeration value="ArrestLegalTaskReport"/>
+			<xs:enumeration value="ArrestObstructTaskReport"/>
+			<xs:enumeration value="AssembleMaterielTaskReport"/>
+			<xs:enumeration value="AssemblePersonsTaskReport"/>
+			<xs:enumeration value="AssemblePersons"/>
+			<xs:enumeration value="AssignedToTaskReport"/>
+			<xs:enumeration value="AssistTaskReport"/>
+			<xs:enumeration value="AttachedToTaskReport"/>
+			<xs:enumeration value="AttackTaskReport"/>
+			<xs:enumeration value="AvoidTaskReport"/>
+			<xs:enumeration value="BlockTaskReport"/>
+			<xs:enumeration value="BreachTaskReport"/>
+			<xs:enumeration value="BuildUpTaskReport"/>
+			<xs:enumeration value="CanalizeTaskReport"/>
+			<xs:enumeration value="CancelTaskReport"/>
+			<xs:enumeration value="CaptureTaskReport"/>
+			<xs:enumeration value="ClearLandTaskReport"/>
+			<xs:enumeration value="ClearObstacleTaskReport"/>
+			<xs:enumeration value="ConcentrateTaskReport"/>
+			<xs:enumeration value="ConductTaskReport"/>
+			<xs:enumeration value="ConfiscateTaskReportType"/>
+			<xs:enumeration value="ConsolidateTaskReport"/>
+			<xs:enumeration value="ConstituteTaskReport"/>
+			<xs:enumeration value="ContainTaskReport"/>
+			<xs:enumeration value="CounterAttackTaskReport"/>
+			<xs:enumeration value="CoverTaskReport"/>
+			<xs:enumeration value="DefeatTaskReport"/>
+			<xs:enumeration value="DefendTaskReport"/>
+			<xs:enumeration value="DeflectTaskReport"/>
+			<xs:enumeration value="DemolishTaskReport"/>
+			<xs:enumeration value="DenyTaskReport"/>
+			<xs:enumeration value="DeployTaskReport"/>
+			<xs:enumeration value="DestroyTaskReport"/>
+			<xs:enumeration value="DisengageTaskReport"/>
+			<xs:enumeration value="DisruptTaskReport"/>
+			<xs:enumeration value="DistributeTaskReport"/>
+			<xs:enumeration value="EscortTaskReport"/>
+			<xs:enumeration value="EvacuateTaskReport"/>
+			<xs:enumeration value="ExploitTaskReport"/>
+			<xs:enumeration value="FixTaskReport"/>
+			<xs:enumeration value="GuardTaskReport"/>
+			<xs:enumeration value="HarassTaskReport"/>
+			<xs:enumeration value="HideTaskReport"/>
+			<xs:enumeration value="HoldDefensiveTaskReport"/>
+			<xs:enumeration value="HoldOffensiveTaskReport"/>
+			<xs:enumeration value="IdentifyTaskReport"/>
+			<xs:enumeration value="IlluminateTaskReport"/>
+			<xs:enumeration value="InfiltrateTaskReport"/>
+			<xs:enumeration value="IsolateTaskReport"/>
+			<xs:enumeration value="MarchTaskReport"/>
+			<xs:enumeration value="MopUpTaskReport"/>
+			<xs:enumeration value="MoveTaskReport"/>
+			<xs:enumeration value="ObserveTaskReport"/>
+			<xs:enumeration value="OccupyTaskReport"/>
+			<xs:enumeration value="PatrolTaskReport"/>
+			<xs:enumeration value="PenetrateTaskReport"/>
+			<xs:enumeration value="PlanTaskReport"/>
+			<xs:enumeration value="ProcureTaskReport"/>
+			<xs:enumeration value="PursueTaskReport"/>
+			<xs:enumeration value="ReconnaissanceTaskReport"/>
+			<xs:enumeration value="RecoverTaskReport"/>
+			<xs:enumeration value="ReinforceTaskReport"/>
+			<xs:enumeration value="ReliefInPlaceTaskReport"/>
+			<xs:enumeration value="RelieveTaskReport"/>
+			<xs:enumeration value="RestTaskReport"/>
+			<xs:enumeration value="ScreenTaskReport"/>
+			<xs:enumeration value="SecureTaskReport"/>
+			<xs:enumeration value="SeizeTaskReport"/>
+			<xs:enumeration value="SetUpTaskReport"/>
+			<xs:enumeration value="SupportTaskReport"/>
+			<xs:enumeration value="WithdrawTaskReport"/>
+			<xs:enumeration value="ProcureTaskReport"/>
+			<xs:enumeration value="AccidentTrafficEventReport"/>
+			<xs:enumeration value="MINOBREP"/>-->
+			<!-- Not Needed for NMSG-048 2009 Experiments -->
+			<!-- <xs:enumeration value="PositionStatusReport"/> 
+			<xs:enumeration value="PersonnelStatusReport"/>
+			<xs:enumeration value="MaterielStatusReport"/>
+			<xs:enumeration value="FacilityStatusReport"/>
+			 -->
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

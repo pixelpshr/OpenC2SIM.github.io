@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	       xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2" 
+	       xmlns:cbml="http://www.sisostds.org/schemas/c-bml/1.0" 
+	       targetNamespace="http://www.sisostds.org/schemas/c-bml/1.0" 
+	       elementFormDefault="qualified" 
+	       attributeFormDefault="unqualified">
+    <xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2" 
+    	schemaLocation="../jc3iedm-simple-types/3.0.2/jc3iedm-simple-types.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			IBML-Reports by JMP 5Aug2013
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:include schemaLocation="../cbml-organisation-types/1.0/cbml-organisation-types.xsd"/>
+	
+	<xs:include schemaLocation="../cbml-composites-light/1.0/cbml-composites-light.xsd"/>
+	
+	<xs:include schemaLocation="../cbml-composites/1.0/cbml-composites.xsd"/>
+	
+	<xs:include schemaLocation="../cbml-entity-types/1.0/cbml-entity-types.xsd"/>
+	
+	<xs:include schemaLocation="MIPBaseTypes.xsd"/>
+	
+	<xs:element name="CBMLReport">
+		<xs:annotation>
+			<xs:documentation>a military Ground report</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Report" type="cbml:ReportType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="ReportPullType">
+		<xs:sequence>
+			<xs:element name="ReportID" type="jc3iedm:OIDType"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ReportType">
+		<xs:sequence>
+			<xs:element name="CategoryOfReport" type="cbml:CategoryOfReportType"/>
+			<xs:element name="TypeOfReport" type="cbml:TypeOfReportType"/>
+			<xs:element name="ReportHeader" type="cbml:AlternateReportHeaderLightType"/>
+			<xs:choice>
+				<xs:element name="StatusReport" type="cbml:StatusReportsType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="CategoryOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="StatusReport"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="TypeOfReportType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GeneralStatusReport"/>
+			<xs:enumeration value="TaskStatusReport"/>
+			<xs:enumeration value="ControlFeatureReport"/>
+			<xs:enumeration value="FacilityStatusReport"/>
+			<xs:enumeration value="WhoHoldingStatusReport"/>
+			<xs:enumeration value="ObserveTaskReport"/>
+			<xs:enumeration value="SpotReport"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="AlternateReportHeaderLightType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Work-around for ReporterWhoType
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ReporterWho" type="cbml:AlternateReporterWhoType"/>
+			<xs:element name="ReportingData" type="cbml:ReportingData"/>
+			<xs:choice>
+				<xs:element name="AbsoluteReportedWhen" type="cbml:AbsoluteReportedWhenLightType"/>
+				<xs:element name="RelativeReportedWhen" type="cbml:RelativeReportedWhenLightType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AlternateReporterWhoType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Work-around for OrganizationRef in ReporterWhoType
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OID" type="jc3iedm:OIDType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="VelocityVectorType">
+		<xs:annotation>
+			<xs:documentation>Defines the magnitude and bearing of a velocity in kilometers
+				per hour and degrees clockwise from North in the range 0-360
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Magnitude" type="xs:float"/>
+			<xs:element name="BearingDegrees" type="xs:float"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ObservedWhoType">
+		<xs:annotation>
+			<xs:documentation>Specifies a Who that is observed, either by the unit ID (corresponds to unit's name, if unit is known), or by a unit description if unit is partially known.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="UnitID" type="jc3iedm:OIDType"></xs:element>
+			<xs:element name="UnitDescription">
+				<xs:annotation>
+					<xs:documentation>A unit description build with main parameters of JC3IEDM class 'UnitType', and corresponding dictionaries.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Hostility" type="cbml:ObjectItemHostilityStatusCodeXmlType"/>
+						<xs:element name="Size" type="cbml:UnitTypeSizeCodeXmlType"/>
+						<!-- <xs:element name="Category" type="mip:UnitTypeCategoryCodeXmlType"/> -->
+						<xs:element name="ArmCategory" type="cbml:UnitTypeArmCategoryCodeXmlType"/>
+						<!-- <xs:element name="ArmSpecialisation" type="jc3iedm:UnitTypeArmSpecialisationCodeXmlType" minOccurs="0"/> -->
+						<!-- <xs:element name="SupplementarySpecialisation" type="mip:UnitTypeSupplementarySpecialisationCodeXmlType" minOccurs="0"/> -->
+						<!-- <xs:element name="GeneneralMobility" type="mip:UnitTypeGeneralMobilityCodeXmlType" minOccurs="0"/> -->
+						<xs:element name="Qualifier" type="cbml:UnitTypeQualifierCodeXmlType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="CredibilityType">
+		<xs:annotation>
+			<xs:documentation>Defines Reporter's confidence in reported information</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Source" type="cbml:ReportingDataSourceTypeCodeXmlType"/>
+			<xs:element name="Reliability" type="cbml:ReportingDataReliabilityCodeXmlType"/>
+			<xs:element name="Certainty" type="cbml:ReportingDataCredibilityCodeXmlType"/>
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="StatusReportsType">
+		<xs:annotation>
+			<xs:documentation>
+				The ReportID must be unique for every instance of
+				report from a given ReporterWho.	
+  			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="ObserveTaskReport" type="cbml:SpotReportType"/>
+			<xs:element name="SpotReport" type="cbml:SpotReportType"/>
+      		<xs:element name="GeneralStatusReport" type="cbml:GeneralStatusReportType"/>
+      		<xs:element name="ControlFeatureReport" type="cbml:ControlFeatureReportType"/>
+      		<xs:element name="FacilityStatusReport" type="cbml:FacilityStatusReportType"/>
+      		<xs:element name="WhoHoldingStatusReport" type="cbml:WhoHoldingStatusReportType"/>
+      		<xs:element name="TaskStatusReport" type="cbml:TaskStatusReportType"/>
+      	</xs:choice>
+    </xs:complexType>
+	
+	<xs:complexType name="SpotReportType">
+		<xs:sequence>
+			<xs:element name="Hostility" type="jc3iedm:ObjectItemHostilityStatusCode" minOccurs="0"/>
+			<xs:element name="Executer" type="jc3iedm:OIDType" minOccurs="0"/>
+			<xs:element name="AtWhere" type="cbml:PointLightType" minOccurs="0"/>
+			<xs:element name="Context" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+			<xs:element name="Parameters">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Size" type="xs:string" minOccurs="0"/>
+						<xs:element name="Activity" type="xs:string" minOccurs="0"/>
+						<xs:element name="Location" type="cbml:PointLightType" minOccurs="0"/>
+						<xs:element name="Unit" type="jc3iedm:OIDType" minOccurs="0"/>
+						<xs:element name="Equipment" type="jc3iedm:VehicleTypeCategoryCode" minOccurs="0"/>
+						<xs:element name="SendersAssesment" type="xs:string" minOccurs="0"/>
+						<xs:element name="Narrative" type="xs:string" minOccurs="0"/>
+						<xs:element name="Authentication" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+      		
+    <xs:complexType name="GeneralStatusReportType">
+       	<xs:annotation>
+         	<xs:documentation>
+           		GeneralStatusReport is for reporting the operational
+           		status of an organization.
+         	</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        	<xs:element name="ReporterWho" type="cbml:AlternateReporterWhoType"/>
+            <xs:element name="Context" type="jc3iedm:OIDType" minOccurs="0"/>
+            <xs:element name="Hostility" type="cbml:ObjectItemHostilityStatusCodeXmlType"/>
+            <xs:element name="Executer" type="cbml:ObservedWhoType"/>
+            <xs:element name="OpStatus" type="cbml:OrganisationStatusOperationalStatusCodeXmlType"/>
+            <xs:element name="WhereLocation" type="cbml:AtWhereLightType"/>
+            <xs:element name="VelocityVector" type="cbml:VelocityVectorType" minOccurs="0"/>
+        	<xs:element name="When" type="jc3iedm:DatetimeTypeFix18"/>
+            <xs:element name="ReportID" type="jc3iedm:OIDType"/>
+            <xs:element name="Credibility" type="cbml:CredibilityType"/>
+        </xs:sequence>
+    </xs:complexType>
+			
+    <xs:complexType name="ControlFeatureReportType">
+        <xs:annotation>
+         	<xs:documentation>
+            	ControlFeatureReport is for reporting on a control feature 
+            	(forward line of troops...) and its status (operational, not operational...).
+          	</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        	<xs:element name="ReporterWho" type="cbml:AlternateReporterWhoType"/>
+            <xs:element name="Context" type="jc3iedm:OIDType" minOccurs="0"/>
+           	<xs:element name="Hostility" type="cbml:ObjectItemHostilityStatusCodeXmlType"/>
+          	<xs:element name="ControlFeatureID" type="jc3iedm:OIDType"/>
+            <xs:element name="TypeCategoryCode" type="cbml:ControlFeatureTypeCategoryCodeXmlType"/>
+            <xs:element name="OpStatus" type="cbml:OrganisationStatusOperationalStatusCodeXmlType"/>
+            <xs:element name="WhereLocation" type="cbml:AtWhereLightType"/>
+            <xs:element name="WhoRef" type="cbml:WhoType" minOccurs="0" maxOccurs="unbounded">
+             	<xs:annotation>
+                	<xs:documentation xml:lang="en">
+               			References to units linked to this control feature.
+               		</xs:documentation>
+             	</xs:annotation>
+            </xs:element>
+          	<xs:element name="When" type="jc3iedm:ActionTaskTimingDayCode"/>
+          	<xs:element name="ReportID" type="jc3iedm:OIDType"/>
+            <xs:element name="Credibility" type="cbml:CredibilityType"/>
+        </xs:sequence>
+    </xs:complexType>
+			
+    <xs:complexType name="FacilityStatusReportType">
+        <xs:annotation>
+         	<xs:documentation>
+           		FacilityReport is for reporting on a facility (hospitals, 
+           		ammunition depots, radar site, etc.) and its status (marked, damaged, etc.)
+          	</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        	<xs:element name="ReporterWho" type="cbml:AlternateReporterWhoType"/>
+          	<xs:element name="Context" type="jc3iedm:OIDType" minOccurs="0"/>
+            <xs:element name="Hostility" type="cbml:ObjectItemHostilityStatusCodeXmlType"/>
+          	<xs:element name="FacilityID" type="jc3iedm:OIDType"/>
+            <xs:element name="TypeCategoryCode" type="cbml:FacilityTypeCategoryCodeXmlType"/>
+            <xs:element name="OpStatus" type="cbml:FacilityStatusOperationalStatusQualifierCodeXmlType"/>
+            <xs:element name="WhereLocation" type="cbml:AtWhereLightType">
+	           	<xs:annotation>
+	                <xs:documentation>
+	                    Facility location can be defined by a simple point (gravity center), 
+	                    a surface (with its outer line), or a line for 'lineic' facility 
+	                    (eg.: road, rail, fence)
+	                </xs:documentation>
+	            </xs:annotation>
+            </xs:element>
+          	<xs:element name="ResponsibleWho" type="jc3iedm:OIDType" minOccurs="0" maxOccurs="unbounded">
+             	<xs:annotation>
+                	<xs:documentation xml:lang="en">
+                		References to units responsible of this facility.
+                	</xs:documentation>
+              	</xs:annotation>
+            </xs:element>
+          	<xs:element name="When" type="jc3iedm:ActionTaskTimingDayCode"/>
+          	<xs:element name="ReportID" type="jc3iedm:OIDType"/>
+          	<xs:element name="Credibility" type="cbml:CredibilityType"/>
+        </xs:sequence>
+    </xs:complexType>
+			
+    <xs:complexType name="WhoHoldingStatusReportType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Specifies a report describing the holding of an entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ReporterWho" type="cbml:AlternateReporterWhoType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Who is reporting.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="When" type="jc3iedm:ActionTaskTimingDayCode"/>
+			<xs:element name="WhoRef" type="cbml:WhoType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A reference on who is being reported on.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Holding" type="cbml:HoldingType"/>
+			<xs:element name="Context" type="jc3iedm:OIDType" minOccurs="0"/>
+			<xs:element name="ReportID" type="jc3iedm:OIDType"/>
+		</xs:sequence>
+	</xs:complexType>
+			
+	<xs:complexType name="TaskStatusReportType">
+		<xs:annotation>
+			<xs:documentation>
+				TaskStatusReport is about the status of the progress of a task.
+  			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ReportID" type="jc3iedm:OIDType"/>
+			<xs:element name="When" type="jc3iedm:ActionTaskTimingDayCode"/>
+			<xs:element name="TaskID" type="jc3iedm:OIDType"/>
+			<xs:element name="Executer" type="cbml:ObservedWhoType"/>
+			<xs:element name="TaskStatus" type="cbml:ActionTaskStatusProgressCodeXmlType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="HoldingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The quantity of each specific Equipment/Consumable defined by a Nato Stock Number that is held by, installed in, or included with a specific OBJECT-ITEM.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NSN_Code" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The 13 digits of NATO Stock Number of the equipment or consumable that the report deals with.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NSN_Name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The human readable name of the NSN code.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsEquipment" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optionnaly define the category of the item (equipment or consumbale). Maybe redundant with the first 4 digit of the NSN_Code, but this attribute is easier to interprate.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperationalCount" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The integer value representing the number of specific OBJECT-TYPEs a specific OBJECT-ITEM has available for operations. For simulation purpose, it's mapped to the quantity of available and operational Equipment/Consumable (without reserve) at the instant of the report in the unit.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the total quantity, to include reserves, of specific OBJECT-TYPEs physically held by a specific OBJECT-ITEM. The unit of measure is derived from the OBJECT-TYPE specification.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OnHandQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the quantity of specific OBJECT-TYPEs physically held on-hand, not including reserves, by a specific OBJECT-ITEM. For simulation purpose, it's mapped to the quantity of available and [operational + damaged] Equipment (without reserve) at the instant of the report in the unit. If simulation doesn't provide this attribute, it means that it doesn't manage damaged equipments. It’s not used for consumables.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredTotalQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the total quantity of specific OBJECT-TYPEs required to be held on-hand and in reserve by a specific OBJECT-ITEM to meet the NATO assigned task in accordance with Force Standards or established mission requirements.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredOnHandQuantity" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The numeric value representing the quantity of specific OBJECT-TYPEs, not including reserves, required to be held on-hand by a specific OBJECT-ITEM in accordance with Force Standards or established mission requirements. For simulation purpose, it's mapped to the theorical quantity of Equipment/Consumable (without reserve) in the unit.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredCalculationMethodCode" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The specific value that represents the required stocks calculation method used for the count of OBJECT-TYPEs in a specific HOLDING.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

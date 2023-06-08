@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c2s:MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../../../Users/mpullen/Documents/C2SIMGUIv2.9.2/Schema/C2SIM/C2SIM_SMX_LOX_v1.0.0.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<!-- NPS-VRForces order template for FMN demo -->
+<c2s:DomainMessageBody>
+<c2s:OrderBody>
+    <c2s:FromSender>00000000-0000-0001-0001-000000000000</c2s:FromSender>
+    <c2s:ToReceiver>00000000-0007-0001-0000-000000000000</c2s:ToReceiver>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:DesiredEffectCode>IDNT</c2s:DesiredEffectCode>
+        <c2s:TaskActionCode>BYPASS</c2s:TaskActionCode>
+        <c2s:StartTime>
+            <c2s:SimulationTime><c2s:DelayTimeAmount>
+                <c2s:IsoTimeDuration>P00Y00M00DT00H00M10S</c2s:IsoTimeDuration>
+            </c2s:DelayTimeAmount></c2s:SimulationTime>
+        </c2s:StartTime>
+        <c2s:AffectedEntity>00000000-0007-0001-0103-000000000000</c2s:AffectedEntity>       
+        <c2s:PerformingEntity>00000000-0007-0001-0103-000000000000</c2s:PerformingEntity>
+        <c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.694</c2s:Latitude>
+            <c2s:Longitude>16.101</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Location>
+        <c2s:UUID>00000000-0007-0001-0006-000000000000</c2s:UUID>
+        <c2s:Name>NPS-VRF5</c2s:Name>
+        <c2s:RuleOfEngagement><c2s:MipWeaponUseROE><c2s:WeaponROECode>
+             <c2s:WeaponRuleOfEngagementCode>ROETight</c2s:WeaponRuleOfEngagementCode>
+        </c2s:WeaponROECode></c2s:MipWeaponUseROE></c2s:RuleOfEngagement>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:DesiredEffectCode>IDNT</c2s:DesiredEffectCode>
+        <c2s:TaskActionCode>ATTACK</c2s:TaskActionCode>
+        <c2s:StartTime>
+            <c2s:RelativeTime>
+                <c2s:DelayTimeAmount>
+                    <c2s:IsoTimeDuration>P00Y00M00DT00H00M10S</c2s:IsoTimeDuration>
+                </c2s:DelayTimeAmount>
+                <c2s:TimeReferenceCode>IntervalStartTime</c2s:TimeReferenceCode>
+            </c2s:RelativeTime>
+        </c2s:StartTime>
+        <c2s:AffectedEntity>00000000-0007-0002-1000-000000000000</c2s:AffectedEntity>       
+        <c2s:PerformingEntity>00000000-0007-0001-0103-000000000000</c2s:PerformingEntity>
+        <c2s:ActionTemporalRelationship>
+            <c2s:ActionTemporalAssociationCode>STREND</c2s:ActionTemporalAssociationCode>
+            <c2s:TemporalAssociationWithAction>00000000-0007-0001-0006-000000000000</c2s:TemporalAssociationWithAction>
+        </c2s:ActionTemporalRelationship>
+        <c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.744</c2s:Latitude>
+            <c2s:Longitude>16.175</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Location>
+        <c2s:UUID>00000000-0007-0001-0007-000000000000</c2s:UUID>
+        <c2s:Name>NPS-VRF6</c2s:Name>
+        <c2s:RuleOfEngagement><c2s:MipWeaponUseROE><c2s:WeaponROECode>
+             <c2s:WeaponRuleOfEngagementCode>ROEFree</c2s:WeaponRuleOfEngagementCode>
+        </c2s:WeaponROECode></c2s:MipWeaponUseROE></c2s:RuleOfEngagement>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:DesiredEffectCode>NKN</c2s:DesiredEffectCode>
+        <c2s:TaskActionCode>ATTACK</c2s:TaskActionCode>
+        <c2s:StartTime><c2s:DateTime>
+            <c2s:Name>0.00</c2s:Name>
+            <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+        </c2s:DateTime></c2s:StartTime>
+        <c2s:AffectedEntity>00000000-0007-0001-0050-000000000000</c2s:AffectedEntity>       
+        <c2s:PerformingEntity>00000000-0007-0001-0050-000000000000</c2s:PerformingEntity>
+        <c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.644655</c2s:Latitude>
+            <c2s:Longitude>16.427088</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Location>
+	<c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.605881</c2s:Latitude>
+            <c2s:Longitude>16.236114</c2s:Longitude>
+            <c2s:AltitudeAGL>20</c2s:AltitudeAGL>
+        </c2s:GeodeticCoordinate></c2s:Location>
+        <c2s:UUID>00000000-0007-0001-0001-000000000000</c2s:UUID>
+        <c2s:Name>NPS-VRF1</c2s:Name>
+        <c2s:RuleOfEngagement><c2s:MipWeaponUseROE><c2s:WeaponROECode>
+             <c2s:WeaponRuleOfEngagementCode>ROEFree</c2s:WeaponRuleOfEngagementCode>
+        </c2s:WeaponROECode></c2s:MipWeaponUseROE></c2s:RuleOfEngagement>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+    <c2s:IssuedTime>
+        <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+    </c2s:IssuedTime>
+    <c2s:OrderID>00000000-0007-0000-0006-000000000000</c2s:OrderID>
+</c2s:OrderBody>
+</c2s:DomainMessageBody>
+</c2s:MessageBody>

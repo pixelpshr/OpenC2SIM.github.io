@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- this schema derived from FGAN C2LG schema v1.3.080521 by GMU C4I Center 6-11-08 -->
+<xs:schema xmlns:bml="http://netlab.gmu.edu/IBML" xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-BaseTypes.xsd"/>
+	<xs:import namespace="http://netlab.gmu.edu/IBML" schemaLocation="FiveWTypes.xsd"/>
+	<xs:include schemaLocation="IBMLReports.xsd"/>
+	<!-- Needed but not implemented: BML Server returns MultipleReports instead of  MultipleReportPull -->
+	<xs:element name="MultipleReportPull">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- Needed but not implemented: BML Server returns BMLREPORT instead of  BMLReport -->
+				<xs:element name="BMLReport" type="BMLReportType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="IDPullStatusReport">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- Needed but Not Implemented -->
+				<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+				<xs:element name="ReportTime" type="ReportTimeType"/>
+				<xs:element name="TypeOfReport" type="TypeOfReportType"/>
+				<!-- Needed but not implemented -->
+				<xs:element name="IDRange">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Min"/>
+							<xs:element name="Max"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ReportIDs"/>
+		<xs:complexType name="ReportIDList">
+			<xs:sequence>
+					<xs:element name="ReportID" type="bml:LabelType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	
+	<xs:element name="ReportPull" type="ReportPullType"/>
+	<xs:complexType name="ReportPullType">
+		<xs:sequence>
+			<xs:element name="PullPositionStatusReportID" type="bml:LabelType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PullGeneralStatusReportID" type="bml:LabelType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PullTaskStatusReportID" type="bml:LabelType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PullPersonnelStatusReportID" type="bml:LabelType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PullMaterielStatusReportID" type="bml:LabelType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PullFacilityStatusReportID" type="bml:LabelType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="DeleteReports" type="DeleteReportsType"/>
+	<xs:complexType name="DeleteReportsType">
+		<xs:sequence>
+			<xs:element name="DeleteReportID" type="bml:LabelType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReportTimeType">
+		<xs:choice>
+			<!-- Needed but Not Implemented -->
+			<xs:element name="SentAtTime" type="mip:Datetime18XmlType"/>
+			<!-- Needed but Not Implemented -->
+			<xs:element name="AllAfterTime" type="mip:Datetime18XmlType"/>
+		</xs:choice>
+	</xs:complexType>
+	<!-- ***************************************************** 
+		This section is typically in a WSDL:
+		Push a Report: String sbmlProcess(BMLReport input, "IBMLReport")
+		Pull a Report by ID:  MultipleReportPull sbmlProcess(ReportPull input, "IBMLReport")
+		Pull a Report Type by ID and Time range: ReportIDs sbmlProcess(IDPullStatusReport input, "IBMLReport") 
+	 ***************************************************** -->
+</xs:schema>

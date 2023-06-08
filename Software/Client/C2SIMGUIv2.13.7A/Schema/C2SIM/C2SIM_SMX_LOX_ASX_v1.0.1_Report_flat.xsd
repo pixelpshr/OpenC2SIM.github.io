@@ -1,0 +1,2631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+	targetNamespace="http://www.sisostds.org/schemas/C2SIM/1.1">
+
+	<!-- repackaging of C2SIM_SMX_LOX_v1.0.1.xsd from C2SIM Core/SMX/LOX Ontology -->
+	<!-- replacing ref and group by an equivalent direct use of the element names -->
+        <!-- elements from v9 Autonomous Systems Extension (ASX) have been retained -->
+
+	<xs:complexType name="MessageBodyType">
+		<xs:choice>
+			<xs:element ref="DomainMessageBody"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="MessageBody" type="MessageBodyType"/>
+
+	<xs:complexType name="DomainMessageBodyType">
+		<xs:choice>
+			<xs:element name="ReportBody" type="ReportBodyType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="DomainMessageBody" type="DomainMessageBodyType"/>
+
+	<xs:simpleType name="UUIDBaseType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="FromSenderType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="ToReceiverType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="IsoDateTimeBaseType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{4}-[0-9]{2}-[0-9]{2}[T]{1}[0-9]{2}:[0-9]{2}:[0-9]{2}[Z]{1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IsoDateTimeType">
+		<xs:restriction base="IsoDateTimeBaseType"/>
+	</xs:simpleType>
+	<xs:element name="IsoDateTime" type="IsoDateTimeType"/>
+	<xs:complexType name="DateTimeType">
+		<xs:annotation>
+			<xs:documentation>A date and time in ISO 8601:2000 DateTime Group format yyyy-mm-ddThh:mm:ssZ e.g. 1998-05-12T14:15:00Z. From MSDL simple types.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="IsoDateTime" type="IsoDateTimeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="TimeReferenceCodeType">
+		<xs:annotation>
+			<xs:documentation>Indicates whether a relative time is referenced to the start or the end of an interval time.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="IntervalEndTime"/>
+			<xs:enumeration value="IntervalStartTime"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="TimeReferenceCode" type="TimeReferenceCodeType"/>
+
+	<xs:simpleType name="EventReferenceType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:element name="EventReference" type="EventReferenceType"/>
+
+	<xs:complexType name="RelativeTimeType">
+		<xs:annotation>
+			<xs:documentation>Specifies an absolute time relative to the start or end time of an event.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="DelayTimeAmount" type="DurationType" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="TimeReferenceCode" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="EventReference" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="RelativeTime" type="RelativeTimeType"/>
+
+	<xs:complexType name="SimulationTimeType">
+		<xs:annotation>
+			<xs:documentation>A time measured as a time duration since the time instant of the scenario start.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="DelayTimeAmount" type="DurationType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SimulationTime" type="SimulationTimeType"/>
+
+	<xs:complexType name="TimeInstantType">
+		<xs:choice>
+			<xs:element name="DateTime" type="DateTimeType" />
+			<xs:element ref="RelativeTime"/>
+			<xs:element ref="SimulationTime"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="DetectionTypeCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Detection"/>
+			<xs:enumeration value="Discovery"/>
+			<xs:enumeration value="Identification"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="DetectionTypeCode" type="DetectionTypeCodeType"/>
+
+	<xs:complexType name="LevelOfAutonomyType">
+		<xs:sequence>
+			<xs:element name="LevelOfAutonomyCode" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LevelOfAutonomy" type="LevelOfAutonomyType"/>
+	<xs:simpleType name="LevelOfAutonomyCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="LoA-0"/>
+			<xs:enumeration value="LoA-1"/>
+			<xs:enumeration value="LoA-2"/>
+			<xs:enumeration value="LoA-3"/>
+			<xs:enumeration value="LoA-4"/>
+			<xs:enumeration value="LoA-5"/>
+			<xs:enumeration value="LoA-6"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TacticalAttitudeCodeType">
+		<xs:annotation>
+			<xs:documentation>The specific operational attitude to be adopted for a mission</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AWARE"/>
+			<xs:enumeration value="CARELESS"/>
+			<xs:enumeration value="STEALTH"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="BatteryPercentageType">
+		<xs:restriction base="percentageType"/>
+	</xs:simpleType>
+	<xs:element name="BatteryPercentage" type="BatteryPercentageType"/>
+
+	<xs:simpleType name="LinkPercentageType">
+		<xs:restriction base="percentageType"/>
+	</xs:simpleType>
+	<xs:element name="LinkPercentage" type="LinkPercentageType"/>
+
+	<xs:simpleType name="CurrentTaskType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:element name="CurrentTask" type="CurrentTaskType"/>
+
+	<xs:simpleType name="SuggestedTaskType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:element name="SuggestedTask" type="SuggestedTaskType"/>
+
+	<xs:simpleType name="OrderIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="RequestingEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="ReportingEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:complexType name="OperationalStatusType">
+		<xs:annotation>
+			<xs:documentation>An enumeration indicating degree of partial capability.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OperationalStatusCode" type="OperationalStatusCodeType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="percentageType">
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:maxInclusive value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="StrengthPercentageType">
+		<xs:restriction base="percentageType"/>
+	</xs:simpleType>
+
+	<xs:complexType name="StrengthType">
+		<xs:annotation>
+			<xs:documentation>Representation of the strength of an entity expressed as a percentage of some starting value.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StrengthPercentage" type="StrengthPercentageType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="SubjectEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="ConfidenceLevelType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="ReportIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="UncertaintyIntervalType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:complexType name="ActivityObservationType">
+		<xs:annotation>
+			<xs:documentation>An observation of the activity of the subject.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ActorReference" type="ActorReferenceType" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="ConfidenceLevel" type="ConfidenceLevelType" minOccurs="1"
+				maxOccurs="1"/>
+			<xs:element name="UncertaintyInterval" type="UncertaintyIntervalType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="HealthObservationType">
+		<xs:annotation>
+			<xs:documentation>An observation of the health state of a subject; for example operational status or resource count.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ActorReference" type="ActorReferenceType" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="ConfidenceLevel" type="ConfidenceLevelType" minOccurs="1"
+				maxOccurs="1"/>
+			<xs:element name="UncertaintyInterval" type="UncertaintyIntervalType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="LocationObservationType">
+		<xs:annotation>
+			<xs:documentation>An observation of the location of a subject.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+                        <xs:element name="ActorReference" type="ActorReferenceType" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="ConfidenceLevel" type="ConfidenceLevelType" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="UncertaintyInterval" type="UncertaintyIntervalType" minOccurs="0"
+				maxOccurs="0"/>
+			<xs:element name="Location" type="LocationType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="NameObservationType">
+		<xs:annotation>
+			<xs:documentation>An observation of the unit name of the subject.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ActorReference" type="ActorReferenceType" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="ConfidenceLevel" type="ConfidenceLevelType" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="UncertaintyInterval" type="UncertaintyIntervalType" minOccurs="0"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="SIDCStringType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="EntityTypeStringType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:complexType name="APP6-SIDCType">
+		<xs:sequence>
+			<xs:element name="EntityTypeString" type="EntityTypeStringType" minOccurs="1"
+				maxOccurs="1"/>
+			<xs:element name="SIDCString" type="SIDCStringType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="DISCountryCodeType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="DISDomainCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DomainAir"/>
+			<xs:enumeration value="DomainLand"/>
+			<xs:enumeration value="DomainOther"/>
+			<xs:enumeration value="DomainSpace"/>
+			<xs:enumeration value="DomainSubsurface"/>
+			<xs:enumeration value="DomainSurface"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="DISKindCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="KindCulturalFeature"/>
+			<xs:enumeration value="KindEnvironmental"/>
+			<xs:enumeration value="KindExpendable"/>
+			<xs:enumeration value="KindLifeForm"/>
+			<xs:enumeration value="KindMunition"/>
+			<xs:enumeration value="KindOther"/>
+			<xs:enumeration value="KindPlatform"/>
+			<xs:enumeration value="KindRadio"/>
+			<xs:enumeration value="KindSensorEmitter"/>
+			<xs:enumeration value="KindSupply"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="DISCategoryType">
+		<xs:annotation>
+			<xs:documentation>Values for this property to be taken from the DIS standard, SISO-REF-010-2015</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="DISExtraType">
+		<xs:annotation>
+			<xs:documentation>Values for this property to be taken from the DIS standard, SISO-REF-010-2015</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="DISSpecificType">
+		<xs:annotation>
+			<xs:documentation>Values for this property to be taken from the DIS standard, SISO-REF-010-2015</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="DISSubCategoryType">
+		<xs:annotation>
+			<xs:documentation>Values for this property to be taken from the DIS standard, SISO-REF-010-2015</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:complexType name="DISEntityTypeType">
+		<xs:sequence>
+			<xs:element name="EntityTypeString" type="EntityTypeStringType" minOccurs="1"
+				maxOccurs="1"/>
+			<xs:element name="DISCountryCode" type="DISCountryCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISDomainCode" type="DISDomainCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISKindCode" type="DISKindCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISCategory" type="DISCategoryType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISExtra" type="DISExtraType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISSpecific" type="DISSpecificType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DISSubCategory" type="DISSubCategoryType" minOccurs="1" maxOccurs="1"
+			/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EntityTypeType">
+		<xs:choice>
+			<xs:element name="APP6-SIDC" type="APP6-SIDCType"/>
+			<xs:element name="DISEntityType" type="DISEntityTypeType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="SubjectTypeObservationType">
+		<xs:annotation>
+			<xs:documentation>An observation of the type of the subject.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ConfidenceLevel" type="ConfidenceLevelType" minOccurs="1"
+				maxOccurs="1"/>
+			<xs:element name="UncertaintyInterval" type="UncertaintyIntervalType" minOccurs="1"
+				maxOccurs="1"/>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ObservationType">
+		<xs:choice>
+			<xs:element name="ActivityObservation" type="ActivityObservationType"/>
+			<xs:element name="HealthObservation" type="HealthObservationType"/>
+			<xs:element name="LocationObservation" type="LocationObservationType"/>
+			<xs:element name="NameObservation" type="NameObservationType"/>
+			<xs:element name="SubjectTypeObservation"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="Observation" type="ObservationType"/>
+	
+	<xs:simpleType name="QuantityType">
+		<xs:annotation>
+			<xs:documentation>Instances of the class have data identifying a numeric value associated with the quantity for that instance.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="ResourceType">
+		<xs:annotation>
+			<xs:documentation>This is a resource that can be part of, transferred to, or removed from an object (Entity), but is not an entity itself; therefore it does not have a location, extent, or other physical attributes.
+				Resources may include consumable material such as ammunition and fuel; equipment such as weapons, vehicles, and communication devices; and personnel.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntityType" type="EntityTypeType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Quantity" type="QuantityType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ResourcesType">
+		<xs:annotation>
+			<xs:documentation>A level of personnel, equipment, ammunition, fuel, etc. The user must compare this to the full strength of the unit.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Resource" type="ResourceType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="EntityHealthStatusType">
+		<xs:choice>
+			<xs:element name="OperationalStatus" type="OperationalStatusType"/>
+			<xs:element name="Resources" type="ResourcesType"/>
+			<xs:element name="Strength" type="StrengthType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="PositionReportContentType">
+		<xs:sequence>
+			<xs:element name="TimeOfObservation" type="TimeInstantType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EntityHealthStatus" type="EntityHealthStatusType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Location" type="LocationType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SubjectEntity" type="SubjectEntityType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ObservationReportContentType">
+		<xs:annotation>
+			<xs:documentation>This report contains an observation of some aspect of a subject--not necessarily including the location, health, or other facts that are in a position report.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TimeOfObservation" type="TimeInstantType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Observation" type="ObservationType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="AutonomousSystemObservationReportContent" 
+				type="AutonomousSystemObservationReportContentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ObservationReportContent" type="ObservationReportContentType"/>
+
+	<xs:complexType name="AutonomousSystemPositionReportContentType">
+		<xs:sequence>
+			<xs:element name="LevelOfAutonomyCode" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="TacticalAttitudeCode" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="BatteryPercentage" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="LinkPercentage" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CurrentTask" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SuggestedTask" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AutonomousSystemPositionReportContent"
+		type="AutonomousSystemPositionReportContentType"/>
+
+	<xs:complexType name="AutonomousSystemObservationReportContentType">
+		<xs:sequence>
+			<xs:element name="DetectionTypeCode" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="UUID" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SideHostilityCode" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EntityType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="OperationalStatusCode" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Strength" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CurrentTask" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SuggestedTask" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="TaskStatusType">
+		<xs:annotation>
+			<xs:documentation>The status of a task, provided before, during or after a task is executed.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TimeOfObservation" type="TimeInstantType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="TaskStatusCode" type="TaskStatusCodeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="TaskStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>An enumeration of possible status values for a task.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TASKABRT"/>
+			<xs:enumeration value="TASKCMPLT"/>
+			<xs:enumeration value="TASKINPRG"/>
+			<xs:enumeration value="TASKPEND"/>
+			<xs:enumeration value="TASKSTRT"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="ReportContentType">
+		<xs:choice>
+			<xs:element name="PositionReportContent" type="PositionReportContentType"/>
+			<xs:element name="TaskStatus" type="TaskStatusType"/>
+			<xs:element name="ObservationReportContent" type="ObservationReportContentType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="ReportBodyType">
+		<xs:annotation>
+			<xs:documentation>The structure for sending report messages.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FromSender" type="FromSenderType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ToReceiver" type="ToReceiverType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ReportContent" type="ReportContentType" minOccurs="1"
+				maxOccurs="unbounded"/>
+			<xs:element name="ReportID" type="ReportIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ReportingEntity" type="ReportingEntityType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="FunctionalAssociationWithTaskType">
+		<xs:annotation>
+			<xs:documentation>This property identifies the UUID of a Maneuver Warfare Task that is the object of a JC3IEDM ActionFunctionalAssociation.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="TaskFunctionalRelationType">
+		<xs:annotation>
+			<xs:documentation>A functional relationship between maneuver warfare tasks.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TaskFunctionalAssociationCode" type="TaskFunctionalAssociationCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="FunctionalAssociationWithTask" type="FunctionalAssociationWithTaskType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:simpleType name="EventCodeType">
+		<xs:annotation>
+			<xs:documentation>The type of event.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GenericEvent"/>
+			<xs:enumeration value="TaskEnd"/>
+			<xs:enumeration value="TaskStart"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="TaskActionCodeType">
+		<xs:annotation>
+			<xs:documentation>The activity to be performed in the task, e.g. Move, Observe, Assist.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AssistOtherUnit"/>
+			<xs:enumeration value="HoldInPlace"/>
+			<xs:enumeration value="MoveToLocation"/>
+			<xs:enumeration value="Observe"/>
+			<xs:enumeration value="OrientToLocation"/>
+			<xs:enumeration value="ReportPosition"/>
+			<xs:enumeration value="UseCapability"/>
+			<xs:enumeration value="ExecutePlanPhase"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="ActionCodeType">
+		<xs:choice>
+			<xs:element name="EventCode" type="EventCodeType"/>
+			<xs:element name="TaskActionCode" type="TaskActionCodeType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="ActionTemporalAssociationCodeType">
+		<xs:annotation>
+			<xs:documentation>An enumeration describing the temporal relationship between two actions.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ENDEND"/>
+			<xs:enumeration value="ENDENE"/>
+			<xs:enumeration value="ENDENL"/>
+			<xs:enumeration value="ENDSNE"/>
+			<xs:enumeration value="ENDSNL"/>
+			<xs:enumeration value="ENDSTR"/>
+			<xs:enumeration value="SAEAST"/>
+			<xs:enumeration value="SAENDO"/>
+			<xs:enumeration value="SASTEA"/>
+			<xs:enumeration value="SBEAST"/>
+			<xs:enumeration value="SDUREA"/>
+			<xs:enumeration value="SDUREB"/>
+			<xs:enumeration value="STREND"/>
+			<xs:enumeration value="STRENE"/>
+			<xs:enumeration value="STRENL"/>
+			<xs:enumeration value="STRSNE"/>
+			<xs:enumeration value="STRSNL"/>
+			<xs:enumeration value="STRSTR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="AllegianceRelationshipCodeType">
+		<xs:annotation>
+			<xs:documentation>This code defines the types of allegiance in an AllegianceRelationship.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FriendlyTo"/>
+			<xs:enumeration value="HostileTo"/>
+			<xs:enumeration value="NeutralTo"/>
+			<xs:enumeration value="UnkownAllegianceTo"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ActorReferenceType">
+		<xs:annotation>
+			<xs:documentation>These references should be to objects of class Actor, or subclasses.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="AllegianceRelationshipType">
+		<xs:annotation>
+			<xs:documentation>This is a relationship of friendly, hostile, or neutral toward an actor entity. It is part of the definition of the hasAllegianceTo property of an EntityDescriptor.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllegianceRelationshipCode" type="AllegianceRelationshipCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ActorReference" type="ActorReferenceType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- JMP NOTE: This is probably wrong; warfighters use something like "NOPR" -->
+	<xs:simpleType name="OperationalStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>An enumeration indicating the general level of capability of an entity relative to its greatest expected capability.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FullyOperational"/>
+			<xs:enumeration value="MostlyOperational"/>
+			<xs:enumeration value="NotOperational"/>
+			<xs:enumeration value="PartlyOperational"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="CountryCodeType">
+		<xs:annotation>
+			<xs:documentation>A unique three-letter code for each nation on Earth, defined in ISO 3166-1 standard and also found in JC3IEDM AffiliationGeopoliticalCode.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ABW"/>
+			<xs:enumeration value="AFG"/>
+			<xs:enumeration value="AGO"/>
+			<xs:enumeration value="AIA"/>
+			<xs:enumeration value="ALA"/>
+			<xs:enumeration value="ALB"/>
+			<xs:enumeration value="AND"/>
+			<xs:enumeration value="ANT"/>
+			<xs:enumeration value="ARE"/>
+			<xs:enumeration value="ARG"/>
+			<xs:enumeration value="ARM"/>
+			<xs:enumeration value="ASM"/>
+			<xs:enumeration value="ATA"/>
+			<xs:enumeration value="ATF"/>
+			<xs:enumeration value="ATG"/>
+			<xs:enumeration value="AUS"/>
+			<xs:enumeration value="AUT"/>
+			<xs:enumeration value="AZE"/>
+			<xs:enumeration value="BDI"/>
+			<xs:enumeration value="BEL"/>
+			<xs:enumeration value="BEN"/>
+			<xs:enumeration value="BFA"/>
+			<xs:enumeration value="BGD"/>
+			<xs:enumeration value="BGR"/>
+			<xs:enumeration value="BHR"/>
+			<xs:enumeration value="BHS"/>
+			<xs:enumeration value="BIH"/>
+			<xs:enumeration value="BLR"/>
+			<xs:enumeration value="BLZ"/>
+			<xs:enumeration value="BMU"/>
+			<xs:enumeration value="BOL"/>
+			<xs:enumeration value="BRA"/>
+			<xs:enumeration value="BRB"/>
+			<xs:enumeration value="BRN"/>
+			<xs:enumeration value="BTN"/>
+			<xs:enumeration value="BVT"/>
+			<xs:enumeration value="BWA"/>
+			<xs:enumeration value="CAF"/>
+			<xs:enumeration value="CAN"/>
+			<xs:enumeration value="CCK"/>
+			<xs:enumeration value="CHE"/>
+			<xs:enumeration value="CHL"/>
+			<xs:enumeration value="CHN"/>
+			<xs:enumeration value="CIV"/>
+			<xs:enumeration value="CMR"/>
+			<xs:enumeration value="COD"/>
+			<xs:enumeration value="COG"/>
+			<xs:enumeration value="COK"/>
+			<xs:enumeration value="COL"/>
+			<xs:enumeration value="COM"/>
+			<xs:enumeration value="CPV"/>
+			<xs:enumeration value="CRI"/>
+			<xs:enumeration value="CSHH"/>
+			<xs:enumeration value="CSXX"/>
+			<xs:enumeration value="CUB"/>
+			<xs:enumeration value="CXR"/>
+			<xs:enumeration value="CYM"/>
+			<xs:enumeration value="CYP"/>
+			<xs:enumeration value="CZE"/>
+			<xs:enumeration value="DDDE"/>
+			<xs:enumeration value="DEU"/>
+			<xs:enumeration value="DJI"/>
+			<xs:enumeration value="DMA"/>
+			<xs:enumeration value="DNK"/>
+			<xs:enumeration value="DOM"/>
+			<xs:enumeration value="DZA"/>
+			<xs:enumeration value="ECU"/>
+			<xs:enumeration value="EGY"/>
+			<xs:enumeration value="ERI"/>
+			<xs:enumeration value="ESH"/>
+			<xs:enumeration value="ESP"/>
+			<xs:enumeration value="EST"/>
+			<xs:enumeration value="ETH"/>
+			<xs:enumeration value="FIN"/>
+			<xs:enumeration value="FJI"/>
+			<xs:enumeration value="FLK"/>
+			<xs:enumeration value="FRA"/>
+			<xs:enumeration value="FRO"/>
+			<xs:enumeration value="FSM"/>
+			<xs:enumeration value="FXFR"/>
+			<xs:enumeration value="GAB"/>
+			<xs:enumeration value="GBR"/>
+			<xs:enumeration value="GEO"/>
+			<xs:enumeration value="GGY"/>
+			<xs:enumeration value="GHA"/>
+			<xs:enumeration value="GIB"/>
+			<xs:enumeration value="GIN"/>
+			<xs:enumeration value="GLP"/>
+			<xs:enumeration value="GMB"/>
+			<xs:enumeration value="GNB"/>
+			<xs:enumeration value="GNQ"/>
+			<xs:enumeration value="GRC"/>
+			<xs:enumeration value="GRD"/>
+			<xs:enumeration value="GRL"/>
+			<xs:enumeration value="GTM"/>
+			<xs:enumeration value="GUF"/>
+			<xs:enumeration value="GUM"/>
+			<xs:enumeration value="GUY"/>
+			<xs:enumeration value="HKG"/>
+			<xs:enumeration value="HMD"/>
+			<xs:enumeration value="HND"/>
+			<xs:enumeration value="HRV"/>
+			<xs:enumeration value="HTI"/>
+			<xs:enumeration value="HUN"/>
+			<xs:enumeration value="IDN"/>
+			<xs:enumeration value="IMN"/>
+			<xs:enumeration value="IND"/>
+			<xs:enumeration value="IOT"/>
+			<xs:enumeration value="IRL"/>
+			<xs:enumeration value="IRN"/>
+			<xs:enumeration value="IRQ"/>
+			<xs:enumeration value="ISL"/>
+			<xs:enumeration value="ISR"/>
+			<xs:enumeration value="ITA"/>
+			<xs:enumeration value="JAM"/>
+			<xs:enumeration value="JEY"/>
+			<xs:enumeration value="JOR"/>
+			<xs:enumeration value="JPN"/>
+			<xs:enumeration value="KAZ"/>
+			<xs:enumeration value="KEN"/>
+			<xs:enumeration value="KGZ"/>
+			<xs:enumeration value="KHM"/>
+			<xs:enumeration value="KIR"/>
+			<xs:enumeration value="KNA"/>
+			<xs:enumeration value="KOR"/>
+			<xs:enumeration value="KWT"/>
+			<xs:enumeration value="LAO"/>
+			<xs:enumeration value="LBN"/>
+			<xs:enumeration value="LBR"/>
+			<xs:enumeration value="LBY"/>
+			<xs:enumeration value="LCA"/>
+			<xs:enumeration value="LIE"/>
+			<xs:enumeration value="LKA"/>
+			<xs:enumeration value="LSO"/>
+			<xs:enumeration value="LTU"/>
+			<xs:enumeration value="LUX"/>
+			<xs:enumeration value="LVA"/>
+			<xs:enumeration value="MAC"/>
+			<xs:enumeration value="MAR"/>
+			<xs:enumeration value="MCO"/>
+			<xs:enumeration value="MDA"/>
+			<xs:enumeration value="MDG"/>
+			<xs:enumeration value="MDV"/>
+			<xs:enumeration value="MEX"/>
+			<xs:enumeration value="MHL"/>
+			<xs:enumeration value="MKD"/>
+			<xs:enumeration value="MLI"/>
+			<xs:enumeration value="MLT"/>
+			<xs:enumeration value="MMR"/>
+			<xs:enumeration value="MNE"/>
+			<xs:enumeration value="MNG"/>
+			<xs:enumeration value="MNP"/>
+			<xs:enumeration value="MOZ"/>
+			<xs:enumeration value="MRT"/>
+			<xs:enumeration value="MSR"/>
+			<xs:enumeration value="MTQ"/>
+			<xs:enumeration value="MUS"/>
+			<xs:enumeration value="MWI"/>
+			<xs:enumeration value="MYS"/>
+			<xs:enumeration value="MYT"/>
+			<xs:enumeration value="NAM"/>
+			<xs:enumeration value="NCL"/>
+			<xs:enumeration value="NER"/>
+			<xs:enumeration value="NFK"/>
+			<xs:enumeration value="NGA"/>
+			<xs:enumeration value="NIC"/>
+			<xs:enumeration value="NIU"/>
+			<xs:enumeration value="NLD"/>
+			<xs:enumeration value="NOR"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="NPL"/>
+			<xs:enumeration value="NRU"/>
+			<xs:enumeration value="NZL"/>
+			<xs:enumeration value="OMN"/>
+			<xs:enumeration value="PAK"/>
+			<xs:enumeration value="PAN"/>
+			<xs:enumeration value="PCN"/>
+			<xs:enumeration value="PER"/>
+			<xs:enumeration value="PHL"/>
+			<xs:enumeration value="PLW"/>
+			<xs:enumeration value="PNG"/>
+			<xs:enumeration value="POL"/>
+			<xs:enumeration value="PRI"/>
+			<xs:enumeration value="PRK"/>
+			<xs:enumeration value="PRT"/>
+			<xs:enumeration value="PRY"/>
+			<xs:enumeration value="PSE"/>
+			<xs:enumeration value="PYF"/>
+			<xs:enumeration value="QAT"/>
+			<xs:enumeration value="REU"/>
+			<xs:enumeration value="ROU"/>
+			<xs:enumeration value="RUS"/>
+			<xs:enumeration value="RWA"/>
+			<xs:enumeration value="SAU"/>
+			<xs:enumeration value="SDN"/>
+			<xs:enumeration value="SEN"/>
+			<xs:enumeration value="SGP"/>
+			<xs:enumeration value="SGS"/>
+			<xs:enumeration value="SHN"/>
+			<xs:enumeration value="SJM"/>
+			<xs:enumeration value="SLB"/>
+			<xs:enumeration value="SLE"/>
+			<xs:enumeration value="SLV"/>
+			<xs:enumeration value="SMR"/>
+			<xs:enumeration value="SOM"/>
+			<xs:enumeration value="SPM"/>
+			<xs:enumeration value="SRB"/>
+			<xs:enumeration value="STP"/>
+			<xs:enumeration value="SUHH"/>
+			<xs:enumeration value="SUR"/>
+			<xs:enumeration value="SVK"/>
+			<xs:enumeration value="SVN"/>
+			<xs:enumeration value="SWE"/>
+			<xs:enumeration value="SWZ"/>
+			<xs:enumeration value="SYC"/>
+			<xs:enumeration value="SYR"/>
+			<xs:enumeration value="TCA"/>
+			<xs:enumeration value="TCD"/>
+			<xs:enumeration value="TGO"/>
+			<xs:enumeration value="THA"/>
+			<xs:enumeration value="TJK"/>
+			<xs:enumeration value="TKL"/>
+			<xs:enumeration value="TKM"/>
+			<xs:enumeration value="TLS"/>
+			<xs:enumeration value="TON"/>
+			<xs:enumeration value="TTO"/>
+			<xs:enumeration value="TUN"/>
+			<xs:enumeration value="TUR"/>
+			<xs:enumeration value="TUV"/>
+			<xs:enumeration value="TWN"/>
+			<xs:enumeration value="TZA"/>
+			<xs:enumeration value="UGA"/>
+			<xs:enumeration value="UKR"/>
+			<xs:enumeration value="UMI"/>
+			<xs:enumeration value="URY"/>
+			<xs:enumeration value="USA"/>
+			<xs:enumeration value="UZB"/>
+			<xs:enumeration value="VAT"/>
+			<xs:enumeration value="VCT"/>
+			<xs:enumeration value="VEN"/>
+			<xs:enumeration value="VGB"/>
+			<xs:enumeration value="VIR"/>
+			<xs:enumeration value="VNM"/>
+			<xs:enumeration value="VUT"/>
+			<xs:enumeration value="WLF"/>
+			<xs:enumeration value="WSM"/>
+			<xs:enumeration value="YEM"/>
+			<xs:enumeration value="YUCS"/>
+			<xs:enumeration value="ZAF"/>
+			<xs:enumeration value="ZMB"/>
+			<xs:enumeration value="ZWE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="SecurityClassificationCodeType">
+		<xs:annotation>
+			<xs:documentation>Alphabetic text descriptions used by the USA-Department of Defense to identify the level of sensitivity of information</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Confidential"/>
+			<xs:enumeration value="Secret"/>
+			<xs:enumeration value="TopSecret"/>
+			<xs:enumeration value="Unclassified"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="PlanPhaseCompletionConditionType">
+		<xs:annotation>
+			<xs:documentation>A code defining the condition to be used to test the tasks of a plan phase to determine whether the phase is considered to be complete.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AllTasksComplete"/>
+			<xs:enumeration value="OneTaskComplete"/>
+			<xs:enumeration value="OtherOrderReceived"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="WeaponRuleOfEngagementCodeType">
+		<xs:annotation>
+			<xs:documentation>A code (enumerated value) describing a standard condition for using weapons to engage another force.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ROEFree"/>
+			<xs:enumeration value="ROEHold"/>
+			<xs:enumeration value="ROETight"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="CommandRelationCodeType">
+		<xs:annotation>
+			<xs:documentation>Enumerations of possible relationships between a unit and the unit that commands it. Obtained from JC3IEDM-v3.0.1.ObjectItemAssociationSubcategoryCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ADMCON"/>
+			<xs:enumeration value="ALTFOR"/>
+			<xs:enumeration value="ASGND"/>
+			<xs:enumeration value="ATPRCL"/>
+			<xs:enumeration value="ATTACH"/>
+			<xs:enumeration value="CASP1"/>
+			<xs:enumeration value="CASP2"/>
+			<xs:enumeration value="CASP3"/>
+			<xs:enumeration value="CASP4"/>
+			<xs:enumeration value="CLSSUP"/>
+			<xs:enumeration value="COAUTH"/>
+			<xs:enumeration value="COMD"/>
+			<xs:enumeration value="DETACH"/>
+			<xs:enumeration value="DIRSUP"/>
+			<xs:enumeration value="FORCE"/>
+			<xs:enumeration value="GENSRI"/>
+			<xs:enumeration value="GENSUP"/>
+			<xs:enumeration value="HSCPTD"/>
+			<xs:enumeration value="HSNSPT"/>
+			<xs:enumeration value="ISCPER"/>
+			<xs:enumeration value="LOGCON"/>
+			<xs:enumeration value="MUTSUP"/>
+			<xs:enumeration value="ONCALL"/>
+			<xs:enumeration value="OPCOMD"/>
+			<xs:enumeration value="OPCON"/>
+			<xs:enumeration value="ORGANC"/>
+			<xs:enumeration value="REINFC"/>
+			<xs:enumeration value="RESERV"/>
+			<xs:enumeration value="ROLE"/>
+			<xs:enumeration value="SAME"/>
+			<xs:enumeration value="SPTAMM"/>
+			<xs:enumeration value="SPTENG"/>
+			<xs:enumeration value="SPTMED"/>
+			<xs:enumeration value="SPTMVT"/>
+			<xs:enumeration value="SPTPAR"/>
+			<xs:enumeration value="SPTPOL"/>
+			<xs:enumeration value="SPTPST"/>
+			<xs:enumeration value="SPTRAT"/>
+			<xs:enumeration value="SPTRRE"/>
+			<xs:enumeration value="SPTSPL"/>
+			<xs:enumeration value="SPTTRN"/>
+			<xs:enumeration value="TACCNT"/>
+			<xs:enumeration value="TACCOM"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="EchelonCodeType">
+		<xs:annotation>
+			<xs:documentation>Enumerations of possible echelons for a military organization from JC3IEDM-v3.0.1.EchelonSizeCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AG"/>
+			<xs:enumeration value="ARMY"/>
+			<xs:enumeration value="BATGRP"/>
+			<xs:enumeration value="BDE"/>
+			<xs:enumeration value="BDEGRP"/>
+			<xs:enumeration value="BN"/>
+			<xs:enumeration value="BNG"/>
+			<xs:enumeration value="CORPS"/>
+			<xs:enumeration value="COY"/>
+			<xs:enumeration value="COYG"/>
+			<xs:enumeration value="DIV"/>
+			<xs:enumeration value="FLEET"/>
+			<xs:enumeration value="FLIGHT"/>
+			<xs:enumeration value="NKN"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="NTF"/>
+			<xs:enumeration value="NTG"/>
+			<xs:enumeration value="NTU"/>
+			<xs:enumeration value="PLT"/>
+			<xs:enumeration value="REGION"/>
+			<xs:enumeration value="RGT"/>
+			<xs:enumeration value="SECT"/>
+			<xs:enumeration value="SQDRNA"/>
+			<xs:enumeration value="SQDRNM"/>
+			<xs:enumeration value="SQUAD"/>
+			<xs:enumeration value="TEAM"/>
+			<xs:enumeration value="TSKELN"/>
+			<xs:enumeration value="WING"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="HostilityStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>Enumerations of possible hostility relationships in a military situation. Dervived from JC3IEDM-v3.0.1.ObjectItemHostilityStatusCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AFR"/>
+			<xs:enumeration value="AHO"/>
+			<xs:enumeration value="AIV"/>
+			<xs:enumeration value="ANT"/>
+			<xs:enumeration value="FAKER"/>
+			<xs:enumeration value="FR"/>
+			<xs:enumeration value="HO"/>
+			<xs:enumeration value="IV"/>
+			<xs:enumeration value="JOKER"/>
+			<xs:enumeration value="NEUTRL"/>
+			<xs:enumeration value="PENDNG"/>
+			<xs:enumeration value="SUSPCT"/>
+			<xs:enumeration value="UNK"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ReinforcedReducedTypeType">
+		<xs:annotation>
+			<xs:documentation>Enumerations of possible reinforcement relationships in a military situation. Dervived from JC3IEDM-v3.0.1.OrganisationStatusReinforcementCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DETD"/>
+			<xs:enumeration value="NORM"/>
+			<xs:enumeration value="REIN"/>
+			<xs:enumeration value="RIDT"/>
+			<xs:enumeration value="ReinforcementNKN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="CodeType">
+		<xs:choice>
+			<xs:element name="ActionCode" type="ActionCodeType"/>
+			<xs:element name="ActionTemporalAssociationCode" type="ActionTemporalAssociationCodeType"/>
+			<xs:element name="AllegianceRelationshipCode" type="AllegianceRelationshipType"/>
+			<xs:element name="DesiredEffectCode" type="DesiredEffectCodeType"/>
+			<xs:element name="OperationalStatusCode" type="OperationalStatusCodeType"/>
+			<xs:element name="OrganizationCode" type="OrganizationCodeType"/>
+			<xs:element name="SecurityClassificationCode" type="SecurityClassificationCodeType"/>
+			<xs:element name="TimeReferenceCode" type="TimeReferenceCodeType"/>
+			<xs:element name="PlanPhaseCompletionCondition" type="PlanPhaseCompletionConditionType"/>
+			<xs:element name="TaskFunctionalAssociationCode" type="TaskFunctionalAssociationCodeType"/>
+			<xs:element name="WeaponRuleOfEngagementCode" type="WeaponRuleOfEngagementCodeType"/>
+			<xs:element name="CommandRelationCode" type="CommandRelationCodeType"/>
+			<xs:element name="EchelonCode" type="EchelonCodeType"/>
+			<xs:element name="HostilityStatusCode" type="HostilityStatusCodeType"/>
+			<xs:element name="ReinforcedReducedType" type="ReinforcedReducedTypeType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:simpleType name="TemporalAssociationWithActionType">
+		<xs:annotation>
+			<xs:documentation>The object action with which the subject action has a temporal association (relationship)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	
+	<xs:complexType name="ActionTemporalRelationshipType">
+		<xs:annotation>
+			<xs:documentation>A temporal relationship between two actions. Some relationships involve a time duration.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ActionTemporalAssociationCode" type="ActionTemporalAssociationCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Duration" type="DurationType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="TemporalAssociationWithAction" type="TemporalAssociationWithActionType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="RuleOfEngagementType">
+		<xs:choice>
+			<xs:element name="MipWeaponUseROE" type="MipWeaponUseROEType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="MipWeaponUseROEType">
+		<xs:annotation>
+			<xs:documentation>A RuleofEngagement that is based on a standard code describing engagement conditions.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="WeaponROECode" type="CodeType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ManeuverWarfareTaskType">
+		<xs:annotation>
+			<xs:documentation>A task with additional properties for a Maneuver Warfare Task, including a definition of rules of engagement, and a relationship to another task.
+				
+				Note that the TaskActionCode for this task should be taken from the individuals defined as members of ManeuverWarfareTaskActionCode.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>A request for an actor in the domain to perform a Task. The actor to perform the Task is indicated by the hasPerformingEntity property of the Task. An Action that takes place over time, and is performed by an Entity to change the state of the world.
+					Must identify WHO, WHAT, WHEN and WHERE.
+					WHO is represented by hasPerformingEntity (and hasAffectedEntity).
+					WHAT is represented by the hasTaskActionCode.
+					WHEN is represented by the start time/duration/end time (2 of 3)
+					WHERE is represented by hasLocation and/or hasMapGraphicID reference.
+					WHY may be represented by hasDesiredEffect.</xs:documentation>
+			</xs:annotation>
+			<xs:element name="DesiredEffectCode" type="DesiredEffectCodeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="TaskActionCode" type="ManeuverWarfareTaskActionCodeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Duration" type="DurationType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="EndTime" type="TimeInstantType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="StartTime" type="TimeInstantType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="AffectedEntity"  type="AffectedEntityType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PerformingEntity" type="PerformingEntityType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ActionTemporalRelationship" type="ActionTemporalRelationshipType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Location" type="LocationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="MapGraphicID" type="MapGraphicIDType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UUID" type="UUIDType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Name" type="NameType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="RuleOfEngagement" type="RuleOfEngagementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="TaskFunctionalRelation" type="TaskFunctionalRelationType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:simpleType name="EthnicGroupCodeType">
+		<xs:annotation>
+			<xs:documentation>Alphabetic code up to six letters, describing an ethnic group, obtained from JC3IEDM AffiliationEthnicGroupCode-3.0.2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ABKHAZ"/>
+			<xs:enumeration value="ABORGN"/>
+			<xs:enumeration value="ADMISL"/>
+			<xs:enumeration value="AFAR"/>
+			<xs:enumeration value="AFGHAN"/>
+			<xs:enumeration value="AFRADJ"/>
+			<xs:enumeration value="AFRAMR"/>
+			<xs:enumeration value="AFRBAL"/>
+			<xs:enumeration value="AFRBAR"/>
+			<xs:enumeration value="AFRBAS"/>
+			<xs:enumeration value="AFRBEL"/>
+			<xs:enumeration value="AFRBUR"/>
+			<xs:enumeration value="AFRFON"/>
+			<xs:enumeration value="AFRFUL"/>
+			<xs:enumeration value="AFRGBA"/>
+			<xs:enumeration value="AFRGIO"/>
+			<xs:enumeration value="AFRGOL"/>
+			<xs:enumeration value="AFRGRE"/>
+			<xs:enumeration value="AFRJOL"/>
+			<xs:enumeration value="AFRKIS"/>
+			<xs:enumeration value="AFRKPE"/>
+			<xs:enumeration value="AFRKRA"/>
+			<xs:enumeration value="AFRKRU"/>
+			<xs:enumeration value="AFRLOM"/>
+			<xs:enumeration value="AFRMAN"/>
+			<xs:enumeration value="AFRMEN"/>
+			<xs:enumeration value="AFRMND"/>
+			<xs:enumeration value="AFRMNJ"/>
+			<xs:enumeration value="AFRMNO"/>
+			<xs:enumeration value="AFRNDE"/>
+			<xs:enumeration value="AFRNFD"/>
+			<xs:enumeration value="AFROAR"/>
+			<xs:enumeration value="AFROAS"/>
+			<xs:enumeration value="AFROCH"/>
+			<xs:enumeration value="AFROEA"/>
+			<xs:enumeration value="AFROEU"/>
+			<xs:enumeration value="AFRPAP"/>
+			<xs:enumeration value="AFRSER"/>
+			<xs:enumeration value="AFRSHO"/>
+			<xs:enumeration value="AFRTEM"/>
+			<xs:enumeration value="AFRVAI"/>
+			<xs:enumeration value="AFRWOL"/>
+			<xs:enumeration value="AFRYOR"/>
+			<xs:enumeration value="AGNI"/>
+			<xs:enumeration value="AITISL"/>
+			<xs:enumeration value="ALBANN"/>
+			<xs:enumeration value="ALBNAN"/>
+			<xs:enumeration value="ALEMAN"/>
+			<xs:enumeration value="ALGRAN"/>
+			<xs:enumeration value="AMERIC"/>
+			<xs:enumeration value="AMERIN"/>
+			<xs:enumeration value="AMERUS"/>
+			<xs:enumeration value="AMHARA"/>
+			<xs:enumeration value="ANDORR"/>
+			<xs:enumeration value="ANGOLA"/>
+			<xs:enumeration value="ANTASA"/>
+			<xs:enumeration value="ARAB"/>
+			<xs:enumeration value="ARABBE"/>
+			<xs:enumeration value="ARGNTN"/>
+			<xs:enumeration value="ARMNAN"/>
+			<xs:enumeration value="ASNNFD"/>
+			<xs:enumeration value="ASSYRN"/>
+			<xs:enumeration value="ATUISL"/>
+			<xs:enumeration value="AUSISL"/>
+			<xs:enumeration value="AUSTRA"/>
+			<xs:enumeration value="AUSTRL"/>
+			<xs:enumeration value="AUSTRN"/>
+			<xs:enumeration value="AYMARA"/>
+			<xs:enumeration value="AZERBA"/>
+			<xs:enumeration value="AZERI"/>
+			<xs:enumeration value="BAHRAN"/>
+			<xs:enumeration value="BAKONG"/>
+			<xs:enumeration value="BALOCH"/>
+			<xs:enumeration value="BANDA"/>
+			<xs:enumeration value="BANGLS"/>
+			<xs:enumeration value="BANTBA"/>
+			<xs:enumeration value="BANTBT"/>
+			<xs:enumeration value="BANTES"/>
+			<xs:enumeration value="BANTFA"/>
+			<xs:enumeration value="BANTKO"/>
+			<xs:enumeration value="BANTLU"/>
+			<xs:enumeration value="BANTMO"/>
+			<xs:enumeration value="BANTU"/>
+			<xs:enumeration value="BAOULE"/>
+			<xs:enumeration value="BASARW"/>
+			<xs:enumeration value="BASHKR"/>
+			<xs:enumeration value="BASQUE"/>
+			<xs:enumeration value="BATSWA"/>
+			<xs:enumeration value="BAYA"/>
+			<xs:enumeration value="BEJA"/>
+			<xs:enumeration value="BELAU"/>
+			<xs:enumeration value="BELGAN"/>
+			<xs:enumeration value="BELORU"/>
+			<xs:enumeration value="BENGLI"/>
+			<xs:enumeration value="BERBER"/>
+			<xs:enumeration value="BERIKA"/>
+			<xs:enumeration value="BETE"/>
+			<xs:enumeration value="BETSIM"/>
+			<xs:enumeration value="BHOTE"/>
+			<xs:enumeration value="BHOTIA"/>
+			<xs:enumeration value="BIHARS"/>
+			<xs:enumeration value="BIOKOB"/>
+			<xs:enumeration value="BIOKOF"/>
+			<xs:enumeration value="BISMAR"/>
+			<xs:enumeration value="BLACK"/>
+			<xs:enumeration value="BLACKA"/>
+			<xs:enumeration value="BOBO"/>
+			<xs:enumeration value="BOLIVN"/>
+			<xs:enumeration value="BOSCRO"/>
+			<xs:enumeration value="BOSMUS"/>
+			<xs:enumeration value="BOSSER"/>
+			<xs:enumeration value="BOUGNV"/>
+			<xs:enumeration value="BRAZLN"/>
+			<xs:enumeration value="BRETON"/>
+			<xs:enumeration value="BRTNEC"/>
+			<xs:enumeration value="BRTNFD"/>
+			<xs:enumeration value="BULGRN"/>
+			<xs:enumeration value="BURGHR"/>
+			<xs:enumeration value="BURMAN"/>
+			<xs:enumeration value="BURMSE"/>
+			<xs:enumeration value="BUYI"/>
+			<xs:enumeration value="BYLRSN"/>
+			<xs:enumeration value="CAFRE"/>
+			<xs:enumeration value="CAMERO"/>
+			<xs:enumeration value="CANADN"/>
+			<xs:enumeration value="CARIBN"/>
+			<xs:enumeration value="CARISL"/>
+			<xs:enumeration value="CAUCAS"/>
+			<xs:enumeration value="CELTIC"/>
+			<xs:enumeration value="CENAMR"/>
+			<xs:enumeration value="CHAHAR"/>
+			<xs:enumeration value="CHAM"/>
+			<xs:enumeration value="CHAMOR"/>
+			<xs:enumeration value="CHEWA"/>
+			<xs:enumeration value="CHLEAN"/>
+			<xs:enumeration value="CHNISL"/>
+			<xs:enumeration value="CHNNEC"/>
+			<xs:enumeration value="CHNNFD"/>
+			<xs:enumeration value="CHRSTN"/>
+			<xs:enumeration value="CHUVAS"/>
+			<xs:enumeration value="CIRCAS"/>
+			<xs:enumeration value="COASTA"/>
+			<xs:enumeration value="COCOSM"/>
+			<xs:enumeration value="COKNFD"/>
+			<xs:enumeration value="COLMBN"/>
+			<xs:enumeration value="COMORA"/>
+			<xs:enumeration value="CORNSH"/>
+			<xs:enumeration value="CORSCN"/>
+			<xs:enumeration value="COSTRN"/>
+			<xs:enumeration value="COTIER"/>
+			<xs:enumeration value="CRELLA"/>
+			<xs:enumeration value="CRELUS"/>
+			<xs:enumeration value="CREOLE"/>
+			<xs:enumeration value="CREOLM"/>
+			<xs:enumeration value="CROATN"/>
+			<xs:enumeration value="CYRNFD"/>
+			<xs:enumeration value="CZECH"/>
+			<xs:enumeration value="DAGHES"/>
+			<xs:enumeration value="DALMTN"/>
+			<xs:enumeration value="DANISH"/>
+			<xs:enumeration value="DIOLA"/>
+			<xs:enumeration value="DJERMA"/>
+			<xs:enumeration value="DRAVID"/>
+			<xs:enumeration value="DUTCH"/>
+			<xs:enumeration value="EASISL"/>
+			<xs:enumeration value="ECUDRN"/>
+			<xs:enumeration value="EGYPTN"/>
+			<xs:enumeration value="ENGLSH"/>
+			<xs:enumeration value="EQUATO"/>
+			<xs:enumeration value="ERIRIA"/>
+			<xs:enumeration value="ESTONN"/>
+			<xs:enumeration value="ETHNCN"/>
+			<xs:enumeration value="ETHNCT"/>
+			<xs:enumeration value="EURNEC"/>
+			<xs:enumeration value="EURNFD"/>
+			<xs:enumeration value="EUROAF"/>
+			<xs:enumeration value="EUROIN"/>
+			<xs:enumeration value="EUROPE"/>
+			<xs:enumeration value="EWE"/>
+			<xs:enumeration value="FAROES"/>
+			<xs:enumeration value="FIJIAN"/>
+			<xs:enumeration value="FIJNIN"/>
+			<xs:enumeration value="FILPNO"/>
+			<xs:enumeration value="FINNSH"/>
+			<xs:enumeration value="FLEMSH"/>
+			<xs:enumeration value="FLKISL"/>
+			<xs:enumeration value="FORROS"/>
+			<xs:enumeration value="FRANCO"/>
+			<xs:enumeration value="FRENCH"/>
+			<xs:enumeration value="FULA"/>
+			<xs:enumeration value="FULANI"/>
+			<xs:enumeration value="GAELIC"/>
+			<xs:enumeration value="GAGAUZ"/>
+			<xs:enumeration value="GARIFU"/>
+			<xs:enumeration value="GEORGN"/>
+			<xs:enumeration value="GERMAB"/>
+			<xs:enumeration value="GERMAL"/>
+			<xs:enumeration value="GERMAN"/>
+			<xs:enumeration value="GERMAR"/>
+			<xs:enumeration value="GILAKI"/>
+			<xs:enumeration value="GMBISL"/>
+			<xs:enumeration value="GOULAY"/>
+			<xs:enumeration value="GOURMA"/>
+			<xs:enumeration value="GREEK"/>
+			<xs:enumeration value="GREEKT"/>
+			<xs:enumeration value="GREENA"/>
+			<xs:enumeration value="GREENC"/>
+			<xs:enumeration value="GRNLND"/>
+			<xs:enumeration value="GUADLN"/>
+			<xs:enumeration value="GUATLN"/>
+			<xs:enumeration value="GUJART"/>
+			<xs:enumeration value="GUMISL"/>
+			<xs:enumeration value="GURAGE"/>
+			<xs:enumeration value="GURUNG"/>
+			<xs:enumeration value="GURUNS"/>
+			<xs:enumeration value="GUYANS"/>
+			<xs:enumeration value="GYPSY"/>
+			<xs:enumeration value="HAMTC"/>
+			<xs:enumeration value="HAMTCM"/>
+			<xs:enumeration value="HAN"/>
+			<xs:enumeration value="HAUSA"/>
+			<xs:enumeration value="HAWIAN"/>
+			<xs:enumeration value="HAZARA"/>
+			<xs:enumeration value="HINDUS"/>
+			<xs:enumeration value="HISPAN"/>
+			<xs:enumeration value="HKCHNS"/>
+			<xs:enumeration value="HMONG"/>
+			<xs:enumeration value="HONDRN"/>
+			<xs:enumeration value="HUI"/>
+			<xs:enumeration value="HUNGRN"/>
+			<xs:enumeration value="HUTU"/>
+			<xs:enumeration value="HUTUBA"/>
+			<xs:enumeration value="IBOS"/>
+			<xs:enumeration value="ICLNDR"/>
+			<xs:enumeration value="IKRBAT"/>
+			<xs:enumeration value="INDIGE"/>
+			<xs:enumeration value="INDIGM"/>
+			<xs:enumeration value="INDIGN"/>
+			<xs:enumeration value="INDNEC"/>
+			<xs:enumeration value="INDNFD"/>
+			<xs:enumeration value="INDOAR"/>
+			<xs:enumeration value="INDOCH"/>
+			<xs:enumeration value="INDOMA"/>
+			<xs:enumeration value="INDOSN"/>
+			<xs:enumeration value="INUIT"/>
+			<xs:enumeration value="IRAQI"/>
+			<xs:enumeration value="IRISH"/>
+			<xs:enumeration value="IRNPER"/>
+			<xs:enumeration value="ISRJEW"/>
+			<xs:enumeration value="ITALAN"/>
+			<xs:enumeration value="ITALFR"/>
+			<xs:enumeration value="ITALGE"/>
+			<xs:enumeration value="ITALSL"/>
+			<xs:enumeration value="JAMACN"/>
+			<xs:enumeration value="JAPNES"/>
+			<xs:enumeration value="JAVANE"/>
+			<xs:enumeration value="JEWISH"/>
+			<xs:enumeration value="JORDNN"/>
+			<xs:enumeration value="KABYE"/>
+			<xs:enumeration value="KALANG"/>
+			<xs:enumeration value="KALENJ"/>
+			<xs:enumeration value="KAMBA"/>
+			<xs:enumeration value="KAMCHN"/>
+			<xs:enumeration value="KANAKA"/>
+			<xs:enumeration value="KARAKA"/>
+			<xs:enumeration value="KAREN"/>
+			<xs:enumeration value="KAZAKH"/>
+			<xs:enumeration value="KAZAKQ"/>
+			<xs:enumeration value="KENYAN"/>
+			<xs:enumeration value="KGALAG"/>
+			<xs:enumeration value="KHMER"/>
+			<xs:enumeration value="KIKUYU"/>
+			<xs:enumeration value="KIMBUN"/>
+			<xs:enumeration value="KIRDI"/>
+			<xs:enumeration value="KIRGHZ"/>
+			<xs:enumeration value="KISII"/>
+			<xs:enumeration value="KONGO"/>
+			<xs:enumeration value="KOREAN"/>
+			<xs:enumeration value="KUNAMA"/>
+			<xs:enumeration value="KURD"/>
+			<xs:enumeration value="KUWAIT"/>
+			<xs:enumeration value="LADINO"/>
+			<xs:enumeration value="LAOTAN"/>
+			<xs:enumeration value="LAPP"/>
+			<xs:enumeration value="LATIN"/>
+			<xs:enumeration value="LATNEC"/>
+			<xs:enumeration value="LATNFD"/>
+			<xs:enumeration value="LATVAN"/>
+			<xs:enumeration value="LEBNSE"/>
+			<xs:enumeration value="LIBYAN"/>
+			<xs:enumeration value="LIMBUS"/>
+			<xs:enumeration value="LITHUN"/>
+			<xs:enumeration value="LOBI"/>
+			<xs:enumeration value="LOMWE"/>
+			<xs:enumeration value="LUHYA"/>
+			<xs:enumeration value="LUO"/>
+			<xs:enumeration value="LUR"/>
+			<xs:enumeration value="MACDNN"/>
+			<xs:enumeration value="MADURE"/>
+			<xs:enumeration value="MAGARS"/>
+			<xs:enumeration value="MAKOA"/>
+			<xs:enumeration value="MALAGA"/>
+			<xs:enumeration value="MALATN"/>
+			<xs:enumeration value="MALAY"/>
+			<xs:enumeration value="MALAYA"/>
+			<xs:enumeration value="MALAYI"/>
+			<xs:enumeration value="MALAYM"/>
+			<xs:enumeration value="MALCHN"/>
+			<xs:enumeration value="MALINK"/>
+			<xs:enumeration value="MALTSE"/>
+			<xs:enumeration value="MALVAN"/>
+			<xs:enumeration value="MAN"/>
+			<xs:enumeration value="MANCHU"/>
+			<xs:enumeration value="MANDE"/>
+			<xs:enumeration value="MANDEB"/>
+			<xs:enumeration value="MANDEM"/>
+			<xs:enumeration value="MANDES"/>
+			<xs:enumeration value="MANDJI"/>
+			<xs:enumeration value="MANDNG"/>
+			<xs:enumeration value="MANGIS"/>
+			<xs:enumeration value="MANHIS"/>
+			<xs:enumeration value="MANUIS"/>
+			<xs:enumeration value="MANX"/>
+			<xs:enumeration value="MAORI"/>
+			<xs:enumeration value="MARISL"/>
+			<xs:enumeration value="MARQIS"/>
+			<xs:enumeration value="MARSIS"/>
+			<xs:enumeration value="MASSA"/>
+			<xs:enumeration value="MAUKIS"/>
+			<xs:enumeration value="MAUR"/>
+			<xs:enumeration value="MAURTN"/>
+			<xs:enumeration value="MAYA"/>
+			<xs:enumeration value="MAZAND"/>
+			<xs:enumeration value="MBAKA"/>
+			<xs:enumeration value="MBAYE"/>
+			<xs:enumeration value="MBOCHI"/>
+			<xs:enumeration value="MBOUM"/>
+			<xs:enumeration value="MDENEC"/>
+			<xs:enumeration value="MDENFD"/>
+			<xs:enumeration value="MELANE"/>
+			<xs:enumeration value="MEO"/>
+			<xs:enumeration value="MERU"/>
+			<xs:enumeration value="MESTZE"/>
+			<xs:enumeration value="MESTZS"/>
+			<xs:enumeration value="MEXCAN"/>
+			<xs:enumeration value="MIAO"/>
+			<xs:enumeration value="MICRON"/>
+			<xs:enumeration value="MINA"/>
+			<xs:enumeration value="MITISL"/>
+			<xs:enumeration value="MIXED"/>
+			<xs:enumeration value="MOLDOV"/>
+			<xs:enumeration value="MON"/>
+			<xs:enumeration value="MONEGA"/>
+			<xs:enumeration value="MONGOL"/>
+			<xs:enumeration value="MONTEN"/>
+			<xs:enumeration value="MOOR"/>
+			<xs:enumeration value="MORAVI"/>
+			<xs:enumeration value="MOROCN"/>
+			<xs:enumeration value="MOSSI"/>
+			<xs:enumeration value="MOUND"/>
+			<xs:enumeration value="MOUSSE"/>
+			<xs:enumeration value="MUHAJR"/>
+			<xs:enumeration value="MULATT"/>
+			<xs:enumeration value="MUONG"/>
+			<xs:enumeration value="MUSIMO"/>
+			<xs:enumeration value="MUSLIM"/>
+			<xs:enumeration value="MUSLMA"/>
+			<xs:enumeration value="MUSLMB"/>
+			<xs:enumeration value="MUSLMF"/>
+			<xs:enumeration value="MUSLMH"/>
+			<xs:enumeration value="MUSLMK"/>
+			<xs:enumeration value="MUSLMM"/>
+			<xs:enumeration value="MUSLMT"/>
+			<xs:enumeration value="MUSLMU"/>
+			<xs:enumeration value="MUSLMY"/>
+			<xs:enumeration value="MUSLMZ"/>
+			<xs:enumeration value="NAINDN"/>
+			<xs:enumeration value="NATVEF"/>
+			<xs:enumeration value="NATVEM"/>
+			<xs:enumeration value="NAUISL"/>
+			<xs:enumeration value="NEGRIT"/>
+			<xs:enumeration value="NEPLSE"/>
+			<xs:enumeration value="NEWARS"/>
+			<xs:enumeration value="NEWBRT"/>
+			<xs:enumeration value="NEWCAL"/>
+			<xs:enumeration value="NEWGER"/>
+			<xs:enumeration value="NEWIRL"/>
+			<xs:enumeration value="NEWZEA"/>
+			<xs:enumeration value="NEWZLE"/>
+			<xs:enumeration value="NEWZLM"/>
+			<xs:enumeration value="NGAMBY"/>
+			<xs:enumeration value="NGONDE"/>
+			<xs:enumeration value="NGONI"/>
+			<xs:enumeration value="NICRGN"/>
+			<xs:enumeration value="NIGRAN"/>
+			<xs:enumeration value="NIUEAN"/>
+			<xs:enumeration value="NKN"/>
+			<xs:enumeration value="NORDIC"/>
+			<xs:enumeration value="NORMAN"/>
+			<xs:enumeration value="NORMFR"/>
+			<xs:enumeration value="NORTAF"/>
+			<xs:enumeration value="NORWGN"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="NYANJA"/>
+			<xs:enumeration value="OAFNEC"/>
+			<xs:enumeration value="OASNEC"/>
+			<xs:enumeration value="OCNISL"/>
+			<xs:enumeration value="OEUNFD"/>
+			<xs:enumeration value="OIMATS"/>
+			<xs:enumeration value="OMANI"/>
+			<xs:enumeration value="OPANEC"/>
+			<xs:enumeration value="OPANFD"/>
+			<xs:enumeration value="ORIENT"/>
+			<xs:enumeration value="ORKISL"/>
+			<xs:enumeration value="OROMO"/>
+			<xs:enumeration value="OSANEC"/>
+			<xs:enumeration value="OSSET"/>
+			<xs:enumeration value="OVIMBU"/>
+			<xs:enumeration value="PACNFD"/>
+			<xs:enumeration value="PAKSTN"/>
+			<xs:enumeration value="PALAUA"/>
+			<xs:enumeration value="PALMIS"/>
+			<xs:enumeration value="PALSTN"/>
+			<xs:enumeration value="PANMAN"/>
+			<xs:enumeration value="PAPUAN"/>
+			<xs:enumeration value="PARGYN"/>
+			<xs:enumeration value="PASHTP"/>
+			<xs:enumeration value="PASHTU"/>
+			<xs:enumeration value="PENISL"/>
+			<xs:enumeration value="PERSAN"/>
+			<xs:enumeration value="PERUVN"/>
+			<xs:enumeration value="PEUL"/>
+			<xs:enumeration value="PHNISL"/>
+			<xs:enumeration value="PHOUTH"/>
+			<xs:enumeration value="PITISL"/>
+			<xs:enumeration value="POLISH"/>
+			<xs:enumeration value="POLYNE"/>
+			<xs:enumeration value="POLYNS"/>
+			<xs:enumeration value="POLYNT"/>
+			<xs:enumeration value="PORTGS"/>
+			<xs:enumeration value="PUERTR"/>
+			<xs:enumeration value="PUKISL"/>
+			<xs:enumeration value="PUNJAB"/>
+			<xs:enumeration value="QUECHU"/>
+			<xs:enumeration value="RAIS"/>
+			<xs:enumeration value="RAKHIN"/>
+			<xs:enumeration value="RAKISL"/>
+			<xs:enumeration value="RARTGN"/>
+			<xs:enumeration value="RIOMUN"/>
+			<xs:enumeration value="ROMANN"/>
+			<xs:enumeration value="ROMANS"/>
+			<xs:enumeration value="ROMANY"/>
+			<xs:enumeration value="ROTUMN"/>
+			<xs:enumeration value="RUSSAN"/>
+			<xs:enumeration value="RUTHEN"/>
+			<xs:enumeration value="RWANDA"/>
+			<xs:enumeration value="SAHO"/>
+			<xs:enumeration value="SAKALA"/>
+			<xs:enumeration value="SAMMAR"/>
+			<xs:enumeration value="SAMOAN"/>
+			<xs:enumeration value="SAMOAP"/>
+			<xs:enumeration value="SANGHA"/>
+			<xs:enumeration value="SANISL"/>
+			<xs:enumeration value="SARA"/>
+			<xs:enumeration value="SARDNN"/>
+			<xs:enumeration value="SCANDN"/>
+			<xs:enumeration value="SCOTSH"/>
+			<xs:enumeration value="SENA"/>
+			<xs:enumeration value="SENOUF"/>
+			<xs:enumeration value="SENUFO"/>
+			<xs:enumeration value="SERBAN"/>
+			<xs:enumeration value="SERER"/>
+			<xs:enumeration value="SERVIC"/>
+			<xs:enumeration value="SEYISL"/>
+			<xs:enumeration value="SHAN"/>
+			<xs:enumeration value="SHERPA"/>
+			<xs:enumeration value="SHTISL"/>
+			<xs:enumeration value="SICLAN"/>
+			<xs:enumeration value="SIDAMO"/>
+			<xs:enumeration value="SIKH"/>
+			<xs:enumeration value="SINCHN"/>
+			<xs:enumeration value="SINDHI"/>
+			<xs:enumeration value="SINHLS"/>
+			<xs:enumeration value="SINOMA"/>
+			<xs:enumeration value="SLAVIC"/>
+			<xs:enumeration value="SLOVAK"/>
+			<xs:enumeration value="SLOVNE"/>
+			<xs:enumeration value="SLVNEC"/>
+			<xs:enumeration value="SLVNFD"/>
+			<xs:enumeration value="SOCISL"/>
+			<xs:enumeration value="SOLISL"/>
+			<xs:enumeration value="SOLVEN"/>
+			<xs:enumeration value="SOMALI"/>
+			<xs:enumeration value="SONGHA"/>
+			<xs:enumeration value="SOTHO"/>
+			<xs:enumeration value="SOUAFR"/>
+			<xs:enumeration value="SOUAMR"/>
+			<xs:enumeration value="SOUNFD"/>
+			<xs:enumeration value="SOUSSO"/>
+			<xs:enumeration value="SOUTHA"/>
+			<xs:enumeration value="SPANSH"/>
+			<xs:enumeration value="SRINEC"/>
+			<xs:enumeration value="SRINFD"/>
+			<xs:enumeration value="SRITML"/>
+			<xs:enumeration value="SUNDAN"/>
+			<xs:enumeration value="SWEDSH"/>
+			<xs:enumeration value="SWISS"/>
+			<xs:enumeration value="SYRANL"/>
+			<xs:enumeration value="SYRIAN"/>
+			<xs:enumeration value="SYROLE"/>
+			<xs:enumeration value="TAHITN"/>
+			<xs:enumeration value="TAICHN"/>
+			<xs:enumeration value="TAJIK"/>
+			<xs:enumeration value="TAMANG"/>
+			<xs:enumeration value="TAMIL"/>
+			<xs:enumeration value="TATAR"/>
+			<xs:enumeration value="TEKE"/>
+			<xs:enumeration value="TEUTON"/>
+			<xs:enumeration value="THAI"/>
+			<xs:enumeration value="TIBETN"/>
+			<xs:enumeration value="TIGREA"/>
+			<xs:enumeration value="TOKELN"/>
+			<xs:enumeration value="TONGAN"/>
+			<xs:enumeration value="TONGAS"/>
+			<xs:enumeration value="TORISL"/>
+			<xs:enumeration value="TOUBOU"/>
+			<xs:enumeration value="TOUCOU"/>
+			<xs:enumeration value="TSIMHE"/>
+			<xs:enumeration value="TUAISL"/>
+			<xs:enumeration value="TUAREG"/>
+			<xs:enumeration value="TUMBUK"/>
+			<xs:enumeration value="TUNISN"/>
+			<xs:enumeration value="TURKME"/>
+			<xs:enumeration value="TURKOM"/>
+			<xs:enumeration value="TURKSH"/>
+			<xs:enumeration value="TUTSI"/>
+			<xs:enumeration value="TUVISL"/>
+			<xs:enumeration value="TWA"/>
+			<xs:enumeration value="UGANDN"/>
+			<xs:enumeration value="UKRANN"/>
+			<xs:enumeration value="URUGYN"/>
+			<xs:enumeration value="UYGUR"/>
+			<xs:enumeration value="UZBEK"/>
+			<xs:enumeration value="VANUAT"/>
+			<xs:enumeration value="VEDDA"/>
+			<xs:enumeration value="VENEZN"/>
+			<xs:enumeration value="VIETNM"/>
+			<xs:enumeration value="VITCHN"/>
+			<xs:enumeration value="VLACHS"/>
+			<xs:enumeration value="VOLTAC"/>
+			<xs:enumeration value="WAKISL"/>
+			<xs:enumeration value="WALISL"/>
+			<xs:enumeration value="WALLIS"/>
+			<xs:enumeration value="WALLOO"/>
+			<xs:enumeration value="WELSH"/>
+			<xs:enumeration value="WHITE"/>
+			<xs:enumeration value="WOLOF"/>
+			<xs:enumeration value="WSTIND"/>
+			<xs:enumeration value="YAO"/>
+			<xs:enumeration value="YAPISL"/>
+			<xs:enumeration value="YEMENI"/>
+			<xs:enumeration value="YI"/>
+			<xs:enumeration value="YORUBA"/>
+			<xs:enumeration value="YUGOSL"/>
+			<xs:enumeration value="ZAIRAN"/>
+			<xs:enumeration value="ZANZIB"/>
+			<xs:enumeration value="ZHUANG"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="OrganizationTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>Alphabetic code up to six letters describing the type of an organization, obtained from JC3IEDM-3.0.2 GroupOrganisationTypeCategoryCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CIVCON"/>
+			<xs:enumeration value="CNTRCT"/>
+			<xs:enumeration value="CRIMIN"/>
+			<xs:enumeration value="DSPLPR"/>
+			<xs:enumeration value="EDUCAL"/>
+			<xs:enumeration value="FINCAL"/>
+			<xs:enumeration value="FRNFGT"/>
+			<xs:enumeration value="GANG"/>
+			<xs:enumeration value="INSRGT"/>
+			<xs:enumeration value="INTEL"/>
+			<xs:enumeration value="INTLCT"/>
+			<xs:enumeration value="JRNLST"/>
+			<xs:enumeration value="JUDCAL"/>
+			<xs:enumeration value="LNDOWN"/>
+			<xs:enumeration value="LOCINH"/>
+			<xs:enumeration value="MEDCAL"/>
+			<xs:enumeration value="MEDINT"/>
+			<xs:enumeration value="MEDLCL"/>
+			<xs:enumeration value="MEDNAT"/>
+			<xs:enumeration value="MEDNOS"/>
+			<xs:enumeration value="MRCHNT"/>
+			<xs:enumeration value="NKN"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="POLCHF"/>
+			<xs:enumeration value="POLICE"/>
+			<xs:enumeration value="POLTCL"/>
+			<xs:enumeration value="POW"/>
+			<xs:enumeration value="PRSNR"/>
+			<xs:enumeration value="REFUGE"/>
+			<xs:enumeration value="SHURA"/>
+			<xs:enumeration value="SOCIAL"/>
+			<xs:enumeration value="TERRST"/>
+			<xs:enumeration value="TRIBAL"/>
+			<xs:enumeration value="VILELD"/>
+			<xs:enumeration value="WRITER"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ReligionCodeType">
+		<xs:annotation>
+			<xs:documentation>Alphabetic code, up to six letters, representing a religion, obtained from JC3IEDM-3.0.2 AffiliationReligionCode</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AFRMTH"/>
+			<xs:enumeration value="ANGLCN"/>
+			<xs:enumeration value="ANIMSM"/>
+			<xs:enumeration value="APSTLC"/>
+			<xs:enumeration value="ARMNAN"/>
+			<xs:enumeration value="ARMORT"/>
+			<xs:enumeration value="ASMGOD"/>
+			<xs:enumeration value="ATHEST"/>
+			<xs:enumeration value="BABYLN"/>
+			<xs:enumeration value="BAHAI"/>
+			<xs:enumeration value="BAPTST"/>
+			<xs:enumeration value="BEHAI"/>
+			<xs:enumeration value="BLGORT"/>
+			<xs:enumeration value="BUDHSM"/>
+			<xs:enumeration value="CALVNS"/>
+			<xs:enumeration value="CATHLC"/>
+			<xs:enumeration value="CHNDGY"/>
+			<xs:enumeration value="CHRENG"/>
+			<xs:enumeration value="CHRFRW"/>
+			<xs:enumeration value="CHRGOD"/>
+			<xs:enumeration value="CHRSLB"/>
+			<xs:enumeration value="CHRSTN"/>
+			<xs:enumeration value="CHRTVL"/>
+			<xs:enumeration value="CNFCNS"/>
+			<xs:enumeration value="CNG"/>
+			<xs:enumeration value="CNGCCH"/>
+			<xs:enumeration value="CNGNCH"/>
+			<xs:enumeration value="CPTCHR"/>
+			<xs:enumeration value="DRUZE"/>
+			<xs:enumeration value="EKLNIE"/>
+			<xs:enumeration value="EPSCPL"/>
+			<xs:enumeration value="ESTORT"/>
+			<xs:enumeration value="ETHORT"/>
+			<xs:enumeration value="EVNALL"/>
+			<xs:enumeration value="EVNGCH"/>
+			<xs:enumeration value="EVNLUT"/>
+			<xs:enumeration value="GEOORT"/>
+			<xs:enumeration value="GRGARM"/>
+			<xs:enumeration value="GRKCTH"/>
+			<xs:enumeration value="GRKORT"/>
+			<xs:enumeration value="HINDU"/>
+			<xs:enumeration value="IBDMUS"/>
+			<xs:enumeration value="INDGNS"/>
+			<xs:enumeration value="ISLAMA"/>
+			<xs:enumeration value="ISLAMC"/>
+			<xs:enumeration value="ISLAMI"/>
+			<xs:enumeration value="ISLAMN"/>
+			<xs:enumeration value="JAINS"/>
+			<xs:enumeration value="JHVWTN"/>
+			<xs:enumeration value="JUDASM"/>
+			<xs:enumeration value="KIEVPT"/>
+			<xs:enumeration value="KMBNGS"/>
+			<xs:enumeration value="LAMBUD"/>
+			<xs:enumeration value="LNDMSN"/>
+			<xs:enumeration value="LTRSNT"/>
+			<xs:enumeration value="LUTHRN"/>
+			<xs:enumeration value="MANDEA"/>
+			<xs:enumeration value="MARONT"/>
+			<xs:enumeration value="MENNTE"/>
+			<xs:enumeration value="METHDS"/>
+			<xs:enumeration value="MODKNG"/>
+			<xs:enumeration value="MORMON"/>
+			<xs:enumeration value="MSCWPT"/>
+			<xs:enumeration value="MUSLIM"/>
+			<xs:enumeration value="MUSMLY"/>
+			<xs:enumeration value="MUSSHF"/>
+			<xs:enumeration value="MUSZYD"/>
+			<xs:enumeration value="NIUNCH"/>
+			<xs:enumeration value="NKN"/>
+			<xs:enumeration value="NONE"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="ORTHDX"/>
+			<xs:enumeration value="PARSI"/>
+			<xs:enumeration value="PGNAFR"/>
+			<xs:enumeration value="PNTCST"/>
+			<xs:enumeration value="PRSBYT"/>
+			<xs:enumeration value="PRT"/>
+			<xs:enumeration value="PRTADV"/>
+			<xs:enumeration value="PRTEVN"/>
+			<xs:enumeration value="PRTMRV"/>
+			<xs:enumeration value="RMNCTH"/>
+			<xs:enumeration value="RMNCTU"/>
+			<xs:enumeration value="ROMORT"/>
+			<xs:enumeration value="RUSORT"/>
+			<xs:enumeration value="SHIMUS"/>
+			<xs:enumeration value="SHINTO"/>
+			<xs:enumeration value="SHMNSM"/>
+			<xs:enumeration value="SIKH"/>
+			<xs:enumeration value="SLVMUS"/>
+			<xs:enumeration value="SOCFRD"/>
+			<xs:enumeration value="SPRCLT"/>
+			<xs:enumeration value="SUNMUS"/>
+			<xs:enumeration value="SVNADV"/>
+			<xs:enumeration value="SYNCHN"/>
+			<xs:enumeration value="TAOISM"/>
+			<xs:enumeration value="TBTBUD"/>
+			<xs:enumeration value="THRVBD"/>
+			<xs:enumeration value="TRBREL"/>
+			<xs:enumeration value="TRD"/>
+			<xs:enumeration value="TRDMYN"/>
+			<xs:enumeration value="UKRAUT"/>
+			<xs:enumeration value="UKRCTH"/>
+			<xs:enumeration value="UKRORT"/>
+			<xs:enumeration value="UNCH"/>
+			<xs:enumeration value="UNCHAU"/>
+			<xs:enumeration value="UNCHCN"/>
+			<xs:enumeration value="UNCHPR"/>
+			<xs:enumeration value="UNDMTH"/>
+			<xs:enumeration value="UNDPRB"/>
+			<xs:enumeration value="UNFRCH"/>
+			<xs:enumeration value="UNICTH"/>
+			<xs:enumeration value="VOODOO"/>
+			<xs:enumeration value="ZRSTRN"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="TaskType">
+		<xs:choice>
+			<xs:element name="ManeuverWarfareTask" type="ManeuverWarfareTaskType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+			<xs:simpleType name="ManeuverWarfareTaskActionCodeType">
+		<xs:annotation>
+			<xs:documentation>A code (enumerated value) that defines the action associated with a manuever warfare task.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACQUIR"/>
+			<xs:enumeration value="ADVANC"/>
+			<xs:enumeration value="AEREVA"/>
+			<xs:enumeration value="AERRFL"/>
+			<xs:enumeration value="AEW"/>
+			<xs:enumeration value="AEWCON"/>
+			<xs:enumeration value="AIRDEF"/>
+			<xs:enumeration value="AIRLND"/>
+			<xs:enumeration value="AIRSUP"/>
+			<xs:enumeration value="AIRSWP"/>
+			<xs:enumeration value="AMBUSH"/>
+			<xs:enumeration value="AMPH"/>
+			<xs:enumeration value="AMPHWF"/>
+			<xs:enumeration value="ANALYS"/>
+			<xs:enumeration value="ANARWF"/>
+			<xs:enumeration value="ANSBWF"/>
+			<xs:enumeration value="ANSFWF"/>
+			<xs:enumeration value="ANTARM"/>
+			<xs:enumeration value="ARASLT"/>
+			<xs:enumeration value="ARBNAS"/>
+			<xs:enumeration value="ARCCTL"/>
+			<xs:enumeration value="ARDREQ"/>
+			<xs:enumeration value="ARDROP"/>
+			<xs:enumeration value="ARINTR"/>
+			<xs:enumeration value="ARLFSA"/>
+			<xs:enumeration value="ARLFTR"/>
+			<xs:enumeration value="ARMAS"/>
+			<xs:enumeration value="ARRLGL"/>
+			<xs:enumeration value="ARROBS"/>
+			<xs:enumeration value="ARTCTL"/>
+			<xs:enumeration value="ASSMBL"/>
+			<xs:enumeration value="ATTACK"/>
+			<xs:enumeration value="ATTDVR"/>
+			<xs:enumeration value="ATTEL"/>
+			<xs:enumeration value="ATTMN"/>
+			<xs:enumeration value="ATTRIT"/>
+			<xs:enumeration value="ATTSPT"/>
+			<xs:enumeration value="AVOID"/>
+			<xs:enumeration value="AWACS"/>
+			<xs:enumeration value="BIOSMP"/>
+			<xs:enumeration value="BLDUP"/>
+			<xs:enumeration value="BLOCK"/>
+			<xs:enumeration value="BRAKUP"/>
+			<xs:enumeration value="BREACH"/>
+			<xs:enumeration value="BYPASS"/>
+			<xs:enumeration value="CADVGD"/>
+			<xs:enumeration value="CANDC"/>
+			<xs:enumeration value="CANLSE"/>
+			<xs:enumeration value="CAPBAR"/>
+			<xs:enumeration value="CAPNGR"/>
+			<xs:enumeration value="CAPPRT"/>
+			<xs:enumeration value="CAPRES"/>
+			<xs:enumeration value="CAPSRF"/>
+			<xs:enumeration value="CAPTUR"/>
+			<xs:enumeration value="CARLNC"/>
+			<xs:enumeration value="CARREC"/>
+			<xs:enumeration value="CBRHDF"/>
+			<xs:enumeration value="CBRKOF"/>
+			<xs:enumeration value="CDWDAC"/>
+			<xs:enumeration value="CFLKGD"/>
+			<xs:enumeration value="CHAFF"/>
+			<xs:enumeration value="CHMSMP"/>
+			<xs:enumeration value="CINPLF"/>
+			<xs:enumeration value="CLARSP"/>
+			<xs:enumeration value="CLOSE"/>
+			<xs:enumeration value="CLRAIR"/>
+			<xs:enumeration value="CLRLND"/>
+			<xs:enumeration value="CLROBS"/>
+			<xs:enumeration value="CLRRAD"/>
+			<xs:enumeration value="CMAINB"/>
+			<xs:enumeration value="CNFPSL"/>
+			<xs:enumeration value="CNFSTE"/>
+			<xs:enumeration value="CNRPSL"/>
+			<xs:enumeration value="CNRSVC"/>
+			<xs:enumeration value="CNSLDT"/>
+			<xs:enumeration value="COARPL"/>
+			<xs:enumeration value="COMC3I"/>
+			<xs:enumeration value="COMINC"/>
+			<xs:enumeration value="COMREL"/>
+			<xs:enumeration value="CONSTR"/>
+			<xs:enumeration value="CONTAN"/>
+			<xs:enumeration value="COOPER"/>
+			<xs:enumeration value="COURER"/>
+			<xs:enumeration value="COVER"/>
+			<xs:enumeration value="CRESRV"/>
+			<xs:enumeration value="CROSS"/>
+			<xs:enumeration value="CRRGD"/>
+			<xs:enumeration value="CTRATK"/>
+			<xs:enumeration value="CTRBYF"/>
+			<xs:enumeration value="CTRFIR"/>
+			<xs:enumeration value="DAZZLE"/>
+			<xs:enumeration value="DCPTEL"/>
+			<xs:enumeration value="DEBARK"/>
+			<xs:enumeration value="DECEIV"/>
+			<xs:enumeration value="DECSVC"/>
+			<xs:enumeration value="DEFCNT"/>
+			<xs:enumeration value="DEFDST"/>
+			<xs:enumeration value="DEFEAT"/>
+			<xs:enumeration value="DEFEND"/>
+			<xs:enumeration value="DEFLCT"/>
+			<xs:enumeration value="DEFSUP"/>
+			<xs:enumeration value="DELAY"/>
+			<xs:enumeration value="DEMFRP"/>
+			<xs:enumeration value="DEMGRD"/>
+			<xs:enumeration value="DEMO"/>
+			<xs:enumeration value="DENY"/>
+			<xs:enumeration value="DEPLOY"/>
+			<xs:enumeration value="DESCRB"/>
+			<xs:enumeration value="DESTRY"/>
+			<xs:enumeration value="DETECT"/>
+			<xs:enumeration value="DISENG"/>
+			<xs:enumeration value="DISRPT"/>
+			<xs:enumeration value="DIVE"/>
+			<xs:enumeration value="DIVERT"/>
+			<xs:enumeration value="DLBATK"/>
+			<xs:enumeration value="DRONL"/>
+			<xs:enumeration value="DSTRBT"/>
+			<xs:enumeration value="DUMPNG"/>
+			<xs:enumeration value="ELCCNM"/>
+			<xs:enumeration value="ELCWAR"/>
+			<xs:enumeration value="ELCWRS"/>
+			<xs:enumeration value="EMBARK"/>
+			<xs:enumeration value="ENGAGE"/>
+			<xs:enumeration value="ENVLP"/>
+			<xs:enumeration value="ESCRT"/>
+			<xs:enumeration value="EVACT"/>
+			<xs:enumeration value="EXFLTR"/>
+			<xs:enumeration value="EXPLT"/>
+			<xs:enumeration value="FIX"/>
+			<xs:enumeration value="FIXACO"/>
+			<xs:enumeration value="FIXELM"/>
+			<xs:enumeration value="FIXELO"/>
+			<xs:enumeration value="FNCHFL"/>
+			<xs:enumeration value="FOLASS"/>
+			<xs:enumeration value="FOLSPT"/>
+			<xs:enumeration value="FRWDAC"/>
+			<xs:enumeration value="GENCHS"/>
+			<xs:enumeration value="GUARD"/>
+			<xs:enumeration value="HARASS"/>
+			<xs:enumeration value="HASTY"/>
+			<xs:enumeration value="HIDE"/>
+			<xs:enumeration value="HLDDEF"/>
+			<xs:enumeration value="HLDOFF"/>
+			<xs:enumeration value="HONASP"/>
+			<xs:enumeration value="IDENT"/>
+			<xs:enumeration value="IDENTP"/>
+			<xs:enumeration value="ILLUMN"/>
+			<xs:enumeration value="IMINGT"/>
+			<xs:enumeration value="INFILT"/>
+			<xs:enumeration value="INFOOP"/>
+			<xs:enumeration value="INTCEP"/>
+			<xs:enumeration value="INTCOL"/>
+			<xs:enumeration value="INTDCT"/>
+			<xs:enumeration value="ISOLAT"/>
+			<xs:enumeration value="ISSMDA"/>
+			<xs:enumeration value="ISSMDD"/>
+			<xs:enumeration value="ISSPRS"/>
+			<xs:enumeration value="JAM"/>
+			<xs:enumeration value="LAY"/>
+			<xs:enumeration value="LEAGR"/>
+			<xs:enumeration value="LIFT"/>
+			<xs:enumeration value="LIFTAD"/>
+			<xs:enumeration value="LOCATE"/>
+			<xs:enumeration value="MAINTN"/>
+			<xs:enumeration value="MAP"/>
+			<xs:enumeration value="MARK"/>
+			<xs:enumeration value="MASSFR"/>
+			<xs:enumeration value="MCM11"/>
+			<xs:enumeration value="MCM12"/>
+			<xs:enumeration value="MCM13"/>
+			<xs:enumeration value="MCM14"/>
+			<xs:enumeration value="MCM31"/>
+			<xs:enumeration value="MCM32"/>
+			<xs:enumeration value="MCM33"/>
+			<xs:enumeration value="MCM34"/>
+			<xs:enumeration value="MCM35"/>
+			<xs:enumeration value="MCM36"/>
+			<xs:enumeration value="MCM37"/>
+			<xs:enumeration value="MCM38"/>
+			<xs:enumeration value="MCM39"/>
+			<xs:enumeration value="MCM41"/>
+			<xs:enumeration value="MCM42"/>
+			<xs:enumeration value="MCM43"/>
+			<xs:enumeration value="MCM44"/>
+			<xs:enumeration value="MCM45"/>
+			<xs:enumeration value="MCM46"/>
+			<xs:enumeration value="MCM47"/>
+			<xs:enumeration value="MCM48"/>
+			<xs:enumeration value="MCM50"/>
+			<xs:enumeration value="MCM51"/>
+			<xs:enumeration value="MCM52"/>
+			<xs:enumeration value="MCM53"/>
+			<xs:enumeration value="MCM54"/>
+			<xs:enumeration value="MCM55"/>
+			<xs:enumeration value="MCM56"/>
+			<xs:enumeration value="MCM57"/>
+			<xs:enumeration value="MCM58A"/>
+			<xs:enumeration value="MCM58B"/>
+			<xs:enumeration value="MCM58C"/>
+			<xs:enumeration value="MCM59"/>
+			<xs:enumeration value="MCM61"/>
+			<xs:enumeration value="MCM62"/>
+			<xs:enumeration value="MCM63"/>
+			<xs:enumeration value="MCM71"/>
+			<xs:enumeration value="MCM72"/>
+			<xs:enumeration value="MCM73"/>
+			<xs:enumeration value="MCM74"/>
+			<xs:enumeration value="MCM75"/>
+			<xs:enumeration value="MCM81"/>
+			<xs:enumeration value="MCM82"/>
+			<xs:enumeration value="MCM83"/>
+			<xs:enumeration value="MCM84"/>
+			<xs:enumeration value="MCM85"/>
+			<xs:enumeration value="MCM86"/>
+			<xs:enumeration value="MCM87"/>
+			<xs:enumeration value="MCM88"/>
+			<xs:enumeration value="MCM89"/>
+			<xs:enumeration value="MCM91"/>
+			<xs:enumeration value="MCM92"/>
+			<xs:enumeration value="MCM93"/>
+			<xs:enumeration value="MCMATT"/>
+			<xs:enumeration value="MCMCHK"/>
+			<xs:enumeration value="MCMEXP"/>
+			<xs:enumeration value="MCMLDT"/>
+			<xs:enumeration value="MCMLMC"/>
+			<xs:enumeration value="MCMPRE"/>
+			<xs:enumeration value="MCMSA"/>
+			<xs:enumeration value="MCMSAA"/>
+			<xs:enumeration value="MCMSAC"/>
+			<xs:enumeration value="MCMSAD"/>
+			<xs:enumeration value="MCMSAG"/>
+			<xs:enumeration value="MCMSAH"/>
+			<xs:enumeration value="MCMSAM"/>
+			<xs:enumeration value="MCMSAZ"/>
+			<xs:enumeration value="MCMSB"/>
+			<xs:enumeration value="MCMSBZ"/>
+			<xs:enumeration value="MCMSC"/>
+			<xs:enumeration value="MCMSCA"/>
+			<xs:enumeration value="MCMSCC"/>
+			<xs:enumeration value="MCMSCD"/>
+			<xs:enumeration value="MCMSCG"/>
+			<xs:enumeration value="MCMSCH"/>
+			<xs:enumeration value="MCMSCM"/>
+			<xs:enumeration value="MCMSCZ"/>
+			<xs:enumeration value="MCMSE"/>
+			<xs:enumeration value="MCMSEA"/>
+			<xs:enumeration value="MCMSEC"/>
+			<xs:enumeration value="MCMSED"/>
+			<xs:enumeration value="MCMSEG"/>
+			<xs:enumeration value="MCMSEH"/>
+			<xs:enumeration value="MCMSEM"/>
+			<xs:enumeration value="MCMSEZ"/>
+			<xs:enumeration value="MCMSL"/>
+			<xs:enumeration value="MCMSLA"/>
+			<xs:enumeration value="MCMSLH"/>
+			<xs:enumeration value="MCMSLM"/>
+			<xs:enumeration value="MCMSLZ"/>
+			<xs:enumeration value="MCMSP"/>
+			<xs:enumeration value="MCMSPA"/>
+			<xs:enumeration value="MCMSPC"/>
+			<xs:enumeration value="MCMSPG"/>
+			<xs:enumeration value="MCMSPH"/>
+			<xs:enumeration value="MCMSPM"/>
+			<xs:enumeration value="MCMSPZ"/>
+			<xs:enumeration value="MCMSR"/>
+			<xs:enumeration value="MCMSRD"/>
+			<xs:enumeration value="MCMSRH"/>
+			<xs:enumeration value="MCMSRV"/>
+			<xs:enumeration value="MCMSS"/>
+			<xs:enumeration value="MCMSSA"/>
+			<xs:enumeration value="MCMSSC"/>
+			<xs:enumeration value="MCMSSD"/>
+			<xs:enumeration value="MCMSSG"/>
+			<xs:enumeration value="MCMSSH"/>
+			<xs:enumeration value="MCMSSM"/>
+			<xs:enumeration value="MCMSSZ"/>
+			<xs:enumeration value="MCMSU"/>
+			<xs:enumeration value="MCMSUH"/>
+			<xs:enumeration value="MCMSUZ"/>
+			<xs:enumeration value="MCMSV"/>
+			<xs:enumeration value="MCMSVA"/>
+			<xs:enumeration value="MCMSVC"/>
+			<xs:enumeration value="MCMSVD"/>
+			<xs:enumeration value="MCMSVG"/>
+			<xs:enumeration value="MCMSVH"/>
+			<xs:enumeration value="MCMSVM"/>
+			<xs:enumeration value="MCMSVZ"/>
+			<xs:enumeration value="MCMSW"/>
+			<xs:enumeration value="MCMSWZ"/>
+			<xs:enumeration value="MCMSZZ"/>
+			<xs:enumeration value="MCMTML"/>
+			<xs:enumeration value="MEDEVC"/>
+			<xs:enumeration value="METBAL"/>
+			<xs:enumeration value="MINCM"/>
+			<xs:enumeration value="MINEWF"/>
+			<xs:enumeration value="MINLAY"/>
+			<xs:enumeration value="MINSWP"/>
+			<xs:enumeration value="MISSTG"/>
+			<xs:enumeration value="MNHUNT"/>
+			<xs:enumeration value="MNSWMA"/>
+			<xs:enumeration value="MNTAIR"/>
+			<xs:enumeration value="MNTGRD"/>
+			<xs:enumeration value="MOPUP"/>
+			<xs:enumeration value="MOVE"/>
+			<xs:enumeration value="MPA"/>
+			<xs:enumeration value="MRITOP"/>
+			<xs:enumeration value="NACLSP"/>
+			<xs:enumeration value="NTRCHM"/>
+			<xs:enumeration value="NTRCOM"/>
+			<xs:enumeration value="NTREXP"/>
+			<xs:enumeration value="NUCSMP"/>
+			<xs:enumeration value="NVLPLF"/>
+			<xs:enumeration value="OBSCUR"/>
+			<xs:enumeration value="OBSRV"/>
+			<xs:enumeration value="OCCUPY"/>
+			<xs:enumeration value="OFFAIR"/>
+			<xs:enumeration value="OFFCNA"/>
+			<xs:enumeration value="ORGCNF"/>
+			<xs:enumeration value="ORGMED"/>
+			<xs:enumeration value="ORGRCR"/>
+			<xs:enumeration value="ORGSCL"/>
+			<xs:enumeration value="ORGSPT"/>
+			<xs:enumeration value="PATROL"/>
+			<xs:enumeration value="PENTRT"/>
+			<xs:enumeration value="PHOTO"/>
+			<xs:enumeration value="PLAN"/>
+			<xs:enumeration value="PREFIR"/>
+			<xs:enumeration value="PREPR"/>
+			<xs:enumeration value="PROCUR"/>
+			<xs:enumeration value="PROTEL"/>
+			<xs:enumeration value="PRVACC"/>
+			<xs:enumeration value="PRVAGR"/>
+			<xs:enumeration value="PRVBDD"/>
+			<xs:enumeration value="PRVCMP"/>
+			<xs:enumeration value="PRVCNS"/>
+			<xs:enumeration value="PRVEDU"/>
+			<xs:enumeration value="PRVHLT"/>
+			<xs:enumeration value="PRVINF"/>
+			<xs:enumeration value="PRVLND"/>
+			<xs:enumeration value="PRVRPR"/>
+			<xs:enumeration value="PRVSCY"/>
+			<xs:enumeration value="PRVSHL"/>
+			<xs:enumeration value="PRVSTG"/>
+			<xs:enumeration value="PRVTRS"/>
+			<xs:enumeration value="PSYCHW"/>
+			<xs:enumeration value="PUBMDA"/>
+			<xs:enumeration value="PUBMDD"/>
+			<xs:enumeration value="PUBPRS"/>
+			<xs:enumeration value="PURSUE"/>
+			<xs:enumeration value="RCALIB"/>
+			<xs:enumeration value="RECARM"/>
+			<xs:enumeration value="RECCE"/>
+			<xs:enumeration value="RECCEF"/>
+			<xs:enumeration value="RECCEL"/>
+			<xs:enumeration value="RECCES"/>
+			<xs:enumeration value="RECECM"/>
+			<xs:enumeration value="RECONS"/>
+			<xs:enumeration value="RECOVR"/>
+			<xs:enumeration value="RECPHO"/>
+			<xs:enumeration value="RECRAD"/>
+			<xs:enumeration value="RECTGT"/>
+			<xs:enumeration value="RECUPR"/>
+			<xs:enumeration value="RECVIS"/>
+			<xs:enumeration value="REDEPL"/>
+			<xs:enumeration value="REFILL"/>
+			<xs:enumeration value="REFORM"/>
+			<xs:enumeration value="REFUEL"/>
+			<xs:enumeration value="REINF"/>
+			<xs:enumeration value="REORG"/>
+			<xs:enumeration value="REPAIR"/>
+			<xs:enumeration value="RESCUE"/>
+			<xs:enumeration value="REST"/>
+			<xs:enumeration value="RESUPL"/>
+			<xs:enumeration value="RETAIN"/>
+			<xs:enumeration value="RETIRE"/>
+			<xs:enumeration value="RLFPLC"/>
+			<xs:enumeration value="RNDZVA"/>
+			<xs:enumeration value="RNDZVB"/>
+			<xs:enumeration value="RNDZVC"/>
+			<xs:enumeration value="RNDZVD"/>
+			<xs:enumeration value="RNDZVE"/>
+			<xs:enumeration value="RNDZVF"/>
+			<xs:enumeration value="RNDZVG"/>
+			<xs:enumeration value="RNDZVS"/>
+			<xs:enumeration value="SAR"/>
+			<xs:enumeration value="SARCME"/>
+			<xs:enumeration value="SARCMI"/>
+			<xs:enumeration value="SARPLG"/>
+			<xs:enumeration value="SCOUT"/>
+			<xs:enumeration value="SCREEN"/>
+			<xs:enumeration value="SCRMBL"/>
+			<xs:enumeration value="SECURE"/>
+			<xs:enumeration value="SECURT"/>
+			<xs:enumeration value="SEIZE"/>
+			<xs:enumeration value="SENSIM"/>
+			<xs:enumeration value="SERASE"/>
+			<xs:enumeration value="SERATE"/>
+			<xs:enumeration value="SERCH"/>
+			<xs:enumeration value="SERFLO"/>
+			<xs:enumeration value="SERFOE"/>
+			<xs:enumeration value="SERFRE"/>
+			<xs:enumeration value="SERFTE"/>
+			<xs:enumeration value="SERFUE"/>
+			<xs:enumeration value="SERREE"/>
+			<xs:enumeration value="SERRSE"/>
+			<xs:enumeration value="SERSEA"/>
+			<xs:enumeration value="SERSOE"/>
+			<xs:enumeration value="SERSPE"/>
+			<xs:enumeration value="SERSTE"/>
+			<xs:enumeration value="SERSTR"/>
+			<xs:enumeration value="SERTHR"/>
+			<xs:enumeration value="SETUP"/>
+			<xs:enumeration value="SINGA"/>
+			<xs:enumeration value="SPCOPS"/>
+			<xs:enumeration value="SPREAD"/>
+			<xs:enumeration value="SPTCON"/>
+			<xs:enumeration value="SPTELC"/>
+			<xs:enumeration value="SRCHFR"/>
+			<xs:enumeration value="SRCRES"/>
+			<xs:enumeration value="STRCON"/>
+			<xs:enumeration value="STRWAF"/>
+			<xs:enumeration value="SUBWAF"/>
+			<xs:enumeration value="SUPPRS"/>
+			<xs:enumeration value="SUPPRT"/>
+			<xs:enumeration value="SURVEL"/>
+			<xs:enumeration value="SURVLE"/>
+			<xs:enumeration value="SUSOAA"/>
+			<xs:enumeration value="SWEEP"/>
+			<xs:enumeration value="TCARRC"/>
+			<xs:enumeration value="TGTDLT"/>
+			<xs:enumeration value="THREAT"/>
+			<xs:enumeration value="TOWTGT"/>
+			<xs:enumeration value="TRAIN"/>
+			<xs:enumeration value="TRANOP"/>
+			<xs:enumeration value="TRANS"/>
+			<xs:enumeration value="TRNSAA"/>
+			<xs:enumeration value="TRVRS"/>
+			<xs:enumeration value="TURN"/>
+			<xs:enumeration value="UNCONW"/>
+			<xs:enumeration value="UTILTY"/>
+			<xs:enumeration value="VERIFY"/>
+			<xs:enumeration value="WDRPRS"/>
+			<xs:enumeration value="WITHDR"/>
+			<xs:enumeration value="WITNES"/>
+			<xs:enumeration value="WLDWSL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="OrganizationCodeType">
+		<xs:choice>
+			<xs:element name="CountryCode" type="CountryCodeType"/>
+			<xs:element name="EthnicGroupCode" type="EthnicGroupCodeType"/>
+			<xs:element name="OrganizationTypeCode" type="OrganizationTypeCodeType"/>
+			<xs:element name="ReligionCode" type="ReligionCodeType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="DesiredEffectCodeType">
+		<xs:annotation>
+			<xs:documentation>A code describing the intended effect of a task.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BURN"/>
+			<xs:enumeration value="CAPTRD"/>
+			<xs:enumeration value="CONS"/>
+			<xs:enumeration value="DSTRYK"/>
+			<xs:enumeration value="FKIL"/>
+			<xs:enumeration value="FLIG"/>
+			<xs:enumeration value="GenericEffect"/>
+			<xs:enumeration value="IDNT"/>
+			<xs:enumeration value="ILLUMN"/>
+			<xs:enumeration value="INTREC"/>
+			<xs:enumeration value="KILL"/>
+			<xs:enumeration value="LDAM"/>
+			<xs:enumeration value="LGTRST"/>
+			<xs:enumeration value="LOST"/>
+			<xs:enumeration value="MKIL"/>
+			<xs:enumeration value="MODDAM"/>
+			<xs:enumeration value="NBCAS"/>
+			<xs:enumeration value="NKN"/>
+			<xs:enumeration value="NORSTN"/>
+			<xs:enumeration value="NOS"/>
+			<xs:enumeration value="NUTRLD"/>
+			<xs:enumeration value="SDAM"/>
+			<xs:enumeration value="SUPRSD"/>
+			<xs:enumeration value="WNDD"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TaskNameCodeType">
+		<xs:annotation>
+			<xs:documentation>The activity to be performed in the task, e.g. Move, Observe, Assist.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACQUIR"/>
+			<xs:enumeration value="ADVANC"/>
+			<xs:enumeration value="AIRDEF"/>
+			<xs:enumeration value="AMBUSH"/>
+			<xs:enumeration value="ARASLT"/>
+			<xs:enumeration value="ASSMBL"/>
+			<xs:enumeration value="ATTACK"/>
+			<xs:enumeration value="ATTRIT"/>
+			<xs:enumeration value="ATTSPT"/>
+			<xs:enumeration value="AVOID"/>
+			<xs:enumeration value="AssistOtherUnit"/>
+			<xs:enumeration value="BLOCK"/>
+			<xs:enumeration value="BREACH"/>
+			<xs:enumeration value="BYPASS"/>
+			<xs:enumeration value="CAPTUR"/>
+			<xs:enumeration value="CLOSE"/>
+			<xs:enumeration value="CLRLND"/>
+			<xs:enumeration value="CLROBS"/>
+			<xs:enumeration value="CNFPSL"/>
+			<xs:enumeration value="CNRPSL"/>
+			<xs:enumeration value="COVER"/>
+			<xs:enumeration value="CRESRV"/>
+			<xs:enumeration value="CTRATK"/>
+			<xs:enumeration value="CTRBYF"/>
+			<xs:enumeration value="CTRFIR"/>
+			<!-- next line added 11Apr19 JMP-->
+			<xs:enumeration value="DEBARK"/>
+			<xs:enumeration value="DECEIV"/>
+			<xs:enumeration value="DEFEAT"/>
+			<xs:enumeration value="DEFEND"/>
+			<xs:enumeration value="DELAY"/>
+			<xs:enumeration value="DENY"/>
+			<xs:enumeration value="DESTRY"/>
+			<xs:enumeration value="DISENG"/>
+			<xs:enumeration value="DISRPT"/>
+			<xs:enumeration value="DLBATK"/>
+			<xs:enumeration value="DRONL"/>
+			<!-- next line added 22Apr19 JMP-->
+			<xs:enumeration value="EMBARK"/>
+			<xs:enumeration value="ENGAGE"/>
+			<xs:enumeration value="ENVLP"/>
+			<xs:enumeration value="EXPLT"/>
+			<xs:enumeration value="FIX"/>
+			<xs:enumeration value="GUARD"/>
+			<xs:enumeration value="HARASS"/>
+			<xs:enumeration value="HASTY"/>
+			<xs:enumeration value="HONASP"/>
+			<xs:enumeration value="HoldInPlace"/>
+			<xs:enumeration value="INFILT"/>
+			<xs:enumeration value="INTDCT"/>
+			<xs:enumeration value="ISOLAT"/>
+			<xs:enumeration value="LOCATE"/>
+			<xs:enumeration value="MEDEVC"/>
+			<xs:enumeration value="MOPUP"/>
+			<xs:enumeration value="MOVE"/>
+			<xs:enumeration value="MoveToLocation"/>
+			<xs:enumeration value="OBSCUR"/>
+			<xs:enumeration value="OBSRV"/>
+			<xs:enumeration value="OCCUPY"/>
+			<xs:enumeration value="Observe"/>
+			<xs:enumeration value="OrientToLocation"/>
+			<xs:enumeration value="PATROL"/>
+			<xs:enumeration value="PENTRT"/>
+			<xs:enumeration value="PLAN"/>
+			<xs:enumeration value="PREFIR"/>
+			<xs:enumeration value="PURSUE"/>
+			<xs:enumeration value="RECCE"/>
+			<xs:enumeration value="RECONS"/>
+			<xs:enumeration value="RECOVR"/>
+			<xs:enumeration value="REFUEL"/>
+			<xs:enumeration value="REINF"/>
+			<xs:enumeration value="RESCUE"/>
+			<xs:enumeration value="RESUPL"/>
+			<xs:enumeration value="RETAIN"/>
+			<xs:enumeration value="RLFPLC"/>
+			<xs:enumeration value="ReportPosition"/>
+			<xs:enumeration value="SCREEN"/>
+			<xs:enumeration value="SECURE"/>
+			<xs:enumeration value="SEIZE"/>
+			<xs:enumeration value="SUPPRS"/>
+			<xs:enumeration value="SUPPRT"/>
+			<xs:enumeration value="THREAT"/>
+			<xs:enumeration value="TURN"/>
+			<xs:enumeration value="UseCapability"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="IsoTimeDurationBaseType">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="[P]{1}[0-9]{2}[Y]{1}[0-9]{2}[M]{1}[0-9]{2}[D]{1}[T]{1}[0-9]{2}[H]{1}[0-9]{2}[M]{1}[0-9]{2}[S]{1}"
+			/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IsoTimeDurationType">
+		<xs:restriction base="IsoTimeDurationBaseType"/>
+	</xs:simpleType>
+	<xs:complexType name="DurationType">
+		<xs:annotation>
+			<xs:documentation>A time duration expressed in ISO 8601:2000 duration format PnYnMnDTnHnMnS e.g. P00Y00M00DT00H00M00S. Note that this does not support fractions of seconds. From MSDL simple types.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IsoTimeDuration" type="IsoTimeDurationType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="AffectedEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="PerformingEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="TaskFunctionalAssociationCodeType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="latitudeType">
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-90.0"/>
+			<xs:maxInclusive value="90.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LatitudeType">
+		<xs:annotation>
+			<xs:documentation>This should have a range specified of -90 to +90 (degrees)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="latitudeType"/>
+	</xs:simpleType>
+	<xs:simpleType name="longitudeType">
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-180.0"/>
+			<xs:maxInclusive value="180.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LongitudeType">
+		<xs:annotation>
+			<xs:documentation>This should have a range specified of -180 to +180 (degrees)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="longitudeType"/>
+	</xs:simpleType>
+	<xs:simpleType name="AltitudeAGLType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="AltitudeMSLType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="spatialMeasuresType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="AngleType">
+		<xs:restriction base="spatialMeasuresType"/>
+	</xs:simpleType>
+
+	<xs:complexType name="GeodeticCoordinateType">
+		<xs:sequence>
+			<xs:element name="Latitude" type="LatitudeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Longitude" type="LongitudeType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="AltitudeAGL" type="AltitudeAGLType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="AltitudeMSL" type="AltitudeMSLType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="XType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="YType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:simpleType name="ZType">
+		<xs:restriction base="xs:double"/>
+	</xs:simpleType>
+	<xs:element name="GeodeticCoordinate" type="GeodeticCoordinateType"/>
+
+	<xs:complexType name="CartesianOffsetType">
+		<xs:annotation>
+			<xs:documentation>A spatial offset expressed in geocentric coordinates.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="X" type="XType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Y" type="YType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Z" type="ZType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CartesianOffset" type="CartesianOffsetType"/>
+	<xs:complexType name="SpatialOffsetType">
+		<xs:choice>
+			<xs:element ref="CartesianOffset"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:simpleType name="LocationReferenceEntityType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:complexType name="EntityDefinedLocationType">
+		<xs:annotation>
+			<xs:documentation>A location defined by the location of a ConcreteEntity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LocationReferenceEntity" type="LocationReferenceEntityType"
+				minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RelativeLocationType">
+		<xs:annotation>
+			<xs:documentation>A location defined by an offset to some reference location.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SpatialOffset" type="SpatialOffsetType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EntityReference" type="EntityReferenceType" minOccurs="1"
+				maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="EntityReferenceType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+	<xs:complexType name="LocationType">
+		<xs:choice>
+			<xs:element name="GeodeticCoordinate" type="GeodeticCoordinateType"/>
+			<xs:element name="EntityDefinedLocation" type="EntityDefinedLocationType"/>
+			<xs:element name="RelativeLocation" type="RelativeLocationType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="MapGraphicIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="UUIDType">
+		<xs:restriction base="UUIDBaseType"/>
+	</xs:simpleType>
+
+	<xs:simpleType name="NameType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+</xs:schema>

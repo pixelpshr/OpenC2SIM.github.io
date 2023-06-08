@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jaxfront version=2.61;time=2009-07-01 14:06:11.238;xsd=IBMLOrderPushPulls0.15.xsd;xui=file:/C:/BMLGUI/IBML/Sam.xui;nsMapping=%KEYhttp://www.jaxfront.com/xui%VAL%KEYhttp://www.w3.org/2001/XMLSchema%VALxsd%KEYhttp://www.w3.org/2001/XMLSchema-instance%VALxsi?>
+<XUI  xsi:schemaLocation="http://www.jaxfront.com/xui jar:file:/C:/Program%20Files/JAXFront-2.6/lib/jaxfront-core.jar!/xui.xsd" xmlns="http://www.jaxfront.com/xui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       <component xpath="/OrderPush">
+              <style>
+                     <treeEntry>
+                            <label>Main Order</label>
+                            <occurrence showChildrenAsOptional="true">
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+                     <caption>
+                            <style>
+                                   <type collapsed="false"/>
+                            </style>
+                     </caption>
+              </style>
+       </component>
+       <component xpath="/OrderPush/OrderPush">
+              <style>
+                     <mode visible="true" childrenView="tab">
+                            <message/>
+                     </mode>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+              </style>
+       </component>
+       <component xpath="/OrderPush/OrderPush[list]">
+              <style>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+                     <list>
+                            <tab/>
+                     </list>
+              </style>
+       </component>
+       <component xpath="/OrderPush/OrderPush/bml:OrderMode"></component>
+       <component xpath="/OrderPush/OrderPush/bml:Task">
+              <style>
+                     <choice type="radioButton"/>
+              </style>
+       </component>
+       <component xpath="/OrderPush/OrderPush/bml:Task[list]bml:Task[list]"></component>
+       <component xpath="/OrderPush/OrderPush[1]/bml:Task">
+              <style>
+                     <treeEntry>
+                            <showSearch>true</showSearch>
+                     </treeEntry>
+                     <caption>
+                            <style>
+                                   <type collapsed="false"/>
+                            </style>
+                     </caption>
+                     <choice type="comboBox"/>
+              </style>
+       </component>
+</XUI>

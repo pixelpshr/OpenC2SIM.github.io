@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+	targetNamespace="http://netlab.gmu.edu/IBML" 	
+	xmlns:bml="http://netlab.gmu.edu/IBML" 
+	xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-BaseTypes.xsd"/>
+	<xs:include schemaLocation="JBMLOrderTypes.xsd"/>
+	<xs:include schemaLocation="FiveWTypes.xsd"/>
+	<xs:element name="OrderPushIBML10">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="OrderPush" type="bml:OrderType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OrderPullIBML10">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="OrderID" type="bml:LabelType"/>
+				<!-- Removed by GMU in the SBML scripts but not in the Schema until now. -->
+				<!-- <xs:element name="TaskID"  type="bml:LabelType"></xs:element> -->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Needed but Not Implemented -->
+	<xs:element name="OrderSummaryList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Order" type="bml:OrderSummaryType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Needed but Not Implemented -->
+	<xs:complexType name="OrderSummaryType">
+		<xs:sequence>
+			<xs:element name="OrderIssuedWhen" type="mip:Datetime18XmlType"/>
+			<xs:element name="OrderID" type="bml:LabelType"/>
+			<!-- At the moment, we don't need to know if it's a GroundTask or an AirTask -->
+			<xs:element name="Task" type="bml:TaskSummaryType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Needed but Not Implemented -->
+	<xs:complexType name="TaskSummaryType">
+		<xs:sequence>
+			<xs:element name="TaskeeWho" type="bml:WhoType"/>
+			<xs:element name="TaskID" type="bml:LabelType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Replaced by OrderSummaryList -->
+	<!-- <xs:element name="OrderIDs"/>
+			<xs:complexType>
+				<xs:sequence>
+						<xs:element name="OrderID" type="bml:LabelType" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>-->
+		
+	<xs:element name="OrderIDPull">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- Needed but Not Implemented -->
+				<xs:element name="Context" type="bml:LabelType" minOccurs="0"/>
+				<!-- Needed but Not Implemented -->
+				<xs:element name="AllAfterTime" type="mip:Datetime18XmlType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- ***************************************************** 
+		This section is typically in a WSDL:
+		Push an Order: String sbmlProcess(OrderPush input, "IBMLOrder")
+		Pull Order by ID: OrderPush sbmlProcess(OrderPull input, "IBMLOrder")
+		Pull Order by Time Range: OrderSummaryList sbmlProcess(OrderIDPull input, "IBMLOrder")
+	 ***************************************************** -->
+</xs:schema>

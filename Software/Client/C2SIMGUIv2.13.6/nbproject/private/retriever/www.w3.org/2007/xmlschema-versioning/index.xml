@@ -1,0 +1,174 @@
+<?xml version='1.0'?>
+<!--* 
+<!DOCTYPE html PUBLIC "-//XML-DEV//DTD XHTML RDDL 1.0//EN" 
+                      "http://www.w3.org/2001/rddl/rddl-xhtml.dtd" >
+*-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--* 
+*-->
+<html xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:rddl="http://www.rddl.org/" 
+  xml:lang="en">
+ <head>
+  <title>XMLSchema-versioning namespace</title>
+  <link rel="stylesheet" type="text/css" href=
+   "http://www.w3.org/StyleSheets/public.css" />
+
+ </head>
+ <body>
+  <p><a href="../../"><img src="../../Icons/w3c_home.png" alt="W3C" height="48" width="72" style="border:0" /></a><a href="../../Architecture/" rel="in-domain"><img src="../../Icons/arch" alt="Architecture Domain" style="border:0" /></a><a href="/XML" rel="in-area"> XML</a></p>
+
+  <h1>XML Schema Versioning namespace<br />
+   <code>http://www.w3.org/2007/XMLSchema-versioning</code></h1>
+  <div class="head">
+   <p>27 August 2007</p>
+  </div>
+  
+  <div id="toc">
+   <h2>Table of contents</h2>
+   <ol>
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#related.resources">Related resources</a></li>
+    <li><a href="#references">Normative References</a></li>
+   </ol>
+  </div>
+
+  <div id="intro">
+   <p>The URI <code>http://www.w3.org/2007/XMLSchema-versioning</code> identifies a namespace
+    used for two attributes in the <a href="../../TR/xmlschema11-1">XSDL 1.1 specification</a>,
+    namely <code>minVersion</code> and <code>maxVefrsion</code>.
+   </p>
+   <p>This document describes the XML Schema Versioning namespace and 
+    provides links to related resources, using 
+    <a href="http://www.rddl.org/">Resource Directory Description Language</a>.</p>
+   <div>
+    <h3>How it workds</h3>
+   <p>The basic idea of the attributes is simple:  before an XSDL processor does
+    anything else with a schema document, it performs a pre-processing step that
+    executes a simple algorithm for conditional inclusion and exclusion of the
+    elements in the document.</p>
+   <ol>
+    <li>The processor supports a particular version of 
+     XSDL, e.g. 1.1 (or possibly, in the future, 1.2, 2.0, etc.).  For purposes of the
+     algorithm, this version number is treated as a value of type <code>xs:decimal</code>.
+     Call this number <i>V</i> (for &lsquo;version number&rsquo;).
+    </li>
+    <li>Each element in the input document is examined to see if it carries either
+     of the attributes <code>minVersion</code> or <code>maxVersion</code> in the
+     namespace <code>http://www.w3.org/2007/XMLSchema-versioning</code>.</li>
+    <li>If it does, then the attributes are treated as having decimal values, which
+     are compared to <i>V</i>.  If <i>V</i> is less than <code>minVersion</code>,
+     or greater than <code>maxVersion</code>, then the element is excluded from
+     the schema document, including all its descendants, before further processing
+     is done.
+    </li>
+   </ol>
+   <p>Schema authors can use this to provide alternative formulations of some
+    constructs, using idioms like the following:
+   </p>
+   <pre>
+&lt;schema ... 
+   xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning">
+
+  &lt;complexType name="T" <b>vc:maxVersion="1.1"</b>>
+    ... <i>definition for version 1.0 and 1.1 processors</i>  ...
+  &lt;/complexType>
+  &lt;complexType name="T" <b>vc:maxVersion="1.2"</b>>
+    ... <i> definition for 1.2 and later processors</i>  ... 
+  &lt;/complexType>
+
+&lt;/schema></pre>
+   
+   <p>In this way, schemas can use constructs from newer versions of
+    XML Schema even while the set of actually deployed schema processors
+    is a mixture of those which support the new constructs and those
+    which do not support them.</p>
+    <p>For a fuller normative description, see section
+     <a href="http://www.w3.org/TR/xmlschema11-1#cip">4.2.1 Conditional Inclusion</a>
+     of <a  href="http://www.w3.org/TR/xmlschema11-1">XSDL 1.1 Part 1: Structures</a>.
+    </p>
+   </div>
+   <div>
+    <h3>This namespace and XSDL 1.0 processors</h3>
+    <p>
+     XSDL 1.0 does not require schema processors to support this
+     namespace or the <code>minVersion</code> and <code>maxVersion</code> 
+     attributes.  However, the spec says explicitly that the infoset used as
+     a schema document does not necessarily come directly from parsing an
+     XML document but may be a &lsquo;synthetic infoset&rsquo;, the output of 
+     some other process.
+    </p>
+    <p>
+     It is thus quite clear that a conforming XSDL 1.0 processor can
+     implement this mechanism, to allow schema authors to write schema documents
+     usable both with XSDL 1.0 processors and with 1.1 processors.  </p>
+    <p>
+     The XML Schema Working Group or others may publish a note on this topic;
+     at the moment, however, no such note has been published.
+    </p>
+   </div>
+   <div>
+    <h3>Stability of this namespace</h3>
+    <p>
+     Users of the namespace documented here should be aware, as a matter of 
+     namespace policy, that more names in this namespace may be given definitions 
+     in future versions of the XSDL specification, or in other specifications.
+     <em>You should not assume that the namespace has no meaningful names
+      other than those defined at this point.</em>
+    </p>
+   </div>
+  </div>
+
+  <div id="related.resources">
+   <h2>Related Resources</h2>
+   <!-- start resource definitions -->
+   <h3>Schema for this namespace</h3>
+   <rddl:resource id="xmlschema" 
+    xlink:title="XML Schema schema document" 
+    xlink:role="http://www.w3.org/2001/XMLSchema" 
+    xlink:arcrole="http://www.rddl.org/purposes#schema-validation" 
+    xlink:href="XMLSchema.xsd">
+    <div class="resource">
+     <p>An <a href="XMLSchema-versioning.xsd">XML Schema schema document</a> 
+      is available, which provides XSDL declarations for the
+      two attributes now defined in this namespae.
+     </p>
+    </div>
+   </rddl:resource>
+  </div>
+
+  <div id="references" class="resource">
+   <h2>Normative References</h2>
+   <ol>
+    <li>
+     <rddl:resource id="xmlschemap1" 
+      xlink:title="XSDL 1.1 Part 1: Structures" 
+      xlink:role="http://www.w3.org/TR/html4" 
+      xlink:arcrole="http://www.rddl.org/purposes#normative-reference" 
+      xlink:href="http://www.w3.org/TR/xmlschema11-1/">
+      <a href="http://www.w3.org/TR/xmlschema11-1/">W3C XML Schema Definition 
+       Language (XSDL) 1.1 Part 1: Structures</a></rddl:resource>
+    </li>
+    <li>
+     <rddl:resource id="xmlschemap1" 
+      xlink:title="XSDL 1.0 Part 1: Structures" 
+      xlink:role="http://www.w3.org/TR/html4" 
+      xlink:arcrole="http://www.rddl.org/purposes#normative-reference" 
+      xlink:href="http://www.w3.org/TR/xmlschema-1/">
+      <a href="http://www.w3.org/TR/xmlschema-1/">XML Schema Part 1: Structures</a>
+      (Version 1.0)</rddl:resource>
+    </li>
+   </ol>
+  </div>
+ </body>
+</html>
+<!-- Keep this comment at the end of the file
+Local variables:
+mode:xml
+sgml-default-dtd-file:"/Library/SGML/Public/Emacs/xhtml10.ced"
+sgml-omittag:t
+sgml-shorttag:t
+End:
+-->

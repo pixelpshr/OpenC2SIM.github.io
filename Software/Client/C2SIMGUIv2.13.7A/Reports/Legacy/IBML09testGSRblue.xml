@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ibml:BMLReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://netlab.gmu.edu/IBML ../Schema/IBML09/IBMLReports.xsd"
+ xmlns:ibml="http://netlab.gmu.edu/IBML"
+ xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0"
+ xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL">
+    <ibml:Report>
+        <ibml:CategoryOfReport>StatusReport</ibml:CategoryOfReport>
+        <ibml:TypeOfReport>GeneralStatusReport</ibml:TypeOfReport>
+        <ibml:StatusReport>
+            <ibml:GeneralStatusReport>
+                <ibml:ReporterWho>
+                    <ibml:UnitID>1/1_ARMOR</ibml:UnitID>
+                </ibml:ReporterWho>
+                <ibml:Hostility>FR</ibml:Hostility>
+                <ibml:Executer>
+                        <ibml:UnitID>1/10 ARMOR</ibml:UnitID>
+                </ibml:Executer>
+                <ibml:OpStatus>MOPS</ibml:OpStatus>
+                <ibml:WhereLocation>
+                            <ibml:GDC>
+                                <ibml:Latitude>58.673</ibml:Latitude>
+                                <ibml:Longitude>14.982</ibml:Longitude>
+                                <ibml:ElevationAGL>2.054</ibml:ElevationAGL>
+                            </ibml:GDC>
+                </ibml:WhereLocation>
+                <ibml:When>20070101000000.000</ibml:When>
+                <ibml:ReportID>192</ibml:ReportID>
+                <ibml:Credibility>
+                    <ibml:Source>HUMINT</ibml:Source>
+                    <ibml:Reliability>A</ibml:Reliability>
+                    <ibml:Certainty>RPTFCT</ibml:Certainty>
+                </ibml:Credibility>
+            </ibml:GeneralStatusReport>
+        </ibml:StatusReport>
+    </ibml:Report>
+</ibml:BMLReport>

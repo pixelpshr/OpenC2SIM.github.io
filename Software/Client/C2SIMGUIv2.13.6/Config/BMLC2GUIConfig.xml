@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jaxfront version=3.25;time=2023-06-06 19:06:05.911;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
+<SBMLServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BMLC2GUIConfig.xsd">
+      <MapScale>500000</MapScale>
+      <StartSubscribed>yes</StartSubscribed>
+      <CenterUnit/>
+      <SubmitterID>TEST-EDITOR</SubmitterID>
+      <ServerName>127.0.0.1</ServerName>
+      <ServerPassword>v0lgenau</ServerPassword>
+      <C2SIMProtocolVsnMin>CWIX2023v1.0.2</C2SIMProtocolVsnMin>
+      <C2SIMProtocolVsnMax>CWIX2023v1.0.3</C2SIMProtocolVsnMax>
+      <C2SIMProtocolVsnSend>CWIX2023v1.03</C2SIMProtocolVsnSend>
+      <C2SIMns>c2s:</C2SIMns>
+      <CBMLns>cbml:</CBMLns>
+      <IBMLns>ibml:</IBMLns>
+      <LateJoinerMode>1</LateJoinerMode>
+      <InitMapLat>58.62</InitMapLat>
+      <InitMapLon>16.28</InitMapLon>
+      <ReportOrderScale>0</ReportOrderScale>
+      <AutoDisplayInit>0</AutoDisplayInit>
+      <AutoDisplayReports>C2SIM</AutoDisplayReports>
+      <AutoDisplayOrders>C2SIM</AutoDisplayOrders>
+      <DisplayBluePosition>1</DisplayBluePosition>
+      <DisplayBlueObservation>1</DisplayBlueObservation>
+      <DisplayRedPosition>1</DisplayRedPosition>
+      <DisplayRedObservation>1</DisplayRedObservation>
+      <DisplayOtherPosition>1</DisplayOtherPosition>
+      <DisplayOtherObservation>1</DisplayOtherObservation>
+      <StartWithListeningOn>1</StartWithListeningOn>
+      <RecordingProtocol>ALL</RecordingProtocol>
+      <PlaybackProtocol>ALL</PlaybackProtocol>
+      <PlaybackSubmitter>ALL</PlaybackSubmitter>
+      <PlaybackTimescale>0</PlaybackTimescale>
+      <PlaybackTimelimit>0</PlaybackTimelimit>
+      <WarnOnReportSeq>0</WarnOnReportSeq>
+      <OrderIDXPATH>C_BML:OrderID</OrderIDXPATH>
+      <LocationXPATH>C_BML:AtWhere</LocationXPATH>
+      <LocationRouteWhereXPATH>C_BML:RouteWhere</LocationRouteWhereXPATH>
+      <latlonParentTag>C_BML:SpecificPoint</latlonParentTag>
+      <latTag>C_BML:Latitude</latTag>
+      <lonTag>C_BML:Longitude</lonTag>
+      <whereIdLabelTag>C_BML:WhereLabel</whereIdLabelTag>
+      <whereShapeTypeTag>C_BML:WhereClass</whereShapeTypeTag>
+      <routeIdLabelTag>C_BML:RouteID</routeIdLabelTag>
+      <routeFromViaToTag>C_BML:From-Via-To</routeFromViaToTag>
+      <serverTestStompWait>20000</serverTestStompWait>
+      <blueSideName/>
+      <checkForDuplicateID>1</checkForDuplicateID>
+      <askAboutCheckDuplicateID>1</askAboutCheckDuplicateID>
+      <ReportRepeatms>1</ReportRepeatms>
+</SBMLServer>

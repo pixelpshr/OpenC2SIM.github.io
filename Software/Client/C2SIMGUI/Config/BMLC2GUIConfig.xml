@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?jaxfront version=3.25;time=2022-09-12 15:01:44.76;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
+<?jaxfront version=3.25;time=2023-06-02 13:12:48.737;xui=BMLC2GUIConfigView.xui;xsd=BMLC2GUIConfig.xsd?>
 <SBMLServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BMLC2GUIConfig.xsd">
       <MapScale>500000</MapScale>
       <StartSubscribed>yes</StartSubscribed>
       <CenterUnit/>
       <SubmitterID>TEST-EDITOR</SubmitterID>
-      <ServerName>10.2.10.70</ServerName>
+      <ServerName>10.2.10.30</ServerName>
       <ServerPassword>v0lgenau</ServerPassword>
       <C2SIMProtocolVsnMin>CWIX2023v1.0.3</C2SIMProtocolVsnMin>
       <C2SIMProtocolVsnMax>CWIX2023v1.0.3</C2SIMProtocolVsnMax>

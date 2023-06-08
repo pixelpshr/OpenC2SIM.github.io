@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+	<status>OK</status>
+	<message>Message processed successfully</message>
+	<serverInitialized>true</serverInitialized>
+	<serverVersion>4.8.0.10</serverVersion>
+	<sessionState>RUNNING</sessionState>
+	<unitDatabaseName>default</unitDatabaseName>
+	<unitDatabaseSize>46</unitDatabaseSize>
+	<msgNumber>2841</msgNumber>
+	<time> 0.003</time>
+	<collectResponseTime>T</collectResponseTime>
+</result>

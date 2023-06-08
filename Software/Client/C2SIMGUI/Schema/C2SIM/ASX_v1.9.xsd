@@ -509,7 +509,7 @@
 	<xs:element name="ActionCode" type="ActionCodeType"/>
 	<xs:element name="C2SIMHeader" type="C2SIMHeaderType"/>
 	<xs:element name="Code" type="CodeType"/>
-	<xs:element name="CommunicativeActTypeCode" type="CommunicativeActTypeCodeType"/>
+	<xs:element name="" type="CommunicativeActTypeCodeType"/>
 	<xs:element name="ConsumableMaterial" type="ConsumableMaterialType"/>
 	<xs:element name="CountryCode" type="CountryCodeType"/>
 	<xs:element name="CurrentState" type="EntityStateType"/>

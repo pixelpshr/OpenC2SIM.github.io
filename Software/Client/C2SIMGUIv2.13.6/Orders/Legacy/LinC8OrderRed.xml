@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c2s:MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/C2SIM_SMX_LOX_v1.0.0.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<!-- Blue Order H1:c2S:DomainMessageBodyGroup00 FMN -->
+<!-- CWIX-RED-H0.00 -->
+<c2s:DomainMessageBody>
+<c2s:OrderBody>
+    <c2s:FromSender>00000000-0003-0002-0001-000000000000</c2s:FromSender>
+    <c2s:ToReceiver>00000000-0007-0002-0040-000000000000</c2s:ToReceiver>
+    <c2s:IssuedTime>
+        <c2s:IsoDateTime>0000-00-00T00:00:00Z</c2s:IsoDateTime>
+    </c2s:IssuedTime>
+    <c2s:OrderID>00000000-0007-0002-0001-000000000000</c2s:OrderID>
+    <c2s:Task><c2s:ManeuverWarfareTask>
+        <c2s:Location><c2s:GeodeticCoordinate>
+            <c2s:Latitude>58.605881</c2s:Latitude>
+            <c2s:Longitude>16.236114</c2s:Longitude>
+        </c2s:GeodeticCoordinate></c2s:Location>
+        <c2s:Location>
+            <c2s:GeodeticCoordinate>
+                <c2s:Latitude>58.432609</c2s:Latitude>
+                <c2s:Longitude>15.679098</c2s:Longitude>                    
+            </c2s:GeodeticCoordinate>                
+        </c2s:Location>
+        <c2s:Location>
+            <c2s:GeodeticCoordinate>
+                <c2s:Latitude>58.494577</c2s:Latitude>
+                <c2s:Longitude>15.971560</c2s:Longitude>
+            </c2s:GeodeticCoordinate>              
+        </c2s:Location>       
+        <c2s:Location>
+            <c2s:GeodeticCoordinate>         
+                <c2s:Latitude>58.583471</c2s:Latitude>
+                <c2s:Longitude>16.121321</c2s:Longitude>
+            </c2s:GeodeticCoordinate>    
+        </c2s:Location> 
+        <c2s:Name>LinC8Convoy</c2s:Name>
+        <c2s:UUID>00000000-0007-0002-0040-000000000000</c2s:UUID>
+        <c2s:DesiredEffectCode>FLIG</c2s:DesiredEffectCode>
+        <c2s:PerformingEntity>00000000-0007-0002-0040-000000000000</c2s:PerformingEntity>
+        <c2s:StartTime><c2s:DateTime>
+            <c2s:Name>H1.00</c2s:Name>
+            <c2s:IsoDateTime>0000-00-00T00:05:00Z</c2s:IsoDateTime>
+        </c2s:DateTime></c2s:StartTime> 
+        <c2s:TaskActionCode>MOVE</c2s:TaskActionCode>
+    </c2s:ManeuverWarfareTask></c2s:Task>
+</c2s:OrderBody>
+</c2s:DomainMessageBody>
+</c2s:MessageBody>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CyberAttack xmlns="http://www.sisostds.org/schemas/C2SIM/1.1">
+    <Category1>
+        <EWa>
+            <Fraction>0.1</Fraction>
+            <Duration>300</Duration>
+        </EWa>
+        <EWb>
+            <Fraction>.5</Fraction>
+            <MeanOnTime>60</MeanOnTime>
+            <MeanOffTime>15</MeanOffTime>
+        </EWb>
+        <EWc>
+            <N>8</N>
+        </EWc>
+    </Category1>
+    
+    <Category2>
+        <Cat_2a>
+            <latOffset>5</latOffset>
+            <lonOffset>8</lonOffset>
+        </Cat_2a>
+    </Category2>
+    <Category3>
+        <EWd>
+            <latCenter>45</latCenter>
+            <lonCenter>27.5</lonCenter>
+            <distance>100</distance>
+            <duraton>600</duraton>
+        </EWd>
+        <Cyber_b>
+            <offsetSeconds>60</offsetSeconds>
+        </Cyber_b>
+        <Cyber_c>
+            <reporterName>reporterName0</reporterName>
+        </Cyber_c>
+        <Cyber_x>
+            <reporter>reporterX</reporter>
+            <distance>150</distance>
+            <bearing>45</bearing>
+        </Cyber_x>
+    </Category3>
+</CyberAttack>

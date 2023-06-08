@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jaxfront version=2.61;time=2010-03-30 15:51:20.328;xsd=IBMLReports.xsd;xui=file:/C:/C2MLGUI/XUIView/GeneralStatusReportView.xui;nsMapping=%KEYhttp://www.jaxfront.com/xui%VAL%KEYhttp://www.w3.org/2001/XMLSchema%VALxsd%KEYhttp://www.w3.org/2001/XMLSchema-instance%VALxsi?>
+<XUI  xsi:schemaLocation="http://www.jaxfront.com/xui jar:file:/C:/Program%20Files/JAXFront-2.6/lib/jaxfront-core.jar!/xui.xsd" xmlns="http://www.jaxfront.com/xui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       <component xpath="/BMLREPORT">
+              <style>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+              </style>
+       </component>
+       <component xpath="/BMLREPORT/Report/UNNAMED1/StatusReport/PositionStatusReport/AtWhere/bml:ControlFeature">
+              <style>
+                     <mode visible="false">
+                            <message/>
+                     </mode>
+              </style>
+       </component>
+       <component xpath="/BMLREPORT/Report[1]/UNNAMED1/StatusReport/GeneralStatusReport/AtWhere/bml:ControlFeature">
+              <style>
+                     <mode visible="false">
+                            <message/>
+                     </mode>
+                     <treeEntry>
+                            <occurrence>
+                                   <visibility>
+                                          <never/>
+                                   </visibility>
+                            </occurrence>
+                     </treeEntry>
+              </style>
+       </component>
+</XUI>

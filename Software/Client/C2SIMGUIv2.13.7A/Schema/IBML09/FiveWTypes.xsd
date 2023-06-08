@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+    targetNamespace="http://netlab.gmu.edu/IBML" 
+    xmlns="http://netlab.gmu.edu/IBML" 
+    xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
+    
+	<xs:include schemaLocation="Coordinates.xsd"/>
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+     			Battle Management Language proposed schema types definition.
+     			Copyright 2008 George Mason University C4I Center.
+     			This version contains some compromises needed for SIMCI and MSG-048 2008
+  		</xs:documentation>
+	</xs:annotation>
+	<!-- <xs:annotation>-->
+	<!-- Not Used -->
+	<!-- <xs:documentation>date time group for messages per FM 6-99.2</xs:documentation>
+	</xs:annotation> -->
+	<!-- changed in v.12 to allow date-time the is ordered -->
+	<!-- <xs:simpleType name="DTGType">
+		<xs:restriction base="xs:string"> -->
+	<!--xs:length value="14" fixed="true"/-->
+	<!--xs:pattern value="((0[1-9]|[12][0-9]|3[01])(0[0-9]|[1][0-9]|[2][0-3])(0[0-9]|[1-5][0-9])[a-zA-Z](JAN|MAR|MAY|JUL|AUG|OCT|DEC)(19|20)\d\d|(0[1-9]|[12][0-9]|3[0])(0[1-9]|[1][0-9]|[2][0-3])(0[0-9]|[1-5][0-9])[a-zA-Z](APR|JUN|SEP|NOV)(19|20)\d\d|(0[1-9]|[12][0-9])(0[1-9]|[1][0-9]|[2][0-3])(0[0-9]|[1-5][0-9])[a-zA-Z]FEB(19|20)\d\d)"/-->
+	<!-- 	</xs:restriction>
+	</xs:simpleType> -->
+	<xs:complexType name="WhoType">
+		<xs:annotation>
+			<xs:documentation>corresponds to JC3IEDM name</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="UnitID" type="LabelType"/>
+		</xs:choice>
+	</xs:complexType>
+	
+    <xs:complexType name="ObservedWhoType">
+        <xs:annotation>
+            <xs:documentation>Specifies a Who that is observed, either by the unit ID (corresponds to unit's name, if unit is known), or by a unit description if unit is partially known.</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="UnitID" type="LabelType"></xs:element>
+            <xs:element name="UnitDescription">
+		        <xs:annotation>
+		            <xs:documentation>A unit description build with main parameters of JC3IEDM class 'UnitType', and corresponding dictionaries.</xs:documentation>
+		        </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+                        <xs:element name="Size" type="mip:UnitTypeSizeCodeXmlType"/>
+                        <!-- <xs:element name="Category" type="mip:UnitTypeCategoryCodeXmlType"/> -->
+                        <xs:element name="ArmCategory" type="mip:UnitTypeArmCategoryCodeXmlType"/>
+			            <!-- <xs:element name="ArmSpecialisation" type="mip:UnitTypeArmSpecialisationCodeXmlType" minOccurs="0"/> -->
+			            <!-- <xs:element name="SupplementarySpecialisation" type="mip:UnitTypeSupplementarySpecialisationCodeXmlType" minOccurs="0"/> -->
+			            <!-- <xs:element name="GeneneralMobility" type="mip:UnitTypeGeneralMobilityCodeXmlType" minOccurs="0"/> -->
+			            <xs:element name="Qualifier" type="mip:UnitTypeQualifierCodeXmlType" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+
+	<!-- Not Supported -->
+	<!-- <xs:element name="CompositeWho"> -->
+	<!-- from JBML -->
+	<!-- 	<xs:annotation>
+			<xs:documentation>allows a combination of one or more equipments with organization name</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Equipment" type="mip:VehicleTypeCategoryCodeXmlType" maxOccurs="unbounded"/>
+				<xs:element ref="mip:AnyUnit"/> -->
+	<!-- from ArmyBML OPORD; replaces JBML OrgName -->
+	<!-- 	</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="SingleWhoType"> -->
+	<!-- from JBML -->
+	<!-- Not Supported -->
+	<!-- 	<xs:annotation>
+			<xs:documentation>supports WhereRelative that defines an offset from a known equipment or organization</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Equipment" type="mip:VehicleTypeCategoryCodeXmlType"/>
+			<xs:element ref="mip:AnyUnit"/> -->
+	<!-- from ArmyBML OPORD; replaces JBML OrgName -->
+	<!-- 	</xs:choice>
+	</xs:complexType> -->
+	<xs:complexType name="WhereType">
+		<xs:annotation>
+			<xs:documentation>
+				Where defines a location (point, sequence of points, or area)
+				RouteWhere defines a how to go somewhere
+				AtWhere defines a location, in the general sense.
+				
+				It is possible to use only AtWhere, at the cost of
+				losing benefit of the grammar.
+				
+				ControlFeatureWhere is the same as AtWhere->At. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="WhereID" type="LabelType"/>
+			<xs:choice>
+				<xs:element name="RouteWhere" type="RouteWhereType"/>
+				<xs:element name="AtWhere" type="AtWhereType"/>
+				<!-- Not Supported -->
+				<!-- <xs:element name="ControlFeatureWhere" type="ControlFeatureWhereType"/> -->
+			</xs:choice>
+		</xs:sequence>
+		<!-- from JBML -->
+	</xs:complexType>
+	<!-- Not Supported -->
+	<!-- <xs:element name="WhereRelative"> -->
+	<!-- from JBML -->
+	<!-- 	<xs:annotation>
+			<xs:documentation>used to specify a distance from a known object at a given time</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="WhereOffset" type="WhereOffsetType"/>
+				<xs:element name="WhereIndirect" type="SingleWhoType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element> -->
+	<!-- Not Supported -->
+	<!-- <xs:complexType name="WhereOffsetType"> -->
+	<!-- from JBML -->
+	<!-- <xs:annotation>
+			<xs:documentation>
+				bearing in degrees, range in meters, altitude angle in degrees
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BearingFromNorth" type="AngleType"/>
+			<xs:element name="Range" type="xs:integer"/>
+			<xs:element name="AltitudeAngle" type="AngleType"/>
+		</xs:sequence>
+	</xs:complexType>-->
+	<!-- Not Supported -->
+	<!--<xs:simpleType name="AngleType"> -->
+	<!-- from JBML -->
+	<!-- <xs:annotation>
+			<xs:documentation>Value of an angle in degrees</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:float">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxExclusive value="360.0"/>
+		</xs:restriction>
+	</xs:simpleType> -->
+	<!-- Not Used -->
+	<!-- <xs:simpleType name="DTGType"/> Date Time Group from JBML - replaced by mip:Datetime18XmlType -->
+	<xs:simpleType name="LabelType">
+		<xs:annotation>
+			<xs:documentation>Text to identify some object</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9/._ \-]*"/>
+		</xs:restriction>
+		<!-- from JBML -->
+	</xs:simpleType>
+	<xs:complexType name="WhyType">
+		<xs:annotation>
+			<xs:documentation>Specifies reasons for executing order.</xs:documentation>
+		</xs:annotation>
+			<xs:sequence>
+				<!-- from ArmyBML OPORD -->
+				<xs:element name="Effect" type="mip:ActionEffectDescriptionCodeXmlType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Taken from an enumerated list of desired effects.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<!-- Not Supported -->
+				<!-- <xs:element name="Objective" type="mip:ObjectItemXmlType" minOccurs="0">-->
+				<!-- <xs:annotation>
+						<xs:documentation>An object to receive the effect.</xs:documentation>
+					</xs:annotation>
+				</xs:element> -->
+			</xs:sequence>
+			<!-- from JBML-->
+			<!-- Not Supported -->
+			<!-- <xs:element name="WhyTaskID" type="LabelType" minOccurs="0"> -->
+			<!-- <xs:annotation>
+					<xs:documentation>The label of another task that is supported by this task.</xs:documentation>
+				</xs:annotation>
+			</xs:element> -->
+	</xs:complexType>
+	<xs:complexType name="WhatType">
+		<xs:annotation>
+			<xs:documentation>What is the tasked unit to do.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!-- from JBML -->
+			<xs:element name="WhatCode" type="mip:ActionTaskActivityCodeXmlType"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="Target" type="TargetType" minOccurs="0"/> -->
+		</xs:sequence>
+		<!-- removed xs:attribute name="OrderID" here -  it seems to have been inserted by mistake -->
+	</xs:complexType>
+	<!-- Not Supported -->
+	<xs:complexType name="TargetType">
+		<xs:annotation>
+			<xs:documentation>Defines the location and identification of a target</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Location" type="WhereType"/>
+		</xs:sequence>
+		<xs:attribute name="Name"/>
+	</xs:complexType>
+	<!-- Not Supported -->
+	<!-- <xs:simpleType name="YesNoType"> -->
+	<!-- new for IBML -->
+	<!-- <xs:annotation>
+			<xs:documentation>Defines a binary option</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Yes"/>
+			<xs:enumeration value="No"/>
+		</xs:restriction>
+	</xs:simpleType>-->
+	<!-- Not Supported -->
+	<!-- <xs:complexType name="CornerLocationsType"> -->
+	<!-- new for IBML-geoBML -->
+	<!-- <xs:annotation>
+			<xs:documentation>Defines the corner locations of a polygon control feature</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CornerLocation" type="LocationType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>-->
+
+	<xs:complexType name="RouteWhereType">
+	<!-- from FGAN -->
+		<xs:annotation>
+			<xs:documentation>Defines a route to be followed in action</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Along" type="LocationType"/>
+			<xs:element name="Towards">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="Location" type="LocationType"/>
+						<xs:element name="Direction" type="mip:DirectionCodeXmlType"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="From-Via-To">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="From" type="LocationType" minOccurs="0"/>
+						<xs:element name="Via" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence maxOccurs="unbounded">
+									<xs:element name="Waypoint">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Location" type="LocationType"/>
+											</xs:sequence>
+											<xs:attribute name="sequence" type="xs:int" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="To" type="LocationType"/>
+					</xs:all>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="AtWhereType">
+		<xs:annotation>
+			<xs:documentation>Defines Where an action is done</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<!-- Not Supported -->
+			<!-- <xs:element name="At" type="ControlFeatureWhereType"/> -->
+			<!-- <xs:element name="InFrontOf" type="ControlFeatureWhereType"/> -->
+			<!-- <xs:element name="Behind" type="ControlFeatureWhereType"/> -->
+			<xs:element name="JBMLAtWhere" type="JBMLAtWhereType"/>
+		</xs:choice>
+		<!-- from FGAN -->
+	</xs:complexType>
+	<xs:complexType name="VelocityVectorType">
+		<xs:annotation>
+			<xs:documentation>Defines the magnitude and bearing of a velocity in kilometers
+                        per hour and degrees clockwise from North in the range 0-360</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Magnitude" type="xs:float"/>
+			<xs:element name="BearingDegrees" type="xs:float"/>
+		</xs:sequence>
+		<!-- for MSG-048 evaluation 10-19-08-->
+	</xs:complexType>
+	<!-- Not Supported -->
+	<!-- <xs:complexType name="ControlFeatureWhereType"> -->
+	<!-- from ArmyBML OPORD -->
+	<!-- <xs:sequence>
+			<xs:element name="Qualifier" type="mip:ActionObjectiveQualifierCodeXmlType"/>
+			<xs:element ref="mip:AnyControlFeature"/>
+		</xs:sequence>
+	</xs:complexType> -->
+	<xs:annotation>
+		<xs:documentation>
+			temporary accommodation for SIMCI and MSG-048 2008
+		</xs:documentation>
+	</xs:annotation>
+  <xs:complexType name="JBMLAtWhereType">
+    <xs:sequence>
+      <xs:element name="WhereLabel" type="LabelType"/>
+      <xs:element name="WhereCategory" type="WhereCategoryType"/>
+      <xs:element name="jc3iedmWhereCategory" type="mip:ControlFeatureTypeCategoryCodeXmlType" minOccurs="0"/>
+      <xs:element name="WhereCategoryEchelon" type="mip:UnitTypeSizeCodeXmlType" minOccurs="0"/>
+      <xs:element name="WhereClass" type="WhereClassType"/>
+      <xs:element name="WhereValue" type="WhereValueType"/>
+      <xs:element name="WhereQualifier" type="WhereQualifierType"/>
+      <!-- next line added for evaluation at MSG-048 request 10-19a-08 -->
+      <xs:element name="VelocityVector" type="VelocityVectorType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AtWhereLocationType">
+    <xs:sequence>
+      <xs:element name="WhereLabel" type="LabelType" minOccurs="0"/>
+      <xs:element name="WhereClass" type="WhereClassType"/>
+      <xs:element name="WhereValue" type="WhereValueType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WhereValueType">
+		<xs:choice>
+			<xs:element name="WhereLocation" type="WhereLocationType" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation>
+			Sequence attribute with WhereLocation is used for a route
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="WhereLocationType">
+		<xs:complexContent>
+			<xs:extension base="Coordinates">
+				<xs:attribute name="Sequence" type="xs:integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation>
+			Represents type of Control Measure, e.g., Control Point, 
+			Assembly Area, or Phase Line
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="WhereCategoryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AIRCONTROLPOINT"/>
+			<xs:enumeration value="CHECKPOINT"/>
+			<xs:enumeration value="CONTROLPOINT"/>
+			<xs:enumeration value="DECISIONPOINT"/>
+			<xs:enumeration value="DROPPOINT"/>
+			<xs:enumeration value="PASSAGEPOINT"/>
+			<xs:enumeration value="RALLYPOINT"/>
+			<xs:enumeration value="RENDEZVOUSPOINT"/>
+			<xs:enumeration value="ALTERNATESUPPLYROUTE"/>
+			<xs:enumeration value="COORDINATIONFIRELINE"/>
+			<xs:enumeration value="BOUNDARYLINE"/>
+			<xs:enumeration value="FIRESUPPORTCOORDINATIONLINE"/>
+			<xs:enumeration value="FORWARDLINEOFTROOPS"/>
+			<xs:enumeration value="LINEOFADVANCE"/>
+			<xs:enumeration value="LINEOFDEPARTURE"/>
+			<xs:enumeration value="LINEOFCONTACT"/>
+			<xs:enumeration value="OBSTACLELINE"/>
+			<xs:enumeration value="PHASELINE"/>
+			<xs:enumeration value="ROUTE"/>
+			<xs:enumeration value="MAINSUPPLYROUTE"/>
+			<xs:enumeration value="AREAOFINTEREST"/>
+			<xs:enumeration value="AREAOFOPERATION"/>
+			<xs:enumeration value="ASSEMBLYAREA"/>
+			<xs:enumeration value="ARTILLERYAREA"/>
+			<xs:enumeration value="ASSAULTPOSITION"/>
+			<xs:enumeration value="ATTACKBYFIREPOSITION"/>
+			<xs:enumeration value="BATTLEPOSITION"/>
+			<xs:enumeration value="CONTROLAREA"/>
+			<xs:enumeration value="ENGAGEMENTAREA"/>
+			<xs:enumeration value="MAINBATTLEAREA"/>
+			<xs:enumeration value="MINEDAREA"/>
+			<xs:enumeration value="NAMEDAREAOFINTEREST"/>
+			<xs:enumeration value="OBJECTIVEAREA"/>
+			<xs:enumeration value="RECONNAISSANCEAREA"/>
+			<xs:enumeration value="SLOWGOAREA"/>
+			<xs:enumeration value="SUPPLYAREA"/>
+			<xs:enumeration value="NOGOAREA"/>
+			<xs:enumeration value="WAYPOINT"/>
+			<xs:enumeration value="INITIALPOINT"/>
+			<xs:enumeration value="NOGOAREA"/>
+			<xs:enumeration value="DEPARTUREBASE"/>
+			<xs:enumeration value="RECOVERYBASE"/>
+			<xs:enumeration value="TARGET"/>
+			<xs:enumeration value="BENUMBER"/>
+			<xs:enumeration value="GENCOORDINATE"/>
+    </xs:restriction>
+	</xs:simpleType>
+	<xs:annotation>
+		<xs:documentation>Categorization of the Where geometry
+		                   a LINE (LN) is an open sequence of points (not necessarily
+		                   colinear in a geometric sense); an SURFACE (SURFAC) is a closed
+		                   sequence of points. </xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="WhereClassType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PT"/>
+			<xs:enumeration value="LN"/>
+			<!-- Needed but Not Implemented -->
+			<xs:enumeration value="SURFAC"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:annotation>
+		<xs:documentation>Relationship of the Where object to the tasking</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="WhereQualifierType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AT"/>
+			<xs:enumeration value="ALONG"/>
+			<xs:enumeration value="BETWEEN"/>
+			<xs:enumeration value="FROM"/>
+			<xs:enumeration value="IN"/>
+			<xs:enumeration value="ON"/>
+			<xs:enumeration value="TO"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CredibilityType">
+		<xs:annotation>
+			<xs:documentation>Defines Reporter's confidence in reported information</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Source" type="mip:ReportingDataSourceTypeCodeXmlType"/>
+			<xs:element name="Reliability" type="mip:ReportingDataReliabilityCodeXmlType"/>
+			<xs:element name="Certainty" type="mip:ReportingDataCredibilityCodeXmlType"/>
+		</xs:all>
+		<!-- from FGAN -->
+	</xs:complexType>
+	<xs:complexType name="WhenType">
+		<xs:annotation>
+			<xs:documentation>
+				Basic temporal parameter but this may be ambiguous; 
+				WhenTime is a start/end pair; 
+				WhenEvent is synched to another task; 
+				WhenDetails is unambiguous.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="WhenTime" type="WhenTimeType"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="WhenEvent" type="WhenEventType"/> -->
+			<!-- <xs:element name="WhenDetails" type="WhenDetailsType"/> -->
+			<!-- Needed but Not Implemented -->
+			<xs:element name="RelativeWhen" type="RelativeWhenType"/>
+		</xs:choice>
+		<!-- attempt to merge multiple sources -->
+	</xs:complexType>
+	<!-- StartWhenType,EndWhenType, StartWhenTimeType,EndWhenTimeType
+	     added by JMP 2Aug2013 as workaround for BMLC2GUI 
+	     this is consistent with original schema and works in JAXFront -->
+	<xs:complexType name="StartWhenType">
+		<xs:annotation>
+			<xs:documentation>
+				Basic temporal parameter but this may be ambiguous; 
+				WhenTime is a start/end pair; 
+				WhenEvent is synched to another task; 
+				WhenDetails is unambiguous.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="WhenTime" type="StartWhenTimeType"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="WhenEvent" type="WhenEventType"/> -->
+			<!-- <xs:element name="WhenDetails" type="WhenDetailsType"/> -->
+			<!-- Needed but Not Implemented -->
+			<xs:element name="RelativeWhen" type="RelativeWhenType"/>
+		</xs:choice>
+		<!-- attempt to merge multiple sources -->
+	</xs:complexType>
+	<xs:complexType name="EndWhenType">
+		<xs:annotation>
+			<xs:documentation>
+				Basic temporal parameter but this may be ambiguous; 
+				WhenTime is a start/end pair; 
+				WhenEvent is synched to another task; 
+				WhenDetails is unambiguous.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="WhenTime" type="EndWhenTimeType"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="WhenEvent" type="WhenEventType"/> -->
+			<!-- <xs:element name="WhenDetails" type="WhenDetailsType"/> -->
+			<!-- Needed but Not Implemented -->
+			<xs:element name="RelativeWhen" type="RelativeWhenType"/>
+		</xs:choice>
+		<!-- attempt to merge multiple sources -->
+	</xs:complexType>
+	<xs:complexType name="StartWhenTimeType">
+		<xs:annotation>
+			<xs:documentation>Army BML definition of When</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StartTimeQualifier" type="mip:ActionTaskStartQualifierCodeXmlType"/>
+			<xs:element name="DateTime" type="mip:Datetime18XmlType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EndWhenTimeType">
+		<xs:annotation>
+			<xs:documentation>Army BML definition of When</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EndTimeQualifier" type="mip:ActionTaskEndQualifierCodeXmlType"/>
+			<xs:element name="DateTime" type="mip:Datetime18XmlType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- end JMP additions 2Aug2013 -->
+	<xs:complexType name="WhenTimeType">
+		<xs:annotation>
+			<xs:documentation>Army BML definition of When</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+		    <xs:choice>
+			    <xs:element name="StartTimeQualifier" type="mip:ActionTaskStartQualifierCodeXmlType"/>
+			    <xs:element name="EndTimeQualifier" type="mip:ActionTaskEndQualifierCodeXmlType"/>
+		    </xs:choice>
+			<xs:element name="DateTime" type="mip:Datetime18XmlType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Not Supported -->
+	<!-- <xs:complexType name="WhenEventType"> -->
+	<!-- from ArmyBML OPORD -->
+	<!-- <xs:annotation>
+			<xs:documentation>Army BML form of When that defines time with respect to another Task</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Qualifier" type="mip:ActionTemporalAssociationCategoryCodeXmlType"/>
+			<xs:element name="WhenEventID" type="LabelType"/>
+		</xs:sequence>
+	</xs:complexType> -->
+	<!-- Needed but Not Implemented -->
+	<xs:complexType name="RelativeWhenType">
+		<xs:sequence>
+			<xs:element name="Qualifier" type="mip:ActionTemporalAssociationCategoryCodeXmlType"/>
+			<xs:element name="ReferenceDuration" type="mip:Duration19XmlType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The format of ReferenceDuration is the same as a Date ((+/-)YYYYMMDDHHMMSS.SSS) 
+						but remember it's a Duration not a Date. For instance, If you want to start a task no later 
+						than 1hour 2min 30sec after the end of another task you would set Qualifier to STRENL and 
+						ReferenceDuration to +00000000010230.000.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaskID" type="LabelType" minOccurs="0"/>
+			<xs:element name="RelativeWhenReferenceTaskID" type="LabelType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Not Supported -->
+	<!-- <xs:element name="AnyTask"/> -->
+	<!-- probably this needs elaboration to fill OPORD needs -->
+	<!-- <xs:complexType name="EventType"> -->
+	<!-- from Army BML OPORD -->
+	<!-- <xs:sequence>
+			<xs:element name="Who" type="WhoType"/>
+			<xs:element name="Activity" type="mip:ActionEventCategoryCodeXmlType"/>
+			<xs:element name="Where" type="WhereType"/>
+		</xs:sequence>
+	</xs:complexType> -->
+	<!-- Not Supported -->
+	<!-- <xs:complexType name="WhenDetailsType"> -->
+	<!-- from FGAN -->
+	<!-- <xs:annotation>
+			<xs:documentation>FGAN's definition of When</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Modifier">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="start"/>
+						<xs:enumeration value="ongoing"/>
+						<xs:enumeration value="end"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Prefix">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="at"/>
+						<xs:enumeration value="bef"/>
+						<xs:enumeration value="aft"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Value">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="DateTime" type="mip:Datetime18XmlType"/>
+						<xs:element name="Condition">
+							<xs:annotation>
+								<xs:documentation>Is true if another action identified 
+								by a label satisfies a given condition.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="Finished" type="YesNoType"/>
+									<xs:element name="Started" type="YesNoType"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType> -->
+	<xs:complexType name="ExecuterType">
+		<xs:annotation>
+			<xs:documentation>Defines the type of Who that is reported executing some action</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Taskee" type="WhoType"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="Agent" type="AgentType"/> -->
+			<!-- <xs:element name="Theme" type="ThemeType"/> -->
+		</xs:choice>
+		<!-- from FGAN -->
+	</xs:complexType>
+	
+	<xs:complexType name="LocationType">
+	<!-- from FGAN -->
+	<xs:annotation>
+			<xs:documentation>Defines format for a location; Lat/Lon, MGRS, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="LocationID" type="LabelType"/>
+			<xs:element name="Coords" type="Coordinates"/>
+		</xs:choice>
+	</xs:complexType>
+	<!-- Not Supported -->
+	<!--<xs:complexType name="ThemeType"> -->
+	<!-- from FGAN -->
+	<!-- <xs:annotation>
+			<xs:documentation>A Theme is an object without instrinsic ability to act</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Count" type="xs:string"/>
+			<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+			<xs:element name="Equipment" type="mip:VehicleTypeCategoryCodeXmlType"/>
+			<xs:element name="ObjectID" type="LabelType"/>
+		</xs:all>
+	</xs:complexType>-->
+	<!-- Not Supported -->
+	<!-- <xs:complexType name="AgentType"> -->
+	<!-- from FGAN -->
+	<!-- <xs:annotation>
+			<xs:documentation>An Agent is an object with intrinisic ability to act</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="Size" type="SizeType"/>
+			<xs:element name="Hostility" type="mip:ObjectItemHostilityStatusCodeXmlType"/>
+			<xs:element name="UnitFunction" type="mip:UnitTypeArmCategoryCodeXmlType"/>
+			<xs:element name="AgentID" type="LabelType"/>
+		</xs:all>
+	</xs:complexType>-->
+	<!-- Not Supported -->
+	<!-- <xs:simpleType name="SizeType"> -->
+	<!-- from FGAN -->
+	<!-- <xs:restriction base="xs:string">
+			<xs:enumeration value="person"/>
+			<xs:enumeration value="team"/>
+			<xs:enumeration value="squad"/>
+			<xs:enumeration value="section"/>
+			<xs:enumeration value="platoon"/>
+			<xs:enumeration value="company"/>
+			<xs:enumeration value="battalion"/>
+			<xs:enumeration value="regiment"/>
+			<xs:enumeration value="brigade"/>
+			<xs:enumeration value="division"/>
+			<xs:enumeration value="corps"/>
+			<xs:enumeration value="army"/>
+			<xs:enumeration value="armygroup"/>
+			<xs:enumeration value="region"/>
+			<xs:enumeration value="taskforce"/>
+			<xs:enumeration value="dummy"/>
+		</xs:restriction>
+	</xs:simpleType>-->
+	<!-- Not Supported -->
+	<!--<xs:simpleType name="FormationType"> -->
+	<!-- from FGAN -->
+	<!-- <xs:restriction base="xs:string">
+			<xs:enumeration value="column"/>
+			<xs:enumeration value="patrol"/>
+			<xs:enumeration value="wedge"/>
+			<xs:enumeration value="line"/>
+			<xs:enumeration value="coil"/>
+			<xs:enumeration value="echelon"/>
+			<xs:enumeration value="herringbone"/>
+			<xs:enumeration value="march"/>
+			<xs:enumeration value="deployed"/>
+			<xs:enumeration value="vee"/>
+			<xs:enumeration value="air formation"/>
+			<xs:enumeration value="naval formation"/>
+		</xs:restriction>
+	</xs:simpleType>-->
+	<!-- Not Supported -->
+	<!--<xs:simpleType name="InMannerType"> -->
+	<!-- from FGAN -->
+	<!-- <xs:restriction base="xs:string">
+			<xs:enumeration value="fast"/>
+			<xs:enumeration value="slow"/>
+			<xs:enumeration value="cautious"/>
+			<xs:enumeration value="aggressive"/>
+		</xs:restriction>
+	</xs:simpleType> -->
+	<!-- Not Used -->
+	<!--<xs:simpleType name="PrecedenceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ROUTINE"/>
+			<xs:enumeration value="PRIORITY"/>
+			<xs:enumeration value="IMMEDIATE"/>
+			<xs:enumeration value="FLASH"/>
+		</xs:restriction>
+		from FM 6-99.2 
+	</xs:simpleType>-->
+</xs:schema>

@@ -1,0 +1,4 @@
+# C2SIM Order and Report validation with no translation
+PUSH 100ORDER USA-SIM2-VRF-AH-64+USBN1CoB-ThreeTasks.xml
+PUSH 100REPORT C2sim-v1.0.0-PositionReport.xml
+

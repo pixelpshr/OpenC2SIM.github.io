@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://netlab.gmu.edu/IBML"
+	xmlns:jc3iedm="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+	xmlns:msdl="http://netlab.gmu.edu/JBML/MSDL"
+	xmlns:cbml="http://www.sisostds.org/schemas/c-bml/1.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://netlab.gmu.edu/IBML"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:int:nato:standard:mip:jc3iedm:3.0.2:oo:2.2"
+		schemaLocation="../jc3iedm-simple-types/3.0.2/jc3iedm-simple-types.xsd"/>
+	<xs:import namespace="http://www.sisostds.org/schemas/c-bml/1.0"
+		schemaLocation="../cbml-composites-light/1.0/cbml-composites-light.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en"> 
+			GMU C4I Center Experimental C_BML-Light-Order Schema Version: 1.0	
+			Copyright 2011 By GMU C4I Center 
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:element name="OrderPush" type="OrderType"/>
+
+	<xs:element name="OrderPull">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="OrderID" type="jc3iedm:TextTypeVar80"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="OrderType">
+		<xs:sequence>
+			<!-- <xs:element name="OrderMode" type="OrderModeType" default="SINGLE" minOccurs="0"/> -->
+			<xs:element name="TaskersIntent" type="jc3iedm:TextTypeVar255" minOccurs="0"/>
+			<xs:element name="Task" type="cbml:TaskLightType" maxOccurs="unbounded"/>
+			<!-- Needed but Not Implemented -->
+			<xs:element name="OrderIssuedWhen" type="jc3iedm:DatetimeTypeFix18"/>
+			<xs:element name="OrderID" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+			<!-- Needed but Not Implemented -->
+			<xs:element name="ReferenceOrderID" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+			<!-- Needed but Not Implemented -->
+			<xs:element name="Context" type="jc3iedm:TextTypeVar80" minOccurs="0"/>
+			<xs:element name="TaskerWho" type="jc3iedm:OIDType"/>
+			<!-- Needed but Not Implemented -->
+			<!-- Feb 1st 2010 ssingapo made this optional -->
+			<xs:element name="TaskOrganization" type="TaskOrganizationType" minOccurs="0"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="EnemyTaskOrg" type="msdl:TaskOrgType" minOccurs="0"/> -->
+			<xs:element name="ControlMeasures" type="OrderControlMeasuresType" minOccurs="0"/>
+			<!-- Not Supported -->
+			<!-- <xs:element name="TargetList" type="TargetListType" minOccurs="0"/> -->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:annotation>
+		<xs:documentation>Defines the task organisation associated with the order</xs:documentation>
+	</xs:annotation>
+
+	<!-- Needed but Not Implemented -->
+	<xs:complexType name="TaskOrganizationType">
+		<xs:sequence>
+			<xs:element name="UnitID" type="jc3iedm:OIDType"/>
+			<!-- Task Organization Unit's position and status will be provided by another SBML service. -->
+			<!-- <xs:element name="WhereLocation" type="WhereLocationType" minOccurs="0"/> -->
+			<xs:element name="TaskOrganization" type="TaskOrganizationType" minOccurs="0"
+				maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation>Defines the domain of warfare associated with the task</xs:documentation>
+	</xs:annotation>
+	<xs:annotation>
+		<xs:documentation>optional control measures element</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="OrderControlMeasuresType">
+		<xs:sequence>
+			<xs:element name="ControlMeasure" type="ControlMeasureType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ControlMeasureType">
+		<xs:choice>
+			<xs:element name="AtWhere" type="cbml:AtWhereLightType"> </xs:element>
+			<xs:element name="RouteWhere" type="cbml:RouteWhereLightType"/>
+		</xs:choice>
+	</xs:complexType>
+
+</xs:schema>

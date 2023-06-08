@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/ASX_v1.9.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<DomainMessageBody>
+    <ReportBody>
+        <FromSender>1c2cd9be-3b6c-11e9-b210-d663bd873d93</FromSender>
+        <ToReceiver>9ea6a07e-3a35-4a8d-befe-36ee36bc56e4</ToReceiver>
+        <ReportContent><PositionReportContent>
+            <TimeOfObservation>
+                <IsoDateTime>2019-03-14T09:00:26Z</IsoDateTime>
+            </TimeOfObservation>
+            <Location><Coordinate><GeodeticCoordinate>
+                <Latitude>58.482000</Latitude>
+                <Longitude>15.483000</Longitude>
+                <AltitudeMSL>911.195080</AltitudeMSL>
+            </GeodeticCoordinate></Coordinate></Location>
+            <OperationalStatus>
+                <OperationalStatusCode>FullyOperational</OperationalStatusCode>
+            </OperationalStatus>
+            <Strength>
+                <StrengthPercentage>100</StrengthPercentage>
+            </Strength>
+            <SubjectEntity>1c2cd9be-3b6c-11e9-b210-d663bd873d93</SubjectEntity>
+            <AutonomousSystemPositionReportContent>
+                <LevelOfAutonomyCode>LoA-0</LevelOfAutonomyCode>
+                <TacticalAttitudeCode>AWARE</TacticalAttitudeCode>
+                <LinkPercentage>100</LinkPercentage>
+            </AutonomousSystemPositionReportContent>
+        </PositionReportContent></ReportContent>
+        <ReportingEntity>1c2cd9be-3b6c-11e9-b210-d663bd873d93</ReportingEntity>
+    </ReportBody>
+</DomainMessageBody>
+</MessageBody>

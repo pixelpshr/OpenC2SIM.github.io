@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://netlab.gmu.edu/JBML/BML" xmlns:bml="http://netlab.gmu.edu/IBML" xmlns:mip="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://netlab.gmu.edu/JBML/BML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="urn:int:nato:standard:mip:jc3iedm:3.1a:oo:2.0" schemaLocation="US-JC3IEDM-v3_1b-EntityTypes.xsd"/>
+	<xsd:import namespace="http://netlab.gmu.edu/IBML" schemaLocation="FiveWTypes.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en"> Battle Management Language proposed schema types
+			definition. Inputs needed for a New Who, that is, to instantiate a unit in the database
+			Copyright 2009 George Mason University C4I Center. </xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="NewWhoPush">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="NewWho" type="NewWhoType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="BatchNewWhoPush">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NewWhoPush" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<!-- Needed and Not Implemented -->
+	<xsd:element name="ListWho" />
+	
+	<!-- Needed and Not Implemented -->
+	<xsd:element name="UnitList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Unit" type="NewWhoType" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<!-- Needed and Not Implemented -->
+	<xsd:complexType name="NewWhoType">
+		<xsd:sequence>
+			<xsd:annotation>
+				<xsd:documentation> for XmlType definitions see US-JC3IEDM-v3_1b-EntityTypes.xsd
+				</xsd:documentation>
+			</xsd:annotation>
+			<xsd:element name="unit_name_txt" type="bml:LabelType">
+				<xsd:annotation>
+					<xsd:documentation> name of the Who in strict format, e.g. A2-BN-5-CAV
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="obj_type_name_txt" type="bml:LabelType">
+				<xsd:annotation>
+					<xsd:documentation> name for the type of Who's organization, e.g. Motorized
+						Cavalry Bn </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="cmd_function_ind_code" type="mip:OrganisationTypeCommandFunctionIndicatorCodeXmlType"/>
+			<xsd:element name="service_code" type="mip:MilitaryOrganisationTypeServiceCodeXmlType"/>
+			<xsd:element name="unit_type_cat_code" type="mip:UnitTypeCategoryCodeXmlType"/>
+			<xsd:element name="arm_cat_code" type="mip:UnitTypeArmCategoryCodeXmlType"/>
+			<xsd:element name="size_code" type="mip:UnitTypeSizeCodeXmlType"/>
+			<!-- <xsd:element name="obj_type_cat_code" type="mip:ObjectTypeCategoryCodeXmlType" minOccurs="0" default="OR"/> -->
+			<!-- <xsd:element name="org_type_cat_code" type="mip:OrganisationTypeCategoryCodeXmlType" minOccurs="0" default="GVTORG"/> -->
+			<!-- <xsd:element name="govt_org_type_cat_code" type="mip:GovernmentOrganisationTypeCategoryCodeXmlType" minOccurs="0" default="MILORG"/> -->
+			<!-- <xsd:element name="mil_org_type_cat_code" type="mip:MilitaryOrganisationTypeCategoryCodeXmlType" minOccurs="0" default="UNIT"/> -->
+			<!-- xsd:element name="obj_item_cat_code" type="mip:ObjectItemCategoryCodeXmlType" minOccurs="0" default="OR"/> -->
+			<!-- <xsd:element name="org_cat_code" type="mip:OrganisationCategoryCodeXmlType" minOccurs="0" default="UN"/> -->
+			<!-- <xsd:element name="dummy_ind_code" type="mip:ObjectTypeIdXmlType" minOccurs="0"  default="NO"/> -->
+			<xsd:element name="unit_type_arm_spclsn_code" type="mip:UnitTypeArmSpecialisationCodeXmlType" minOccurs="0"/>
+			<xsd:element name="unit_type_suppl_spclsn_code" type="mip:UnitTypeSupplementarySpecialisationCodeXmlType" minOccurs="0"/>
+			<xsd:element name="unit_type_gen_mob_code" type="mip:UnitTypeGeneralMobilityCodeXmlType" minOccurs="0"/>
+			<xsd:element name="unit_type_qual_code" type="mip:UnitTypeQualifierCodeXmlType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>	
+	
+	<!-- ***************************************************** 
+		This section is typically in a WSDL:
+		Push a New Who: String sbmlProcess(NewWhoPush input, "IBMLOrder")
+		Push multiple New Who:  String sbmlProcess(BatchNewWhoPush input, "IBMLOrder")
+		List all Units:  UnitList sbmlProcess(ListWho input, "IBMLOrder") 
+	 ***************************************************** -->
+</xsd:schema>
+

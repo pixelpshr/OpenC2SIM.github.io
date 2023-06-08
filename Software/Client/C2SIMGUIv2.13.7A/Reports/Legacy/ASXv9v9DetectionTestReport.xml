@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 ../Schema/C2SIM/ASX_v1.9.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1"
+ xmlns:c2s="http://www.sisostds.org/schemas/C2SIM/1.1">
+<DomainMessageBody>
+<ReportBody>
+    <FromSender>1c2cd9be-3b6c-11e9-b210-d663bd873d93</FromSender>
+    <ToReceiver>6b4ce21a-3b70-11e9-b210-d663bd873d94</ToReceiver>
+    <ReportContent>
+        <ObservationReportContent>
+            <TimeOfObservation>
+               <IsoDateTime>2019-03-14T09:00:26Z</IsoDateTime>
+            </TimeOfObservation>
+            <Observation>
+                <LocationObservation>
+                    <ConfidenceLevel></ConfidenceLevel>
+                    <UncertaintyInterval></UncertaintyInterval>
+                    <Location><Coordinate><GeodeticCoordinate>
+                        <Latitude>58.2</Latitude>
+                        <Longitude>15.6</Longitude>
+                        <AltitudeMSL>0.00906276</AltitudeMSL>
+                    </GeodeticCoordinate></Coordinate></Location>
+                </LocationObservation>
+            </Observation>
+            <AutonomousSystemObservationReportContent>
+                <DetectionTypeCode>Identification</DetectionTypeCode>
+                <UUID>2423a5e9-c4cc-4da1-b65e-66c83950b7da</UUID>
+                <SideHostilityCode>HO</SideHostilityCode>
+                <EntityType><APP6-SIDC>
+                    <EntityTypeString></EntityTypeString>
+                    <SIDCString></SIDCString>
+                </APP6-SIDC></EntityType>
+                <OperationalStatusCode>NotOperational</OperationalStatusCode>
+                <Strength>
+                    <StrengthPercentage>100</StrengthPercentage>
+                </Strength>
+                <CurrentTask>7ab53278-3b72-11e9-b210-d663bd873d93</CurrentTask>
+                <!--<SuggestedTask></SuggestedTask>-->
+            </AutonomousSystemObservationReportContent>
+        </ObservationReportContent>
+    </ReportContent>
+    <ReportingEntity>1c2cd9be-3b6c-11e9-b210-d663bd873d93</ReportingEntity>
+</ReportBody>
+</DomainMessageBody>
+</MessageBody>

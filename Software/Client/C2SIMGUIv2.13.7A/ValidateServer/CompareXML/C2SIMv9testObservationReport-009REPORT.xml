@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><MessageBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.sisostds.org/schemas/C2SIM/1.1 C2SIMv9_SMXv9_LOXplusv6.xsd"
+ xmlns="http://www.sisostds.org/schemas/C2SIM/1.1">
+    <DomainMessageBody>
+        <ReportBody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://www.sisostds.org/schemas/C2SIM/1.1">
+            <FromSender>00000000-0000-0001-0010-000000000000</FromSender>
+            <ToReceiver>00000000-0000-0001-0001-000000000000</ToReceiver>
+            <ReportContent>
+                <ObservationReportContent>
+                    <TimeOfObservation>
+                        <IsoDateTime>0000-00-00T00:10:00Z</IsoDateTime>
+                    </TimeOfObservation>
+                    <Observation><LocationObservation>
+                        <ConfidenceLevel>HIGH</ConfidenceLevel>
+                        <UncertaintyInterval></UncertaintyInterval>
+                        <Location>
+                            <Coordinate>
+                                <GeodeticCoordinate>
+                                    <Latitude>58.640</Latitude>
+                                    <Longitude>16.223</Longitude>
+                                </GeodeticCoordinate>
+                            </Coordinate>
+                        </Location>
+                    </LocationObservation></Observation>
+                </ObservationReportContent>
+            </ReportContent>
+            <ReportingEntity>00000000-0000-0001-0010-000000000000</ReportingEntity>
+        </ReportBody>
+    </DomainMessageBody>
+</MessageBody>
