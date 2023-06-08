@@ -3,3 +3,4 @@
 **/*.pch
 **/*.VC.db
 /Software/Interfaces/SWORD
+Software/Library/CS/C2SIMSDK/.vs/
