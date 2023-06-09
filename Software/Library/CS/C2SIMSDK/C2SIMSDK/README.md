@@ -143,7 +143,7 @@ and embedding the type choices previously defined in `SystemCommandTypeCodeType`
 The embedded choices are expanded to cover the additional recording, replay, replay speed and magic move commands.
 
 There is no longer a need for a separate customized class, as the extraneous elements have been removed from
-the responses produced by more recent version sof the server (e.g. v4.8.3.3).
+the responses produced by more recent version sof the server (v4.8.3.3+).
 
 ### Classes per message type
 

@@ -1,7 +1,16 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.13
+* JoinSession() returns just the C2SIMINitializationBody xml content
+* Fixed a bug on STOMP disconnection that happened when the client app did not provide a cancellation token
+
+## Version 1.2.12
+* JoinSession() now always returns content - would return null if state was "Initializing". 
+If interested in restricting the state the invoker should query the status.  
+
 ## Version 1.2.11
-* C2SIMHeader elements re-ordered to match changes seen on the Java Library code v4.8.3.1
+* C2SIMHeader elements re-ordered to match changes seen on the Java Library code v4.8.3.1.
+That overcomes issues seen in some instances of the server that may be configured with stricter validation.
 * Setting header SendingTIme to UTC to match the Zulu format of the string representation sent to the server (was local time, as used in the Java version)
 
 ## Version 1.2.10

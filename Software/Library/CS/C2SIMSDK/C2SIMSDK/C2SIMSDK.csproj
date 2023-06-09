@@ -38,7 +38,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.11</Version>
+    <Version>1.2.13</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -51,59 +51,7 @@
     <LicenseFile>LICENSE.md</LicenseFile>
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
-    <PackageReleaseNotes>
-    ## Version 1.2.11
-    * Changed the order of the C2SIMHeader elements to match java Library (v4.8.31) updates
-    
-    ## Version 1.2.10
-    * Updated C2SIM v1.0.2 schema (CWIX2023)
-    
-    ## Version 1.2.9
-    * Safer termination when client code fails to call Disconnect() before disposing
-
-    ## Version 1.2.8
-    * Added a heart-beat option to STOMP connections to enhance the longevity of the subscriptions - defaults to server messages every 10 seconds
-    * Refactored the Library settings classes - C2SIMClientRESTSettings and C2SIMClientSTOMPSettings - into separate files
-    * Added debug logging listing content of messages and commands
-
-    ## Version 1.2.7
-    * Fixed issue with switching connections to another server midrun (connection confirmation got swallowed by previous message pump)
-    * Making C2SIMSDK disposable
-
-    ## Version 1.2.6
-    * Extended list of commands to comply with the schema version 1.0.2
-
-     ## Version 1.2.5
-    * Injecting ILoggerFactory to simplify logger propagation when nested libraries are used
-    * Documented Status changed events that signal that the server is waiting for Initialization, or for Orders / Reports
-
-    ## Version 1.2.4
-    * Improved reporting on connection error
-    * Fixed issue with larger message numbers in C2SIM server response object
-
-    ## Version 1.2.3
-    *  More detailed logging
-    
-    ## Version 1.2.2
-    * Fixed issue with server responses, which may sometimes be just strings rather than xml 
-
-    ## Version 1.2.1
-
-    * Wrapping Initialization, Order and Report messages in MessageBody if not already present
-    * Returning push message server results as strongly typed  objects
-
-    ## Version 1.2.0
-
-    * Changes to make it possible to handle both versions of the schema - v1.0.0 and v1.0.1
-
-    ## Version 1.1.0
-
-    * Updated to C2SIM schema v1.0.1
-
-    ## Version 1.0.0
-
-    * Initial release    
-    </PackageReleaseNotes>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText('.\ReleaseNotes.md').TrimEnd())</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</RepositoryUrl>
