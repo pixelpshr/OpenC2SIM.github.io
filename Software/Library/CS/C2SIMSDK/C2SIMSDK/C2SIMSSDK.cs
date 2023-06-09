@@ -324,22 +324,32 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     /// <summary>
     /// Request to join a potentially ongoing session, where initialization messages have already been published
     /// </summary>
-    /// <remarks>
-    /// The C2SIM Initialize message content is returned indirectly via an InitializationReceived notification
-    /// </remarks>
     /// <returns>Server response - Status OK if success, ERROR otherwise</returns>
     /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> JoinSession()
     {
         _logger?.LogTrace("Entering method");
-        // What is the payload returned?
-        if (await GetStatus() == C2SIMServerStatus.INITIALIZING)
-        {
-            // Nothing to do - no initialization published yet
-            return null;
-        }
         // Issue command to get already published initialization
-        return await PushCommand(C2SIMCommands.QUERYINIT);
+        // Full message containing Initialization xml is returned as payload 
+        // <?xml version="1.0" encoding="UTF-8"?>
+        // <Message xmlns="http://www.sisostds.org/schemas/C2SIM/1.1">
+        //   <C2SIMHeader><CommunicativeActTypeCode>Inform</CommunicativeActTypeCode>
+        //    <ConversationID>bbcf3a9c-eb80-429b-a551-f759df73308a</ConversationID>
+        //    <MessageID>ab048c9c-2f83-40d3-ab3b-0b2a8b99ccfa</MessageID>
+        //    <Protocol>SISO-STD-C2SIM</Protocol><ProtocolVersion>CWIX2023v1.0.2</ProtocolVersion>
+        //    <SendingTime>2023-06-08T13:02:53Z</SendingTime><FromSendingSystem>SERVER</FromSendingSystem>
+        //    <ToReceivingSystem>ALL</ToReceivingSystem>
+        //   </C2SIMHeader>
+        // \n
+        //   <MessageBody xmlns = "http://www.sisostds.org/schemas/C2SIM/1.1" >
+        //     <C2SIMInitializationBody >< ObjectDefinitions /></ C2SIMInitializationBody >
+        //   </MessageBody >
+        // </Message>
+        string message = await PushCommand(C2SIMCommands.QUERYINIT);
+        _logger.LogDebug(message);
+        XElement bodyElement = ParseMessageBodyElement(message);
+        System.Diagnostics.Debug.Assert(bodyElement?.Name.LocalName.ToString().Equals("C2SIMInitializationBody") ?? false);
+        return bodyElement.ToString();
     }
 
     /// <summary>
@@ -594,30 +604,23 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
                             //            </xs:choice>
                             //		<xs:element ref="ObjectInitializationBody"/>
                             //		<xs:element ref="SystemAcknowledgementBody"/>
-                            //		<xs:element ref="SystemCommandBody"/>
+                            //		<xs:element ref="SystemMessageBody"/> or the deprecated <xs:element ref="SystemCommandBody"/>
                             //      ReportBody is also a type, even though it is not listed in C2SIM_SMX_LOX_v1.0.0.xsd
                             //	</xs:choice>
                             //</xs:complexType>
-                            // Get the name of the first element - that is what tells us what kind of message we got
-                            XNamespace ns = "http://www.sisostds.org/schemas/C2SIM/1.1";
-                            XElement mb = XElement.Parse(stompMsg.MessageBody);
-                            if (mb?.Name.LocalName != "MessageBody")
-                            {
-                                // Look for nested element
-                                mb = mb?.Descendants(ns + "MessageBody").FirstOrDefault();
-                            }
-                            if (mb is null)
+                            XElement bodyElement = ParseMessageBodyElement(stompMsg.MessageBody);
+                            if (bodyElement is null)
                             {
                                 // TODO: Should this throw an exception instead?
                                 _logger?.LogWarning($"Could not find MessageBody in notification message: {stompMsg.MessageBody}. Ignoring");
                                 continue;
                             }
-                            XElement bodyElement = mb.FirstNode as XElement;
                             string bodyName = bodyElement?.Name.LocalName.ToString();
                             _logger?.LogTrace($"Message type = {bodyName}");
                             switch (bodyName)
                             {
-                                case "SystemCommandBody":
+                                case "SystemMessageBody":
+                                case "SystemCommandBody": // deprecated as of 1.0.2
                                     OnStatusChangeReceived(new C2SIMNotificationEventParams(header, bodyElement.ToString()));
                                     break;
                                 case "C2SIMInitializationBody":
@@ -668,6 +671,35 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
             throw new C2SIMClientException(emsg, e);
         }
     }
+
+    private XElement ParseMessageBodyElement(string message)
+    {
+        // Parse message and dispatch specific events: status changes, initializations, orders, reports 
+        //   <MessageBody xmlns = "http://www.sisostds.org/schemas/C2SIM/1.1" >
+        //     <C2SIMInitializationBody> or
+        //     <SystemMessageBody> or the deprecated <SystemCommandBody> or 
+        //     <DomainMessageBody> 
+        //   </MessageBody>
+        // </Message >
+
+        // Get the name of the first element - that is what tells us what kind of message we got
+        XNamespace ns = "http://www.sisostds.org/schemas/C2SIM/1.1";
+        XElement mb = XElement.Parse(message);
+        if (mb?.Name.LocalName != "MessageBody")
+        {
+            // Look for nested element
+            mb = mb?.Descendants(ns + "MessageBody").FirstOrDefault();
+        }
+        if (mb is null)
+        {
+            // TODO: Should this throw an exception instead?
+            _logger?.LogWarning($"Could not find MessageBody in notification message: {message}. Ignoring");
+            return null;
+        }
+        XElement bodyElement = mb.FirstNode as XElement;
+        return bodyElement;
+    }
+
     /// <summary>
     /// Disconnect from the notification service (STOMP)
     /// </summary>
@@ -678,7 +710,7 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
         try
         {
             // Cancel the message pump
-            _cancellationSource.Cancel();
+            _cancellationSource?.Cancel();
             // Disconnect from server
             await _c2SimStompClient.Disconnect();
             _logger?.LogTrace($"Disconnected from STOMP");
